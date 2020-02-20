@@ -1,0 +1,278 @@
+<?
+/*
+Plugin Name: bb Topic Icons
+Plugin URI: http://devt.caffeinatedbliss.com/bbpress/topic-icons
+Description: Adds configurable icons next to topics based on their status
+Author: Paul Hawke
+Author URI: http://paul.caffeinatedbliss.com/
+Version: 0.6
+*/
+
+/****************************************************************************
+ *
+ * Configure the following constants to fine-tune the CSS classes that are
+ * generated, the icon filenames that are used, and the text used in the
+ * legend (if you have one displayed).  Note: filenames are likely to be
+ * taken away in a future version and replaced with the concept of "icon sets"
+ * whose filenames are fixed, so dont get used to editing the filenames,
+ * as this will break in future versions.
+ *
+ ****************************************************************************/
+
+// css class for the unsorted list used in the legend display
+define( LEGEND_CLASS, 'topic_icon_legend' );
+
+// busy threshold - a topic with more posts than this is counted as "busy"
+// for purposes of picking an icon.
+define( BUSY_THRESHOLD, 15 );
+
+// width of the images, in pixels
+define( ICON_WIDTH, '20' );
+
+// height of the images, in pixels
+define( ICON_HEIGHT, '20' );
+
+// the URL base for where to find the default icon set.
+define( ICON_SET_URL_BASE, BB_PLUGIN_URL.'bb-topic-icons/icon-sets/' );
+
+/****************************************************************************
+ *
+ * Shouldnt be much need to edit anything beyond this point - configuration
+ * is all done via the constants (above) and through and admin area page in
+ * bbPress at runtime.
+ *
+ ****************************************************************************/
+
+require( 'bb-topic-icons-api.php' );
+require( 'bb-topic-icons-admin.php' );
+require( 'interface.status-interpreter.php' );
+require( 'interface.status-renderer.php' );
+require( 'class.default-status-interpreter.php' );
+require( 'class.default-status-renderer.php' );
+
+function topic_icons_legend() {
+	$icon_set_name = topic_icons_get_active_icon_set();
+	$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+	$statuses = get_active_status_interpreter()->getAllStatuses();
+	$renderer = get_active_status_renderer();
+	
+	echo '<ul id="'.LEGEND_CLASS.'">';
+	for ($i=0; $i < count($statuses); $i++) {
+		$image = $renderer->renderStatus($statuses[$i]);
+		$tooltip = $renderer->renderStatusTooltip($statuses[$i]);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (isset($image) && strlen($image) > 0 &&
+			isset($tooltip) && strlen($tooltip) > 0 && $exists) {
+			echo '<li><img src="'.$icon_set_url.'/'.$image.
+				'" width="'.ICON_WIDTH.'" height="'.ICON_HEIGHT.
+				'" align="absmiddle">&nbsp;'.$tooltip.'</li>';
+		}
+	}
+	echo '</ul>';
+}
+
+function topic_icons_css() {
+	echo "\n<style type=\"text/css\"><!--\n";
+	require( 'bb-topic-icons.css' );
+	echo "\n--></style>";
+}
+
+function topic_icons_label( $label ) {
+	global $topic;
+	
+	if (bb_is_front() || bb_is_forum() || bb_is_view() || bb_is_tag()) {		
+		$icon_set_name = topic_icons_get_active_icon_set();
+		$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+
+		$status = get_active_status_interpreter()->getStatus(bb_get_location(), $topic);
+		$renderer = get_active_status_renderer();
+		$image = $renderer->renderStatus($status);
+		$tooltip = $renderer->renderStatusTooltip($status);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (!$exists) {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), ICON_SET_URL_BASE.'/empty.png', ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		} else if (strlen($tooltip) > 0) {		
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"><span>%s</span></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $tooltip, $label);
+		} else {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		}
+	}
+	
+	return $label;
+}
+
+function topic_icons_init( ) {
+	remove_filter('bb_topic_labels', 'bb_closed_label', 10);
+	remove_filter('bb_topic_labels', 'bb_sticky_label', 20);
+
+	add_filter('bb_topic_labels', 'topic_icons_label', 11);
+
+	add_action('bb_head', 'topic_icons_css');
+
+	add_action('bb_admin_menu_generator', 'topic_icons_admin_page_add');
+	add_action('bb_admin-header.php', 'topic_icons_admin_page_process');
+	
+	topic_icons_register_status_interpreter('default', new DefaultStatusInterpreter(BUSY_THRESHOLD));
+	topic_icons_register_status_renderer('default', new DefaultStatusRenderer());
+}
+
+topic_icons_init();
+
+?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Tag: zotero - Recent Topics</title>
+		<link>http://digitalhumanities.org/answers/tags/zotero</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Tag: zotero - Recent Topics</description>
+		<language>en-US</language>
+		<pubDate>Sun, 24 Mar 2019 17:09:00 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/tags/zotero/topics" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>shmerritt on "Most effective software for building searchable digital bibliographic database?"</title>
+						<link>http://digitalhumanities.org/answers/topic/most-effective-software-for-building-searchable-digital-bibliographic-database#post-1856</link>
+			<pubDate>Wed, 16 Jan 2013 02:07:48 +0000</pubDate>
+			<dc:creator>shmerritt</dc:creator>
+			<guid isPermaLink="false">1856@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;[Stéfan Sinclair (via DH Commons mentorship program) suggested that I post here.  I have described this project in my &#34;collaborator&#34; or user profile on DH Commons at &#60;a href=&#34;http://dhcommons.org&#34; rel=&#34;nofollow&#34;&#62;http://dhcommons.org&#60;/a&#62; ; direct link from the &#34;Collaborators&#34; section at &#60;a href=&#34;http://dhcommons.org/users/susan-hollis-merritt&#34; rel=&#34;nofollow&#34;&#62;http://dhcommons.org/users/susan-hollis-merritt&#60;/a&#62; and in my member profile on MLA Commons at &#60;a href=&#34;http://commons.mla.org&#34; rel=&#34;nofollow&#34;&#62;http://commons.mla.org&#60;/a&#62; ; direct member link at &#60;a href=&#34;http://commons.mla.org/members/shmerritt/&#34; rel=&#34;nofollow&#34;&#62;http://commons.mla.org/members/shmerritt/&#60;/a&#62;; direct links are also provided in the Pinter Bibliography and CV sections on my website at &#60;a href=&#34;http://www.susanhollismerritt.org&#34; rel=&#34;nofollow&#34;&#62;http://www.susanhollismerritt.org&#60;/a&#62; , where there are related details.]&#60;/p&#62;
+&#60;p&#62;I am requesting advice and guidance as I explore the possibility of building a searchable digital database for my &#34;Harold Pinter Bibliography&#34; published in print in volumes of &#60;em&#62;The Pinter Review&#60;/em&#62; (Tampa: The University of Tampa Press, 1987-2011).  Each annual/biennial/special edition of this bibliography is published in MLA format (whatever the most current MLA format has been at the time).  I would plan to continue with MLA format for consistency of documentation style throughout.  (I understand that users of such a bibliography could convert easily to whatever format is desired on their end later.)&#60;/p&#62;
+&#60;p&#62;I have word-processed files (WordPerfect) for all of the 14 editions of this bibliography.  The same typist working for The University of Tampa Press prepared my word-processed files into a format to be used by the printer.  For several years, she converted my &#34;Harold Pinter Bibliography&#34; files initially to MS Word document files or various versions of PDF files for the printer.  More recently, I gave her my own PDF file versions of my WordPerfect files, which I believe she also converted to Word or to another format for the printer.  The typist's and printer's digital files may be accessible if I need to have them for easier digital conversion.&#60;/p&#62;
+&#60;p&#62;A problem with the typist's conversions from one word-processing software program to another has been the loss of accents, punctuation, and other typesetting features, which at times have had to be corrected in printer's proofs.  I have maintained hard copies (original books and parts of books, offprints, photocopies, or print outs) and handwritten index cards (for every entry) to check as back ups of the bibliographic entries in the printed bibliographies for purposes of such error-correction of occasional printer's errors that were missed even in corrected proof.&#60;/p&#62;
+&#60;p&#62;From looking into this matter over a decade ago (when ProCite was initially popular), I believe that the printed information (even though digitized) would need to be converted into records featuring bibliographic fields (including annotations, sometimes lengthy, most often very brief) for each printed entry, and each entry would need to have key words and/or phrases (e.g., to accommodate multiple authors, editors, titles, subjects, etc.) so that it could be capable of classification by key words for searching by users.  Also, there are categories and subsections of categories in each published edition of this bibliography that may need some kind of &#34;field&#34;/key word/phrase identification for sorting electronically.&#60;/p&#62;
+&#60;p&#62;I am not familiar with mark up language beyond HTML, but it is possible that I might be able to learn about additional mark up languages if needed (e.g., RIS Format, SML format, etc.).  When I asked this question of a presenter after a DH session at the MLA Convention in Boston, she advised me to look at Drupal (which I have done somewhat), but I am not trained in using it for anything.  It appears to me to be involved in the stage of actually putting an already developed database online.  Another piece of advice I have received is possibly to create an EXCEL type spreadsheet which could be searched.  But before I would begin doing any of this work, I would like to have a plan to use one mode of conversion (one kind of software, so as to avoid duplication of effort).&#60;/p&#62;
+&#60;p&#62;Thus, a main question that I am asking is: What would be the most effective current software package or packages to use for this entire process?&#60;/p&#62;
+&#60;p&#62;Prior to deciding this project's feasibility and how and where this database would be hosted (institutional partners/support), I need to explore such matters as: (1) the technical requirements for such conversion from printed material to searchable digital format; (2) the estimated cost of such conversion (including the costs of any commercial software packages involved (if any) and of assistance with the physical input of the records); (3) whether or not applying for grant support is warranted; and so on.&#60;/p&#62;
+&#60;p&#62;I welcome suggestions, advice, and guidance.  Thank you very much.&#60;/p&#62;
+&#60;p&#62;[(updated on January 17, 2013)Since first posting this, I have been exploring some earlier DH Q&#38;amp;A threads and found Bethany Nowviskie's suggesting that updates are in progress for &#60;a href=&#34;http://arts-humanities.net/&#34; rel=&#34;nofollow&#34;&#62;http://arts-humanities.net/&#60;/a&#62;, and I will be exploring the &#34;tools&#34; forum there; the &#34;bibliography&#34; section returned an error message when I tried it, so I'll try it again later.]&#60;/p&#62;
+&#60;p&#62;Susan Hollis Merritt, PhD&#60;br /&#62;
+Founding Bibliographical Editor&#60;br /&#62;
+&#60;em&#62;The Pinter Review&#60;/em&#62;&#60;br /&#62;
+&#60;a href=&#34;http://www.susanhollismerritt.org&#34; rel=&#34;nofollow&#34;&#62;http://www.susanhollismerritt.org&#60;/a&#62;
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>mdalmau on "Who&#039;s using the Zotero-plugin for displaying bibliographic collections in Omeka?"</title>
+						<link>http://digitalhumanities.org/answers/topic/whos-using-the-zotero-plugin-for-displaying-bibliographic-collections-in-omeka#post-1868</link>
+			<pubDate>Tue, 29 Jan 2013 15:06:01 +0000</pubDate>
+			<dc:creator>mdalmau</dc:creator>
+			<guid isPermaLink="false">1868@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Using Omeka for discovery of bibliographic collections was discussed in a related post by Susan Hollis Merritt (&#60;a href=&#34;http://digitalhumanities.org/answers/topic/most-effective-software-for-building-searchable-digital-bibliographic-database#post-1856)&#34; rel=&#34;nofollow&#34;&#62;http://digitalhumanities.org/answers/topic/most-effective-software-for-building-searchable-digital-bibliographic-database#post-1856)&#60;/a&#62;.  I'd like to focus on the public display aspect touched upon therein.&#60;/p&#62;
+&#60;p&#62;A few of us here at Indiana University are exploring options for fostering image-based bibliographic collections.  Most of these to date are driven by scholars so they serve very specific research questions, but our Rare Books library could very well benefit from such a platform for documents with broader appeal.  Poking around the Omeka forums and the interwebs, I noticed a lot of interest in the Zotero plugin for Omeka, but I am curious to see some examples of Zotero-based collections using Omeka as an end-user delivery system.  &#60;/p&#62;
+&#60;p&#62;Please share links and any other pertinent info!   I am especially curious how well importing file attachments work. Thanks!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>elotroalex on "How do you get a zotero library to feed into a webpage?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-do-you-get-a-zotero-library-to-feed-into-a-webpage#post-866</link>
+			<pubDate>Sun, 16 Jan 2011 00:25:28 +0000</pubDate>
+			<dc:creator>elotroalex</dc:creator>
+			<guid isPermaLink="false">866@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Lately, I've noticed that questions have been very general and grandiose, so I thought I would take it back to the mundane a bit by trying out a technical question. The question itself is a bit of an experiment also, since I imagine it belongs more on the Zotero forum. I'm wonder what kind of productive overlap we can have between the two forums. The question came about after I saw &#60;a href=&#34;http://twitter.com/mwidner&#34;&#62;@&#60;a href='http://digitalhumanities.org/answers/profile/mwidner'&#62;mwidner&#60;/a&#62;&#60;/a&#62; posted a link to &#60;a href=&#34;http://www.michaelwidner.com/courses/e314lspring2011&#34;&#62;a new course&#60;/a&#62; where he will be using a zotero feed of his student's collaborative bibliography. I figure I could write to him, or play with the RSS until I figure it out, but then I thought an answer here would be more useful to the larger community. I will be happy to answer my self if I figure it out tonight, but if you have a ready answer feel free.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Jentery Sayers on "How do we introduce undergraduates to the digital humanities?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-do-we-introduce-undergraduates-to-the-digital-humanities#post-68</link>
+			<pubDate>Fri, 17 Sep 2010 04:14:12 +0000</pubDate>
+			<dc:creator>Jentery Sayers</dc:creator>
+			<guid isPermaLink="false">68@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Example courses? Syllabi? Sites? Projects? Lessons? Prompts?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Shawn on "Share your (digital) research workflow!"</title>
+						<link>http://digitalhumanities.org/answers/topic/share-your-digital-research-workflow#post-1353</link>
+			<pubDate>Wed, 24 Aug 2011 17:22:11 +0000</pubDate>
+			<dc:creator>Shawn</dc:creator>
+			<guid isPermaLink="false">1353@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hi Miriam,&#60;/p&#62;
+&#60;p&#62;I've been sketching out how I work here: &#60;a href=&#34;http://j.mp/digital-smg&#34; rel=&#34;nofollow&#34;&#62;http://j.mp/digital-smg&#60;/a&#62;  But for actual step-by-step workflow, take a look at Bill Turkel: &#60;a href=&#34;http://williamjturkel.net/how-to/&#34; rel=&#34;nofollow&#34;&#62;http://williamjturkel.net/how-to/&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;Shawn
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Stéfan Sinclair on "Bibliographies with Geolocation Metadata"</title>
+						<link>http://digitalhumanities.org/answers/topic/bibliographies-with-geolocation-metadata#post-1410</link>
+			<pubDate>Wed, 12 Oct 2011 13:41:08 +0000</pubDate>
+			<dc:creator>Stéfan Sinclair</dc:creator>
+			<guid isPermaLink="false">1410@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Can anyone suggest good sources for &#60;strong&#62;bulk&#60;/strong&#62; bibliographic records with geolocation metadata? I'm mostly interested in literary and historical texts, though other collections might serve as good examples. Typical publication location as words would be a fine start, but ideally there would be location of writing (where possible) and latitude/longitude values.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>inactinique on "DOMDocument and UTF-8"</title>
+						<link>http://digitalhumanities.org/answers/topic/domdocument-and-utf-8#post-1385</link>
+			<pubDate>Thu, 22 Sep 2011 06:14:21 +0000</pubDate>
+			<dc:creator>inactinique</dc:creator>
+			<guid isPermaLink="false">1385@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hi,&#60;/p&#62;
+&#60;p&#62;I'm trying to use an under development plug-in for wordpress that is developped by @&#60;a href='http://digitalhumanities.org/answers/profile/clioweb'&#62;clioweb&#60;/a&#62; and @stakats from the CHNM. The aim of this plug-in is to take the content of a zotero user's CV and to publish it on your wordpress blog. Sean Takats is using it on his blog: &#60;a href=&#34;http://quintessenceofham.org/cv/&#34; rel=&#34;nofollow&#34;&#62;http://quintessenceofham.org/cv/&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;My problem is the following: I'm French, so I've got accent in my name. See here: &#60;a href=&#34;http://www.zotero.org/inactinique/cv&#34; rel=&#34;nofollow&#34;&#62;http://www.zotero.org/inactinique/cv&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;When I'm using this plug-in, the accents in my name (and in all titles of my zotero CV page also - temporarily, I just found expressions in French with no accents for those titles) are not properly encoded on my website: &#60;a href=&#34;http://www.clavert.net/wordpress/?page_id=333&#34; rel=&#34;nofollow&#34;&#62;http://www.clavert.net/wordpress/?page_id=333&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;If you look at the HTML code of the zotero CV page, the page is declared as UTF-8 encoded (just as my website). Accents in titles, in this code, are directly typed-in (é, è, etc), but in the rest of the source code, accents are encoded in HTML (&#38;eacute; &#38;egrave; etc).&#60;/p&#62;
+&#60;p&#62;So I suppose that the problem is the way DOMDocument and loadHTML in the php code of the plug-in are handling special caracters.&#60;/p&#62;
+&#60;p&#62;The source code of the plug-in is here: &#60;a href=&#34;https://github.com/inactinique/scholarpress-vitaware&#34; rel=&#34;nofollow&#34;&#62;https://github.com/inactinique/scholarpress-vitaware&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;Does someone have an idea? Please, be quite explicit in your answers - I'm starting with php.&#60;/p&#62;
+&#60;p&#62;Best regards,&#60;br /&#62;
+Frédéric Clavert
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Miriam Posner on "Constrained Vocabularies in Zotero Fields"</title>
+						<link>http://digitalhumanities.org/answers/topic/constrained-vocabularies-in-zotero-fields#post-1058</link>
+			<pubDate>Mon, 21 Mar 2011 19:41:55 +0000</pubDate>
+			<dc:creator>Miriam Posner</dc:creator>
+			<guid isPermaLink="false">1058@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hi Stéfan,&#60;/p&#62;
+&#60;p&#62;I asked a similar question a little while ago &#60;a href=&#34;http://forums.zotero.org/discussion/16067/controlling-permitted-tags-for-a-group/&#34;&#62;over at the Zotero forums&#60;/a&#62;, but maybe you'll get a wider range of answers here. In any case, I've noticed this question popping up a few times in conversation with researchers, so it seems like it might be a good candidate for a new feature.&#60;/p&#62;
+&#60;p&#62;Miriam
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>tanyaclement on "Are there essential reads on the open source movement and humanities research?"</title>
+						<link>http://digitalhumanities.org/answers/topic/are-there-essential-reads-on-the-open-source-movement-and-humanities-research#post-844</link>
+			<pubDate>Mon, 20 Dec 2010 15:35:32 +0000</pubDate>
+			<dc:creator>tanyaclement</dc:creator>
+			<guid isPermaLink="false">844@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I'm looking for articles or books on the affect or use or impact of the open source movement in software development on research in the humanities.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>inactinique on "Is there a free (open) sofware to annotate PDFs, that can be used with zotero?"</title>
+						<link>http://digitalhumanities.org/answers/topic/is-there-a-free-open-sofware-to-annotate-pdfs-that-can-be-used-with-zotero#post-220</link>
+			<pubDate>Wed, 29 Sep 2010 15:24:16 +0000</pubDate>
+			<dc:creator>inactinique</dc:creator>
+			<guid isPermaLink="false">220@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;To annotate PDFs in zotero, I am using a software (freeware), PDF X-Change Viewer, wich allow PDF-annotation. But it is not free/open-source. I can't use Pliny, because it's not zotero compliant. I'm using Windows XP and Ubuntu.
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

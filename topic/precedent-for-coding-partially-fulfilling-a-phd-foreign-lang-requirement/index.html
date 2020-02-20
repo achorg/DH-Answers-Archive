@@ -1,0 +1,464 @@
+<?
+/*
+Plugin Name: bb Topic Icons
+Plugin URI: http://devt.caffeinatedbliss.com/bbpress/topic-icons
+Description: Adds configurable icons next to topics based on their status
+Author: Paul Hawke
+Author URI: http://paul.caffeinatedbliss.com/
+Version: 0.6
+*/
+
+/****************************************************************************
+ *
+ * Configure the following constants to fine-tune the CSS classes that are
+ * generated, the icon filenames that are used, and the text used in the
+ * legend (if you have one displayed).  Note: filenames are likely to be
+ * taken away in a future version and replaced with the concept of "icon sets"
+ * whose filenames are fixed, so dont get used to editing the filenames,
+ * as this will break in future versions.
+ *
+ ****************************************************************************/
+
+// css class for the unsorted list used in the legend display
+define( LEGEND_CLASS, 'topic_icon_legend' );
+
+// busy threshold - a topic with more posts than this is counted as "busy"
+// for purposes of picking an icon.
+define( BUSY_THRESHOLD, 15 );
+
+// width of the images, in pixels
+define( ICON_WIDTH, '20' );
+
+// height of the images, in pixels
+define( ICON_HEIGHT, '20' );
+
+// the URL base for where to find the default icon set.
+define( ICON_SET_URL_BASE, BB_PLUGIN_URL.'bb-topic-icons/icon-sets/' );
+
+/****************************************************************************
+ *
+ * Shouldnt be much need to edit anything beyond this point - configuration
+ * is all done via the constants (above) and through and admin area page in
+ * bbPress at runtime.
+ *
+ ****************************************************************************/
+
+require( 'bb-topic-icons-api.php' );
+require( 'bb-topic-icons-admin.php' );
+require( 'interface.status-interpreter.php' );
+require( 'interface.status-renderer.php' );
+require( 'class.default-status-interpreter.php' );
+require( 'class.default-status-renderer.php' );
+
+function topic_icons_legend() {
+	$icon_set_name = topic_icons_get_active_icon_set();
+	$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+	$statuses = get_active_status_interpreter()->getAllStatuses();
+	$renderer = get_active_status_renderer();
+	
+	echo '<ul id="'.LEGEND_CLASS.'">';
+	for ($i=0; $i < count($statuses); $i++) {
+		$image = $renderer->renderStatus($statuses[$i]);
+		$tooltip = $renderer->renderStatusTooltip($statuses[$i]);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (isset($image) && strlen($image) > 0 &&
+			isset($tooltip) && strlen($tooltip) > 0 && $exists) {
+			echo '<li><img src="'.$icon_set_url.'/'.$image.
+				'" width="'.ICON_WIDTH.'" height="'.ICON_HEIGHT.
+				'" align="absmiddle">&nbsp;'.$tooltip.'</li>';
+		}
+	}
+	echo '</ul>';
+}
+
+function topic_icons_css() {
+	echo "\n<style type=\"text/css\"><!--\n";
+	require( 'bb-topic-icons.css' );
+	echo "\n--></style>";
+}
+
+function topic_icons_label( $label ) {
+	global $topic;
+	
+	if (bb_is_front() || bb_is_forum() || bb_is_view() || bb_is_tag()) {		
+		$icon_set_name = topic_icons_get_active_icon_set();
+		$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+
+		$status = get_active_status_interpreter()->getStatus(bb_get_location(), $topic);
+		$renderer = get_active_status_renderer();
+		$image = $renderer->renderStatus($status);
+		$tooltip = $renderer->renderStatusTooltip($status);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (!$exists) {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), ICON_SET_URL_BASE.'/empty.png', ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		} else if (strlen($tooltip) > 0) {		
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"><span>%s</span></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $tooltip, $label);
+		} else {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		}
+	}
+	
+	return $label;
+}
+
+function topic_icons_init( ) {
+	remove_filter('bb_topic_labels', 'bb_closed_label', 10);
+	remove_filter('bb_topic_labels', 'bb_sticky_label', 20);
+
+	add_filter('bb_topic_labels', 'topic_icons_label', 11);
+
+	add_action('bb_head', 'topic_icons_css');
+
+	add_action('bb_admin_menu_generator', 'topic_icons_admin_page_add');
+	add_action('bb_admin-header.php', 'topic_icons_admin_page_process');
+	
+	topic_icons_register_status_interpreter('default', new DefaultStatusInterpreter(BUSY_THRESHOLD));
+	topic_icons_register_status_renderer('default', new DefaultStatusRenderer());
+}
+
+topic_icons_init();
+
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=8" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+	<title>Precedent for coding partially fulfilling a PhD foreign-lang. requirement? &laquo; Digital Humanities Questions &amp; Answers</title>
+	<link rel="stylesheet" href="http://digitalhumanities.org/answers/bb-templates/dhqa/style.css" type="text/css" />
+	<link rel="stylesheet" href="http://digitalhumanities.org/answers/bb-templates/dhqa/blueprint/screen.css" type="text/css" media="screen" title="blueprint-print" charset="utf-8"/>
+	<link rel="stylesheet" href="http://digitalhumanities.org/answers/bb-templates/dhqa/blueprint/print.css" type="text/css" media="print" title="blueprint-print" charset="utf-8"/>
+	<!--[if lt IE 8]>
+	  <link rel="stylesheet" href="http://digitalhumanities.org/answers/bb-templates/dhqa/blueprint/ie.css" type="text/css" media="screen, projection">
+	<![endif]-->
+	<!--[if IE]>
+		<style type="text/css" media="screen">
+			.header-button, form.login input, input[type="submit"], #header div.search, form.login input {
+				border-radius:4px;
+				behavior: url(border-radius.htc);
+			}
+		</style>
+	<![endif]-->
+	<!--[if IE 7]>
+		<style type="text/css" media="screen">
+			#header .search .search-form input.submit {
+				padding: 0;
+				margin: 0;
+				height: 29px;
+				width: 70px;
+			}
+		</style>
+	<![endif]-->
+
+<link rel="alternate" type="application/rss+xml" title="Digital Humanities Questions &amp; Answers &raquo; Topic: Precedent for coding partially fulfilling a PhD foreign-lang. requirement?" href="http://digitalhumanities.org/answers/rss/topic/precedent-for-coding-partially-fulfilling-a-phd-foreign-lang-requirement" />
+<meta name="generator" content="bbPress 1.0.2" />
+
+<link rel="stylesheet" href="http://digitalhumanities.org/answers/my-plugins/bb-syntax/bb-syntax.css" type="text/css" media="screen" />
+<style type="text/css">
+	.best_answer {text-decoration:none; border:0; white-space:nowrap; display:block; margin:1em 0;		
+		border:0; text-decoration:none; width:20px; height:16px;
+		background: url(http://digitalhumanities.org/answers/my-plugins/best-answer/best-answer.png) no-repeat scroll 0px 1px transparent;} 
+	span.best_answer {margin: 0px; float: left;}
+	#thread .threadauthor .best_answer {padding-left: 20px;}
+	a.best_answer, a.best_answer:link {color:#999;}
+	a.best_answer:hover {color:green;}	
+	a.best_answer_selected {color: green;}
+	a.best_answer_selected:hover {color:red;}		
+	#thread li.best_answer_background { background-color: transparent; }
+	#thread li.best_answer_background .threadpost { background-color: #afa; }
+	#thread li.alt.best_answer_background .threadpost { background-color: #afa; }
+	.best_answer_meta { background: url(http://digitalhumanities.org/answers/my-plugins/best-answer/best-answer.png) no-repeat scroll 5px 40% transparent; padding-left: 26px; }
+</style>
+
+<!-- Start Of Code Generated By Social It Plugin By www.gaut.am -->
+<link rel='stylesheet' id='social-it-css'  href='http://digitalhumanities.org/answers/my-plugins/social-it/css/style.css?ver=1.5' type='text/css' media='all' />
+<script type='text/javascript' src='http://digitalhumanities.org/answers/bb-includes/js/jquery/jquery.js?ver=1.2.6'></script>
+<script type='text/javascript' src='http://digitalhumanities.org/answers/my-plugins/social-it/js/social-it-public.js?ver=1.5'></script>
+<!-- End Of Code Generated By Social It Plugin By www.gaut.am -->
+
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-18811436-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+</head>
+<body id="topic-page">
+	<div class="container prepend-top append-bottom">
+		<div id="util-login">
+		<a href="http://digitalhumanities.org/answers/bb-login.php">Log in</a> | <a href="http://digitalhumanities.org/answers/register.php">Register</a>		</div>
+		<div id="header" class="prepend-6 span-18">
+			<a id="ach-logo" href="http://www.ach.org">ACH</a>
+			<h1><a href="http://digitalhumanities.org/answers/">Digital Humanities Questions &amp; Answers</a></h1>
+						<div class="login-container span-12">
+				<form class="login" method="post" action="http://digitalhumanities.org/answers/bb-login.php">
+		<div class="header-button ask-link"><a href="http://digitalhumanities.org/answers/bb-login.php">Ask a Question</a></div></form>			</div>
+
+			<div class="search span-6 last">
+<form class="search-form" role="search" action="http://digitalhumanities.org/answers/search.php" method="get">
+	<p>
+		<label class="hidden" for="q">Search:</label>
+		<input type="text" size="10" maxlength="100" name="q" id="q" />
+		<input class="submit" type="submit" value="Search &raquo;" />
+	</p>
+</form>
+			</div>
+		</div>
+		<div id="main" class="span-24">
+
+<div class="bbcrumb"><a href="http://digitalhumanities.org/answers/">Digital Humanities Questions &amp; Answers</a> &raquo; <a href="http://digitalhumanities.org/answers/forum/pedagogy">DH in the Classroom</a></div>
+<div class="infobox" role="main">
+
+<div id="topic-info">
+<span id="topic_labels"></span>
+<h2 class="topictitle">Precedent for coding partially fulfilling a PhD foreign-lang. requirement?</h2>
+<span id="topic_posts">(9 posts)</span>
+<span id="topic_voices">(8 voices)</span>
+
+<ul class="topicmeta">
+	<li>Asked 6 years ago by Ethan Whittet</li>
+	<li><a href="http://digitalhumanities.org/answers/topic/precedent-for-coding-partially-fulfilling-a-phd-foreign-lang-requirement#post-2043">Latest answer</a> from mbranson_1993</li>
+<li class='best_answer_meta'>This question has a <a href='http://digitalhumanities.org/answers/topic/precedent-for-coding-partially-fulfilling-a-phd-foreign-lang-requirement#post-1824'>best answer</a>.</li></ul>
+</div>
+
+<div id="topic-tags">
+<p>Tags:</p>
+
+
+<ul id="tags-list" class="tags-list list:tag">
+	<li id="tag-985_1405"><a href="http://digitalhumanities.org/answers/tags/foreign-language" rel="tag">foreign-language</a> </li>
+	<li id="tag-346_1405" class="alt"><a href="http://digitalhumanities.org/answers/tags/phd" rel="tag">phd</a> </li>
+	<li id="tag-986_1405"><a href="http://digitalhumanities.org/answers/tags/requirement" rel="tag">requirement</a> </li>
+</ul>
+
+
+</div>
+
+<div style="clear:both;"></div>
+</div>
+<div id="ajax-response"></div>
+<ol id="thread" class="list:post">
+
+	<li id="post-1822">
+		<div id="position-1">
+			<div class="threadauthor">
+				<img alt="" src="http://www.gravatar.com/avatar/8e6d6c19511dc73ac574bd89acad8f03?s=48&amp;d=identicon&amp;r=pg" class="photo avatar avatar-48" style="height:48px; width:48px;" />				<p>
+					<strong>Ethan Whittet</strong><br />
+					<small><a href="http://digitalhumanities.org/answers/profile/ethan-whittet">Member</a></small>
+				</p>
+				<div class="author-badges"><span class='badge 2'><!-- fewer than 5 posts --></span><span class='badge 0'><!-- fewer than 3 answers --></span></div>
+			</div>
+			<div class="threadpost">
+				<div class="post"><p>I've proposed to the Graduate Studies Committee that literacy in writing code should fulfill one of the English PhD program's two foreign-language requirements.</p>
+<p>Is there precedent, on an institutional level, for this move? What standards should we use to measure "literacy"?
+</p>
+
+<!-- Start Of Code Generated By Social It Plugin By www.gaut.am -->
+<div class="social-it" style=""><ul class="socials"><li class="socialit-twitter"><a href="http://twitter.com/home?status=Precedent+for+coding+partially+fulfilling+a+PhD+foreign-lang.+requirement%3F+-+http://bit.ly/VzIZgv+(via+@DHAnswers)" rel="nofollow" class="external" title="Tweet this question">Tweet this question</a></li></ul><div style="clear:both;"></div></div><!-- End Of Code Generated By Social It Plugin By www.gaut.am -->
+
+</div>
+				<div class="poststuff">Posted 6 years ago <a class="post-perma-link" href="#post-1822">Permalink</a> </div>
+			</div>
+		</div>
+	</li>
+	<li id="post-1823" class="alt">
+		<div id="position-2">
+			<div class="threadauthor">
+				<img alt="" src="http://www.gravatar.com/avatar/80cb4b64e36e8a3c8f6206f583d17fe1?s=48&amp;d=identicon&amp;r=pg" class="photo avatar avatar-48" style="height:48px; width:48px;" />				<p>
+					<strong>dana.solomonx@gmail.com</strong><br />
+					<small><a href="http://digitalhumanities.org/answers/profile/danasolomonxgmailcom">Member</a></small>
+				</p>
+				<div class="author-badges"><span class='badge 1'><!-- fewer than 5 posts --></span><span class='badge 0'><!-- fewer than 3 answers --></span></div>
+			</div>
+			<div class="threadpost">
+				<div class="post"><p>Matthew Kirschenbaum discusses this in his 2009 "Hello Worlds" post for The Chronicle. See: <a href="http://chronicle.com/article/Hello-Worlds/5476" rel="nofollow">http://chronicle.com/article/Hello-Worlds/5476</a>
+</p></div>
+				<div class="poststuff">Posted 6 years ago <a class="post-perma-link" href="#post-1823">Permalink</a> </div>
+			</div>
+		</div>
+	</li>
+	<li id="post-1824" class="best_answer_background">
+		<div id="position-3">
+			<div class="threadauthor">
+				<a href="http://stefansinclair.name/"><img alt="" src="http://www.gravatar.com/avatar/cba4d537795cd02764c6a5c778c21566?s=48&amp;d=identicon&amp;r=pg" class="photo avatar avatar-48" style="height:48px; width:48px;" /></a>				<p>
+					<strong><a href="http://stefansinclair.name/">Stéfan Sinclair</a></strong><br />
+					<small><a href="http://digitalhumanities.org/answers/profile/stefansinclair">Admin</a><div class='best_answer'>Best Answer</div></small>
+				</p>
+				<div class="author-badges"><span title='50+ Posts' class='badge gold-poster 103'><!-- 50+ posts! --></span><span title='3+ Best Answers' class='badge bronze-answerer 6'><!-- 3-9 answers --></span></div>
+			</div>
+			<div class="threadpost">
+				<div class="post"><p>I think that selling a programming language competency is already a big enough challenge, but truth be told, I'd rather see a technical competency that necessarily relies on whatever language(s) the student prefers.</p>
+<p>So, for instance, instead of sitting down to write a Java program to determine word frequencies in a collection of 1,000 texts, it would be more like this: take the plain text version of Hamlet from Gutenberg and write code to automate the conversion of it to a very, very simple TEI representation, ensuring that character names are identified in elements separately from their speeches. Presumably to do that you would need to know pattern matching (regular expressions), loops, data structures, etc. (ideally you'd write your own functions, but if you didn't, does that really matter? I'd take a very pragmatic approach: complete a task without worrying too much about how the code looks (if you coding is a central aspect of the research activities for the student, they'll be plenty of opportunity to learn best practices).</p>
+<p>In any case, I'd probably put more emphasis on data pre-processing than on building analytic tools because I think the first kind of activity is under-estimated (even if there's lots of room for better analytic and visualization tools to be built). Rarely do we find shrink-wrapped data sets that are ready for use without some manipulation and preparation. In that context, I think some basic programming competencies can be very useful, to not say indispensable, for many kinds of digital methodologies.
+</p></div>
+				<div class="poststuff">Posted 6 years ago <a class="post-perma-link" href="#post-1824">Permalink</a> </div>
+			</div>
+		</div>
+	</li>
+	<li id="post-1825" class="alt">
+		<div id="position-4">
+			<div class="threadauthor">
+				<a href="http://hackingthehumanities.org"><img alt="" src="http://www.gravatar.com/avatar/5eae155257da1e1fea52ff200be56161?s=48&amp;d=identicon&amp;r=pg" class="photo avatar avatar-48" style="height:48px; width:48px;" /></a>				<p>
+					<strong><a href="http://hackingthehumanities.org">Patrick Murray-John</a></strong><br />
+					<small><a href="http://digitalhumanities.org/answers/profile/patrickmj"></a></small>
+				</p>
+				<div class="author-badges"><span title='50+ Posts' class='badge gold-poster 124'><!-- 50+ posts! --></span><span title='3+ Best Answers' class='badge bronze-answerer 3'><!-- 3-9 answers --></span></div>
+			</div>
+			<div class="threadpost">
+				<div class="post"><p>I think what's important in Mike's piece and Stefan's reply is that it will call for some careful thinking-through -- beyond a switcheroo.</p>
+<p>I blogged about similar stuff <a href="http://hackingthehumanities.org/node/28">thinking about alt-ac training</a>, but in terms of minors.
+</p></div>
+				<div class="poststuff">Posted 6 years ago <a class="post-perma-link" href="#post-1825">Permalink</a> </div>
+			</div>
+		</div>
+	</li>
+	<li id="post-1826">
+		<div id="position-5">
+			<div class="threadauthor">
+				<a href="http://sappingattention.blogspot.com"><img alt="" src="http://www.gravatar.com/avatar/8bc2b47883e7e62acc612bf211a0a863?s=48&amp;d=identicon&amp;r=pg" class="photo avatar avatar-48" style="height:48px; width:48px;" /></a>				<p>
+					<strong><a href="http://sappingattention.blogspot.com">bmschmidt</a></strong><br />
+					<small><a href="http://digitalhumanities.org/answers/profile/bmschmidt">Member</a></small>
+				</p>
+				<div class="author-badges"><span class='badge 4'><!-- fewer than 5 posts --></span><span class='badge 0'><!-- fewer than 3 answers --></span></div>
+			</div>
+			<div class="threadpost">
+				<div class="post"><p>There's some precedent for allowing knowledge of statistics, if not programming, to replace foreign languages in history programs. I know from word-of-mouth that the Princeton history department used to allow 'quantitative methods' to displace one required language. No one had used it in years, and it seems to have disappeared from the program guidelines.</p>
+<p>Searching for that, I see that the Michigan Grad program history allows <a href="http://www.lsa.umich.edu/UMICH/history/Home/Graduate/The%20Gray%20Book/2011%20Gray%20Book.pdf">quantitative methods/statistics (pdf at link)</a> competency to displace a single language requirement. There they require formal coursework in statistics.
+</p></div>
+				<div class="poststuff">Posted 6 years ago <a class="post-perma-link" href="#post-1826">Permalink</a> </div>
+			</div>
+		</div>
+	</li>
+	<li id="post-1827" class="alt">
+		<div id="position-6">
+			<div class="threadauthor">
+				<img alt="" src="http://www.gravatar.com/avatar/ebb814c150a5ae131da22086419763c2?s=48&amp;d=identicon&amp;r=pg" class="photo avatar avatar-48" style="height:48px; width:48px;" />				<p>
+					<strong>janaremy</strong><br />
+					<small><a href="http://digitalhumanities.org/answers/profile/janaremy">Member</a></small>
+				</p>
+				<div class="author-badges"><span class='badge 1'><!-- fewer than 5 posts --></span><span class='badge 0'><!-- fewer than 3 answers --></span></div>
+			</div>
+			<div class="threadpost">
+				<div class="post"><p>I did my PhD work at UCIrvine where they accepted Stats or work in another discipline as one of the languages for the doctorate.  However, in 2005 when I asked to use a programming language, I was told no.  So I opted to learn the "language of Anthropology" instead (which meant 5 classes in Anth and a 40-page paper demonstrating how I would use what I learned in my research). Last year I was told that they would now consider a programming language to fulfill that requirement.
+</p></div>
+				<div class="poststuff">Posted 6 years ago <a class="post-perma-link" href="#post-1827">Permalink</a> </div>
+			</div>
+		</div>
+	</li>
+	<li id="post-1828">
+		<div id="position-7">
+			<div class="threadauthor">
+				<img alt="" src="http://www.gravatar.com/avatar/8e0bc5358ddb553807e8f0086a779967?s=48&amp;d=identicon&amp;r=pg" class="photo avatar avatar-48" style="height:48px; width:48px;" />				<p>
+					<strong>Daniel Powell</strong><br />
+					<small><a href="http://digitalhumanities.org/answers/profile/daniel-powell">Member</a></small>
+				</p>
+				<div class="author-badges"><span class='badge 2'><!-- fewer than 5 posts --></span><span class='badge 0'><!-- fewer than 3 answers --></span></div>
+			</div>
+			<div class="threadpost">
+				<div class="post"><p>This has come up in my graduate program as well (English at the University of Victoria, home to the Digital Humnities Summer Institute). Reception has been lukewarm, but I came across the Claremont Graudate University's interesting idea of requiring what they call "Language and Research Tools." </p>
+<p>For the PhD in History, "the student must demonstrate proficiency in two foreign languages or in one foreign language and an approved research tool . . . . With the advisor’s approval, a PhD student may substitute the second language requirement with Digital Humanities or oral history."</p>
+<p>See: <a href="http://www.cgu.edu/pages/8200.asp" rel="nofollow">http://www.cgu.edu/pages/8200.asp</a> in the middle of the page. </p>
+<p>The  English PhD has similar language, although the 'research tool' option is limited to digital humanities. See <a href="http://www.cgu.edu/pages/8210.asp" rel="nofollow">http://www.cgu.edu/pages/8210.asp</a></p>
+<p>The University of Guelph PhD in Literary Studies/Theatre Studies in English Writes that "In certain cases, students' research may require demonstrable competency in a non-written or technical language such as a programming language. The selection of the language(s) will be determined by the student in consultation with the dissertation advisor, and must be submitted for approval by the Graduate Studies Committee." there doesn't seem to be an accepted (or at least outlined) method for assessing a programming language. See: <a href="http://www.uoguelph.ca/registrar/calendars/graduate/current/gradprog/sets-phd.shtml" rel="nofollow">http://www.uoguelph.ca/registrar/calendars/graduate/current/gradprog/sets-phd.shtml</a></p>
+<p>UC Santa Cruz has similar language on the website for the PhD in Film and Digital Media: <a href="http://film.ucsc.edu/phd_program/requirements" rel="nofollow">http://film.ucsc.edu/phd_program/requirements</a></p>
+<p>Thinking about this in relation to the above, it seems like there might be precedent in in History for considering various specializations (oral history, quantitative methods), as well as in Linguistics. Personally, I really like Claremont's research tools idea, given the justifications that have bee explicitly put forth for reasons why multiple languages are required, ie, to be useful in primary research settings.
+</p></div>
+				<div class="poststuff">Posted 6 years ago <a class="post-perma-link" href="#post-1828">Permalink</a> </div>
+			</div>
+		</div>
+	</li>
+	<li id="post-1832" class="alt">
+		<div id="position-8">
+			<div class="threadauthor">
+				<img alt="" src="http://www.gravatar.com/avatar/8e6d6c19511dc73ac574bd89acad8f03?s=48&amp;d=identicon&amp;r=pg" class="photo avatar avatar-48" style="height:48px; width:48px;" />				<p>
+					<strong>Ethan Whittet</strong><br />
+					<small><a href="http://digitalhumanities.org/answers/profile/ethan-whittet">Member</a></small>
+				</p>
+				<div class="author-badges"><span class='badge 2'><!-- fewer than 5 posts --></span><span class='badge 0'><!-- fewer than 3 answers --></span></div>
+			</div>
+			<div class="threadpost">
+				<div class="post"><p>Thank you all for your input! Daniel, janaremy, and bmschmidt, your information on how other institutions have handled this issue will certainly interest my Graduate Studies Committee. Much obliged.
+</p></div>
+				<div class="poststuff">Posted 6 years ago <a class="post-perma-link" href="#post-1832">Permalink</a> </div>
+			</div>
+		</div>
+	</li>
+	<li id="post-2043">
+		<div id="position-9">
+			<div class="threadauthor">
+				<a href="http://english111blog2.blogspot.com/"><img alt="" src="http://www.gravatar.com/avatar/d7bbb871aca6a01d43f5276756ddcb09?s=48&amp;d=identicon&amp;r=pg" class="photo avatar avatar-48" style="height:48px; width:48px;" /></a>				<p>
+					<strong><a href="http://english111blog2.blogspot.com/">mbranson_1993</a></strong><br />
+					<small><a href="http://digitalhumanities.org/answers/profile/mbranson_1993">Member</a></small>
+				</p>
+				<div class="author-badges"><span title='5+ Posts' class='badge bronze-poster 5'><!-- 10-19 posts --></span><span class='badge 0'><!-- fewer than 3 answers --></span></div>
+			</div>
+			<div class="threadpost">
+				<div class="post"><p>In the early 2000s, a colleague and good friend used her HTML coding experience as her ONLY language other than English for her PhD at University of North Carolina ay Greensboro. When I did my PhD work at the same school in the early 1980s, I was required to take two graduate level French classes. . . so there is precedent at this one university in NC accepting coding. . . .
+</p></div>
+				<div class="poststuff">Posted 5 years ago <a class="post-perma-link" href="#post-2043">Permalink</a> </div>
+			</div>
+		</div>
+	</li>
+
+</ol>
+<div class="clearit"><br style=" clear: both;" /></div>
+<p class="rss-link"><a href="http://digitalhumanities.org/answers/rss/topic/precedent-for-coding-partially-fulfilling-a-phd-foreign-lang-requirement" class="rss-link"><abbr title="Really Simple Syndication">RSS</abbr> feed for this topic</a></p>
+<h2 class="post-form">Reply</h2>
+<p>You must <a href="http://digitalhumanities.org/answers/bb-login.php">log in</a> to post.</p>		</div>
+			<div id="footer" role="contentinfo" class="span-24">
+				<div id="lang-switch">
+					<span class="lang-label">Language</span>
+					<form id="bb_language_switcher" style="display:inline-block;"><select  style="width:150px;" name="bb_language_switcher" onchange="location.href='/answers/topic/precedent-for-coding-partially-fulfilling-a-phd-foreign-lang-requirement?bblang=' + this.options[this.selectedIndex].value;">
+<option value=''>Select...</option>	<option value="bg_BG">&nbsp;Bulgarian (BG) </option>
+	<option value="continents-cities-sr_RS">&nbsp;Corsican</option>
+	<option value="da_DK">&nbsp;Danish (DK) </option>
+	<option style='background:#ECE9D8;color:#000;font-weight:bold;' value=" ">&nbsp;English</option>
+	<option value="et_EE">&nbsp;Estonian (EE) </option>
+	<option value="fr_FR">&nbsp;French (FR) </option>
+	<option value="de">&nbsp;German</option>
+	<option value="he_IL">&nbsp;Hebrew (IL) </option>
+	<option value="hu_HU">&nbsp;Hungarian (HU) </option>
+	<option value="id_ID">&nbsp;Indonesian (ID) </option>
+	<option value="it_IT">&nbsp;Italian (IT) </option>
+	<option value="ja">&nbsp;Japanese</option>
+	<option value="pl_PL">&nbsp;Polish (PL) </option>
+	<option value="pt_BR">&nbsp;Portuguese (BR) </option>
+	<option value="pt_PT">&nbsp;Portuguese (PT) </option>
+	<option value="ro_RO">&nbsp;Romanian (RO) </option>
+	<option value="ru_RU">&nbsp;Russian (RU) </option>
+	<option value="sr_RS">&nbsp;Serbian (RS) </option>
+	<option value="sk">&nbsp;Slovak</option>
+	<option value="sk_SK">&nbsp;Slovak (SK) </option>
+	<option value="es_ES">&nbsp;Spanish (ES) </option>
+	<option value="sv_SE">&nbsp;Swedish (SE) </option>
+	<option value="th">&nbsp;Thai</option>
+	<option value="ug_CN">&nbsp;Uyghur (CN) </option>
+	<option value="uz_UZ">&nbsp;Uzbek (UZ) </option>
+	<option value="vi">&nbsp;Vietnamese</option>
+</select></form>
+				</div>			
+				<p>A project of the <a href="http://www.ach.org">Association for Computers and the Humanities</a> and the Chronicle of Higher Education's <a href="http://profhacker.com">ProfHacker</a></p>
+				<p>Icons by <a href="http://www.famfamfam.com/lab/icons/silk/">famfamfam</a></p>
+				<p><a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/"><img alt="Creative Commons License" src="http://i.creativecommons.org/l/by-nc-sa/3.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License</a>.</p>
+				<p><a href="http://lib.virginia.edu/scholarslab"><img src="http://digitalhumanities.org/answers/bb-templates/dhqa/images/slab-logo.jpg" alt="Scholars' Lab" title="Scholars' Lab"/></a></p>
+			</div>
+	</div>
+
+
+</body>
+</html>

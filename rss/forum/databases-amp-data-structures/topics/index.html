@@ -1,0 +1,312 @@
+<?
+/*
+Plugin Name: bb Topic Icons
+Plugin URI: http://devt.caffeinatedbliss.com/bbpress/topic-icons
+Description: Adds configurable icons next to topics based on their status
+Author: Paul Hawke
+Author URI: http://paul.caffeinatedbliss.com/
+Version: 0.6
+*/
+
+/****************************************************************************
+ *
+ * Configure the following constants to fine-tune the CSS classes that are
+ * generated, the icon filenames that are used, and the text used in the
+ * legend (if you have one displayed).  Note: filenames are likely to be
+ * taken away in a future version and replaced with the concept of "icon sets"
+ * whose filenames are fixed, so dont get used to editing the filenames,
+ * as this will break in future versions.
+ *
+ ****************************************************************************/
+
+// css class for the unsorted list used in the legend display
+define( LEGEND_CLASS, 'topic_icon_legend' );
+
+// busy threshold - a topic with more posts than this is counted as "busy"
+// for purposes of picking an icon.
+define( BUSY_THRESHOLD, 15 );
+
+// width of the images, in pixels
+define( ICON_WIDTH, '20' );
+
+// height of the images, in pixels
+define( ICON_HEIGHT, '20' );
+
+// the URL base for where to find the default icon set.
+define( ICON_SET_URL_BASE, BB_PLUGIN_URL.'bb-topic-icons/icon-sets/' );
+
+/****************************************************************************
+ *
+ * Shouldnt be much need to edit anything beyond this point - configuration
+ * is all done via the constants (above) and through and admin area page in
+ * bbPress at runtime.
+ *
+ ****************************************************************************/
+
+require( 'bb-topic-icons-api.php' );
+require( 'bb-topic-icons-admin.php' );
+require( 'interface.status-interpreter.php' );
+require( 'interface.status-renderer.php' );
+require( 'class.default-status-interpreter.php' );
+require( 'class.default-status-renderer.php' );
+
+function topic_icons_legend() {
+	$icon_set_name = topic_icons_get_active_icon_set();
+	$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+	$statuses = get_active_status_interpreter()->getAllStatuses();
+	$renderer = get_active_status_renderer();
+	
+	echo '<ul id="'.LEGEND_CLASS.'">';
+	for ($i=0; $i < count($statuses); $i++) {
+		$image = $renderer->renderStatus($statuses[$i]);
+		$tooltip = $renderer->renderStatusTooltip($statuses[$i]);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (isset($image) && strlen($image) > 0 &&
+			isset($tooltip) && strlen($tooltip) > 0 && $exists) {
+			echo '<li><img src="'.$icon_set_url.'/'.$image.
+				'" width="'.ICON_WIDTH.'" height="'.ICON_HEIGHT.
+				'" align="absmiddle">&nbsp;'.$tooltip.'</li>';
+		}
+	}
+	echo '</ul>';
+}
+
+function topic_icons_css() {
+	echo "\n<style type=\"text/css\"><!--\n";
+	require( 'bb-topic-icons.css' );
+	echo "\n--></style>";
+}
+
+function topic_icons_label( $label ) {
+	global $topic;
+	
+	if (bb_is_front() || bb_is_forum() || bb_is_view() || bb_is_tag()) {		
+		$icon_set_name = topic_icons_get_active_icon_set();
+		$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+
+		$status = get_active_status_interpreter()->getStatus(bb_get_location(), $topic);
+		$renderer = get_active_status_renderer();
+		$image = $renderer->renderStatus($status);
+		$tooltip = $renderer->renderStatusTooltip($status);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (!$exists) {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), ICON_SET_URL_BASE.'/empty.png', ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		} else if (strlen($tooltip) > 0) {		
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"><span>%s</span></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $tooltip, $label);
+		} else {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		}
+	}
+	
+	return $label;
+}
+
+function topic_icons_init( ) {
+	remove_filter('bb_topic_labels', 'bb_closed_label', 10);
+	remove_filter('bb_topic_labels', 'bb_sticky_label', 20);
+
+	add_filter('bb_topic_labels', 'topic_icons_label', 11);
+
+	add_action('bb_head', 'topic_icons_css');
+
+	add_action('bb_admin_menu_generator', 'topic_icons_admin_page_add');
+	add_action('bb_admin-header.php', 'topic_icons_admin_page_process');
+	
+	topic_icons_register_status_interpreter('default', new DefaultStatusInterpreter(BUSY_THRESHOLD));
+	topic_icons_register_status_renderer('default', new DefaultStatusRenderer());
+}
+
+topic_icons_init();
+
+?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Forum: Databases &#38; Data Structures - Recent Topics</title>
+		<link>http://digitalhumanities.org/answers/forum/databases-amp-data-structures</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Forum: Databases &amp; Data Structures - Recent Topics</description>
+		<language>en-US</language>
+		<pubDate>Sun, 24 Mar 2019 17:09:17 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/forum/databases-amp-data-structures/topics" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>diane.southier on "text network analysis using Gephi"</title>
+						<link>http://digitalhumanities.org/answers/topic/text-network-analysis-using-gephi#post-2354</link>
+			<pubDate>Tue, 03 Nov 2015 21:59:59 +0000</pubDate>
+			<dc:creator>diane.southier</dc:creator>
+			<guid isPermaLink="false">2354@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hi!&#60;br /&#62;
+I'm a student from Brazil, and I'm looking for help to text network analysis using Gephi graph visualization software. I have a lot of texts in portuguese to anylise, and Gephi's tools seem to be the best to reach the result I want. So how do I import text to Gephi?&#60;br /&#62;
+Thanks!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>elotroalex on "Transcription layer on top of fedora/blacklight stack"</title>
+						<link>http://digitalhumanities.org/answers/topic/transcription-layer-on-top-of-fedorablacklight-stack#post-2326</link>
+			<pubDate>Wed, 13 May 2015 19:36:15 +0000</pubDate>
+			<dc:creator>elotroalex</dc:creator>
+			<guid isPermaLink="false">2326@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;What if I wanted to build a transcription layer on top of columbia lib's digital collections? we have a fedora/blacklight stack. thinking of an API. anybody out there doing it?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>thomasgpadilla on "Where do you go for data?"</title>
+						<link>http://digitalhumanities.org/answers/topic/where-do-you-go-for-data#post-2257</link>
+			<pubDate>Thu, 13 Nov 2014 14:33:38 +0000</pubDate>
+			<dc:creator>thomasgpadilla</dc:creator>
+			<guid isPermaLink="false">2257@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Where do you go for data to support your DH work aside from LAMs (library, archive, museum) specific repositories?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>cperryk@gmail.com on "Where can I get data for a map of all of the letters a historical figure sent?"</title>
+						<link>http://digitalhumanities.org/answers/topic/where-can-i-get-data-for-a-map-of-all-of-the-letters-a-historical-figure-sent#post-1933</link>
+			<pubDate>Thu, 14 Mar 2013 19:09:40 +0000</pubDate>
+			<dc:creator>cperryk@gmail.com</dc:creator>
+			<guid isPermaLink="false">1933@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hi all,&#60;/p&#62;
+&#60;p&#62;I make maps and interactives for Slate.com. I thought it might be interesting to make a map showing all of the locations from which a historical figure sent letters. Like a simpler version of this: &#60;a href=&#34;http://www.stanford.edu/group/toolingup/rplviz/&#34; rel=&#34;nofollow&#34;&#62;http://www.stanford.edu/group/toolingup/rplviz/&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;Do any people or organizations have structured data that would be suitable for this project? I could use, for example, a dataset of an individual's letters that includes sender location, recipient location, and date.&#60;/p&#62;
+&#60;p&#62;I would really appreciate any help on this!&#60;/p&#62;
+&#60;p&#62;Chris Kirk&#60;br /&#62;
+Interactives Editor&#60;br /&#62;
+Slate.com
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Josh on "How does one prepare and use data for network analysis with Gephi?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-does-one-prepare-and-use-data-for-network-analysis-with-gephi#post-1880</link>
+			<pubDate>Thu, 14 Feb 2013 16:09:22 +0000</pubDate>
+			<dc:creator>Josh</dc:creator>
+			<guid isPermaLink="false">1880@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;There are plenty of tutorials on the web that are useful for learning Gephi, but I've encountered a much steeper learning curve for the steps prior—such as extracting and preparing data from literary texts to be used with Gephi. In my example, I am interested in performing a network analysis of the social networks (both real and imaginary) in the works of Enrique Vila-Matas (I'd eventually like to expand this corpus to other authors). Acquiring the digital text and working with Gephi I can do (or the latter learn), but it's the very important intermediary steps of preparing the data (extraction of names and places to getting those in a form—database? spreadsheet?—analyzable by Gephi) that I need help with. Any good reading, tutorials, or other resources out there? Other recommendations? I'm working on a Mac and have a limited knowledge of Python, so any Mac-friendly software would be a big help. Thanks!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>boybot16@gmail.com on "Have you used MongoDB for DH project?"</title>
+						<link>http://digitalhumanities.org/answers/topic/have-you-used-mongodb-for-dh-project#post-1850</link>
+			<pubDate>Sat, 05 Jan 2013 15:19:42 +0000</pubDate>
+			<dc:creator>boybot16@gmail.com</dc:creator>
+			<guid isPermaLink="false">1850@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;We have a DH project that's currently uses MySQL for the database, and it works very well.&#60;/p&#62;
+&#60;p&#62;There has been much recent talk about NoSQL databases, particularly MongoDB, promising flexibility and scalability. We're considering re-writing the backend. Is anyone in the DH community seriously using MongoDB?&#60;/p&#62;
+&#60;p&#62;If you have used MongoDB for a DH project, what has been your experience with it? Biggest joy? Gotchas to look out for? Is conversion worth it for libraries and archives open source projects?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>martin.delaiglesia@googlemail.com on "Is anyone using the RBMS/ACRL vocabularies Binding Terms or Type Evidence?"</title>
+						<link>http://digitalhumanities.org/answers/topic/is-anyone-using-the-rbmsacrl-vocabularies-binding-terms-or-type-evidence#post-1581</link>
+			<pubDate>Thu, 29 Mar 2012 10:02:08 +0000</pubDate>
+			<dc:creator>martin.delaiglesia@googlemail.com</dc:creator>
+			<guid isPermaLink="false">1581@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I recently found out that the Rare Books and Manuscripts Section (RBMS) of the Association of College and Research Libraries (ACRL) has published online versions of their controlled vocabularies (&#60;a href=&#34;http://www.rbms.info/committees/bibliographic_standards/controlled_vocabularies)&#34; rel=&#34;nofollow&#34;&#62;http://www.rbms.info/committees/bibliographic_standards/controlled_vocabularies)&#60;/a&#62;. I'm especially interested in using the vocabularies &#34;Binding Terms&#34; and &#34;Type Evidence&#34; to describe and classify book bindings and typefaces within my digital edition project. Now that there's one URI per term in these vocabularies, they come pretty close to what I was looking for - not quite Linked Open Data ontologies, but almost. What worries me, though, is that no one seems to be using these vocabularies. They were intended to be used in MARC records, but I haven't yet seen any MARC record containing their terms. So, my question is: is there any DH project or library that actually uses one of the RBMS/ACRL vocabularies? Or does anyone have an opinion on them, or can suggest better alternatives?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Katy Meyers on "Can you migrate Omeka.net content into Omeka.org?"</title>
+						<link>http://digitalhumanities.org/answers/topic/can-you-migrate-omekanet-content-into-omekaorg#post-1149</link>
+			<pubDate>Sun, 01 May 2011 14:21:58 +0000</pubDate>
+			<dc:creator>Katy Meyers</dc:creator>
+			<guid isPermaLink="false">1149@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I am going to be building an Omeka.org site and was wondering if I can transfer my Omeka.net data directly into it? Does anyone know what steps can be done to migrate data? Are there any guides?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Matthew Wilkens on "In-copyright ebooks for text analysis?"</title>
+						<link>http://digitalhumanities.org/answers/topic/in-copyright-ebooks-for-text-analysis#post-1441</link>
+			<pubDate>Wed, 09 Nov 2011 05:55:59 +0000</pubDate>
+			<dc:creator>Matthew Wilkens</dc:creator>
+			<guid isPermaLink="false">1441@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Does anyone know of a source for digital editions of contemporary fiction in large quantities (10,000+ volumes, say) that are supplied in a format suitable for text-mining (XML, HTML, plain text, etc.)? Amazon is out due to DRM, as are the typical library providers. Google and Hathi might offer long-term access, but nothing at the moment. Anything on which one can lay ones hands in the very near term?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Stéfan Sinclair on "Bibliographies with Geolocation Metadata"</title>
+						<link>http://digitalhumanities.org/answers/topic/bibliographies-with-geolocation-metadata#post-1410</link>
+			<pubDate>Wed, 12 Oct 2011 13:41:08 +0000</pubDate>
+			<dc:creator>Stéfan Sinclair</dc:creator>
+			<guid isPermaLink="false">1410@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Can anyone suggest good sources for &#60;strong&#62;bulk&#60;/strong&#62; bibliographic records with geolocation metadata? I'm mostly interested in literary and historical texts, though other collections might serve as good examples. Typical publication location as words would be a fine start, but ideally there would be location of writing (where possible) and latitude/longitude values.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Wilko von Hardenberg on "References/best practices on controlled vocabularies and thesauri"</title>
+						<link>http://digitalhumanities.org/answers/topic/referencesbest-practices-on-controlled-vocabularies-and-thesauri#post-1201</link>
+			<pubDate>Thu, 09 Jun 2011 12:43:57 +0000</pubDate>
+			<dc:creator>Wilko von Hardenberg</dc:creator>
+			<guid isPermaLink="false">1201@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I am working on adapting existing CVs/thesauri to the needs of our new environmental humanities portal and wanted to know if anyone had any reference/best practice to hint me to. I am particulary interested in issues related to the use of CVs in defining tags/search terms, the relationships between terms/tags and their practical use within a site/dbase and in CV scalability over time.&#60;/p&#62;
+&#60;p&#62;Many thanks&#60;br /&#62;
+Wilko
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>cwittern@gmail.com on "How to model dates and time in DH projects?"</title>
+						<link>http://digitalhumanities.org/answers/topic/i-am-looking-for-discussions-of-how-to-model-dates-and-time-in-dh-projects#post-650</link>
+			<pubDate>Thu, 04 Nov 2010 03:48:48 +0000</pubDate>
+			<dc:creator>cwittern@gmail.com</dc:creator>
+			<guid isPermaLink="false">650@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;getting a grip of how to model date and time is difficult and I am looking for a good discussion of the possibilities, including how to deal with unknown, imprecise or uncertain data.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Stéfan Sinclair on "Institutional Records Repository Software"</title>
+						<link>http://digitalhumanities.org/answers/topic/institutional-records-repository-software#post-805</link>
+			<pubDate>Wed, 08 Dec 2010 17:00:10 +0000</pubDate>
+			<dc:creator>Stéfan Sinclair</dc:creator>
+			<guid isPermaLink="false">805@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;A committee on campus has been formed to try to figure out some strategies for managing institutional documents (both print and digital). Yes, this is obviously an enormous undertaking and there are commercial solutions that are worth exploring. My question is whether anyone has tried something like this at a large scale with similar kinds of documents, perhaps using open-source components like Fedora. I need to emphasize how diverse the documents are (in content, in medium, etc.) and the need for records management pieces like retention and access policies.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>margiemcl@gmail.com on "Annual Faculty Activity Report"</title>
+						<link>http://digitalhumanities.org/answers/topic/annual-faculty-activity-report#post-777</link>
+			<pubDate>Wed, 01 Dec 2010 21:10:04 +0000</pubDate>
+			<dc:creator>margiemcl@gmail.com</dc:creator>
+			<guid isPermaLink="false">777@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I am looking for tools that universities use to allow faculty to submit their annual activity reports online that would then allow the different offices to pull and compiles relevant information. The office of serving learning could then gather all the data related to service learning and civic engagement in the reports. I was thinking about it in terms of my department chair and dean putting together their annual reports. Today, I talked with our computing services and it turns out our research office wants something similar that would allow them to pull out a report on a keyword search -- such as what's going on in digital humanities at Wright State?  It would be great if faculty to could login and add to the report under the different headings throughout the year and then click submit when they want to share it or turn it in. It would help, of course, if it would format all the publications, grants, etc. for us as well. Is there something open source that does this now? Right now, we each submit the report as a word file.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>J.Matthew Huculak on "What&#039;s the best way to name files for large projects??"</title>
+						<link>http://digitalhumanities.org/answers/topic/whats-the-best-way-to-name-files-for-large-projects#post-218</link>
+			<pubDate>Wed, 29 Sep 2010 15:14:03 +0000</pubDate>
+			<dc:creator>J.Matthew Huculak</dc:creator>
+			<guid isPermaLink="false">218@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;What's the best practice for choosing filenames for large projects. Is there an archival standard that one should use?
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

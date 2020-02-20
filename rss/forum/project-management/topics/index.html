@@ -1,0 +1,332 @@
+<?
+/*
+Plugin Name: bb Topic Icons
+Plugin URI: http://devt.caffeinatedbliss.com/bbpress/topic-icons
+Description: Adds configurable icons next to topics based on their status
+Author: Paul Hawke
+Author URI: http://paul.caffeinatedbliss.com/
+Version: 0.6
+*/
+
+/****************************************************************************
+ *
+ * Configure the following constants to fine-tune the CSS classes that are
+ * generated, the icon filenames that are used, and the text used in the
+ * legend (if you have one displayed).  Note: filenames are likely to be
+ * taken away in a future version and replaced with the concept of "icon sets"
+ * whose filenames are fixed, so dont get used to editing the filenames,
+ * as this will break in future versions.
+ *
+ ****************************************************************************/
+
+// css class for the unsorted list used in the legend display
+define( LEGEND_CLASS, 'topic_icon_legend' );
+
+// busy threshold - a topic with more posts than this is counted as "busy"
+// for purposes of picking an icon.
+define( BUSY_THRESHOLD, 15 );
+
+// width of the images, in pixels
+define( ICON_WIDTH, '20' );
+
+// height of the images, in pixels
+define( ICON_HEIGHT, '20' );
+
+// the URL base for where to find the default icon set.
+define( ICON_SET_URL_BASE, BB_PLUGIN_URL.'bb-topic-icons/icon-sets/' );
+
+/****************************************************************************
+ *
+ * Shouldnt be much need to edit anything beyond this point - configuration
+ * is all done via the constants (above) and through and admin area page in
+ * bbPress at runtime.
+ *
+ ****************************************************************************/
+
+require( 'bb-topic-icons-api.php' );
+require( 'bb-topic-icons-admin.php' );
+require( 'interface.status-interpreter.php' );
+require( 'interface.status-renderer.php' );
+require( 'class.default-status-interpreter.php' );
+require( 'class.default-status-renderer.php' );
+
+function topic_icons_legend() {
+	$icon_set_name = topic_icons_get_active_icon_set();
+	$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+	$statuses = get_active_status_interpreter()->getAllStatuses();
+	$renderer = get_active_status_renderer();
+	
+	echo '<ul id="'.LEGEND_CLASS.'">';
+	for ($i=0; $i < count($statuses); $i++) {
+		$image = $renderer->renderStatus($statuses[$i]);
+		$tooltip = $renderer->renderStatusTooltip($statuses[$i]);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (isset($image) && strlen($image) > 0 &&
+			isset($tooltip) && strlen($tooltip) > 0 && $exists) {
+			echo '<li><img src="'.$icon_set_url.'/'.$image.
+				'" width="'.ICON_WIDTH.'" height="'.ICON_HEIGHT.
+				'" align="absmiddle">&nbsp;'.$tooltip.'</li>';
+		}
+	}
+	echo '</ul>';
+}
+
+function topic_icons_css() {
+	echo "\n<style type=\"text/css\"><!--\n";
+	require( 'bb-topic-icons.css' );
+	echo "\n--></style>";
+}
+
+function topic_icons_label( $label ) {
+	global $topic;
+	
+	if (bb_is_front() || bb_is_forum() || bb_is_view() || bb_is_tag()) {		
+		$icon_set_name = topic_icons_get_active_icon_set();
+		$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+
+		$status = get_active_status_interpreter()->getStatus(bb_get_location(), $topic);
+		$renderer = get_active_status_renderer();
+		$image = $renderer->renderStatus($status);
+		$tooltip = $renderer->renderStatusTooltip($status);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (!$exists) {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), ICON_SET_URL_BASE.'/empty.png', ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		} else if (strlen($tooltip) > 0) {		
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"><span>%s</span></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $tooltip, $label);
+		} else {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		}
+	}
+	
+	return $label;
+}
+
+function topic_icons_init( ) {
+	remove_filter('bb_topic_labels', 'bb_closed_label', 10);
+	remove_filter('bb_topic_labels', 'bb_sticky_label', 20);
+
+	add_filter('bb_topic_labels', 'topic_icons_label', 11);
+
+	add_action('bb_head', 'topic_icons_css');
+
+	add_action('bb_admin_menu_generator', 'topic_icons_admin_page_add');
+	add_action('bb_admin-header.php', 'topic_icons_admin_page_process');
+	
+	topic_icons_register_status_interpreter('default', new DefaultStatusInterpreter(BUSY_THRESHOLD));
+	topic_icons_register_status_renderer('default', new DefaultStatusRenderer());
+}
+
+topic_icons_init();
+
+?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Forum: Project Management &#38; DH Professions - Recent Topics</title>
+		<link>http://digitalhumanities.org/answers/forum/project-management</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Forum: Project Management &amp; DH Professions - Recent Topics</description>
+		<language>en-US</language>
+		<pubDate>Sun, 24 Mar 2019 17:08:58 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/forum/project-management/topics" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>pfyfe on "Why should DH coursework count towards a literature grad program?"</title>
+						<link>http://digitalhumanities.org/answers/topic/why-should-dh-coursework-count-towards-a-literature-grad-program#post-2400</link>
+			<pubDate>Thu, 01 Dec 2016 15:51:42 +0000</pubDate>
+			<dc:creator>pfyfe</dc:creator>
+			<guid isPermaLink="false">2400@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hi everyone: I have a former grad student who wrote to me in a panic. Apparently, her current department chair has decided that her previous coursework in DH, book history will not count towards her current graduate program, because it does not &#34;correlate&#34; to literature, composition, or teaching. (Wow. I can barely even.) The chair is apparently reacting to an accreditation review and has asked for justification in language accessible to non-specialist peers. Does anyone have go-to resources for helping us make this case? Thank you --
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>althealogan on "Reviving stalled or neglected DH projects"</title>
+						<link>http://digitalhumanities.org/answers/topic/reviving-stalled-or-neglected-dh-projects#post-2398</link>
+			<pubDate>Wed, 28 Sep 2016 14:52:47 +0000</pubDate>
+			<dc:creator>althealogan</dc:creator>
+			<guid isPermaLink="false">2398@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hello!&#60;/p&#62;
+&#60;p&#62;I am a student at the School of Information at the University of Texas at Austin.  I’m working with Jennifer Hecker (&#60;a href=&#34;http://jenniferlasupremahecker.info)&#34; rel=&#34;nofollow&#34;&#62;http://jenniferlasupremahecker.info)&#60;/a&#62;, who works with Technology Innovation &#38;amp; Strategy here at UT, on a project exploring how best to breathe new life into stalled or neglected DH projects.  &#60;/p&#62;
+&#60;p&#62;If you have experience working on a DH project, and a few minutes to spare, I’d be grateful if you would complete my survey on this topic.  You can find the survey here: &#60;/p&#62;
+&#60;p&#62; &#60;a href=&#34;http://tinyurl.com/revivingdh&#34; rel=&#34;nofollow&#34;&#62;http://tinyurl.com/revivingdh&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;I also welcome any resource recommendations, feedback or questions you may have. Also, please feel free to forward this survey to other interested parties. &#60;/p&#62;
+&#60;p&#62;Thanks for your time!&#60;/p&#62;
+&#60;p&#62;Althea N. Logan&#60;br /&#62;
+MSIS Candidate - School of Information, The University of Texas at Austin&#60;br /&#62;
+&#60;a href=&#34;https://loganmsis.wordpress.com&#34; rel=&#34;nofollow&#34;&#62;https://loganmsis.wordpress.com&#60;/a&#62;&#60;br /&#62;
+&#60;a href=&#34;mailto:thealogan@utexas.edu&#34;&#62;thealogan@utexas.edu&#60;/a&#62;
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>katherineharris on "Map or Directory of Digital Humanists?"</title>
+						<link>http://digitalhumanities.org/answers/topic/map-or-directory-of-digital-humanists#post-2379</link>
+			<pubDate>Sun, 28 Feb 2016 01:15:57 +0000</pubDate>
+			<dc:creator>katherineharris</dc:creator>
+			<guid isPermaLink="false">2379@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Has anyone ever created a directory or map of Digital Humanists? I ask because there are so many doing DH in California but I don't know where or how to find them. I follow lists on Twitter, keep updated on recent scholarship and writings, talk to many people, but still I hear about California DH events after the fact. &#60;/p&#62;
+&#60;p&#62;Would really like to know if someone has taken this up based on the directory from DHNow or DHCommons or Day of DH. &#60;/p&#62;
+&#60;p&#62;I bet if we knew there was someone down the street that we could get up to some interesting shenanigans in DH
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Miriam Posner on "DH Grad Fellowships?"</title>
+						<link>http://digitalhumanities.org/answers/topic/dh-grad-fellowships#post-2348</link>
+			<pubDate>Mon, 17 Aug 2015 21:56:02 +0000</pubDate>
+			<dc:creator>Miriam Posner</dc:creator>
+			<guid isPermaLink="false">2348@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I feel like this question gets asked periodically in various fora, but perhaps there are new developments I'm not aware of:&#60;/p&#62;
+&#60;p&#62;Are there any options out there for graduate students looking for fellowships to do specifically DH work? ACH micro-grants and the like are helpful, of course, but I'm thinking of fellowships along the lines of the &#60;a href=&#34;https://www.acls.org/programs/dcf/&#34;&#62;Mellon dissertation completion fellowship&#60;/a&#62; or the &#60;a href=&#34;http://www.clir.org/fellowships/mellon&#34;&#62;CLIR Original Sources&#60;/a&#62; fellowships. &#60;/p&#62;
+&#60;p&#62;I'm asking specifically for American grad students, but I'm sure future readers will appreciate links to other fellowships as well.&#60;/p&#62;
+&#60;p&#62;Thanks!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Miriam Posner on "Best DH project-management system?"</title>
+						<link>http://digitalhumanities.org/answers/topic/best-dh-project-management-system#post-427</link>
+			<pubDate>Thu, 14 Oct 2010 15:54:08 +0000</pubDate>
+			<dc:creator>Miriam Posner</dc:creator>
+			<guid isPermaLink="false">427@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;What project-management system does your center or initiative use to monitor progress, set deadlines, keep track of issues, communicate with contributors, set to-do lists, and, well, manage projects as a group?&#60;/p&#62;
+&#60;p&#62;My impression is that Basecamp is the &#34;industry&#34; standard. If you use it, are there things you wish it did better? DH-specific features you wish it had? Maybe it has too many features?&#60;/p&#62;
+&#60;p&#62;My experience has been that any number of PM tools work great for a week or two, but if they're not really, really well-integrated into your workflow, they'll sort of drop out of use.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>ebuhe on "Feedback on Digital Humanities Best Practices document"</title>
+						<link>http://digitalhumanities.org/answers/topic/feedback-on-digital-humanities-best-practices-document#post-2306</link>
+			<pubDate>Sun, 22 Mar 2015 00:51:16 +0000</pubDate>
+			<dc:creator>ebuhe</dc:creator>
+			<guid isPermaLink="false">2306@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I'm working on a Digital Humanities Best Practices document that would serve as a list of questions humanities scholars could ask themselves as they get started on a collaborative project--something that is widely applicable, accessible, and quick and easy to read (meaning: not written in prose, not one person's reflections about their DH experience, not behind a paywall). The scope is specifically geared toward setting expectations and the issues to consider including in a charter / contract.&#60;/p&#62;
+&#60;p&#62;It currently exists as an editable document on Google Drive -- and I'd love feedback!! What's missing, what's too broad/specific? Other great links to share? I'd especially like thoughts on integrating language re: open source, creative commons, code.&#60;/p&#62;
+&#60;p&#62;Here's the link:&#60;br /&#62;
+&#60;a href=&#34;http://www.nyu.edu/gsas/dept/fineart/research/digital-humanities-best-practices.htm&#34; rel=&#34;nofollow&#34;&#62;http://www.nyu.edu/gsas/dept/fineart/research/digital-humanities-best-practices.htm&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;Thanks!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>trmarvin on "How to gain DH experience without institutional support"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-to-gain-dh-experience-without-institutional-support#post-2145</link>
+			<pubDate>Tue, 11 Feb 2014 15:16:30 +0000</pubDate>
+			<dc:creator>trmarvin</dc:creator>
+			<guid isPermaLink="false">2145@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hello, I'm a freshly minted, traditionally trained humanities Ph.D. interested in DH. I come from a specialized research institution without a DH center, etc. My interest in DH methodologies stems from a data set I collected incidentally while doing my dissertation research, which, I think, could be productively manipulated and, pending results, expanded. I have a decent set of self-taught beginner tech skills and enjoy picking up more when I have the time. I'm aware of the great resources and advice out there for people in my situation, but my question is more specific: without institutional backing, how do I obtain CV-level involvement (for lack of a better term) in DH projects that would allow me to collaborate, learn, and work on a deeper level than just plugging away alone in my (very little) spare time on the server space I purchased out-of-pocket?&#60;/p&#62;
+&#60;p&#62;Any advice is greatly appreciated.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Beth Russell on "How do you maintain digital projects in the long term?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-do-you-maintain-digital-projects-in-the-long-term#post-2177</link>
+			<pubDate>Mon, 09 Jun 2014 08:41:05 +0000</pubDate>
+			<dc:creator>Beth Russell</dc:creator>
+			<guid isPermaLink="false">2177@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;We have a new Center for Digital Scholarship, on a new campus, and I am new in my position heading up the space. A faculty member has approached me with an idea to build an Arabic language learning website. She'll seek funding from the institution to get it built and up and running, and the CDS will host the project, providing guidance, space, etc.&#60;/p&#62;
+&#60;p&#62;What I keep running into as a sticking point is how this site will be maintained in the long run. After the professor moves on, and the site is fully built, who should assume responsibility for updating content, migrating it forward, etc.?&#60;/p&#62;
+&#60;p&#62;I'd love to hear about any models of how this successfully works for you as I'm sure this is a common issue in our field. I've not found much in my preliminary research.&#60;/p&#62;
+&#60;p&#62;Many thanks.&#60;br /&#62;
+Beth
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Michael Widner on "What hardware and software would you put in a DH/Multimedia lab?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-hardware-and-software-would-you-put-in-a-dhmultimedia-lab#post-1680</link>
+			<pubDate>Mon, 11 Jun 2012 22:55:32 +0000</pubDate>
+			<dc:creator>Michael Widner</dc:creator>
+			<guid isPermaLink="false">1680@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;If you could build your own DH lab, what would you stock it with? Anything from AV equipment to software to computer hardware is fair game. I'm envisioning a place where graduate students (mainly) and others would have the space and tools to experiment, learn, and do research and/or produce media.&#60;/p&#62;
+&#60;p&#62;Aside: I notice there's not a category in DHAnswers for these sorts of infrastructure questions.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Dorothea Salo on "Deposit or licence agreements for online reuse of copyright material"</title>
+						<link>http://digitalhumanities.org/answers/topic/deposit-or-licence-agreements-for-online-reuse-of-copyright-material#post-2132</link>
+			<pubDate>Thu, 21 Nov 2013 14:46:31 +0000</pubDate>
+			<dc:creator>Dorothea Salo</dc:creator>
+			<guid isPermaLink="false">2132@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Not quite sure what you're asking? As an erstwhile institutional-repository manager, I have yet to see an IR deposit agreement that is an actual copyright TRANSFER. License, yes -- repos need depositors to grant sufficient permission for the repo to hold, distribute, and preserve the work -- but that's not at ALL the same as a copyright transfer.&#60;/p&#62;
+&#60;p&#62;I also have yet to see the IR that gives two hoots what else happens by way of authors/depositors publishing their deposited content, or putting a copy in another repo. I never did.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>jennriley on "Disciplines with guidelines for evaluating digital work"</title>
+						<link>http://digitalhumanities.org/answers/topic/disciplines-with-guidelines-for-evaluating-digital-work#post-2080</link>
+			<pubDate>Fri, 16 Aug 2013 15:55:18 +0000</pubDate>
+			<dc:creator>jennriley</dc:creator>
+			<guid isPermaLink="false">2080@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;What humanities disciplines have published recommendations/guidelines/statements for how to evaluate digital work in their area? I do know the big ones: MLA (&#60;a href=&#34;http://www.mla.org/resources/documents/rep_it/guidelines_evaluation_digital&#34; rel=&#34;nofollow&#34;&#62;http://www.mla.org/resources/documents/rep_it/guidelines_evaluation_digital&#60;/a&#62;) and the AHA guidance on evaluating public historians, which is intersected with but not wholly digital work (&#60;a href=&#34;http://ncph.org/cms/wp-content/uploads/Engaged-Historian.pdf)&#34; rel=&#34;nofollow&#34;&#62;http://ncph.org/cms/wp-content/uploads/Engaged-Historian.pdf)&#60;/a&#62;. What others are out there?&#60;/p&#62;
+&#60;p&#62;Thanks,&#60;br /&#62;
+Jenn
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Luftmensch on "Does anyone know of a survey of DH programs about how they got started?"</title>
+						<link>http://digitalhumanities.org/answers/topic/does-anyone-know-of-a-survey-of-dh-programs-about-how-they-got-started#post-2072</link>
+			<pubDate>Tue, 13 Aug 2013 17:04:29 +0000</pubDate>
+			<dc:creator>Luftmensch</dc:creator>
+			<guid isPermaLink="false">2072@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Does anyone know of a survey of DH programs about how they got started? &#60;/p&#62;
+&#60;p&#62;Our university does not have a DH program (much less a center) and I am interested in learning about the experience of others who have started programs. Any lessons learned would be very valuable.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Stéfan Sinclair on "Licenses and IP Agreements for DH Projects"</title>
+						<link>http://digitalhumanities.org/answers/topic/licenses-and-ip-agreements-for-dh-projects#post-1956</link>
+			<pubDate>Tue, 02 Apr 2013 19:31:03 +0000</pubDate>
+			<dc:creator>Stéfan Sinclair</dc:creator>
+			<guid isPermaLink="false">1956@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I'm wondering if any of you folks would be willing to share custom (software or content) licenses as well as IP agreements for your DH projects. I'm especially interested in what licenses people are using for code and why, as well as IP agreements that are used with research assistants, staff and other researchers. I'll post a few examples that we've used in a separate message below, but I'd be grateful to hear what others have been doing and why (as applicable).
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>David Michelson on "What are some models for governance/editorial oversight for DH projects?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-are-some-models-for-governanceeditorial-oversight-for-dh-projects#post-1974</link>
+			<pubDate>Wed, 10 Apr 2013 17:24:24 +0000</pubDate>
+			<dc:creator>David Michelson</dc:creator>
+			<guid isPermaLink="false">1974@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I am looking for models and best practices to ensure long term sustainability of a collaborative DH project. Could you please point me to long running DH projects whose protocols for governance, editorial oversight, institutional ownership/hosting I might emulate? I am thinking of medium sized DH projects as models, so bigger than one scholar publishing a digital project, but smaller than the TEI consortium or Jstor. Something the size of Nines or another project that has multiple contributors and a focused but regular scholarly user base.&#60;/p&#62;
+&#60;p&#62;Given the concerns over sustainability inherent in DH, I am also interested in thoughts and advice on how to transition a project from the stage where a grant-funded PI is the leader in getting content online to where an editorial board (and institutional hosts) maintain a project longer term. Also, how do DH projects handle the preservation of content for such a project? The data will be licensed open source, but who should hold the copyright after the project is launched? A university library, an s-corporation independent of any institution (like some non-profit scholarly journals or professional societies), the public domain, the original scholarly contributors?&#60;/p&#62;
+&#60;p&#62;Please provide links to governance structures and legal arrangement of existing projects if you are aware of them.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>elotroalex on "What libraries are doing a librarian re-skilling program?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-libraries-are-doing-a-librarian-re-skilling-program#post-1812</link>
+			<pubDate>Mon, 03 Dec 2012 20:28:43 +0000</pubDate>
+			<dc:creator>elotroalex</dc:creator>
+			<guid isPermaLink="false">1812@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;At Columbia University we are embarking on a two year program to re-skill our librarians to be the consulting arm of our re-envisioned Digital Humanities Center. We are not finding much on our environmental scan other than @trevormuñoz' DH Incubator, some of the work that @karikraus is doing, and the work at Indiana by Angela Courtney (@englishlitlib) and Harriett Green (@greenharr) at Illinois. Do you know more? Let's get this band on the road.
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

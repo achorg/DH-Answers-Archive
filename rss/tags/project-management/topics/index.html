@@ -1,0 +1,264 @@
+<?
+/*
+Plugin Name: bb Topic Icons
+Plugin URI: http://devt.caffeinatedbliss.com/bbpress/topic-icons
+Description: Adds configurable icons next to topics based on their status
+Author: Paul Hawke
+Author URI: http://paul.caffeinatedbliss.com/
+Version: 0.6
+*/
+
+/****************************************************************************
+ *
+ * Configure the following constants to fine-tune the CSS classes that are
+ * generated, the icon filenames that are used, and the text used in the
+ * legend (if you have one displayed).  Note: filenames are likely to be
+ * taken away in a future version and replaced with the concept of "icon sets"
+ * whose filenames are fixed, so dont get used to editing the filenames,
+ * as this will break in future versions.
+ *
+ ****************************************************************************/
+
+// css class for the unsorted list used in the legend display
+define( LEGEND_CLASS, 'topic_icon_legend' );
+
+// busy threshold - a topic with more posts than this is counted as "busy"
+// for purposes of picking an icon.
+define( BUSY_THRESHOLD, 15 );
+
+// width of the images, in pixels
+define( ICON_WIDTH, '20' );
+
+// height of the images, in pixels
+define( ICON_HEIGHT, '20' );
+
+// the URL base for where to find the default icon set.
+define( ICON_SET_URL_BASE, BB_PLUGIN_URL.'bb-topic-icons/icon-sets/' );
+
+/****************************************************************************
+ *
+ * Shouldnt be much need to edit anything beyond this point - configuration
+ * is all done via the constants (above) and through and admin area page in
+ * bbPress at runtime.
+ *
+ ****************************************************************************/
+
+require( 'bb-topic-icons-api.php' );
+require( 'bb-topic-icons-admin.php' );
+require( 'interface.status-interpreter.php' );
+require( 'interface.status-renderer.php' );
+require( 'class.default-status-interpreter.php' );
+require( 'class.default-status-renderer.php' );
+
+function topic_icons_legend() {
+	$icon_set_name = topic_icons_get_active_icon_set();
+	$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+	$statuses = get_active_status_interpreter()->getAllStatuses();
+	$renderer = get_active_status_renderer();
+	
+	echo '<ul id="'.LEGEND_CLASS.'">';
+	for ($i=0; $i < count($statuses); $i++) {
+		$image = $renderer->renderStatus($statuses[$i]);
+		$tooltip = $renderer->renderStatusTooltip($statuses[$i]);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (isset($image) && strlen($image) > 0 &&
+			isset($tooltip) && strlen($tooltip) > 0 && $exists) {
+			echo '<li><img src="'.$icon_set_url.'/'.$image.
+				'" width="'.ICON_WIDTH.'" height="'.ICON_HEIGHT.
+				'" align="absmiddle">&nbsp;'.$tooltip.'</li>';
+		}
+	}
+	echo '</ul>';
+}
+
+function topic_icons_css() {
+	echo "\n<style type=\"text/css\"><!--\n";
+	require( 'bb-topic-icons.css' );
+	echo "\n--></style>";
+}
+
+function topic_icons_label( $label ) {
+	global $topic;
+	
+	if (bb_is_front() || bb_is_forum() || bb_is_view() || bb_is_tag()) {		
+		$icon_set_name = topic_icons_get_active_icon_set();
+		$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+
+		$status = get_active_status_interpreter()->getStatus(bb_get_location(), $topic);
+		$renderer = get_active_status_renderer();
+		$image = $renderer->renderStatus($status);
+		$tooltip = $renderer->renderStatusTooltip($status);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (!$exists) {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), ICON_SET_URL_BASE.'/empty.png', ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		} else if (strlen($tooltip) > 0) {		
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"><span>%s</span></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $tooltip, $label);
+		} else {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		}
+	}
+	
+	return $label;
+}
+
+function topic_icons_init( ) {
+	remove_filter('bb_topic_labels', 'bb_closed_label', 10);
+	remove_filter('bb_topic_labels', 'bb_sticky_label', 20);
+
+	add_filter('bb_topic_labels', 'topic_icons_label', 11);
+
+	add_action('bb_head', 'topic_icons_css');
+
+	add_action('bb_admin_menu_generator', 'topic_icons_admin_page_add');
+	add_action('bb_admin-header.php', 'topic_icons_admin_page_process');
+	
+	topic_icons_register_status_interpreter('default', new DefaultStatusInterpreter(BUSY_THRESHOLD));
+	topic_icons_register_status_renderer('default', new DefaultStatusRenderer());
+}
+
+topic_icons_init();
+
+?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Tag: project management - Recent Topics</title>
+		<link>http://digitalhumanities.org/answers/tags/project-management</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Tag: project management - Recent Topics</description>
+		<language>en-US</language>
+		<pubDate>Sun, 24 Mar 2019 17:09:10 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/tags/project-management/topics" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>Miriam Posner on "Best DH project-management system?"</title>
+						<link>http://digitalhumanities.org/answers/topic/best-dh-project-management-system#post-427</link>
+			<pubDate>Thu, 14 Oct 2010 15:54:08 +0000</pubDate>
+			<dc:creator>Miriam Posner</dc:creator>
+			<guid isPermaLink="false">427@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;What project-management system does your center or initiative use to monitor progress, set deadlines, keep track of issues, communicate with contributors, set to-do lists, and, well, manage projects as a group?&#60;/p&#62;
+&#60;p&#62;My impression is that Basecamp is the &#34;industry&#34; standard. If you use it, are there things you wish it did better? DH-specific features you wish it had? Maybe it has too many features?&#60;/p&#62;
+&#60;p&#62;My experience has been that any number of PM tools work great for a week or two, but if they're not really, really well-integrated into your workflow, they'll sort of drop out of use.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>ebuhe on "Feedback on Digital Humanities Best Practices document"</title>
+						<link>http://digitalhumanities.org/answers/topic/feedback-on-digital-humanities-best-practices-document#post-2306</link>
+			<pubDate>Sun, 22 Mar 2015 00:51:16 +0000</pubDate>
+			<dc:creator>ebuhe</dc:creator>
+			<guid isPermaLink="false">2306@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I'm working on a Digital Humanities Best Practices document that would serve as a list of questions humanities scholars could ask themselves as they get started on a collaborative project--something that is widely applicable, accessible, and quick and easy to read (meaning: not written in prose, not one person's reflections about their DH experience, not behind a paywall). The scope is specifically geared toward setting expectations and the issues to consider including in a charter / contract.&#60;/p&#62;
+&#60;p&#62;It currently exists as an editable document on Google Drive -- and I'd love feedback!! What's missing, what's too broad/specific? Other great links to share? I'd especially like thoughts on integrating language re: open source, creative commons, code.&#60;/p&#62;
+&#60;p&#62;Here's the link:&#60;br /&#62;
+&#60;a href=&#34;http://www.nyu.edu/gsas/dept/fineart/research/digital-humanities-best-practices.htm&#34; rel=&#34;nofollow&#34;&#62;http://www.nyu.edu/gsas/dept/fineart/research/digital-humanities-best-practices.htm&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;Thanks!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Ryan Cordell on "Founding staff for a new DH Center?"</title>
+						<link>http://digitalhumanities.org/answers/topic/founding-staff-for-a-new-dh-center#post-1601</link>
+			<pubDate>Mon, 16 Apr 2012 23:13:25 +0000</pubDate>
+			<dc:creator>Ryan Cordell</dc:creator>
+			<guid isPermaLink="false">1601@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;This fall I will join a group of faculty starting a new center for digital humanities and computational social sciences at Northeastern University. We should have physical space by fall, but next year will be primarily a planning year. We will have a few founding projects: mostly projects already underway that will be federated under the banner of the new center. The founding faculty come from English, History, Political Science, and Computer Science, and there's significant overlap of intellectual interest that should generate collaboration among those faculty. There's also a pool of post-docs in computational social science who will be associated with the center and may be able to provide some project support for affiliated faculty. &#60;/p&#62;
+&#60;p&#62;The new center also has rhetorical support from the dean, president, and other administrators. Right now we're developing priorities for our initial budget request, and we'll soon know how that rhetorical support translates into resources. I do expect that we'll have to grow slowly, perhaps by a position or two each year. If you were charged with such a task--as perhaps you have been--what would be your priorities--especially in terms of staffing the center--in the first year? Would you most want a project manager? Designer? Programmer? I realize of course that all of these positions &#60;em&#62;should&#60;/em&#62; be filled immediately, but I'm trying to think strategically in case that's not possible.&#60;/p&#62;
+&#60;p&#62;Thanks for your help, friends. All suggestions are most welcome.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Miriam Posner on "Tips on performing an environmental scan?"</title>
+						<link>http://digitalhumanities.org/answers/topic/tips-on-performing-an-environmental-scan#post-1566</link>
+			<pubDate>Fri, 16 Mar 2012 18:54:29 +0000</pubDate>
+			<dc:creator>Miriam Posner</dc:creator>
+			<guid isPermaLink="false">1566@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Those of you who have initiated DH projects are, I'm sure, familiar with the environmental scan, in which one surveys existing projects, both to make sure someone hasn't already done what you're about to do and to see if others have developed technology on which you might build. It's a big part of &#60;a href=&#34;http://www.neh.gov/grants/guidelines/digitalhumanitiesstartup.html#howto&#34;&#62;NEH Office of Digital Humanities start-up grants&#60;/a&#62; (as well as just generally good practice).&#60;/p&#62;
+&#60;p&#62;At UCLA, we've been asking our grad students to do environmental scans as part of their final projects, and I've noticed that this can pose a challenge for some of them. Here are the challenges, as I see them:&#60;/p&#62;
+&#60;ul&#62;
+&#60;li&#62;Students have trouble surveying projects outside their home discipline (e.g., art history projects that may be relevant to students in literature).&#60;/li&#62;
+&#60;li&#62;Before they've embarked on the &#34;building&#34; part of their projects, students have trouble understanding what kinds of technology might be relevant to what they're doing (e.g., understanding that what they're about to do is a network visualization).&#60;/li&#62;
+&#60;li&#62;The number of potentially relevant projects is overwhelming.&#60;/li&#62;
+&#60;/ul&#62;
+&#60;p&#62;I'm thinking of ways I can help them overcome these challenges. So far, this is what I've come up with:&#60;/p&#62;
+&#60;ul&#62;
+&#60;li&#62;Check various directories of projects (e.g., &#60;a href=&#34;http://arts-humanities.net/project&#34;&#62;arts-humanities.net&#60;/a&#62;, &#60;a href=&#34;http://dirt.projectbamboo.org/&#34;&#62;DiRT&#60;/a&#62;, &#60;a href=&#34;http://spatial.scholarslab.org/&#34;&#62;Spatial Humanities&#60;/a&#62;, &#60;a href=&#34;http://dhcommons.org/&#34;&#62;DH Commons&#60;/a&#62;). Still, this can be confusing, because it can be hard for students to tell what they should be looking for.&#60;/li&#62;
+&#60;li&#62;Ask! Tweet, ask at DH Answers, ask me, ask librarians. However, when the project is in its infancy, it can be difficult for them to articulate it to others.&#60;/li&#62;
+&#60;/ul&#62;
+&#60;p&#62;Those of you who have completed many projects: Do you have an informal checklist that you run through when you embark on something new? What else might I tell these students?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Bethany Nowviskie on "What would your dream DH apprenticeship opportunity involve?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-would-your-dream-dh-apprenticeship-opportunity-involve#post-1204</link>
+			<pubDate>Sun, 12 Jun 2011 15:23:21 +0000</pubDate>
+			<dc:creator>Bethany Nowviskie</dc:creator>
+			<guid isPermaLink="false">1204@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;The &#60;a href=&#34;http://lib.virginia.edu/scholarslab&#34;&#62;Scholars' Lab&#60;/a&#62; is about to get even  more intentional about the contribution it's making to the grad community and to graduate methodological training in DH at UVa.  As we bring on a bunch of new grad student journeymen (and women!) &#60;a href=&#34;http://www.scholarslab.org/announcements/student-jobs/&#34;&#62;all at once&#60;/a&#62;, we're wondering: &#60;/p&#62;
+&#60;p&#62;What would the specific elements of &#60;strong&#62;your&#60;/strong&#62; dream DH apprenticeship include?  What skills and experiences would you want gain?  What do you need most desperately?  What would you &#60;em&#62;not&#60;/em&#62; find useful or interesting?&#60;/p&#62;
+&#60;p&#62;We'd love to hear from current grad students (either those gaining real-world DH skills somewhere or wishing they could) and from people past the apprenticeship phase who can share their top experiences and memories of learning on-the-job.&#60;/p&#62;
+&#60;p&#62;MANY thanks for your help! This could become a pretty useful DH Answers thread for lots of projects and institutions...
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>essayross@gmail.com on "What does it mean to future-proof a DH project?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-does-it-mean-to-future-proof-a-dh-project#post-512</link>
+			<pubDate>Tue, 19 Oct 2010 04:11:17 +0000</pubDate>
+			<dc:creator>essayross@gmail.com</dc:creator>
+			<guid isPermaLink="false">512@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;How do people &#34;future-proof&#34; online or digital projects? What does it even mean? Does it signal proofing the project against becoming technically obsolete, or obsolete in terms of the content it has, etc? I mean, what am I supposed to say to someone who asks me to show that my proposed project has been &#34;future-proofed&#34;?&#60;/p&#62;
+&#60;p&#62;I find this just a trifle perplexing.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Jason Boyd on "Does DH project management differ from non-DH project management?"</title>
+						<link>http://digitalhumanities.org/answers/topic/dh-and-non-dh-project-management#post-459</link>
+			<pubDate>Fri, 15 Oct 2010 19:55:27 +0000</pubDate>
+			<dc:creator>Jason Boyd</dc:creator>
+			<guid isPermaLink="false">459@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;How is project management in DH actually being done? Do project manager methods/techniques/skills in DH differ in any significant way from those of a project manager for a web-based non-academic project? Are these project manager positions the similiar or should they be similiar?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Vika Zafrin on "DH projects with features explicitly addressing accessibility?"</title>
+						<link>http://digitalhumanities.org/answers/topic/dh-projects-with-features-explicitly-addressing-accessibility#post-86</link>
+			<pubDate>Tue, 21 Sep 2010 00:43:39 +0000</pubDate>
+			<dc:creator>Vika Zafrin</dc:creator>
+			<guid isPermaLink="false">86@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;If I were looking to address accessibility in a nascent web project, and wanted to talk to someone who had already done such a thing, what past/current projects might I contact?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Karin Dalziel on "Is there a self hosted version of  web software such as doodle.com or whenisgood"</title>
+						<link>http://digitalhumanities.org/answers/topic/is-there-a-self-hosted-version-of-web-software-such-as-doodlecom-or-whenisgood#post-57</link>
+			<pubDate>Mon, 13 Sep 2010 15:13:45 +0000</pubDate>
+			<dc:creator>Karin Dalziel</dc:creator>
+			<guid isPermaLink="false">57@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I am looking for some software that is like Doodle.com but self hosted. Would prefer a PHP app that can be quickly installed and deployed.
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

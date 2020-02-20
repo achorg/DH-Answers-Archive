@@ -1,0 +1,184 @@
+<?
+/*
+Plugin Name: bb Topic Icons
+Plugin URI: http://devt.caffeinatedbliss.com/bbpress/topic-icons
+Description: Adds configurable icons next to topics based on their status
+Author: Paul Hawke
+Author URI: http://paul.caffeinatedbliss.com/
+Version: 0.6
+*/
+
+/****************************************************************************
+ *
+ * Configure the following constants to fine-tune the CSS classes that are
+ * generated, the icon filenames that are used, and the text used in the
+ * legend (if you have one displayed).  Note: filenames are likely to be
+ * taken away in a future version and replaced with the concept of "icon sets"
+ * whose filenames are fixed, so dont get used to editing the filenames,
+ * as this will break in future versions.
+ *
+ ****************************************************************************/
+
+// css class for the unsorted list used in the legend display
+define( LEGEND_CLASS, 'topic_icon_legend' );
+
+// busy threshold - a topic with more posts than this is counted as "busy"
+// for purposes of picking an icon.
+define( BUSY_THRESHOLD, 15 );
+
+// width of the images, in pixels
+define( ICON_WIDTH, '20' );
+
+// height of the images, in pixels
+define( ICON_HEIGHT, '20' );
+
+// the URL base for where to find the default icon set.
+define( ICON_SET_URL_BASE, BB_PLUGIN_URL.'bb-topic-icons/icon-sets/' );
+
+/****************************************************************************
+ *
+ * Shouldnt be much need to edit anything beyond this point - configuration
+ * is all done via the constants (above) and through and admin area page in
+ * bbPress at runtime.
+ *
+ ****************************************************************************/
+
+require( 'bb-topic-icons-api.php' );
+require( 'bb-topic-icons-admin.php' );
+require( 'interface.status-interpreter.php' );
+require( 'interface.status-renderer.php' );
+require( 'class.default-status-interpreter.php' );
+require( 'class.default-status-renderer.php' );
+
+function topic_icons_legend() {
+	$icon_set_name = topic_icons_get_active_icon_set();
+	$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+	$statuses = get_active_status_interpreter()->getAllStatuses();
+	$renderer = get_active_status_renderer();
+	
+	echo '<ul id="'.LEGEND_CLASS.'">';
+	for ($i=0; $i < count($statuses); $i++) {
+		$image = $renderer->renderStatus($statuses[$i]);
+		$tooltip = $renderer->renderStatusTooltip($statuses[$i]);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (isset($image) && strlen($image) > 0 &&
+			isset($tooltip) && strlen($tooltip) > 0 && $exists) {
+			echo '<li><img src="'.$icon_set_url.'/'.$image.
+				'" width="'.ICON_WIDTH.'" height="'.ICON_HEIGHT.
+				'" align="absmiddle">&nbsp;'.$tooltip.'</li>';
+		}
+	}
+	echo '</ul>';
+}
+
+function topic_icons_css() {
+	echo "\n<style type=\"text/css\"><!--\n";
+	require( 'bb-topic-icons.css' );
+	echo "\n--></style>";
+}
+
+function topic_icons_label( $label ) {
+	global $topic;
+	
+	if (bb_is_front() || bb_is_forum() || bb_is_view() || bb_is_tag()) {		
+		$icon_set_name = topic_icons_get_active_icon_set();
+		$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+
+		$status = get_active_status_interpreter()->getStatus(bb_get_location(), $topic);
+		$renderer = get_active_status_renderer();
+		$image = $renderer->renderStatus($status);
+		$tooltip = $renderer->renderStatusTooltip($status);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (!$exists) {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), ICON_SET_URL_BASE.'/empty.png', ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		} else if (strlen($tooltip) > 0) {		
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"><span>%s</span></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $tooltip, $label);
+		} else {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		}
+	}
+	
+	return $label;
+}
+
+function topic_icons_init( ) {
+	remove_filter('bb_topic_labels', 'bb_closed_label', 10);
+	remove_filter('bb_topic_labels', 'bb_sticky_label', 20);
+
+	add_filter('bb_topic_labels', 'topic_icons_label', 11);
+
+	add_action('bb_head', 'topic_icons_css');
+
+	add_action('bb_admin_menu_generator', 'topic_icons_admin_page_add');
+	add_action('bb_admin-header.php', 'topic_icons_admin_page_process');
+	
+	topic_icons_register_status_interpreter('default', new DefaultStatusInterpreter(BUSY_THRESHOLD));
+	topic_icons_register_status_renderer('default', new DefaultStatusRenderer());
+}
+
+topic_icons_init();
+
+?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Topic: Creating the DH classroom - equipment, furniture, budget?</title>
+		<link>http://digitalhumanities.org/answers/topic/creating-the-dh-classroom-equipment-furniture-budget</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Topic: Creating the DH classroom - equipment, furniture, budget?</description>
+		<language>en-US</language>
+		<pubDate>Fri, 08 Mar 2019 19:16:18 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/topic/creating-the-dh-classroom-equipment-furniture-budget" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>jbj on "Creating the DH classroom - equipment, furniture, budget?"</title>
+						<link>http://digitalhumanities.org/answers/topic/creating-the-dh-classroom-equipment-furniture-budget#post-2240</link>
+			<pubDate>Tue, 23 Sep 2014 14:53:14 +0000</pubDate>
+			<dc:creator>jbj</dc:creator>
+			<guid isPermaLink="false">2240@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;We just renovated a physics lab into a SCALE-UP format room. I'll digitize our plans and send 'em along to your gmail, if that's ok.&#60;/p&#62;
+&#60;p&#62;I will say this: The thing that people talked about the most during planning was literally the tables: what was the right size and shape to accommodate group work; to allow for free-and-easy movement around the tables, including up-and-down to the ubiquitous walltalker writing surfaces, etc. That took a lot of effort.&#60;/p&#62;
+&#60;p&#62;It has been pretty cool, though.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Patrick Murray-John on "Creating the DH classroom - equipment, furniture, budget?"</title>
+						<link>http://digitalhumanities.org/answers/topic/creating-the-dh-classroom-equipment-furniture-budget#post-2239</link>
+			<pubDate>Tue, 23 Sep 2014 14:44:24 +0000</pubDate>
+			<dc:creator>Patrick Murray-John</dc:creator>
+			<guid isPermaLink="false">2239@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;The folks at University of Mary Washington just opened &#60;a href=&#34;http://convergence.umw.edu/&#34;&#62;a shiny new building with lots of digital classroom space&#60;/a&#62;. You might be able to reach out to their &#60;a href=&#34;http://academics.umw.edu/dtlt/&#34;&#62;Division of Teaching and Learning Technologies&#60;/a&#62; for ideas and what they budgeted.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>caroline.cason@gmail.com on "Creating the DH classroom - equipment, furniture, budget?"</title>
+						<link>http://digitalhumanities.org/answers/topic/creating-the-dh-classroom-equipment-furniture-budget#post-2238</link>
+			<pubDate>Tue, 23 Sep 2014 13:51:12 +0000</pubDate>
+			<dc:creator>caroline.cason@gmail.com</dc:creator>
+			<guid isPermaLink="false">2238@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hello - I am writing a proposal to renovate a traditional, fixed seating computer lab as a SCALE-UP style classroom suitable for teaching DH (among other things). What do you suggest for set up? Furniture, laptops, monitors, budget for software, etc. If anyone has a classroom and budget for a similar project, that would be especially helpful. &#60;/p&#62;
+&#60;p&#62;Thanks!&#60;br /&#62;
+Caroline
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

@@ -1,0 +1,387 @@
+<?
+/*
+Plugin Name: bb Topic Icons
+Plugin URI: http://devt.caffeinatedbliss.com/bbpress/topic-icons
+Description: Adds configurable icons next to topics based on their status
+Author: Paul Hawke
+Author URI: http://paul.caffeinatedbliss.com/
+Version: 0.6
+*/
+
+/****************************************************************************
+ *
+ * Configure the following constants to fine-tune the CSS classes that are
+ * generated, the icon filenames that are used, and the text used in the
+ * legend (if you have one displayed).  Note: filenames are likely to be
+ * taken away in a future version and replaced with the concept of "icon sets"
+ * whose filenames are fixed, so dont get used to editing the filenames,
+ * as this will break in future versions.
+ *
+ ****************************************************************************/
+
+// css class for the unsorted list used in the legend display
+define( LEGEND_CLASS, 'topic_icon_legend' );
+
+// busy threshold - a topic with more posts than this is counted as "busy"
+// for purposes of picking an icon.
+define( BUSY_THRESHOLD, 15 );
+
+// width of the images, in pixels
+define( ICON_WIDTH, '20' );
+
+// height of the images, in pixels
+define( ICON_HEIGHT, '20' );
+
+// the URL base for where to find the default icon set.
+define( ICON_SET_URL_BASE, BB_PLUGIN_URL.'bb-topic-icons/icon-sets/' );
+
+/****************************************************************************
+ *
+ * Shouldnt be much need to edit anything beyond this point - configuration
+ * is all done via the constants (above) and through and admin area page in
+ * bbPress at runtime.
+ *
+ ****************************************************************************/
+
+require( 'bb-topic-icons-api.php' );
+require( 'bb-topic-icons-admin.php' );
+require( 'interface.status-interpreter.php' );
+require( 'interface.status-renderer.php' );
+require( 'class.default-status-interpreter.php' );
+require( 'class.default-status-renderer.php' );
+
+function topic_icons_legend() {
+	$icon_set_name = topic_icons_get_active_icon_set();
+	$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+	$statuses = get_active_status_interpreter()->getAllStatuses();
+	$renderer = get_active_status_renderer();
+	
+	echo '<ul id="'.LEGEND_CLASS.'">';
+	for ($i=0; $i < count($statuses); $i++) {
+		$image = $renderer->renderStatus($statuses[$i]);
+		$tooltip = $renderer->renderStatusTooltip($statuses[$i]);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (isset($image) && strlen($image) > 0 &&
+			isset($tooltip) && strlen($tooltip) > 0 && $exists) {
+			echo '<li><img src="'.$icon_set_url.'/'.$image.
+				'" width="'.ICON_WIDTH.'" height="'.ICON_HEIGHT.
+				'" align="absmiddle">&nbsp;'.$tooltip.'</li>';
+		}
+	}
+	echo '</ul>';
+}
+
+function topic_icons_css() {
+	echo "\n<style type=\"text/css\"><!--\n";
+	require( 'bb-topic-icons.css' );
+	echo "\n--></style>";
+}
+
+function topic_icons_label( $label ) {
+	global $topic;
+	
+	if (bb_is_front() || bb_is_forum() || bb_is_view() || bb_is_tag()) {		
+		$icon_set_name = topic_icons_get_active_icon_set();
+		$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+
+		$status = get_active_status_interpreter()->getStatus(bb_get_location(), $topic);
+		$renderer = get_active_status_renderer();
+		$image = $renderer->renderStatus($status);
+		$tooltip = $renderer->renderStatusTooltip($status);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (!$exists) {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), ICON_SET_URL_BASE.'/empty.png', ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		} else if (strlen($tooltip) > 0) {		
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"><span>%s</span></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $tooltip, $label);
+		} else {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		}
+	}
+	
+	return $label;
+}
+
+function topic_icons_init( ) {
+	remove_filter('bb_topic_labels', 'bb_closed_label', 10);
+	remove_filter('bb_topic_labels', 'bb_sticky_label', 20);
+
+	add_filter('bb_topic_labels', 'topic_icons_label', 11);
+
+	add_action('bb_head', 'topic_icons_css');
+
+	add_action('bb_admin_menu_generator', 'topic_icons_admin_page_add');
+	add_action('bb_admin-header.php', 'topic_icons_admin_page_process');
+	
+	topic_icons_register_status_interpreter('default', new DefaultStatusInterpreter(BUSY_THRESHOLD));
+	topic_icons_register_status_renderer('default', new DefaultStatusRenderer());
+}
+
+topic_icons_init();
+
+?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Tag: Visualization - Recent Posts</title>
+		<link>http://digitalhumanities.org/answers/tags/visualization</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Tag: Visualization - Recent Posts</description>
+		<language>en-US</language>
+		<pubDate>Sun, 24 Mar 2019 17:09:20 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/tags/visualization" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>alangpike on "Big data projects using IMDB?"</title>
+						<link>http://digitalhumanities.org/answers/topic/big-data-projects-using-imdb#post-2022</link>
+			<pubDate>Fri, 07 Jun 2013 12:21:48 +0000</pubDate>
+			<dc:creator>alangpike</dc:creator>
+			<guid isPermaLink="false">2022@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Thanks Ben, I'll report back after more investigation.&#60;/p&#62;
+&#60;p&#62;Cheers.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Ben Schmidt on "Big data projects using IMDB?"</title>
+						<link>http://digitalhumanities.org/answers/topic/big-data-projects-using-imdb#post-2020</link>
+			<pubDate>Fri, 07 Jun 2013 03:06:22 +0000</pubDate>
+			<dc:creator>Ben Schmidt</dc:creator>
+			<guid isPermaLink="false">2020@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I've looked some at the &#60;a href=&#34;http://www.imdb.com/interfaces&#34;&#62;plain text data files&#60;/a&#62; they provide, and was surprised at the amount of stuff one could do with them--they don't include reviews, but they do include most of the other stuff one might want--biographical information, fully standardized lists of cast and crew, etc.. And you can just download all the data straightaway without needing permission, and without having to write a crawler. There are some restraints on redistribution, but nothing that seems like it would be onerous for scholarly research. Social scientists have used it for some of the network stuff, eg &#60;a href=&#34;http://sydney.edu.au/engineering/it/~dmerrick/papers/AhmedEtAl2007.pdf&#34;&#62;here&#60;/a&#62; and &#60;a href=&#34;http://nwb.cns.iu.edu/papers/2007-herr-movieact.pdf&#34;&#62;here.&#60;/a&#62; &#60;/p&#62;
+&#60;p&#62;I don't have any experience with the stuff that you &#38;lt;i&#38;gt;can't&#38;lt;/i&#38;gt; get through the textfiles.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>alangpike on "Big data projects using IMDB?"</title>
+						<link>http://digitalhumanities.org/answers/topic/big-data-projects-using-imdb#post-2019</link>
+			<pubDate>Thu, 06 Jun 2013 12:42:29 +0000</pubDate>
+			<dc:creator>alangpike</dc:creator>
+			<guid isPermaLink="false">2019@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I am in the early stages of my dissertation and, as I explore the possible DH methods that might apply to my work, am wondering if there might be a way for the DH community to take advantage of the mountain of data at IMDB. I have heard from some folks that they have been unfriendly to researchers, but thought it might be worth some serious effort to make some (all!) of their data, reviews, etc. available to film and media studies scholars. The possibilities for DH methods are virtually limitless. For my own work, data visualizations, social network analysis of cast and crew, etc. are all intriguing possibilities. Has anyone out there gotten permission from IMDB to use data crawlers for scholarly research? Has anyone tried to do so and been denied?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Michael Widner on "Automatically Preparing Edge/Node Data for Gephi"</title>
+						<link>http://digitalhumanities.org/answers/topic/automatically-preparing-edgenode-data-for-gephi#post-1961</link>
+			<pubDate>Thu, 04 Apr 2013 19:46:53 +0000</pubDate>
+			<dc:creator>Michael Widner</dc:creator>
+			<guid isPermaLink="false">1961@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;A quick tip for anyone doing similar work. The Python library NetworkX (&#60;a href=&#34;http://networkx.github.com/&#34; rel=&#34;nofollow&#34;&#62;http://networkx.github.com/&#60;/a&#62;) makes it very easy to create graph files that Gephi (and other programs) can read. For example, it will output a GEXF for you from nodes and edges that you create programmatically. You can set the colors, size, and other attributes so that you can have your data formatted for display in Gephi without all the manual work that sometimes requires.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Scott Weingart on "Automatically Preparing Edge/Node Data for Gephi"</title>
+						<link>http://digitalhumanities.org/answers/topic/automatically-preparing-edgenode-data-for-gephi#post-1791</link>
+			<pubDate>Tue, 13 Nov 2012 15:21:25 +0000</pubDate>
+			<dc:creator>Scott Weingart</dc:creator>
+			<guid isPermaLink="false">1791@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Great to hear it, looking forward to the results.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Ryan Cordell on "Automatically Preparing Edge/Node Data for Gephi"</title>
+						<link>http://digitalhumanities.org/answers/topic/automatically-preparing-edgenode-data-for-gephi#post-1790</link>
+			<pubDate>Tue, 13 Nov 2012 15:00:05 +0000</pubDate>
+			<dc:creator>Ryan Cordell</dc:creator>
+			<guid isPermaLink="false">1790@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Thanks so much for your help on this, Scott. The plugin method seems to have worked, though I still need to clean up the resulting graph:&#60;/p&#62;
+&#60;p&#62;&#60;a href=&#34;https://dl.dropbox.com/u/492930/Gephi%200.8.1%20beta%20-%20ChronAm-3000-2.gephi.png&#34; rel=&#34;nofollow&#34;&#62;https://dl.dropbox.com/u/492930/Gephi%200.8.1%20beta%20-%20ChronAm-3000-2.gephi.png&#60;/a&#62;
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Scott Weingart on "Automatically Preparing Edge/Node Data for Gephi"</title>
+						<link>http://digitalhumanities.org/answers/topic/automatically-preparing-edgenode-data-for-gephi#post-1789</link>
+			<pubDate>Tue, 13 Nov 2012 02:25:29 +0000</pubDate>
+			<dc:creator>Scott Weingart</dc:creator>
+			<guid isPermaLink="false">1789@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;So, this is a slightly more complicated problem than it ought to be. Instead of importing a network as an edge list, you have to import your data as separate node and edge lists, as described here: &#60;a href=&#34;https://gephi.org/users/supported-graph-formats/spreadsheet/&#34; rel=&#34;nofollow&#34;&#62;https://gephi.org/users/supported-graph-formats/spreadsheet/&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;In the node list, you'll need to add node attributes (an extra column) that labels the 'type' of the node; whether it is a newspaper title or an ID. Once that network is loaded, you should be able to follow Shawn's steps.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Ryan Cordell on "Automatically Preparing Edge/Node Data for Gephi"</title>
+						<link>http://digitalhumanities.org/answers/topic/automatically-preparing-edgenode-data-for-gephi#post-1787</link>
+			<pubDate>Mon, 12 Nov 2012 19:58:53 +0000</pubDate>
+			<dc:creator>Ryan Cordell</dc:creator>
+			<guid isPermaLink="false">1787@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Right, Scott, two sides of the same network: one with texts themselves as nodes and the other with newspaper titles as nodes. What I'm asking for help on is your recommendation: &#34;create a bimodal network.&#34; Should I import my spreadsheet into Gephi as an edge graph, with the IDs as source and the Newspaper titles as target, and then use the plugin Shawn references to convert that graph to a 1-mode network?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Scott Weingart on "Automatically Preparing Edge/Node Data for Gephi"</title>
+						<link>http://digitalhumanities.org/answers/topic/automatically-preparing-edgenode-data-for-gephi#post-1786</link>
+			<pubDate>Mon, 12 Nov 2012 19:31:06 +0000</pubDate>
+			<dc:creator>Scott Weingart</dc:creator>
+			<guid isPermaLink="false">1786@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I'm not completely clear what you're looking for by the descriptions, so let me try to re-word it. Do you mean you're looking for how pairs of reprinted texts co-occur based on which publications they share? And then you're looking for how pairs of newspaper titles connect to one another, based on which texts they share? So, two sides of the same network?&#60;/p&#62;
+&#60;p&#62;If that's the case, the first thing you should do is create a bimodal network. That is, every edge goes from a newspaper title to a reprinted text. You can then follow Shawn's steps here: &#60;a href=&#34;http://electricarchaeology.ca/2012/04/04/converting-2-mode-with-multimodal-plugin-for-gephi/&#34; rel=&#34;nofollow&#34;&#62;http://electricarchaeology.ca/2012/04/04/converting-2-mode-with-multimodal-plugin-for-gephi/&#60;/a&#62; to create text-text networks or newspaper-newspaper networks.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Ryan Cordell on "Automatically Preparing Edge/Node Data for Gephi"</title>
+						<link>http://digitalhumanities.org/answers/topic/automatically-preparing-edgenode-data-for-gephi#post-1785</link>
+			<pubDate>Mon, 12 Nov 2012 18:51:15 +0000</pubDate>
+			<dc:creator>Ryan Cordell</dc:creator>
+			<guid isPermaLink="false">1785@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Okay,&#60;/p&#62;
+&#60;p&#62;I've done some work with Gephi lately, but I find myself with a problem I can't quite solve. I work on reprinting networks, and thus far have generated network graphs from spreadsheets of reprinting with the original newspaper in one column (source) and reprinting newspaper in the second (target). Import edge table--&#38;gt;Gephi creates a pretty graph.&#60;/p&#62;
+&#60;p&#62;I now have a much larger spreadsheet generated from a text-mining experiment I've started with a colleague in computer science. This  spreadsheet includes for each found text: &#60;/p&#62;
+&#60;p&#62;an ID number identifying a particular reprinted text (ex: 8679:5136:18458:8488:5042:872:3924:2547:21444) &#124; Date of each reprinting &#124; URL of source text &#124; Name of each publication &#124; City and State of Publication &#124; Longitude of Publication &#124; the text matched&#60;/p&#62;
+&#60;p&#62;So there might be 10 lines with the same ID number--the &#34;same text&#34;--but different values in the other columns for each new reprinting of that text we found. I want to generate two opposite but complementary graphs from this data: &#60;/p&#62;
+&#60;p&#62;1.) in the first, the nodes would be Newspaper titles, and the edges would represent shared reprints--the ID field, I suppose. In other words, edges would be drawn between papers that reprinted the same text. Edges would be larger the more texts the two shared. I suspect there will be multi-stage process to prepare my data to do this, but I'm honestly not sure where to start.&#60;/p&#62;
+&#60;p&#62;2.) in the second, the nodes would be individual reprinted texts (the ID field for now, though we're working on generating titles) and the edges would be publications. Edges would be drawn between texts that appeared in the same newspaper. &#60;/p&#62;
+&#60;p&#62;Any help you can offer would be appreciated. I can't find a way to do this in one step through Gephi, so I'm sure there's some data massaging ahead of me.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Gaet86 on "What tools can be used to create topic model network graphs?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-tools-can-be-used-to-create-topic-model-network-graphs#post-1674</link>
+			<pubDate>Mon, 04 Jun 2012 15:21:37 +0000</pubDate>
+			<dc:creator>Gaet86</dc:creator>
+			<guid isPermaLink="false">1674@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hi boys,&#60;br /&#62;
+I have many 'topics model' create with Mallet's library, of this type:&#60;br /&#62;
+TOPIC 1&#60;br /&#62;
+school 0.3&#60;br /&#62;
+teacher 0.2&#60;br /&#62;
+science 0.08&#60;br /&#62;
+mathematics 0.07&#60;br /&#62;
+matter 0.05&#60;br /&#62;
+student 0.03&#60;/p&#62;
+&#60;p&#62;I want to generate a network, where each topic is a node.&#60;br /&#62;
+I tried to use Gephi, but I do not know how to import all topics into csv file.&#60;br /&#62;
+I gently ask if you can help.&#60;br /&#62;
+Thanks in advance...&#60;/p&#62;
+&#60;p&#62;Gaetano
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>rjlewis on "What tools can be used to create topic model network graphs?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-tools-can-be-used-to-create-topic-model-network-graphs#post-1626</link>
+			<pubDate>Wed, 02 May 2012 14:50:06 +0000</pubDate>
+			<dc:creator>rjlewis</dc:creator>
+			<guid isPermaLink="false">1626@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Do you really mean that you want nodes for documents &#60;em&#62;and topics&#60;/em&#62;, a &#38;lt;dfn&#38;gt;bimodal graph&#38;lt;/dfn&#38;gt;? In that case your graph would have a small number of nodes (the topic nodes) with high centrality. And then thousands of small nodes (the document nodes) with low centrality. If this is the case, how are you calculating the topic weight for a document?&#60;/p&#62;
+&#60;p&#62;It seems to make more sense to me to have nodes for just documents, and edges between documents that share a topic; a &#38;lt;dfn&#38;gt;multigraph&#38;lt;/dfn&#38;gt;. Then the greater the number of edges between two nodes, the closer they are in topic. Or alternatively, you could define edge to be a function of the number of topics two documents have in common, which basically amounts to the same thing but alleviates the requirement to be able to represent multigraphs.&#60;/p&#62;
+&#60;p&#62;As for tools to visualise this, here's some Perl which creates a GraphML from a list of documents titled A, B, C, D, E, F, G, and H which each cover one or more topics, 1, 2, 3, 4, 5, 6, or 7:&#60;/p&#62;
+
+
+&#60;div class=&#34;bb_syntax&#34;&#62;&#60;div class=&#34;code&#34;&#62;&#60;pre class=&#34;perl&#34; style=&#34;font-family:monospace;&#34;&#62;&#60;span style=&#34;color: #666666; font-style: italic;&#34;&#62;#!/usr/bin/perl&#60;/span&#62;
+&#38;nbsp;
+&#60;span style=&#34;color: #000000; font-weight: bold;&#34;&#62;use&#60;/span&#62; strict&#60;span style=&#34;color: #339933;&#34;&#62;;&#60;/span&#62;
+&#60;span style=&#34;color: #000000; font-weight: bold;&#34;&#62;use&#60;/span&#62; Graph&#60;span style=&#34;color: #339933;&#34;&#62;::&#60;/span&#62;&#60;span style=&#34;color: #006600;&#34;&#62;Easy&#60;/span&#62;&#60;span style=&#34;color: #339933;&#34;&#62;;&#60;/span&#62;
+&#38;nbsp;
+&#60;span style=&#34;color: #b1b100;&#34;&#62;my&#60;/span&#62; &#60;span style=&#34;color: #0000ff;&#34;&#62;$graph&#60;/span&#62; &#60;span style=&#34;color: #339933;&#34;&#62;=&#60;/span&#62; Graph&#60;span style=&#34;color: #339933;&#34;&#62;::&#60;/span&#62;&#60;span style=&#34;color: #006600;&#34;&#62;Easy&#60;/span&#62;&#60;span style=&#34;color: #339933;&#34;&#62;-&#38;gt;&#60;/span&#62;&#60;span style=&#34;color: #006600;&#34;&#62;new&#60;/span&#62;&#60;span style=&#34;color: #339933;&#34;&#62;;&#60;/span&#62;
+&#60;span style=&#34;color: #b1b100;&#34;&#62;my&#60;/span&#62; &#60;span style=&#34;color: #0000ff;&#34;&#62;$topics&#60;/span&#62; &#60;span style=&#34;color: #339933;&#34;&#62;=&#60;/span&#62; &#60;span style=&#34;color: #009900;&#34;&#62;&#38;#123;&#60;/span&#62;&#60;span style=&#34;color: #009900;&#34;&#62;&#38;#125;&#60;/span&#62;&#60;span style=&#34;color: #339933;&#34;&#62;;&#60;/span&#62;
+&#38;nbsp;
+&#60;span style=&#34;color: #b1b100;&#34;&#62;for&#60;/span&#62; &#60;span style=&#34;color: #009900;&#34;&#62;&#38;#40;&#60;/span&#62;&#60;span style=&#34;color: #009999;&#34;&#62;&#38;lt;DATA&#38;gt;&#60;/span&#62;&#60;span style=&#34;color: #009900;&#34;&#62;&#38;#41;&#60;/span&#62; &#60;span style=&#34;color: #009900;&#34;&#62;&#38;#123;&#60;/span&#62;
+    &#60;span style=&#34;color: #b1b100;&#34;&#62;my&#60;/span&#62; &#60;span style=&#34;color: #009900;&#34;&#62;&#38;#40;&#60;/span&#62;&#60;span style=&#34;color: #0000ff;&#34;&#62;$title&#60;/span&#62;&#60;span style=&#34;color: #339933;&#34;&#62;,&#60;/span&#62; &#60;span style=&#34;color: #0000ff;&#34;&#62;$topic&#60;/span&#62;&#60;span style=&#34;color: #009900;&#34;&#62;&#38;#41;&#60;/span&#62; &#60;span style=&#34;color: #339933;&#34;&#62;=&#60;/span&#62; &#60;span style=&#34;color: #000066;&#34;&#62;split&#60;/span&#62; &#60;span style=&#34;color: #009966; font-style: italic;&#34;&#62;/,/&#60;/span&#62;&#60;span style=&#34;color: #339933;&#34;&#62;;&#60;/span&#62;
+&#38;nbsp;
+    &#60;span style=&#34;color: #b1b100;&#34;&#62;my&#60;/span&#62; &#60;span style=&#34;color: #0000ff;&#34;&#62;$document&#60;/span&#62; &#60;span style=&#34;color: #339933;&#34;&#62;=&#60;/span&#62; &#60;span style=&#34;color: #0000ff;&#34;&#62;$graph&#60;/span&#62;&#60;span style=&#34;color: #339933;&#34;&#62;-&#38;gt;&#60;/span&#62;&#60;span style=&#34;color: #006600;&#34;&#62;add_node&#60;/span&#62;&#60;span style=&#34;color: #009900;&#34;&#62;&#38;#40;&#60;/span&#62;&#60;span style=&#34;color: #0000ff;&#34;&#62;$title&#60;/span&#62;&#60;span style=&#34;color: #009900;&#34;&#62;&#38;#41;&#60;/span&#62;&#60;span style=&#34;color: #339933;&#34;&#62;;&#60;/span&#62;
+&#38;nbsp;
+    &#60;span style=&#34;color: #0000ff;&#34;&#62;$graph&#60;/span&#62;&#60;span style=&#34;color: #339933;&#34;&#62;-&#38;gt;&#60;/span&#62;&#60;span style=&#34;color: #006600;&#34;&#62;add_edge_once&#60;/span&#62;&#60;span style=&#34;color: #009900;&#34;&#62;&#38;#40;&#60;/span&#62;&#60;span style=&#34;color: #0000ff;&#34;&#62;$document&#60;/span&#62;&#60;span style=&#34;color: #339933;&#34;&#62;,&#60;/span&#62; &#60;span style=&#34;color: #0000ff;&#34;&#62;$_&#60;/span&#62;&#60;span style=&#34;color: #009900;&#34;&#62;&#38;#41;&#60;/span&#62; &#60;span style=&#34;color: #b1b100;&#34;&#62;foreach&#60;/span&#62; &#60;span style=&#34;color: #009900;&#34;&#62;&#38;#40;&#60;/span&#62;&#60;span style=&#34;color: #339933;&#34;&#62;@&#60;/span&#62;&#60;span style=&#34;color: #009900;&#34;&#62;&#38;#123;&#60;/span&#62; &#60;span style=&#34;color: #0000ff;&#34;&#62;$topics&#60;/span&#62;&#60;span style=&#34;color: #339933;&#34;&#62;-&#38;gt;&#60;/span&#62;&#60;span style=&#34;color: #009900;&#34;&#62;&#38;#123;&#60;/span&#62;&#60;span style=&#34;color: #0000ff;&#34;&#62;$topic&#60;/span&#62;&#60;span style=&#34;color: #009900;&#34;&#62;&#38;#125;&#60;/span&#62; &#60;span style=&#34;color: #009900;&#34;&#62;&#38;#125;&#60;/span&#62;&#60;span style=&#34;color: #009900;&#34;&#62;&#38;#41;&#60;/span&#62;&#60;span style=&#34;color: #339933;&#34;&#62;;&#60;/span&#62;
+&#38;nbsp;
+    &#60;span style=&#34;color: #000066;&#34;&#62;push&#60;/span&#62; &#60;span style=&#34;color: #339933;&#34;&#62;@&#60;/span&#62;&#60;span style=&#34;color: #009900;&#34;&#62;&#38;#123;&#60;/span&#62; &#60;span style=&#34;color: #0000ff;&#34;&#62;$topics&#60;/span&#62;&#60;span style=&#34;color: #339933;&#34;&#62;-&#38;gt;&#60;/span&#62;&#60;span style=&#34;color: #009900;&#34;&#62;&#38;#123;&#60;/span&#62;&#60;span style=&#34;color: #0000ff;&#34;&#62;$topic&#60;/span&#62;&#60;span style=&#34;color: #009900;&#34;&#62;&#38;#125;&#60;/span&#62; &#60;span style=&#34;color: #009900;&#34;&#62;&#38;#125;&#60;/span&#62;&#60;span style=&#34;color: #339933;&#34;&#62;,&#60;/span&#62; &#60;span style=&#34;color: #0000ff;&#34;&#62;$title&#60;/span&#62;
+	&#60;span style=&#34;color: #b1b100;&#34;&#62;or&#60;/span&#62; &#60;span style=&#34;color: #0000ff;&#34;&#62;$topics&#60;/span&#62;&#60;span style=&#34;color: #339933;&#34;&#62;-&#38;gt;&#60;/span&#62;&#60;span style=&#34;color: #009900;&#34;&#62;&#38;#123;&#60;/span&#62;&#60;span style=&#34;color: #0000ff;&#34;&#62;$topic&#60;/span&#62;&#60;span style=&#34;color: #009900;&#34;&#62;&#38;#125;&#60;/span&#62; &#60;span style=&#34;color: #339933;&#34;&#62;=&#60;/span&#62; &#60;span style=&#34;color: #009900;&#34;&#62;&#38;#91;&#60;/span&#62;&#60;span style=&#34;color: #0000ff;&#34;&#62;$title&#60;/span&#62;&#60;span style=&#34;color: #009900;&#34;&#62;&#38;#93;&#60;/span&#62;&#60;span style=&#34;color: #339933;&#34;&#62;;&#60;/span&#62;
+&#60;span style=&#34;color: #009900;&#34;&#62;&#38;#125;&#60;/span&#62;
+&#38;nbsp;
+&#60;span style=&#34;color: #000066;&#34;&#62;print&#60;/span&#62; &#60;span style=&#34;color: #0000ff;&#34;&#62;$graph&#60;/span&#62;&#60;span style=&#34;color: #339933;&#34;&#62;-&#38;gt;&#60;/span&#62;&#60;span style=&#34;color: #006600;&#34;&#62;as_graphml&#60;/span&#62;&#60;span style=&#34;color: #339933;&#34;&#62;;&#60;/span&#62;
+&#60;span style=&#34;color: #000000; font-weight: bold;&#34;&#62;__END__&#60;/span&#62;
+A&#60;span style=&#34;color: #339933;&#34;&#62;,&#60;/span&#62;&#60;span style=&#34;color: #cc66cc;&#34;&#62;2&#60;/span&#62;
+A&#60;span style=&#34;color: #339933;&#34;&#62;,&#60;/span&#62;&#60;span style=&#34;color: #cc66cc;&#34;&#62;4&#60;/span&#62;
+B&#60;span style=&#34;color: #339933;&#34;&#62;,&#60;/span&#62;&#60;span style=&#34;color: #cc66cc;&#34;&#62;1&#60;/span&#62;
+B&#60;span style=&#34;color: #339933;&#34;&#62;,&#60;/span&#62;&#60;span style=&#34;color: #cc66cc;&#34;&#62;2&#60;/span&#62;
+B&#60;span style=&#34;color: #339933;&#34;&#62;,&#60;/span&#62;&#60;span style=&#34;color: #cc66cc;&#34;&#62;6&#60;/span&#62;
+C&#60;span style=&#34;color: #339933;&#34;&#62;,&#60;/span&#62;&#60;span style=&#34;color: #cc66cc;&#34;&#62;2&#60;/span&#62;
+C&#60;span style=&#34;color: #339933;&#34;&#62;,&#60;/span&#62;&#60;span style=&#34;color: #cc66cc;&#34;&#62;3&#60;/span&#62;
+D&#60;span style=&#34;color: #339933;&#34;&#62;,&#60;/span&#62;&#60;span style=&#34;color: #cc66cc;&#34;&#62;1&#60;/span&#62;
+D&#60;span style=&#34;color: #339933;&#34;&#62;,&#60;/span&#62;&#60;span style=&#34;color: #cc66cc;&#34;&#62;2&#60;/span&#62;
+D&#60;span style=&#34;color: #339933;&#34;&#62;,&#60;/span&#62;&#60;span style=&#34;color: #cc66cc;&#34;&#62;5&#60;/span&#62;
+D&#60;span style=&#34;color: #339933;&#34;&#62;,&#60;/span&#62;&#60;span style=&#34;color: #cc66cc;&#34;&#62;7&#60;/span&#62;
+E&#60;span style=&#34;color: #339933;&#34;&#62;,&#60;/span&#62;&#60;span style=&#34;color: #cc66cc;&#34;&#62;2&#60;/span&#62;
+E&#60;span style=&#34;color: #339933;&#34;&#62;,&#60;/span&#62;&#60;span style=&#34;color: #cc66cc;&#34;&#62;3&#60;/span&#62;
+F&#60;span style=&#34;color: #339933;&#34;&#62;,&#60;/span&#62;&#60;span style=&#34;color: #cc66cc;&#34;&#62;1&#60;/span&#62;
+F&#60;span style=&#34;color: #339933;&#34;&#62;,&#60;/span&#62;&#60;span style=&#34;color: #cc66cc;&#34;&#62;2&#60;/span&#62;
+F&#60;span style=&#34;color: #339933;&#34;&#62;,&#60;/span&#62;&#60;span style=&#34;color: #cc66cc;&#34;&#62;6&#60;/span&#62;
+G&#60;span style=&#34;color: #339933;&#34;&#62;,&#60;/span&#62;&#60;span style=&#34;color: #cc66cc;&#34;&#62;1&#60;/span&#62;
+G&#60;span style=&#34;color: #339933;&#34;&#62;,&#60;/span&#62;&#60;span style=&#34;color: #cc66cc;&#34;&#62;5&#60;/span&#62;
+G&#60;span style=&#34;color: #339933;&#34;&#62;,&#60;/span&#62;&#60;span style=&#34;color: #cc66cc;&#34;&#62;6&#60;/span&#62;
+G&#60;span style=&#34;color: #339933;&#34;&#62;,&#60;/span&#62;&#60;span style=&#34;color: #cc66cc;&#34;&#62;7&#60;/span&#62;
+H&#60;span style=&#34;color: #339933;&#34;&#62;,&#60;/span&#62;&#60;span style=&#34;color: #cc66cc;&#34;&#62;1&#60;/span&#62;
+H&#60;span style=&#34;color: #339933;&#34;&#62;,&#60;/span&#62;&#60;span style=&#34;color: #cc66cc;&#34;&#62;2&#60;/span&#62;
+H&#60;span style=&#34;color: #339933;&#34;&#62;,&#60;/span&#62;&#60;span style=&#34;color: #cc66cc;&#34;&#62;4&#60;/span&#62;
+H&#60;span style=&#34;color: #339933;&#34;&#62;,&#60;/span&#62;&#60;span style=&#34;color: #cc66cc;&#34;&#62;7&#60;/span&#62;&#60;/pre&#62;&#60;/div&#62;&#60;/div&#62;
+
+
+
+&#60;p&#62;I tried importing the output of this in Gephi and it looked basically correct.&#60;/p&#62;
+&#60;p&#62;By the way, when you say &#34;topic model&#34;, are your topics just keywords? Or are you talking about vectors of word frequencies?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Lisa Rhody on "What tools can be used to create topic model network graphs?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-tools-can-be-used-to-create-topic-model-network-graphs#post-1625</link>
+			<pubDate>Wed, 02 May 2012 14:47:21 +0000</pubDate>
+			<dc:creator>Lisa Rhody</dc:creator>
+			<guid isPermaLink="false">1625@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Shawn,&#60;br /&#62;
+Yes! That's what I was looking for.  I'm sorry that I somehow missed it on your blog, but I'm grateful that you took the time to explain it here.  For some reason I couldn't wrap my head around how the .csv file needed to be formatted to get it the way I wanted it in Gephi.  I haven't tried it yet, but I'm about to.  Thank you for the generous reply!&#60;br /&#62;
+-Lisa
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Shawn on "What tools can be used to create topic model network graphs?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-tools-can-be-used-to-create-topic-model-network-graphs#post-1623</link>
+			<pubDate>Wed, 02 May 2012 14:15:54 +0000</pubDate>
+			<dc:creator>Shawn</dc:creator>
+			<guid isPermaLink="false">1623@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hi Lisa,&#60;/p&#62;
+&#60;p&#62;I've written about this sort of thing on my blog a few times - &#60;a href=&#34;http://electricarchaeologist.wordpress.com/&#34; rel=&#34;nofollow&#34;&#62;http://electricarchaeologist.wordpress.com/&#60;/a&#62; &#60;/p&#62;
+&#60;p&#62;Take your topic modeling composition data. Create a spreadsheet where you have three columns, source, target, and weight. Put your docs and topics under source and target as appropriate, and then the percentage composition under weight. Save as a csv file.&#60;/p&#62;
+&#60;p&#62;Then, in Gephi, create a new project. Click on 'data laboratory'. Click on 'edges' under 'data table'. Click 'import spreadsheet'. Navigate to your csv file. Make sure the 'as table' is set to edges table. click next, click finish.&#60;/p&#62;
+&#60;p&#62;Then, go back to the 'overview' pane, and down the left hand side under layout you can select different algorithms that'll take the edge weight into account. &#60;/p&#62;
+&#60;p&#62;...is that the kind of thing you had in mind? You can also include a 'type' column in your csv file, with 'directed' or 'undirected' as appropriate.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Lisa Rhody on "What tools can be used to create topic model network graphs?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-tools-can-be-used-to-create-topic-model-network-graphs#post-1622</link>
+			<pubDate>Wed, 02 May 2012 14:02:41 +0000</pubDate>
+			<dc:creator>Lisa Rhody</dc:creator>
+			<guid isPermaLink="false">1622@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='http://digitalhumanities.org/answers/profile/parezcoydigo'&#62;parezcoydigo&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/what-tools-can-be-used-to-create-topic-model-network-graphs#post-1621&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;That tool looks fantastic because of its flexibility and because it can be worked right into the running of the model.  Unfortunately, at this point I don't have the Python scripting ability to really use it right away.  Do you know of something with a GUI interface with the same flexibility?
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

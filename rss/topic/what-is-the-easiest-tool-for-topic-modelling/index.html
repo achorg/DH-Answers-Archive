@@ -1,0 +1,276 @@
+<?
+/*
+Plugin Name: bb Topic Icons
+Plugin URI: http://devt.caffeinatedbliss.com/bbpress/topic-icons
+Description: Adds configurable icons next to topics based on their status
+Author: Paul Hawke
+Author URI: http://paul.caffeinatedbliss.com/
+Version: 0.6
+*/
+
+/****************************************************************************
+ *
+ * Configure the following constants to fine-tune the CSS classes that are
+ * generated, the icon filenames that are used, and the text used in the
+ * legend (if you have one displayed).  Note: filenames are likely to be
+ * taken away in a future version and replaced with the concept of "icon sets"
+ * whose filenames are fixed, so dont get used to editing the filenames,
+ * as this will break in future versions.
+ *
+ ****************************************************************************/
+
+// css class for the unsorted list used in the legend display
+define( LEGEND_CLASS, 'topic_icon_legend' );
+
+// busy threshold - a topic with more posts than this is counted as "busy"
+// for purposes of picking an icon.
+define( BUSY_THRESHOLD, 15 );
+
+// width of the images, in pixels
+define( ICON_WIDTH, '20' );
+
+// height of the images, in pixels
+define( ICON_HEIGHT, '20' );
+
+// the URL base for where to find the default icon set.
+define( ICON_SET_URL_BASE, BB_PLUGIN_URL.'bb-topic-icons/icon-sets/' );
+
+/****************************************************************************
+ *
+ * Shouldnt be much need to edit anything beyond this point - configuration
+ * is all done via the constants (above) and through and admin area page in
+ * bbPress at runtime.
+ *
+ ****************************************************************************/
+
+require( 'bb-topic-icons-api.php' );
+require( 'bb-topic-icons-admin.php' );
+require( 'interface.status-interpreter.php' );
+require( 'interface.status-renderer.php' );
+require( 'class.default-status-interpreter.php' );
+require( 'class.default-status-renderer.php' );
+
+function topic_icons_legend() {
+	$icon_set_name = topic_icons_get_active_icon_set();
+	$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+	$statuses = get_active_status_interpreter()->getAllStatuses();
+	$renderer = get_active_status_renderer();
+	
+	echo '<ul id="'.LEGEND_CLASS.'">';
+	for ($i=0; $i < count($statuses); $i++) {
+		$image = $renderer->renderStatus($statuses[$i]);
+		$tooltip = $renderer->renderStatusTooltip($statuses[$i]);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (isset($image) && strlen($image) > 0 &&
+			isset($tooltip) && strlen($tooltip) > 0 && $exists) {
+			echo '<li><img src="'.$icon_set_url.'/'.$image.
+				'" width="'.ICON_WIDTH.'" height="'.ICON_HEIGHT.
+				'" align="absmiddle">&nbsp;'.$tooltip.'</li>';
+		}
+	}
+	echo '</ul>';
+}
+
+function topic_icons_css() {
+	echo "\n<style type=\"text/css\"><!--\n";
+	require( 'bb-topic-icons.css' );
+	echo "\n--></style>";
+}
+
+function topic_icons_label( $label ) {
+	global $topic;
+	
+	if (bb_is_front() || bb_is_forum() || bb_is_view() || bb_is_tag()) {		
+		$icon_set_name = topic_icons_get_active_icon_set();
+		$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+
+		$status = get_active_status_interpreter()->getStatus(bb_get_location(), $topic);
+		$renderer = get_active_status_renderer();
+		$image = $renderer->renderStatus($status);
+		$tooltip = $renderer->renderStatusTooltip($status);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (!$exists) {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), ICON_SET_URL_BASE.'/empty.png', ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		} else if (strlen($tooltip) > 0) {		
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"><span>%s</span></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $tooltip, $label);
+		} else {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		}
+	}
+	
+	return $label;
+}
+
+function topic_icons_init( ) {
+	remove_filter('bb_topic_labels', 'bb_closed_label', 10);
+	remove_filter('bb_topic_labels', 'bb_sticky_label', 20);
+
+	add_filter('bb_topic_labels', 'topic_icons_label', 11);
+
+	add_action('bb_head', 'topic_icons_css');
+
+	add_action('bb_admin_menu_generator', 'topic_icons_admin_page_add');
+	add_action('bb_admin-header.php', 'topic_icons_admin_page_process');
+	
+	topic_icons_register_status_interpreter('default', new DefaultStatusInterpreter(BUSY_THRESHOLD));
+	topic_icons_register_status_renderer('default', new DefaultStatusRenderer());
+}
+
+topic_icons_init();
+
+?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Topic: What is the easiest tool for topic modelling ?</title>
+		<link>http://digitalhumanities.org/answers/topic/what-is-the-easiest-tool-for-topic-modelling</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Topic: What is the easiest tool for topic modelling ?</description>
+		<language>en-US</language>
+		<pubDate>Wed, 20 Mar 2019 15:15:12 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/topic/what-is-the-easiest-tool-for-topic-modelling" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>matteo.romanello@gmail.com on "What is the easiest tool for topic modelling ?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-is-the-easiest-tool-for-topic-modelling#post-1718</link>
+			<pubDate>Thu, 28 Jun 2012 08:36:24 +0000</pubDate>
+			<dc:creator>matteo.romanello@gmail.com</dc:creator>
+			<guid isPermaLink="false">1718@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hi!&#60;/p&#62;
+&#60;p&#62;I undertstand that this thread is rather old, but I wanted to share my positive experience with using a python library called Gensim &#60;a href=&#34;http://radimrehurek.com/gensim/&#34; rel=&#34;nofollow&#34;&#62;http://radimrehurek.com/gensim/&#60;/a&#62; for the purpose of topic modelling.&#60;/p&#62;
+&#60;p&#62;For those of you who already work in a Pythonic environment this would probably be the easiest way to try out something with TM. However, I must admit that I'm not much into the eventual differences between LDA's implementations in Mallet and Gensim.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Shawn on "What is the easiest tool for topic modelling ?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-is-the-easiest-tool-for-topic-modelling#post-1010</link>
+			<pubDate>Thu, 24 Feb 2011 17:31:18 +0000</pubDate>
+			<dc:creator>Shawn</dc:creator>
+			<guid isPermaLink="false">1010@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hi everyone,&#60;/p&#62;
+&#60;p&#62;Just thought I'd share the following link: &#60;a href=&#34;https://dhs.stanford.edu/spatial-humanities/the-digital-humanities-as-topic-network/&#34; rel=&#34;nofollow&#34;&#62;https://dhs.stanford.edu/spatial-humanities/the-digital-humanities-as-topic-network/&#60;/a&#62; as an interesting application of topic modeling.&#60;/p&#62;
+&#60;p&#62;I've also discovered what the issue with Mallet is: it has to be installed directly off C:\  (thus, C:\Mallet) and an environment variable (which is accessed from control panel &#38;gt;&#38;gt; system and security &#38;gt;&#38;gt; system &#38;gt;&#38;gt; advanced system settings &#38;gt;&#38;gt; environment variables ) called MALLET_HOME has to be created, which has as its value c:\Mallet\ .  And Java has to be installed too, natch.&#60;/p&#62;
+&#60;p&#62;And then you're good to go!&#60;/p&#62;
+&#60;p&#62;My thanks to Elijah Meeks and Rob Nelson.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>nelson.robert.k@gmail.com on "What is the easiest tool for topic modelling ?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-is-the-easiest-tool-for-topic-modelling#post-973</link>
+			<pubDate>Thu, 10 Feb 2011 17:15:18 +0000</pubDate>
+			<dc:creator>nelson.robert.k@gmail.com</dc:creator>
+			<guid isPermaLink="false">973@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#34;Mining the Dispatch&#34; is my project.  It uses MALLET, which I cannot speak more highly of.  Shawn, I've written some scripts to dump topic and topic proportion data output by MALLET into a relational database.  Unless your student has some experience with relational databases that, of course, isn't easy either, but it's necessary to do any meaningful work with the topic modeling data.  I'd be happy to share those with you and your student if that would be helpful: &#60;a href=&#34;mailto:rnelson2@richmond.edu&#34;&#62;rnelson2@richmond.edu&#60;/a&#62;.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Shawn on "What is the easiest tool for topic modelling ?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-is-the-easiest-tool-for-topic-modelling#post-969</link>
+			<pubDate>Wed, 09 Feb 2011 18:54:32 +0000</pubDate>
+			<dc:creator>Shawn</dc:creator>
+			<guid isPermaLink="false">969@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @organisciak@gmail.com's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/what-is-the-easiest-tool-for-topic-modelling#post-968&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;Hmm. Wasn't familiar with Lemur. Thanks! Will give that an explore. It's also been suggested to me that Weka &#60;a href=&#34;http://www.cs.waikato.ac.nz/ml/weka/&#34; rel=&#34;nofollow&#34;&#62;http://www.cs.waikato.ac.nz/ml/weka/&#60;/a&#62; or Orange &#60;a href=&#34;http://orange.biolab.si/&#34; rel=&#34;nofollow&#34;&#62;http://orange.biolab.si/&#60;/a&#62; might be suitable. &#60;/p&#62;
+&#60;p&#62;Thank you for the link to the classpath info. I'll see where that leads me... ;)
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Peter Organisciak on "What is the easiest tool for topic modelling ?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-is-the-easiest-tool-for-topic-modelling#post-968</link>
+			<pubDate>Wed, 09 Feb 2011 18:26:27 +0000</pubDate>
+			<dc:creator>Peter Organisciak</dc:creator>
+			<guid isPermaLink="false">968@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I was going to suggest MALLET before realizing, as Matt did, that the question was looking for 'easy'. Unfortunately, topic modelling does seem to have some overhead.&#60;/p&#62;
+&#60;p&#62;Have you considered PLSA instead of topic modelling? I've had success with the Lemur toolkit's implementation, which may be easier, but would still require command line hammering.&#60;/p&#62;
+&#60;p&#62;The exception you got, by the way, possibly means that the Java classpath isn't set properly. Not sure, but worth a try... &#60;a href=&#34;http://download.oracle.com/javase/1.3/docs/tooldocs/win32/classpath.html&#34; rel=&#34;nofollow&#34;&#62;http://download.oracle.com/javase/1.3/docs/tooldocs/win32/classpath.html&#60;/a&#62;
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Shawn on "What is the easiest tool for topic modelling ?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-is-the-easiest-tool-for-topic-modelling#post-967</link>
+			<pubDate>Wed, 09 Feb 2011 16:47:40 +0000</pubDate>
+			<dc:creator>Shawn</dc:creator>
+			<guid isPermaLink="false">967@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='http://digitalhumanities.org/answers/profile/rachel'&#62;Rachel&#60;/a&#62; Donahue's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/what-is-the-easiest-tool-for-topic-modelling#post-963&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;Thanks - I'll take a look at that. Good to know about the limitations...
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Shawn on "What is the easiest tool for topic modelling ?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-is-the-easiest-tool-for-topic-modelling#post-966</link>
+			<pubDate>Wed, 09 Feb 2011 16:46:52 +0000</pubDate>
+			<dc:creator>Shawn</dc:creator>
+			<guid isPermaLink="false">966@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='http://digitalhumanities.org/answers/profile/mjockers'&#62;mjockers&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/what-is-the-easiest-tool-for-topic-modelling#post-964&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;Ha! Isn't that the truth... I've been playing with Mallet; or rather, I've been growing increasingly frustrated with it. I've set the environment variables, got Java all hunky dory... but I get the following: &#60;a href=&#34;http://i.imgur.com/xPuox.png&#34; rel=&#34;nofollow&#34;&#62;http://i.imgur.com/xPuox.png&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;&#34;exception in thread&#34;... any ideas how I should tackle this?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>mjockers on "What is the easiest tool for topic modelling ?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-is-the-easiest-tool-for-topic-modelling#post-964</link>
+			<pubDate>Tue, 08 Feb 2011 20:36:19 +0000</pubDate>
+			<dc:creator>mjockers</dc:creator>
+			<guid isPermaLink="false">964@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#34;easy&#34; and &#34;topic-modeling&#34; are not often used in the same sentence:-) So as an alternative to &#34;easy&#34; let me suggest &#34;best.&#34;  In that case I highly recommend MALLET from umass (&#60;a href=&#34;http://mallet.cs.umass.edu/)&#34; rel=&#34;nofollow&#34;&#62;http://mallet.cs.umass.edu/)&#60;/a&#62;.  There are some other packages, including a few for R, but Mallet is, from my experience,  the standard by which others are judged.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Rachel Donahue on "What is the easiest tool for topic modelling ?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-is-the-easiest-tool-for-topic-modelling#post-963</link>
+			<pubDate>Tue, 08 Feb 2011 01:59:55 +0000</pubDate>
+			<dc:creator>Rachel Donahue</dc:creator>
+			<guid isPermaLink="false">963@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;A caution on NVivo: It does NOT do well with large data sets/files, no matter how much power it has available to it. If you're working with lots of small files, it can be very useful. But throw 750 pages of text at it and it grinds to a halt.&#60;/p&#62;
+&#60;p&#62;Still, it has a 30 day free trial and might be worth playing around with.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Patrick Murray-John on "What is the easiest tool for topic modelling ?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-is-the-easiest-tool-for-topic-modelling#post-957</link>
+			<pubDate>Mon, 07 Feb 2011 20:23:33 +0000</pubDate>
+			<dc:creator>Patrick Murray-John</dc:creator>
+			<guid isPermaLink="false">957@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;At THATCampVA we saw a great demo of &#60;a href=&#34;http://www.qsrinternational.com/products_nvivo.aspx&#34;&#62;NVivo&#60;/a&#62;, which looked very powerful.&#60;/p&#62;
+&#60;p&#62;&#60;a href=&#34;http://vue.tufts.edu/&#34;&#62;VUE&#60;/a&#62; (Visual Understanding Environment) from Tufts is open source, and might also do the topic modeling work well.&#60;/p&#62;
+&#60;p&#62;HTH
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Shawn on "What is the easiest tool for topic modelling ?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-is-the-easiest-tool-for-topic-modelling#post-952</link>
+			<pubDate>Mon, 07 Feb 2011 19:05:29 +0000</pubDate>
+			<dc:creator>Shawn</dc:creator>
+			<guid isPermaLink="false">952@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I have a student who has a corpus of materials, and we'd like to plumb its depths with some data mining. We think that topic modeling - as exemplified by the 'Mining the Dispatch &#60;a href=&#34;http://bit.ly/hv4I6E&#34; rel=&#34;nofollow&#34;&#62;http://bit.ly/hv4I6E&#60;/a&#62; might be one way to go. I'd like for the student to run with this herself. What are some good introductory tutorials for data mining more generally, and topic modeling specifically? What about tools? Preferably, we'd like to use some tools that don't involve any command-line interactions. Thanks everyone!
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

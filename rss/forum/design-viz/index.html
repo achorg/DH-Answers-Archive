@@ -1,0 +1,475 @@
+<?
+/*
+Plugin Name: bb Topic Icons
+Plugin URI: http://devt.caffeinatedbliss.com/bbpress/topic-icons
+Description: Adds configurable icons next to topics based on their status
+Author: Paul Hawke
+Author URI: http://paul.caffeinatedbliss.com/
+Version: 0.6
+*/
+
+/****************************************************************************
+ *
+ * Configure the following constants to fine-tune the CSS classes that are
+ * generated, the icon filenames that are used, and the text used in the
+ * legend (if you have one displayed).  Note: filenames are likely to be
+ * taken away in a future version and replaced with the concept of "icon sets"
+ * whose filenames are fixed, so dont get used to editing the filenames,
+ * as this will break in future versions.
+ *
+ ****************************************************************************/
+
+// css class for the unsorted list used in the legend display
+define( LEGEND_CLASS, 'topic_icon_legend' );
+
+// busy threshold - a topic with more posts than this is counted as "busy"
+// for purposes of picking an icon.
+define( BUSY_THRESHOLD, 15 );
+
+// width of the images, in pixels
+define( ICON_WIDTH, '20' );
+
+// height of the images, in pixels
+define( ICON_HEIGHT, '20' );
+
+// the URL base for where to find the default icon set.
+define( ICON_SET_URL_BASE, BB_PLUGIN_URL.'bb-topic-icons/icon-sets/' );
+
+/****************************************************************************
+ *
+ * Shouldnt be much need to edit anything beyond this point - configuration
+ * is all done via the constants (above) and through and admin area page in
+ * bbPress at runtime.
+ *
+ ****************************************************************************/
+
+require( 'bb-topic-icons-api.php' );
+require( 'bb-topic-icons-admin.php' );
+require( 'interface.status-interpreter.php' );
+require( 'interface.status-renderer.php' );
+require( 'class.default-status-interpreter.php' );
+require( 'class.default-status-renderer.php' );
+
+function topic_icons_legend() {
+	$icon_set_name = topic_icons_get_active_icon_set();
+	$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+	$statuses = get_active_status_interpreter()->getAllStatuses();
+	$renderer = get_active_status_renderer();
+	
+	echo '<ul id="'.LEGEND_CLASS.'">';
+	for ($i=0; $i < count($statuses); $i++) {
+		$image = $renderer->renderStatus($statuses[$i]);
+		$tooltip = $renderer->renderStatusTooltip($statuses[$i]);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (isset($image) && strlen($image) > 0 &&
+			isset($tooltip) && strlen($tooltip) > 0 && $exists) {
+			echo '<li><img src="'.$icon_set_url.'/'.$image.
+				'" width="'.ICON_WIDTH.'" height="'.ICON_HEIGHT.
+				'" align="absmiddle">&nbsp;'.$tooltip.'</li>';
+		}
+	}
+	echo '</ul>';
+}
+
+function topic_icons_css() {
+	echo "\n<style type=\"text/css\"><!--\n";
+	require( 'bb-topic-icons.css' );
+	echo "\n--></style>";
+}
+
+function topic_icons_label( $label ) {
+	global $topic;
+	
+	if (bb_is_front() || bb_is_forum() || bb_is_view() || bb_is_tag()) {		
+		$icon_set_name = topic_icons_get_active_icon_set();
+		$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+
+		$status = get_active_status_interpreter()->getStatus(bb_get_location(), $topic);
+		$renderer = get_active_status_renderer();
+		$image = $renderer->renderStatus($status);
+		$tooltip = $renderer->renderStatusTooltip($status);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (!$exists) {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), ICON_SET_URL_BASE.'/empty.png', ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		} else if (strlen($tooltip) > 0) {		
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"><span>%s</span></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $tooltip, $label);
+		} else {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		}
+	}
+	
+	return $label;
+}
+
+function topic_icons_init( ) {
+	remove_filter('bb_topic_labels', 'bb_closed_label', 10);
+	remove_filter('bb_topic_labels', 'bb_sticky_label', 20);
+
+	add_filter('bb_topic_labels', 'topic_icons_label', 11);
+
+	add_action('bb_head', 'topic_icons_css');
+
+	add_action('bb_admin_menu_generator', 'topic_icons_admin_page_add');
+	add_action('bb_admin-header.php', 'topic_icons_admin_page_process');
+	
+	topic_icons_register_status_interpreter('default', new DefaultStatusInterpreter(BUSY_THRESHOLD));
+	topic_icons_register_status_renderer('default', new DefaultStatusRenderer());
+}
+
+topic_icons_init();
+
+?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Forum: Interfaces, Design &#38; Usability - Recent Posts</title>
+		<link>http://digitalhumanities.org/answers/forum/design-viz</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Forum: Interfaces, Design &amp; Usability - Recent Posts</description>
+		<language>en-US</language>
+		<pubDate>Sun, 24 Mar 2019 17:08:48 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/forum/design-viz" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>Amanda Visconti on "Does anyone have resources or examples on how to write about website design?"</title>
+						<link>http://digitalhumanities.org/answers/topic/does-anyone-have-resources-or-examples-on-how-to-write-about-website-design#post-2427</link>
+			<pubDate>Sun, 21 Jan 2018 14:50:55 +0000</pubDate>
+			<dc:creator>Amanda Visconti</dc:creator>
+			<guid isPermaLink="false">2427@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='http://digitalhumanities.org/answers/profile/mlholloway251'&#62;mlholloway251&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/does-anyone-have-resources-or-examples-on-how-to-write-about-website-design#post-2425&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;If you're not already involved there, it could also be useful to join &#60;a href=&#34;https://www.hastac.org/&#34;&#62;HASTAC&#60;/a&#62; and blog about your process/questions that come up—there's a pretty good community of commenters there.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Amanda Visconti on "Does anyone have resources or examples on how to write about website design?"</title>
+						<link>http://digitalhumanities.org/answers/topic/does-anyone-have-resources-or-examples-on-how-to-write-about-website-design#post-2426</link>
+			<pubDate>Sun, 21 Jan 2018 14:45:31 +0000</pubDate>
+			<dc:creator>Amanda Visconti</dc:creator>
+			<guid isPermaLink="false">2426@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Some of the pieces of my &#60;a href=&#34;http://dr.amandavisconti.com/&#34;&#62;(completed) digital dissertation&#60;/a&#62; using web design/development for literature scholarship might be useful? Some specific links below, but also check out &#60;a href=&#34;https://docs.google.com/document/d/1qJwx0nYam3aJazetVfmij6q92Owv-gu_pfl-Xci6BLM/edit?usp=sharing&#34;&#62;this great GoogleDoc&#60;/a&#62; some folks at CUNY curated with info on a variety of digital dissertation formats.&#60;/p&#62;
+&#60;p&#62;I have &#60;a href=&#34;http://literaturegeek.com/tag/dissertation/&#34;&#62;some blog posts&#60;/a&#62; both about the design of a digital edition website for my dissertation, and about the design of the websites presenting the dissertation (e.g. &#60;a href=&#34;http://literaturegeek.com/2014/04/02/digitaldissformat&#34;&#62;post on choosing and arguing for digital dissertation design&#60;/a&#62;, and &#60;a href=&#34;http://literaturegeek.com/2014/03/31/html5scholarlyarticle&#34;&#62;some design choices&#60;/a&#62;, and &#60;a href=&#34;http://literaturegeek.com/2014/09/16/user-testing-a-digital-edition-getting-the-feedback-you-need&#34;&#62;user testing dissertation websites&#60;/a&#62;). &#60;/p&#62;
+&#60;p&#62;A skim of the table of contents for &#60;a href=&#34;http://dr.amandavisconti.com/AmandaVisconti_DigitalDissertationWhitepaper_OfficialSubmission.pdf&#34;&#62;the whitepaper debriefing my digital dissertation&#60;/a&#62; might also be useful?&#60;/p&#62;
+&#60;p&#62;I also found it useful to &#60;a href=&#34;https://github.com/amandavisconti/infinite-ulysses-dissertation/blob/master/About%20the%20Dissertation/MANIFEST.md&#34;&#62;make a list of all the scholarly effort that went into the digital dissertation&#60;/a&#62;, annotated to explain the website-related work that might not be obvious to scholarly evaluators.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>mlholloway251 on "Does anyone have resources or examples on how to write about website design?"</title>
+						<link>http://digitalhumanities.org/answers/topic/does-anyone-have-resources-or-examples-on-how-to-write-about-website-design#post-2425</link>
+			<pubDate>Fri, 19 Jan 2018 22:39:31 +0000</pubDate>
+			<dc:creator>mlholloway251</dc:creator>
+			<guid isPermaLink="false">2425@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I am creating a website via wordpress for my dissertation and I need help on how to write about design choices, layout, what I chose to include, etc. If you have any resources that might help me please let me know. Thanks!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Ramkumar on "What are some of the easily understood examples on small-world networks"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-are-some-of-the-easily-understood-examples-on-small-world-networks#post-2420</link>
+			<pubDate>Sun, 17 Dec 2017 10:00:41 +0000</pubDate>
+			<dc:creator>Ramkumar</dc:creator>
+			<guid isPermaLink="false">2420@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I am looking for more examples to explain the 'small world' network phenomenon.&#60;/p&#62;
+&#60;p&#62;I am working on an article on the same. An example which I have taken up is - a modern well connected cluster of villages. &#60;/p&#62;
+&#60;p&#62;Smart and digitally enabled cluster of villages with urban and social infrastructure are the way forward. In such clusters, every body is connected to everybody. Information passes through all them seamlessly. Everybody stays informed and there are numerous advantages from eliminating village feuds to sharing farm practices and social welfare schemes. Similarly, there could be others. Cheers, Ramkumar
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>aliciapeaker@gmail.com on "I&#039;d like to visualize two or three pictures side by side"</title>
+						<link>http://digitalhumanities.org/answers/topic/id-like-to-visualize-two-or-three-pictures-side-by-side#post-2396</link>
+			<pubDate>Mon, 13 Jun 2016 22:20:23 +0000</pubDate>
+			<dc:creator>aliciapeaker@gmail.com</dc:creator>
+			<guid isPermaLink="false">2396@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;One of the most common ways of doing this is using CSS's &#34;display: inline-block.&#34; Here's a good start with some sample code: &#60;a href=&#34;http://www.w3schools.com/css/css_inline-block.asp&#34; rel=&#34;nofollow&#34;&#62;http://www.w3schools.com/css/css_inline-block.asp&#60;/a&#62;
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Gogol71 on "visualize pictures side by side"</title>
+						<link>http://digitalhumanities.org/answers/topic/visualize-pictures-side-by-side#post-2395</link>
+			<pubDate>Wed, 01 Jun 2016 20:33:11 +0000</pubDate>
+			<dc:creator>Gogol71</dc:creator>
+			<guid isPermaLink="false">2395@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;This is the answer I got from Scalar:&#60;/p&#62;
+&#60;p&#62;We've thought about including this kind of functionality as a built-in feature in Scalar before, allowing authors to insert multiple media objects side-by-side. Perhaps down the road we will. For now, this sort of thing must be done manually, using html in the html editor. In other words, when you're in the page editor, click &#34;Source&#34; so that you're editing the actual html, then insert your media manually, spacing them side-by-side accordingly.&#60;/p&#62;
+&#60;p&#62;I'd be very grateful if someone gave me the html code to do this.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Gogol71 on "I&#039;d like to visualize two or three pictures side by side"</title>
+						<link>http://digitalhumanities.org/answers/topic/id-like-to-visualize-two-or-three-pictures-side-by-side#post-2394</link>
+			<pubDate>Wed, 01 Jun 2016 19:03:02 +0000</pubDate>
+			<dc:creator>Gogol71</dc:creator>
+			<guid isPermaLink="false">2394@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='http://digitalhumanities.org/answers/profile/gogol71'&#62;Gogol71&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/id-like-to-visualize-two-or-three-pictures-side-by-side#post-2393&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;This is the answer I got from Scalar:&#60;/p&#62;
+&#60;p&#62;We've thought about including this kind of functionality as a built-in feature in Scalar before, allowing authors to insert multiple media objects side-by-side. Perhaps down the road we will. For now, this sort of thing must be done manually, using html in the html editor. In other words, when you're in the page editor, click &#34;Source&#34; so that you're editing the actual html, then insert your media manually, spacing them side-by-side accordingly.&#60;/p&#62;
+&#60;p&#62;I'd be very grateful if someone gave me the html code to do this.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Gogol71 on "I&#039;d like to visualize two or three pictures side by side"</title>
+						<link>http://digitalhumanities.org/answers/topic/id-like-to-visualize-two-or-three-pictures-side-by-side#post-2393</link>
+			<pubDate>Wed, 01 Jun 2016 08:00:40 +0000</pubDate>
+			<dc:creator>Gogol71</dc:creator>
+			<guid isPermaLink="false">2393@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I'm working with scalar (&#60;a href=&#34;http://scalar.usc.edu&#34; rel=&#34;nofollow&#34;&#62;http://scalar.usc.edu&#60;/a&#62;) and would like to compare pictures and transcriptions in columns. I guess three and even four columns of pictures or transcriptions should be possible. Many thanks for your help.&#60;br /&#62;
+Guillaume
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Garnett Utt on "$100,000 VOD Giveaway"</title>
+						<link>http://digitalhumanities.org/answers/topic/100000-vod-giveaway-1#post-2340</link>
+			<pubDate>Wed, 01 Jul 2015 14:33:41 +0000</pubDate>
+			<dc:creator>Garnett Utt</dc:creator>
+			<guid isPermaLink="false">2340@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;AV projector on offer.&#60;/p&#62;
+&#60;p&#62;This is Sparta&#34;&#60;/p&#62;
+&#60;p&#62;&#60;a href=&#34;http://goo.gl/4i0wa8&#34; rel=&#34;nofollow&#34;&#62;http://goo.gl/4i0wa8&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;Image:&#60;br /&#62;
+&#60;a href=&#34;https://www.dropbox.com/s/fa4zeqatwg6vy29/5415576.jpg?dl=0&#34; rel=&#34;nofollow&#34;&#62;https://www.dropbox.com/s/fa4zeqatwg6vy29/5415576.jpg?dl=0&#60;/a&#62;&#60;br /&#62;
+Video:&#60;br /&#62;
+&#60;a href=&#34;https://www.dropbox.com/s/k9h0wgari30gxer/Preview.mp4?dl=0&#34; rel=&#34;nofollow&#34;&#62;https://www.dropbox.com/s/k9h0wgari30gxer/Preview.mp4?dl=0&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;One Day, One City, One Story.&#60;/p&#62;
+&#60;p&#62;A story driven by the poetic landscape of Portsea Island,&#60;br /&#62;
+we observe the lives of four&#60;br /&#62;
+isolated characters intertwine through chance meetings.&#60;br /&#62;
+Inspired by 'kitchen sink' drama,&#60;br /&#62;
+this cinema verity experience examines isolated and perpetual lives.&#60;br /&#62;
+The city has a renowned military history&#60;br /&#62;
+and was once was the central east India global trade route,&#60;br /&#62;
+enabling the rapid expansion of the British Empire.&#60;br /&#62;
+It is to this end that the city also has a reputation.&#60;br /&#62;
+It is our humble opinion that you the viewer,&#60;br /&#62;
+should be allowed a glimpse into the peculiar reality that is this town,&#60;br /&#62;
+which of course, is no longer, at the centre of the Universe.&#60;/p&#62;
+&#60;p&#62;Some have described Portsea Island as unfriendly,&#60;br /&#62;
+cold and unwelcoming.&#60;br /&#62;
+Life For Rent dispels the myths by introducing you to a&#60;br /&#62;
+unique perspective of existence within a small community,&#60;br /&#62;
+daily activity can be a chore and hence movement,&#60;br /&#62;
+interaction and relationships set aside.&#60;br /&#62;
+A portrayal of the peculiarity of life as viewed&#60;br /&#62;
+through the eyes of four characters.&#60;br /&#62;
+It is said that there are just 175,481 stories within Portsea Island. &#60;/p&#62;
+&#60;p&#62;This is just one.&#60;/p&#62;
+&#60;p&#62;If upon any given morning, you climb high enough,&#60;br /&#62;
+to a point within the boundaries of Portsea Island,&#60;br /&#62;
+you will notice a desolate city,&#60;br /&#62;
+albeit barren apart from the flocks of Seagulls&#60;br /&#62;
+quarrelling over the previous nights offerings of scattered litter.&#60;br /&#62;
+Occasionally a taxi cab will disrupt the feeding fest,&#60;br /&#62;
+as it flies at an illegal speed to an early destination.&#60;br /&#62;
+Oversized refuse sacks adorn the pavement,&#60;br /&#62;
+emptied takeaway boxes fill the gutter&#60;br /&#62;
+as stacks of newspapers await collection.&#60;br /&#62;
+The morning call is a simple glimmer of overhead lighting,&#60;br /&#62;
+flickering into action as the day emerges.&#60;br /&#62;
+Refuse collectors and recycling agents begin their daily chore,&#60;br /&#62;
+meticulously finding the smallest item,&#60;br /&#62;
+wedged between the gutter and the rear wheel of a parked car.&#60;/p&#62;
+&#60;p&#62;&#34;Morning beckons as pace quickens,&#60;br /&#62;
+the day is clearly here.&#60;br /&#62;
+Quickly moving as once before,&#60;br /&#62;
+to work we hold so dear.&#60;br /&#62;
+Forget the night and find your way,&#60;br /&#62;
+adventure calls upon this day.&#60;br /&#62;
+Seek new goals and pastures true&#60;br /&#62;
+and sip upon the morning dew.&#34;&#60;/p&#62;
+&#60;p&#62;The city has a studded nose,&#60;br /&#62;
+the cathode ray nipple of Great Britain,&#60;br /&#62;
+almost fooling the innocent,&#60;br /&#62;
+the uninitiated in all its vermilion moods.&#60;br /&#62;
+Ice-cream stands, with parks and buses,&#60;br /&#62;
+the city rides as it dies.&#60;br /&#62;
+Drunkards turn around give the v sign to monuments,&#60;br /&#62;
+infecting the vulgar nebula.&#60;br /&#62;
+Hypnotic in places and privacy is impossible,&#60;br /&#62;
+living with the big yard in close proximity.&#60;/p&#62;
+&#60;p&#62;&#34;We find ourselves in quiet corners&#60;br /&#62;
+of our perpetual lives.&#60;br /&#62;
+Occurring on a daily basis,&#60;br /&#62;
+in tune we must survive.&#60;br /&#62;
+Memories of Portsea Island,&#60;br /&#62;
+this day was brought to you.&#60;br /&#62;
+By earnest means and pleasant folk,&#60;br /&#62;
+who rest before a new.&#34;
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Garnett Utt on "$100,000 VOD Giveaway"</title>
+						<link>http://digitalhumanities.org/answers/topic/100000-vod-giveaway#post-2339</link>
+			<pubDate>Wed, 01 Jul 2015 14:31:17 +0000</pubDate>
+			<dc:creator>Garnett Utt</dc:creator>
+			<guid isPermaLink="false">2339@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;AV projector on offer.&#60;/p&#62;
+&#60;p&#62;This is Sparta&#34;&#60;/p&#62;
+&#60;p&#62;&#60;a href=&#34;http://goo.gl/4i0wa8&#34; rel=&#34;nofollow&#34;&#62;http://goo.gl/4i0wa8&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;Image:&#60;br /&#62;
+&#60;a href=&#34;https://www.dropbox.com/s/fa4zeqatwg6vy29/5415576.jpg?dl=0&#34; rel=&#34;nofollow&#34;&#62;https://www.dropbox.com/s/fa4zeqatwg6vy29/5415576.jpg?dl=0&#60;/a&#62;&#60;br /&#62;
+Video:&#60;br /&#62;
+&#60;a href=&#34;https://www.dropbox.com/s/k9h0wgari30gxer/Preview.mp4?dl=0&#34; rel=&#34;nofollow&#34;&#62;https://www.dropbox.com/s/k9h0wgari30gxer/Preview.mp4?dl=0&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;One Day, One City, One Story.&#60;/p&#62;
+&#60;p&#62;A story driven by the poetic landscape of Portsea Island,&#60;br /&#62;
+we observe the lives of four&#60;br /&#62;
+isolated characters intertwine through chance meetings.&#60;br /&#62;
+Inspired by 'kitchen sink' drama,&#60;br /&#62;
+this cinema verity experience examines isolated and perpetual lives.&#60;br /&#62;
+The city has a renowned military history&#60;br /&#62;
+and was once was the central east India global trade route,&#60;br /&#62;
+enabling the rapid expansion of the British Empire.&#60;br /&#62;
+It is to this end that the city also has a reputation.&#60;br /&#62;
+It is our humble opinion that you the viewer,&#60;br /&#62;
+should be allowed a glimpse into the peculiar reality that is this town,&#60;br /&#62;
+which of course, is no longer, at the centre of the Universe.&#60;/p&#62;
+&#60;p&#62;Some have described Portsea Island as unfriendly,&#60;br /&#62;
+cold and unwelcoming.&#60;br /&#62;
+Life For Rent dispels the myths by introducing you to a&#60;br /&#62;
+unique perspective of existence within a small community,&#60;br /&#62;
+daily activity can be a chore and hence movement,&#60;br /&#62;
+interaction and relationships set aside.&#60;br /&#62;
+A portrayal of the peculiarity of life as viewed&#60;br /&#62;
+through the eyes of four characters.&#60;br /&#62;
+It is said that there are just 175,481 stories within Portsea Island. &#60;/p&#62;
+&#60;p&#62;This is just one.&#60;/p&#62;
+&#60;p&#62;If upon any given morning, you climb high enough,&#60;br /&#62;
+to a point within the boundaries of Portsea Island,&#60;br /&#62;
+you will notice a desolate city,&#60;br /&#62;
+albeit barren apart from the flocks of Seagulls&#60;br /&#62;
+quarrelling over the previous nights offerings of scattered litter.&#60;br /&#62;
+Occasionally a taxi cab will disrupt the feeding fest,&#60;br /&#62;
+as it flies at an illegal speed to an early destination.&#60;br /&#62;
+Oversized refuse sacks adorn the pavement,&#60;br /&#62;
+emptied takeaway boxes fill the gutter&#60;br /&#62;
+as stacks of newspapers await collection.&#60;br /&#62;
+The morning call is a simple glimmer of overhead lighting,&#60;br /&#62;
+flickering into action as the day emerges.&#60;br /&#62;
+Refuse collectors and recycling agents begin their daily chore,&#60;br /&#62;
+meticulously finding the smallest item,&#60;br /&#62;
+wedged between the gutter and the rear wheel of a parked car.&#60;/p&#62;
+&#60;p&#62;&#34;Morning beckons as pace quickens,&#60;br /&#62;
+the day is clearly here.&#60;br /&#62;
+Quickly moving as once before,&#60;br /&#62;
+to work we hold so dear.&#60;br /&#62;
+Forget the night and find your way,&#60;br /&#62;
+adventure calls upon this day.&#60;br /&#62;
+Seek new goals and pastures true&#60;br /&#62;
+and sip upon the morning dew.&#34;&#60;/p&#62;
+&#60;p&#62;The city has a studded nose,&#60;br /&#62;
+the cathode ray nipple of Great Britain,&#60;br /&#62;
+almost fooling the innocent,&#60;br /&#62;
+the uninitiated in all its vermilion moods.&#60;br /&#62;
+Ice-cream stands, with parks and buses,&#60;br /&#62;
+the city rides as it dies.&#60;br /&#62;
+Drunkards turn around give the v sign to monuments,&#60;br /&#62;
+infecting the vulgar nebula.&#60;br /&#62;
+Hypnotic in places and privacy is impossible,&#60;br /&#62;
+living with the big yard in close proximity.&#60;/p&#62;
+&#60;p&#62;&#34;We find ourselves in quiet corners&#60;br /&#62;
+of our perpetual lives.&#60;br /&#62;
+Occurring on a daily basis,&#60;br /&#62;
+in tune we must survive.&#60;br /&#62;
+Memories of Portsea Island,&#60;br /&#62;
+this day was brought to you.&#60;br /&#62;
+By earnest means and pleasant folk,&#60;br /&#62;
+who rest before a new.&#34;
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Ethan Gruber on "Examples of web-based galleries or historical architecture?"</title>
+						<link>http://digitalhumanities.org/answers/topic/examples-of-web-based-galleries-or-historical-architecture#post-2123</link>
+			<pubDate>Wed, 23 Oct 2013 19:21:29 +0000</pubDate>
+			<dc:creator>Ethan Gruber</dc:creator>
+			<guid isPermaLink="false">2123@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Photogrammetry is great for low-cost architectural/archaeological documentation, but for the type of virtual reality walkthrough exhibited by Williamsburg, the digital Pompeii project at the University of Arkansas, or any of the other projects using Unity, I'd recommend building the 3D models from scratch rather than importing models generated by photogrammetry.  Photogrammetry tends to produce a muddy, higher-polygon-than-necessary result.  It's great for documenting ruins, but not for reconstructions.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Wayne Graham on "Examples of web-based galleries or historical architecture?"</title>
+						<link>http://digitalhumanities.org/answers/topic/examples-of-web-based-galleries-or-historical-architecture#post-2121</link>
+			<pubDate>Tue, 22 Oct 2013 13:32:03 +0000</pubDate>
+			<dc:creator>Wayne Graham</dc:creator>
+			<guid isPermaLink="false">2121@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hi Paul,&#60;/p&#62;
+&#60;p&#62;This is actually something I've been kicking for some time. I've had a lot of success modeling extant architecture with photogrammetry, and am a proponent of &#60;a href=&#34;http://ccwu.me/vsfm/&#34;&#62;VisualSfM&#60;/a&#62; (Noah Snavely who does &#60;a href=&#34;http://www.cs.cornell.edu/~snavely/bundler/&#34;&#62;Bundler&#60;/a&#62; highly recommended it). I've also had good success getting models out of &#60;a href=&#34;http://www.agisoft.ru/products/photoscan/standard/&#34;&#62;PhotoScan&#60;/a&#62;, which has a decent user interface for this type of thing. The benefit here is that you can get a textured model out of PhotoScan with a few clicks (and waiting), but you don't have to use additional modeling software to get generate a model. &#60;/p&#62;
+&#60;p&#62;I've seen a lot of people use &#60;a href=&#34;http://unity3d.com/&#34;&#62;Unity&#60;/a&#62; to re-render this for web delivery. This is a technique used by Colonial Williamsburg for their &#60;a href=&#34;http://research.history.org/vw1776/&#34;&#62;Williamsburg 1776&#60;/a&#62; reconstruction of the town during the American Revolution. The down side to this technique (other than being quite resource intensive) is that it requires  a plugin to actually work. I think perhaps a better way to handle this is by leveraging modern browser's capabilities with webGL. &#60;/p&#62;
+&#60;p&#62;Depending on how &#34;good&#34; you want the render to be, you're going to need to clean the models up in something like 3DStudio Max, Maya, Blender, or any number of other modeling tools. Just a warning, though, if you're new to this kind of software, the learning curve is steep, and the interfaces for these tools take some getting use to.&#60;/p&#62;
+&#60;p&#62;For web delivery of the models using webGL, there are two main wrappers in major use these days, &#60;a href=&#34;http://threejs.org/&#34;&#62;three.js&#60;/a&#62; and &#60;a href=&#34;http://kineticjs.com/&#34;&#62;kineticjs&#60;/a&#62; (there are others, but these seem to be getting the most traction). Using three.js, the &#60;a href=&#34;http://www.chaostoperfection.com/&#34;&#62;Chaos to Perfection&#60;/a&#62; is an amazing interactive &#34;stroll&#34; around Versailles. And the project has an &#60;a href=&#34;http://threejs.org/&#34;&#62;amazing gallery&#60;/a&#62; of example work. For my own work, I've had quite a bit of success with three.js rendering high-poly models quite quickly, but the main issue I've run in to is the fact that a 30Mb texture map still takes a while to download...&#60;/p&#62;
+&#60;p&#62;For geospatial delivery, I've toyed with a plugin for Omeka that would allow you to add 3D models to items (with an eye toward using them with Neatline). I've been holding off a bit as OpenLayers (the library we use for rendering maps) is going through a major upgrade that will allow you to &#34;easily&#34; tie &#60;a href=&#34;http://cesium.agi.com/&#34;&#62;cesium&#60;/a&#62; to the map, allow you to render terrains (and hopefully models) in 3D without a plugin. &#60;/p&#62;
+&#60;p&#62;With all that said, here are some other examples of using 3D to help visualize this kind of data:&#60;/p&#62;
+&#60;ul&#62;
+&#60;li&#62;&#60;a href=&#34;http://mayaarch3d.unm.edu/&#34;&#62;MayaArch&#60;/a&#62;&#60;/li&#62;
+&#60;li&#62;&#60;a href=&#34;http://www.kvl.cch.kcl.ac.uk/projects.html&#34;&#62;King's Visualization Lab&#60;/a&#62;&#60;/li&#62;
+&#60;li&#62;&#60;a href=&#34;http://archive.cyark.org/&#34;&#62;CyArk&#60;/a&#62;&#60;/li&#62;
+&#60;li&#62;&#60;a href=&#34;http://idialab.org/&#34;&#62;IDIALab&#60;/a&#62;&#60;/li&#62;
+&#60;li&#62;&#60;a href=&#34;http://www.byzantium1200.com/index.html&#34;&#62;Byzantium 1200&#60;/a&#62;&#60;/li&#62;
+&#60;li&#62;&#60;a href=&#34;http://www.dukewired.org/&#34;&#62;Duke Wired&#60;/a&#62;&#60;/li&#62;
+&#60;/ul&#62;
+&#60;p&#62;And, if you're not prone to motion sickness, this is a visualization of 10,000+ images I did of a Spanish Monastery that steps through each image, showing a point cloud, and its shaded and textured surfaces. &#60;a href=&#34;https://www.youtube.com/watch?v=3pKOtiQ-ZOI&#34;&#62;Calatrava&#60;/a&#62;. &#60;/p&#62;
+&#60;p&#62;HTH,&#60;br /&#62;
+Wayne
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>pfyfe on "Examples of web-based galleries or historical architecture?"</title>
+						<link>http://digitalhumanities.org/answers/topic/examples-of-web-based-galleries-or-historical-architecture#post-2116</link>
+			<pubDate>Mon, 21 Oct 2013 19:30:00 +0000</pubDate>
+			<dc:creator>pfyfe</dc:creator>
+			<guid isPermaLink="false">2116@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;A colleague of mine has been admiring the &#60;a href=&#34;http://www.whatjanesaw.org/&#34;&#62;What Jane Saw&#60;/a&#62; project and has asked for help with an idea for a related immersive web-based gallery based on a historical model. I'm wondering if anyone can recommend similar sites that model gallery spaces or that use architectural models for site navigation and display. (And not Second Life.) There must be great architectural projects and museum sites out there that do this. Grateful for your suggestions.&#60;/p&#62;
+&#60;p&#62;We're also interested in suggestions for what kinds of platforms or software would be most useful for creating such a web-based project: making an architectural model, overlaying images, providing some kind of spatial navigation, etc. (It seems that What Jane Saw is built from SketchUp models, rendered into background images, and serving room and picture info with PHP and JavaScript.) What approaches would you recommend or avoid? Thanks for your time --
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>hopegreenberg on "Questions to facilitate design of Digital Humanities projects"</title>
+						<link>http://digitalhumanities.org/answers/topic/questions-to-facilitate-design-of-digital-humanities-projects#post-2075</link>
+			<pubDate>Wed, 14 Aug 2013 14:45:50 +0000</pubDate>
+			<dc:creator>hopegreenberg</dc:creator>
+			<guid isPermaLink="false">2075@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='http://digitalhumanities.org/answers/profile/gaelicmichael'&#62;gaelicmichael&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/questions-to-facilitate-design-of-digital-humanities-projects#post-2073&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;Those are great questions. I particularly like #6 and #8 as a way to help refine the define. I agree with Willy Lee that one way to help focus is to get at the difference between a collection, a Collection, a collection with narrative, and a typical web site. I've found that people who do not have a background in building collections don't usually distinguish between collection=a bunch of stuff I want to organize and display, and Collection=a curated group of objects chosen according to specific criteria. Neither do they distinguish between collections and exhibits. Showing them a searchable/browsable database of objects (eg dSpace), then showing a narrated exhibit (with the objects still in a searchable database behind the exhibit, eg Omeka) goes a long way to clearing that confusion up. (And then too often you find out what they really want is a customized web site with all kinds of bells and whistles. *sigh*)&#60;/p&#62;
+&#60;p&#62;With question #6 you will be able to find out if they want to do things 'above and beyond' that will require additional apps, all of which should play nicely with your core application, so that helps determine what you need as well.&#60;/p&#62;
+&#60;p&#62;Thanks for posting the questions--I'm going to use the pedagogical ones to help frame a course project we are designing right now!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Willy Lee on "Questions to facilitate design of Digital Humanities projects"</title>
+						<link>http://digitalhumanities.org/answers/topic/questions-to-facilitate-design-of-digital-humanities-projects#post-2074</link>
+			<pubDate>Wed, 14 Aug 2013 14:29:08 +0000</pubDate>
+			<dc:creator>Willy Lee</dc:creator>
+			<guid isPermaLink="false">2074@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Is this a story/narrative or a collection/database?&#60;/p&#62;
+&#60;p&#62;This is one of the things I always try to pin down first. If the project has to be in a singular narrative path, it makes some tools completely inappropriate. Alternatively, many tools that excel at narratives are poor choices for random browsing.&#60;/p&#62;
+&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='http://digitalhumanities.org/answers/profile/gaelicmichael'&#62;gaelicmichael&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/questions-to-facilitate-design-of-digital-humanities-projects#post-2073&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

@@ -1,0 +1,382 @@
+<?
+/*
+Plugin Name: bb Topic Icons
+Plugin URI: http://devt.caffeinatedbliss.com/bbpress/topic-icons
+Description: Adds configurable icons next to topics based on their status
+Author: Paul Hawke
+Author URI: http://paul.caffeinatedbliss.com/
+Version: 0.6
+*/
+
+/****************************************************************************
+ *
+ * Configure the following constants to fine-tune the CSS classes that are
+ * generated, the icon filenames that are used, and the text used in the
+ * legend (if you have one displayed).  Note: filenames are likely to be
+ * taken away in a future version and replaced with the concept of "icon sets"
+ * whose filenames are fixed, so dont get used to editing the filenames,
+ * as this will break in future versions.
+ *
+ ****************************************************************************/
+
+// css class for the unsorted list used in the legend display
+define( LEGEND_CLASS, 'topic_icon_legend' );
+
+// busy threshold - a topic with more posts than this is counted as "busy"
+// for purposes of picking an icon.
+define( BUSY_THRESHOLD, 15 );
+
+// width of the images, in pixels
+define( ICON_WIDTH, '20' );
+
+// height of the images, in pixels
+define( ICON_HEIGHT, '20' );
+
+// the URL base for where to find the default icon set.
+define( ICON_SET_URL_BASE, BB_PLUGIN_URL.'bb-topic-icons/icon-sets/' );
+
+/****************************************************************************
+ *
+ * Shouldnt be much need to edit anything beyond this point - configuration
+ * is all done via the constants (above) and through and admin area page in
+ * bbPress at runtime.
+ *
+ ****************************************************************************/
+
+require( 'bb-topic-icons-api.php' );
+require( 'bb-topic-icons-admin.php' );
+require( 'interface.status-interpreter.php' );
+require( 'interface.status-renderer.php' );
+require( 'class.default-status-interpreter.php' );
+require( 'class.default-status-renderer.php' );
+
+function topic_icons_legend() {
+	$icon_set_name = topic_icons_get_active_icon_set();
+	$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+	$statuses = get_active_status_interpreter()->getAllStatuses();
+	$renderer = get_active_status_renderer();
+	
+	echo '<ul id="'.LEGEND_CLASS.'">';
+	for ($i=0; $i < count($statuses); $i++) {
+		$image = $renderer->renderStatus($statuses[$i]);
+		$tooltip = $renderer->renderStatusTooltip($statuses[$i]);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (isset($image) && strlen($image) > 0 &&
+			isset($tooltip) && strlen($tooltip) > 0 && $exists) {
+			echo '<li><img src="'.$icon_set_url.'/'.$image.
+				'" width="'.ICON_WIDTH.'" height="'.ICON_HEIGHT.
+				'" align="absmiddle">&nbsp;'.$tooltip.'</li>';
+		}
+	}
+	echo '</ul>';
+}
+
+function topic_icons_css() {
+	echo "\n<style type=\"text/css\"><!--\n";
+	require( 'bb-topic-icons.css' );
+	echo "\n--></style>";
+}
+
+function topic_icons_label( $label ) {
+	global $topic;
+	
+	if (bb_is_front() || bb_is_forum() || bb_is_view() || bb_is_tag()) {		
+		$icon_set_name = topic_icons_get_active_icon_set();
+		$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+
+		$status = get_active_status_interpreter()->getStatus(bb_get_location(), $topic);
+		$renderer = get_active_status_renderer();
+		$image = $renderer->renderStatus($status);
+		$tooltip = $renderer->renderStatusTooltip($status);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (!$exists) {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), ICON_SET_URL_BASE.'/empty.png', ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		} else if (strlen($tooltip) > 0) {		
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"><span>%s</span></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $tooltip, $label);
+		} else {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		}
+	}
+	
+	return $label;
+}
+
+function topic_icons_init( ) {
+	remove_filter('bb_topic_labels', 'bb_closed_label', 10);
+	remove_filter('bb_topic_labels', 'bb_sticky_label', 20);
+
+	add_filter('bb_topic_labels', 'topic_icons_label', 11);
+
+	add_action('bb_head', 'topic_icons_css');
+
+	add_action('bb_admin_menu_generator', 'topic_icons_admin_page_add');
+	add_action('bb_admin-header.php', 'topic_icons_admin_page_process');
+	
+	topic_icons_register_status_interpreter('default', new DefaultStatusInterpreter(BUSY_THRESHOLD));
+	topic_icons_register_status_renderer('default', new DefaultStatusRenderer());
+}
+
+topic_icons_init();
+
+?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Forum: Archaeology &#38; Cultural Heritage - Recent Topics</title>
+		<link>http://digitalhumanities.org/answers/forum/archaeology-amp-cultural-heritage</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Forum: Archaeology &amp; Cultural Heritage - Recent Topics</description>
+		<language>en-US</language>
+		<pubDate>Sun, 24 Mar 2019 17:08:37 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/forum/archaeology-amp-cultural-heritage/topics" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>Ramkumar on "How do we as people meet the digital demands and information overload?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-do-we-as-people-meet-the-digital-demands-and-information-overload#post-2421</link>
+			<pubDate>Mon, 08 Jan 2018 10:30:25 +0000</pubDate>
+			<dc:creator>Ramkumar</dc:creator>
+			<guid isPermaLink="false">2421@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hi,&#60;br /&#62;
+We are frequently overwhelmed with digital information. We do not switch off our smart phones and devices till late in the night this disturbs our sleep and on top of it, there is enough distraction at work during the day. How do we deal with this ?&#60;/p&#62;
+&#60;p&#62;I have personally seen many people on social networks having an emotional breakdown and have gone into depression either due the over-exposure or their ideas and posts not being paid attention to.  They are unable to deal with this exposure and overload of information. As a society, are we going too fast on the information super lane? &#60;/p&#62;
+&#60;p&#62;We are not paying enough attention. Human attention span on any piece of useful information is only about 3-4 minutes and beyond this is distraction. &#60;/p&#62;
+&#60;p&#62;How do we practice being selective and where do we draw the line ? are the other things that come to my mind right now.  &#60;/p&#62;
+&#60;p&#62;If you have thoughts or comments please do share. Would greatly appreciate. Cheers, Ramkumar
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>hrishikesh on "What funding agencies support a DH project in India?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-funding-agencies-support-a-dh-project-in-india#post-2318</link>
+			<pubDate>Wed, 08 Apr 2015 02:46:49 +0000</pubDate>
+			<dc:creator>hrishikesh</dc:creator>
+			<guid isPermaLink="false">2318@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I have initiated a project related to the history of film exhibition and public culture in Indian cities. I am looking to fund this project to expand its applicability, scope and geography. Can someone let me know of any funding agencies who would support this effort?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>cjs1994 on "DH &#38; Biography"</title>
+						<link>http://digitalhumanities.org/answers/topic/dh-biography#post-2155</link>
+			<pubDate>Tue, 25 Feb 2014 16:29:28 +0000</pubDate>
+			<dc:creator>cjs1994</dc:creator>
+			<guid isPermaLink="false">2155@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Does digital humanities hold any promise for the writing of individual biographies, or is one life too small to crunch with big data?&#60;/p&#62;
+&#60;p&#62;Charles J. Shields
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>zachwhalen on "Best approaches for using DC fields to describe physical computing components?"</title>
+						<link>http://digitalhumanities.org/answers/topic/best-approaches-for-using-dc-fields-to-describe-physical-computing-components#post-2095</link>
+			<pubDate>Tue, 10 Sep 2013 02:03:37 +0000</pubDate>
+			<dc:creator>zachwhalen</dc:creator>
+			<guid isPermaLink="false">2095@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hi,&#60;/p&#62;
+&#60;p&#62;I've got my students working on an assignment where we take apart old media devices, learn about their key components, and then create an Omeka exhibit about our device, using Neatline to trace each component in time and space. This part works pretty well, so far.&#60;/p&#62;
+&#60;p&#62;For example, I'm taking apart an Atari VCS. The MOS 6507 CPU bears the MOS technologies logo so was probably (I've learned) manufactured at their plant in Norristown, PA. The TIA chip, on the other hand, has a Synertek logo which (I've learned) second-sourced many of the integrated circuits used by Atari. Even though Atari's TIA chip (the famous Stella) was originally fabricated by MOS in Pennsylvania, &#60;em&#62;mine&#60;/em&#62; was produce at Synertek in California. &#60;/p&#62;
+&#60;p&#62;My problem is, I want to capture that kind of distinction in my record, but I'm not sure how to use Omeka's Dublin Core fields to describe everything that I find interesting about these chips, including those differences in production sites. My understanding of DC is pretty basic -- for example, does it make a distinction between &#34;The TIA Chip&#34; as a class of objects exhibiting uniform properties, vs. &#34;My TIA Chip&#34; which has a specific origin in time and place? &#60;/p&#62;
+&#60;p&#62;In other words, is Synertek the &#34;creator&#34;, &#34;publisher&#34;, or &#34;source&#34;? And what does &#34;coverage&#34; mean?&#60;/p&#62;
+&#60;p&#62;Am I over-thinking this? Are there better ontologies for this kind of archive?&#60;/p&#62;
+&#60;p&#62;I welcome any and all suggestions. Thanks for your time.&#60;/p&#62;
+&#60;p&#62;Zach
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Stéfan Sinclair on "3D Printers"</title>
+						<link>http://digitalhumanities.org/answers/topic/3d-printers#post-2001</link>
+			<pubDate>Wed, 15 May 2013 15:39:52 +0000</pubDate>
+			<dc:creator>Stéfan Sinclair</dc:creator>
+			<guid isPermaLink="false">2001@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;3D printing is evolving at a breakneck speed with decent machines becoming available at affordable prices. I'd be very grateful for any recommendations from people who have shopped for or deployed 3D printers recently in the context of DH. I wish I could say more about the planned usage, but I guess it's best to say that it's meant to be versatile. I'm imagining something in the $2-10k range though that could changed based on desirable features. My current point of reference is something like a &#60;a href=&#34;http://www.makerbot.com/&#34;&#62;MakerBot&#60;/a&#62;. Thanks in advance!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>MelissaTerras on "Computational analysis of perspective in Paintings/art?"</title>
+						<link>http://digitalhumanities.org/answers/topic/computational-analysis-of-perspective-in-paintingsart#post-1269</link>
+			<pubDate>Wed, 13 Jul 2011 13:31:17 +0000</pubDate>
+			<dc:creator>MelissaTerras</dc:creator>
+			<guid isPermaLink="false">1269@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hi folks. I wondered if anyone had come across any research that uses computational methods to look at perspective in art, such as in renaissance oil paintings, or foreshortening in sculpture, etc. I am sure there is a method to do this, but not sure if anyone has applied it to a corpus of paintings to understand the artist's use of perspective better. If you have any pointers at all I'd be glad to hear about them.&#60;/p&#62;
+&#60;p&#62;Thanks! &#60;/p&#62;
+&#60;p&#62;Melissa
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>wynkenhimself on "Recommendations for introducing librarians to DH?"</title>
+						<link>http://digitalhumanities.org/answers/topic/recommendations-for-introducing-librarians-to-dh#post-1633</link>
+			<pubDate>Thu, 03 May 2012 13:57:53 +0000</pubDate>
+			<dc:creator>wynkenhimself</dc:creator>
+			<guid isPermaLink="false">1633@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;What resources would you recommend for introducing librarians to what DH is and what it can do? Examples of DH/library projects would be great, as well as sites that explain field and link out to more resources? (other than ACH, of course!) thanks
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Stewart Varner on "Data Visualization Tools for Quantitative Methods in History"</title>
+						<link>http://digitalhumanities.org/answers/topic/data-visualization-tools-for-quantitative-methods-in-history#post-1171</link>
+			<pubDate>Mon, 09 May 2011 20:00:59 +0000</pubDate>
+			<dc:creator>Stewart Varner</dc:creator>
+			<guid isPermaLink="false">1171@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hi everybody,&#60;/p&#62;
+&#60;p&#62;I am looking for a very powerful data visualization tool for historians.  A professor has been teaching his students R in his Quantitative Methods class but (understandably) feels that the learning curve is too steep.  He was asking me about creating a user interface for R but, before we think about how to go down that path, I thought I should check with the community.&#60;/p&#62;
+&#60;p&#62;So, any thoughts?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Shawn on "Software for stereoscopy?"</title>
+						<link>http://digitalhumanities.org/answers/topic/software-for-stereoscopy#post-1104</link>
+			<pubDate>Thu, 31 Mar 2011 18:43:27 +0000</pubDate>
+			<dc:creator>Shawn</dc:creator>
+			<guid isPermaLink="false">1104@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;My colleague has a collection of stereoscopic views from the 19th century that he'd like to reproduce online, in such a way that they appear in 3d, without the need for a stereoscopic viewer. I know this isn't exactly a digital humanities type question, but on the other hand, I figured if anybody'd know, it'd be around here. Thank you!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>ethan.watrall on "What Tech Would You Buy for a New Cultural Heritage Informatics Space?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-tech-would-you-buy-for-a-new-cultural-heritage-informatics-space#post-978</link>
+			<pubDate>Mon, 14 Feb 2011 14:03:59 +0000</pubDate>
+			<dc:creator>ethan.watrall</dc:creator>
+			<guid isPermaLink="false">978@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I'm making a tech request to upgrade/renovate/build a tech lab for the Cultural Heritage Informatics Initiative here at MSU (chi.matrix.msu.edu).  I've got some general ideas as to what is going to be in the request.  However, I thought I would throw the question out to the community and see if people had suggestions for purchases - stuff that I may not have thought about.  These could include software, hardware, peripherals, online services &#38;amp; sites, etc.  &#60;/p&#62;
+&#60;p&#62;This lab would mostly be used for cultural heritage informatics projects - anthropology, archaeology, history, classics, art history, museology, historic geography, etc.  (though, that hardly is a good representation of the kinds of things that it might end up being used for).  &#60;/p&#62;
+&#60;p&#62;So, what would you request?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>dot.porter on "Open-source historical GIS tools"</title>
+						<link>http://digitalhumanities.org/answers/topic/open-source-historical-gis-tools#post-162</link>
+			<pubDate>Fri, 24 Sep 2010 15:20:47 +0000</pubDate>
+			<dc:creator>dot.porter</dc:creator>
+			<guid isPermaLink="false">162@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Do you know of any existing open-source tools that can handle the layered visualization of historic data on maps and the visualization of that data over time? Like, extract data out of a relational database and layered to create different visualizations. Or something like this?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>slubar@gmail.com on "Visualization in digital humanities: what are the possibilities?"</title>
+						<link>http://digitalhumanities.org/answers/topic/visualization-in-digital-humanities-what-are-the-possibilities#post-401</link>
+			<pubDate>Sun, 10 Oct 2010 23:54:57 +0000</pubDate>
+			<dc:creator>slubar@gmail.com</dc:creator>
+			<guid isPermaLink="false">401@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I have the opportunity to develop a proposal to work with Brown's visualization group - supercomputers, a CAVE for 3-D presentation, great computer imaging possibilities. I've come up with schemes involving presentation of artifacts and landscapes... but I'm sure there are other possibilities, either that someone's tried, or someone has considered trying. What's the state of the field, the most interesting work so far? What needs more research?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Sheila Brennan on "An intro to DH from the cultural heritage perspective?"</title>
+						<link>http://digitalhumanities.org/answers/topic/getting-to-know-dh-if-you-work-in-cultural-heritage#post-859</link>
+			<pubDate>Mon, 10 Jan 2011 02:21:43 +0000</pubDate>
+			<dc:creator>Sheila Brennan</dc:creator>
+			<guid isPermaLink="false">859@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hey folks,&#60;br /&#62;
+In response to some recent discussions about access to information about digital humanities from folks working in the cultural heritage sector, I decided to provide a quick start guide for those interested in finding more information about things digital that might relate to cultural heritage.&#60;/p&#62;
+&#60;p&#62;This list is only meant to be a starting point, and in no way final, definitive, or proscriptive. I am cross-posting this to DH Answers so that it can grow there in a forum setting and be more open. (If interested, you can read &#60;a href=&#34;http://www.lotfortynine.org/2011/01/navigating-dh-for-cultural-heritage-professionals/&#34;&#62; &#60;/a&#62;)&#60;/p&#62;
+&#60;p&#62;&#60;strong&#62;Please add &#60;/strong&#62; to this and pass this around to your colleagues who do not follow DH'ers.&#60;/p&#62;
+&#60;p&#62;* Find a &#60;a href=&#34;http://thatcamp.org/&#34;&#62;THATCamp&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;* Join a Museum Tech Association&#60;/p&#62;
+&#60;ul&#62;
+&#60;li&#62;&#60;a href=&#34;http://www.mcn.edu/&#34;&#62;Museum Computer Network&#60;/a&#62; is a friendly association of GLAM and DH professionals. MCN sponsors a listserv, &#60;a href=&#34;http://www.mcn.edu/mcn-l&#34;&#62;MCN-L&#60;/a&#62;, and its website provides a number of good resources available to anyone.&#60;/li&#62;
+&#60;li&#62;American Association of Museum's &#60;a href=&#34;http://www.mediaandtechnology.org/&#34;&#62;Media and Technology standing professional committee&#60;/a&#62;: This SPG sponsors tech-related sessions at AAM and the &#60;a href=&#34;http://www.mediaandtechnology.org/muse/index.html&#34;&#62;MUSE awards&#60;/a&#62; that highlight exemplar uses of technology in museum galleries and in digital formats.&#60;/li&#62;
+&#60;/ul&#62;
+&#60;p&#62;* Attend technology-focused sessions at GLAM conferences&#60;br /&#62;
+If you are not working in your institution's tech department, you can still attend sessions at a LAM conference. More tech-focused sessions are available at regional museum association meetings and professional conferences, and sometimes there are some strategy sessions that offer project management assistance or advise for choosing appropriate tools for specific projects.&#60;/p&#62;
+&#60;ul&#62;
+&#60;li&#62;&#60;a href=&#34;http://digital-jumpstart.org/index.php/Topics&#34;&#62; Digital-JumpStart&#60;/a&#62;: sessions from NCPH and AAM 2010, offered opportunities for individuals to to benefit from the lessons learned by those more experienced in the field, and left a legacy with a wiki of resources on all kinds of GLAM-related topics.&#60;/li&#62;
+&#60;li&#62; &#60;a href=&#34;http://www.imls.gov/about/webwise.shtm&#34;&#62;Webwise&#60;/a&#62;: sponsored by the Institute for Museum and Library Services where representatives&#60;br /&#62;
+of museums, libraries, archives, systems science, education, and&#60;br /&#62;
+other fields interested in the future of online content for inquiry and learning. Conference is free.&#60;/li&#62;
+&#60;li&#62;&#60;a href=&#34;http://archimuse.com/conferences/mw.html&#34;&#62;Museums and the Web&#60;/a&#62;: Not everyone can afford to attend Museums and the Web, or may feel that they are not tech-savvy enough to attend, but you can read most papers presented at the conference online for free.&#60;/li&#62;
+&#60;/ul&#62;
+&#60;p&#62;* Review Award-winning Museum Media/Technology Projects&#60;/p&#62;
+&#60;ul&#62;
+&#60;li&#62;&#60;a href=&#34;http://www.mediaandtechnology.org/muse/index.html&#34;&#62;MUSE Awards&#60;/a&#62;, sponsored by AAM's Media and Technology Committee.&#60;/li&#62;
+&#60;li&#62;&#60;a href=&#34;http://conference.archimuse.com/page/best_web_awards&#34;&#62;Best of the Web&#60;/a&#62;, sponsored by Archimuse and the Museums and the Web community&#60;/li&#62;
+&#60;/ul&#62;
+&#60;p&#62;* Subscribe to Blogs&#60;br /&#62;
+There are too many good blogs for me to list here, but I will recommend a few that can help you get started.&#60;/p&#62;
+&#60;ul&#62;
+&#60;li&#62;&#60;a href=&#34;http://musematic.net/&#34;&#62;Musematic&#60;/a&#62;: Written by members of AAM's Media and Technology standing professional committee.&#60;/li&#62;
+&#60;li&#62;&#60;a href=&#34;http://www.technologyinthearts.org/&#34;&#62;Technology in the Arts&#60;br /&#62;
+&#60;/a&#62;written by Carnegie Mellon University's Center for Arts Management and Technology.&#60;/li&#62;
+&#60;li&#62;&#60;a href=&#34;http://digitalhumanitiesnow.org/&#34;&#62;Digital Humanities Now&#60;/a&#62; created by Dan Cohen and Jeremy Boggs at the&#60;a href=&#34;http://chnm.gmu.edu&#34;&#62; Center for History and New Media&#60;/a&#62;, is a real-time, crowdsourced publication. If you don't use Twitter, this helps pull out what people are talking about by taking the pulse of the digital humanities community and tries to discern what articles, blog posts, projects, tools, collections, and announcements are worthy of greater attention.&#60;/li&#62;
+&#60;/ul&#62;
+&#60;p&#62;* Participate in Online Forums&#60;br /&#62;
+Most technology projects host forums for help questions (ie, &#60;a href=&#34;http://omeka.org/forums&#34;&#62;Omeka&#60;/a&#62;), but there are also some general forums that can be very helpful too.&#60;/p&#62;
+&#60;ul&#62;
+&#60;li&#62;&#60;a href=&#34;http://digitalhumanities.org/answers&#34;&#62;DH Answers&#60;/a&#62; is building a community-based Q&#38;amp;A board for digital humanities questions that need a longer answer than Twitter provides.&#60;/li&#62;
+&#60;/ul&#62;
+&#60;p&#62;* Experiment with Digital Tools&#60;/p&#62;
+&#60;ul&#62;
+&#60;li&#62;&#60;a href=&#34;https://digitalresearchtools.pbworks.com/w/page/17801672/FrontPage&#34;&#62;Digital Research Tools wiki (DiRT)&#60;/a&#62;: DiRT is a good starting place for browsing summaries and reviews of scores of digital tools for you to play with or think about trying for a new project.&#60;/li&#62;
+&#60;/ul&#62;
+&#60;p&#62;* Take a Webinar&#60;br /&#62;
+Some webinars are free, others are not. They all offer training and varying levels of interaction that occur at your desktop and do not require travel.&#60;/p&#62;
+&#60;ul&#62;
+&#60;li&#62; &#60;a href=&#34;http://www.oclc.org/research/events/taichi.htm&#34;&#62;OCLC TAI CHI&#60;/a&#62; series highlights innovative applications that libraries, museums and archives may find effective in their own environments, and teaches new technologies and skills.&#60;/li&#62;
+&#60;li&#62;AAM offers a variety of &#60;a href=&#34;http://www.aam-us.org/getinvolved/learn/ondemandwebinars.cfm&#34;&#62;professional development through webinars&#60;/a&#62;.&#60;/li&#62;
+&#60;/ul&#62;
+&#60;p&#62;* Participate on Twitter&#60;br /&#62;
+Getting started on Twitter may seem overwhelming and may not be practical given your daily responsibilities at your institution. If you're interested in following some folks before participating yourself, here are a few lists to get you going. (Not sure &#60;a href=&#34;http://digital-jumpstart.org/index.php/Social_Media&#34;&#62;how to get started on Twitter&#60;/a&#62;?)&#60;/p&#62;
+&#60;ul&#62;
+&#60;li&#62;&#60;a href=&#34;http://twitter.com/#!/danamuses/new-media-in-museums&#34;&#62;New Media in Museums&#60;/a&#62;&#60;/li&#62;
+&#60;li&#62;&#60;a href=&#34;http://twitter.com/#!/dancohen/digitalhumanities&#34;&#62;Digital Humanities list for DH Now &#34;editors&#34;&#60;/a&#62;&#60;/li&#62;
+&#60;li&#62; Create your own list of favorite museum tweeters&#60;/li&#62;
+&#60;/ul&#62;
+&#60;p&#62;* Read More about Digital Humanities Research &#38;amp; Practice&#60;/p&#62;
+&#60;ul&#62;
+&#60;li&#62;&#60;a href=&#34;http://www.zotero.org/groups/digital_humanities&#34;&#62;Digital Humanities Zotero group&#60;/a&#62;, contains a library of resources for the reading.&#60;/li&#62;
+&#60;li&#62;&#60;a href=&#34;http://digitalhumanities.org/dhq/&#34;&#62; Digital Humanities Quarterly&#60;/a&#62; online journal &#60;/li&#62;
+&#60;li&#62;&#60;a&#62;First Monday online journal&#60;/a&#62;&#60;/li&#62;
+&#60;/ul&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Vika Zafrin on "Who follows best practices re: restrictions on digitized public domain works?"</title>
+						<link>http://digitalhumanities.org/answers/topic/who-follows-best-practices-re-restrictions-on-digitized-public-domain-works#post-693</link>
+			<pubDate>Sun, 14 Nov 2010 14:58:27 +0000</pubDate>
+			<dc:creator>Vika Zafrin</dc:creator>
+			<guid isPermaLink="false">693@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;At THATCamp New England, right now, we're talking about the practice some institutions have of digitizing public domain images and then putting all kinds of license restrictions on them.  This is probably not ideal: they're free to &#60;em&#62;sell&#60;/em&#62; those images, but putting restrictions on them seems sketchy.  On the other hand, they did digitize them and make them available.  For an example, see Matthew Battles' article &#60;a href=&#34;http://hilobrow.com/2010/10/07/space-for-sale/&#34;&#62;&#34;Space For Sale.&#34;&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;An idea is being floated: what if image providers (cultural institutions and commercial providers) were required to put up a notice, something like: &#34;The content of this image is in the public domain.  You may be able to find a free copy of it elsewhere.&#34;?&#60;/p&#62;
+&#60;p&#62;If we were to assume that restricting the use of public domain images is not best practice, what are institutional examples of best practice?  What institutions fall short of best practice?&#60;/p&#62;
+&#60;p&#62;It seems to us that the Getty example in Battles' article falls under the latter category.  Google Books (see &#60;a href=&#34;http://books.google.com/support/bin/answer.py?hl=en&#38;amp;answer=44666&#34;&#62;here&#60;/a&#62; and &#60;a href=&#34;http://books.google.com/support/bin/answer.py?answer=43738&#34;&#62;here&#60;/a&#62;) seems to follow best practice.&#60;/p&#62;
+&#60;p&#62;To be clear: most of these thoughts are not mine but the collective's.  :)
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>katherineharris on "Dance and Digital Humanities"</title>
+						<link>http://digitalhumanities.org/answers/topic/dance-and-digital-humanities#post-496</link>
+			<pubDate>Mon, 18 Oct 2010 19:52:07 +0000</pubDate>
+			<dc:creator>katherineharris</dc:creator>
+			<guid isPermaLink="false">496@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;This is perhaps a simplistic question, but as I prepare to discuss Digital Humanities with other departments on my campus, the need for articulating the relevance of Digital Humanities to a Dance Department are on my mind.  How have you articulated DH to the performance-based arts? Have you encountered resistance from the Arts in collaborating under the Humanities umbrella? What tools are used for preservation or data mining in the Arts?  ARTeFact comes to mind for dance. Music has &#60;a href=&#34;http://www.diggingintodata.org/Home/AwardRecipients2009/StructuralAnalysisofLargeAmountsofMusic/tabid/179/Default.aspx&#34;&#62;SALAMI&#60;/a&#62; and &#60;a href=&#34;http://music-encoding.org/&#34;&#62;MEI&#60;/a&#62;.&#60;/p&#62;
+&#60;p&#62;(I'm not even sure where this kind of question should be housed on DH Answers.)
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

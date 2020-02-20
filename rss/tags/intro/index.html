@@ -1,0 +1,330 @@
+<?
+/*
+Plugin Name: bb Topic Icons
+Plugin URI: http://devt.caffeinatedbliss.com/bbpress/topic-icons
+Description: Adds configurable icons next to topics based on their status
+Author: Paul Hawke
+Author URI: http://paul.caffeinatedbliss.com/
+Version: 0.6
+*/
+
+/****************************************************************************
+ *
+ * Configure the following constants to fine-tune the CSS classes that are
+ * generated, the icon filenames that are used, and the text used in the
+ * legend (if you have one displayed).  Note: filenames are likely to be
+ * taken away in a future version and replaced with the concept of "icon sets"
+ * whose filenames are fixed, so dont get used to editing the filenames,
+ * as this will break in future versions.
+ *
+ ****************************************************************************/
+
+// css class for the unsorted list used in the legend display
+define( LEGEND_CLASS, 'topic_icon_legend' );
+
+// busy threshold - a topic with more posts than this is counted as "busy"
+// for purposes of picking an icon.
+define( BUSY_THRESHOLD, 15 );
+
+// width of the images, in pixels
+define( ICON_WIDTH, '20' );
+
+// height of the images, in pixels
+define( ICON_HEIGHT, '20' );
+
+// the URL base for where to find the default icon set.
+define( ICON_SET_URL_BASE, BB_PLUGIN_URL.'bb-topic-icons/icon-sets/' );
+
+/****************************************************************************
+ *
+ * Shouldnt be much need to edit anything beyond this point - configuration
+ * is all done via the constants (above) and through and admin area page in
+ * bbPress at runtime.
+ *
+ ****************************************************************************/
+
+require( 'bb-topic-icons-api.php' );
+require( 'bb-topic-icons-admin.php' );
+require( 'interface.status-interpreter.php' );
+require( 'interface.status-renderer.php' );
+require( 'class.default-status-interpreter.php' );
+require( 'class.default-status-renderer.php' );
+
+function topic_icons_legend() {
+	$icon_set_name = topic_icons_get_active_icon_set();
+	$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+	$statuses = get_active_status_interpreter()->getAllStatuses();
+	$renderer = get_active_status_renderer();
+	
+	echo '<ul id="'.LEGEND_CLASS.'">';
+	for ($i=0; $i < count($statuses); $i++) {
+		$image = $renderer->renderStatus($statuses[$i]);
+		$tooltip = $renderer->renderStatusTooltip($statuses[$i]);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (isset($image) && strlen($image) > 0 &&
+			isset($tooltip) && strlen($tooltip) > 0 && $exists) {
+			echo '<li><img src="'.$icon_set_url.'/'.$image.
+				'" width="'.ICON_WIDTH.'" height="'.ICON_HEIGHT.
+				'" align="absmiddle">&nbsp;'.$tooltip.'</li>';
+		}
+	}
+	echo '</ul>';
+}
+
+function topic_icons_css() {
+	echo "\n<style type=\"text/css\"><!--\n";
+	require( 'bb-topic-icons.css' );
+	echo "\n--></style>";
+}
+
+function topic_icons_label( $label ) {
+	global $topic;
+	
+	if (bb_is_front() || bb_is_forum() || bb_is_view() || bb_is_tag()) {		
+		$icon_set_name = topic_icons_get_active_icon_set();
+		$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+
+		$status = get_active_status_interpreter()->getStatus(bb_get_location(), $topic);
+		$renderer = get_active_status_renderer();
+		$image = $renderer->renderStatus($status);
+		$tooltip = $renderer->renderStatusTooltip($status);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (!$exists) {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), ICON_SET_URL_BASE.'/empty.png', ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		} else if (strlen($tooltip) > 0) {		
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"><span>%s</span></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $tooltip, $label);
+		} else {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		}
+	}
+	
+	return $label;
+}
+
+function topic_icons_init( ) {
+	remove_filter('bb_topic_labels', 'bb_closed_label', 10);
+	remove_filter('bb_topic_labels', 'bb_sticky_label', 20);
+
+	add_filter('bb_topic_labels', 'topic_icons_label', 11);
+
+	add_action('bb_head', 'topic_icons_css');
+
+	add_action('bb_admin_menu_generator', 'topic_icons_admin_page_add');
+	add_action('bb_admin-header.php', 'topic_icons_admin_page_process');
+	
+	topic_icons_register_status_interpreter('default', new DefaultStatusInterpreter(BUSY_THRESHOLD));
+	topic_icons_register_status_renderer('default', new DefaultStatusRenderer());
+}
+
+topic_icons_init();
+
+?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Tag: intro - Recent Posts</title>
+		<link>http://digitalhumanities.org/answers/tags/intro</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Tag: intro - Recent Posts</description>
+		<language>en-US</language>
+		<pubDate>Sun, 24 Mar 2019 17:09:08 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/tags/intro" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>Bethany Nowviskie on "Training in DH for unaffiliated newbie academics?"</title>
+						<link>http://digitalhumanities.org/answers/topic/training-in-dh-for-unaffiliated-newbie-academics#post-1672</link>
+			<pubDate>Thu, 31 May 2012 21:59:12 +0000</pubDate>
+			<dc:creator>Bethany Nowviskie</dc:creator>
+			<guid isPermaLink="false">1672@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I agree with Patrick that the best (and most well-trodden!) path to engagement in DH is to invest some real time in DIY tinkering and good old fashioned puttering around, particularly if you can focus your experimentation on a project or investigation you find inherently motivating.&#60;/p&#62;
+&#60;p&#62;In terms of newbie-friendly programs and conferences, &#60;a href=&#34;http://thatcamp.org&#34;&#62;THATCamps&#60;/a&#62; are terrific, low-cost and friendly introductions to DH.  They're tremendous regional networking opportunities as well -- but you'll also find a welcoming community at the annual &#60;a href=&#34;http://digitalhumanities.org&#34;&#62;DH conference&#60;/a&#62; (where the &#60;a href=&#34;http://ach.org&#34;&#62;ACH&#60;/a&#62; hosts a longstanding &#60;a href=&#34;http://ach.org/mentoring&#34;&#62;mentoring program&#60;/a&#62;, which now runs year-round) and at conferences like SDH-SEMI (see, for example, &#60;a href=&#34;http://sdh-semi.org/2012/04/01/introductory-workshopts-on-digital-humanities-at-congress-2012-in-waterloo/&#34;&#62;these workshops&#60;/a&#62;, held just last week).&#60;/p&#62;
+&#60;p&#62;Most of the North American training institutes with which I'm familiar (like &#60;a href=&#34;http://dhsi.org&#34;&#62;DHSI&#60;/a&#62; and the new &#60;a href=&#34;http://mith.umd.edu/dhwi/&#34;&#62;DHWI&#60;/a&#62;) are open to independent scholars and work hard to cover costs or keep them reasonably low. The various NEH-supported &#60;a href=&#34;http://www.neh.gov/divisions/odh/institutes&#34;&#62;IATDH programs&#60;/a&#62; are generally a bit more advanced (that's what the &#34;A&#34; stands for), but also open to people without institutional affiliation and costs are usually covered.  &#60;/p&#62;
+&#60;p&#62;More and more training programs are being attached to disciplinary conferences. I'm not sure what's in the works for AHA, but the &#60;a href=&#34;http://dhcommons.org/&#34;&#62;DH Commons&#60;/a&#62; group will host another &#34;Getting Started in DH&#34; workshop at the MLA conference this January. (And you should definitely register with and explore DH Commons in general!)&#60;/p&#62;
+&#60;p&#62;Staying plugged in with Twitter is now a must. &#60;a href=&#34;http://digitalhumanitiesnow.org/&#34;&#62;DH Now&#60;/a&#62; can help you follow the conversations being had in the community, and discover new resources. It's being drawn from &#60;a href=&#34;https://docs.google.com/spreadsheet/pub?hl=en_US&#38;amp;hl=en_US&#38;amp;key=0AucqXAIBhf_idGNlZzVjSGkxQU9XNU4yb0w1clMxeXc&#38;amp;single=true&#38;amp;gid=3&#38;amp;output=html&#34;&#62;these people&#60;/a&#62; and their feeds -- also worth some exploration.  And I'm sure you've already discovered past threads on DH Answers that speak to basic readings, tools and platforms, etc. &#60;/p&#62;
+&#60;p&#62;Welcome and best of luck!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Patrick Murray-John on "Training in DH for unaffiliated newbie academics?"</title>
+						<link>http://digitalhumanities.org/answers/topic/training-in-dh-for-unaffiliated-newbie-academics#post-1671</link>
+			<pubDate>Thu, 31 May 2012 14:08:38 +0000</pubDate>
+			<dc:creator>Patrick Murray-John</dc:creator>
+			<guid isPermaLink="false">1671@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I kinda have to giggle, just at how quickly perceptions and activity around DH are changing. The giggly case in point, your question about how open the field is to humanists who are not digital. DH is chock-full of people who came to it from not being digital, so we're all about new humanists becoming more digitally/technologically savvy!&#60;/p&#62;
+&#60;p&#62;Some of the institutes and workshops do assume a certain level of knowledge, but often they are just as appropriate for newcomers. If it isn't clear in the descriptions, &#60;/p&#62;
+&#60;p&#62;This is probably coming from how I got into DH, but good places to start are just using some of the open source tools for a real project, or research, or some other activity. Easy possible gateways are starting a wordpress blog for your research on wordpress.com, then if you want more control of the site to install your own wordpress installation on a shared hosting service like bluehost.com or dreamhost.com. Or, similarly, producing an omeka site on omeka.net and put together a research project there, and/or install your own omeka on a shared hosting service to do so. &#60;/p&#62;
+&#60;p&#62;Installing your own on a shared hosting service is a pretty good way to make first steps into becoming &#34;digital&#34;.&#60;/p&#62;
+&#60;p&#62;If there's one coming up in your area, I'd also suggest attending a &#60;a href=&#34;http://thatcamp.org&#34;&#62;THATCamp&#60;/a&#62;. I know a couple people in situations similar to what you describe from THATCamps.&#60;/p&#62;
+&#60;p&#62;This is clearly from the &#34;Do-It-Yourself/Build-It-Yourself&#34; perspective on DH, so I imagine you will get responses with lots of other great ideas from other perspectives. &#60;/p&#62;
+&#60;p&#62;Good luck!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>cliometra@gmail.com on "Training in DH for unaffiliated newbie academics?"</title>
+						<link>http://digitalhumanities.org/answers/topic/training-in-dh-for-unaffiliated-newbie-academics#post-1670</link>
+			<pubDate>Wed, 30 May 2012 20:27:09 +0000</pubDate>
+			<dc:creator>cliometra@gmail.com</dc:creator>
+			<guid isPermaLink="false">1670@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hello All,&#60;/p&#62;
+&#60;p&#62;I’m a historian who, after some years of teaching, has veered off the T-T seeking track but remains committed to research. The&#60;br /&#62;
+plethora of innovative current DH projects has caused me to investigate entering the field, but I seem to have hit a snag. I'm strictly a historian, with no computing background. I've noticed that DH is a hot new training field for grad students, recent PhDs, or those with institutional affiliation, but what if, like me, you are further down the academic track, wanting to become trained or involved in these initiatives, *but* no longer affiliated with an institution?&#60;/p&#62;
+&#60;p&#62;Are there any specific paths or opportunities you would recommend to become involved in the field (say, in existing projects)? On a related note, how open is the field to humanists who are not, well, digital? While I've noted summer institutes or workshops, those seem geared to people already steeped in DH. In short, I’d value hearing your thoughts on gaining practical experience from a relatively outlier perspective. &#60;/p&#62;
+&#60;p&#62;Thanks!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>maedchenimmond@gmail.com on "Recommendations for introducing librarians to DH?"</title>
+						<link>http://digitalhumanities.org/answers/topic/recommendations-for-introducing-librarians-to-dh#post-1640</link>
+			<pubDate>Fri, 04 May 2012 19:37:28 +0000</pubDate>
+			<dc:creator>maedchenimmond@gmail.com</dc:creator>
+			<guid isPermaLink="false">1640@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;The question was asked on my behalf.  Thank you everyone for some very useful suggestions.  I'll digest them over the weekend.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>wynkenhimself on "Recommendations for introducing librarians to DH?"</title>
+						<link>http://digitalhumanities.org/answers/topic/recommendations-for-introducing-librarians-to-dh#post-1639</link>
+			<pubDate>Fri, 04 May 2012 17:42:47 +0000</pubDate>
+			<dc:creator>wynkenhimself</dc:creator>
+			<guid isPermaLink="false">1639@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Thanks, all. These are for a colleague of a colleague, so I've sent them here to see your suggestions!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Miriam Posner on "Recommendations for introducing librarians to DH?"</title>
+						<link>http://digitalhumanities.org/answers/topic/recommendations-for-introducing-librarians-to-dh#post-1636</link>
+			<pubDate>Thu, 03 May 2012 14:47:06 +0000</pubDate>
+			<dc:creator>Miriam Posner</dc:creator>
+			<guid isPermaLink="false">1636@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I've struggled a bit with this, too, since the field is so broad. Sometimes I'd think I'd done a great job explaining, only to have librarians tell me later that my explanation was confusing. I've learned to try to tailor my explanation to the group I'm talking to, and to spend a lot of time on a few projects rather than slaloming through a bunch. So if I'm in a presentation setting, I'll try to get a sense of what the audience might find interesting. Some of my go-to example projects are those that are easily grasped, visually impressive, and clearly accomplish something that couldn't easily be accomplished as a monograph: &#60;a href=&#34;https://republicofletters.stanford.edu/&#34;&#62;Mapping the Republic of Letters, &#60;/a&#62;&#60;a href=&#34;http://www.americanpast.org/voting/&#34;&#62;Voting America&#60;/a&#62;, and the &#60;a href=&#34;http://www.slavevoyages.org/tast/index.faces&#34;&#62;Trans-Atlantic Slave Trade Database&#60;/a&#62;, for example. You don't need a technical background to see what these projects do and why they're cool. &#60;/p&#62;
+&#60;p&#62;My favorite online directories include the &#60;a href=&#34;http://commons.gc.cuny.edu/wiki/index.php/The_CUNY_Digital_Humanities_Resource_Guide&#34;&#62;CUNY Digital Humanities Guide&#60;/a&#62;, Lisa Spiro's &#60;a href=&#34;http://digitalscholarship.wordpress.com/2011/10/14/getting-started-in-the-digital-humanities/&#34;&#62;&#34;Getting Started in the Digital Humanities,&#34;&#60;/a&#62; and &#60;a href=&#34;http://arts-humanities.net/&#34;&#62;arts-humanities.net&#60;/a&#62;.&#60;/p&#62;
+&#60;p&#62;There are many examples of library-based DH, too: &#60;a href=&#34;http://scholar.library.miami.edu/archivoteatral/&#34;&#62;The Cuban Theater Digital Archive&#60;/a&#62;, the &#60;a href=&#34;http://livingstone.library.ucla.edu/&#34;&#62;Livingstone Spectral Imaging Project&#60;/a&#62;, and the &#60;a href=&#34;http://docsouth.unc.edu/blueridgeparkway/&#34;&#62;Digital Blue Ridge Parkway&#60;/a&#62;, to name a few. Projects like these might provide some inspiration if your library is looking for ways to support DH.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Stewart Varner on "Recommendations for introducing librarians to DH?"</title>
+						<link>http://digitalhumanities.org/answers/topic/recommendations-for-introducing-librarians-to-dh#post-1635</link>
+			<pubDate>Thu, 03 May 2012 14:40:12 +0000</pubDate>
+			<dc:creator>Stewart Varner</dc:creator>
+			<guid isPermaLink="false">1635@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;In addition to what Brian said, I always point people to Lisa Spiro's amazing round-up blog post on Getting Started in the Digital Humanities.  You can find it here: &#60;a href=&#34;http://digitalscholarship.wordpress.com/2011/10/14/getting-started-in-the-digital-humanities/&#34; rel=&#34;nofollow&#34;&#62;http://digitalscholarship.wordpress.com/2011/10/14/getting-started-in-the-digital-humanities/&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;Also, the folks here at Emory's Digital Scholarship Commons would be more than happy to chat/skype/hangout with anyone who wants to talk about supporting DH as librarians.  you can email me directly at &#60;a href=&#34;mailto:stewart.varner@emory.edu&#34;&#62;stewart.varner@emory.edu&#60;/a&#62;
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>briancroxall on "Recommendations for introducing librarians to DH?"</title>
+						<link>http://digitalhumanities.org/answers/topic/recommendations-for-introducing-librarians-to-dh#post-1634</link>
+			<pubDate>Thu, 03 May 2012 14:14:18 +0000</pubDate>
+			<dc:creator>briancroxall</dc:creator>
+			<guid isPermaLink="false">1634@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;As a first thought, I would suggest looking at the &#60;a href=&#34;http://www.arl.org/resources/pubs/spec/complete.shtml&#34;&#62;ARL Spec Kit #326&#60;/a&#62;, which examines Digital Humanities in the Library. I'd also consider a number of &#60;em&#62;&#60;a href=&#34;http://www.clir.org/pubs/reports&#34;&#62;CLIR Reports&#60;/a&#62;&#60;/em&#62;, including #143, A Survey of DH Centers in the US.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>wynkenhimself on "Recommendations for introducing librarians to DH?"</title>
+						<link>http://digitalhumanities.org/answers/topic/recommendations-for-introducing-librarians-to-dh#post-1633</link>
+			<pubDate>Thu, 03 May 2012 13:57:53 +0000</pubDate>
+			<dc:creator>wynkenhimself</dc:creator>
+			<guid isPermaLink="false">1633@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;What resources would you recommend for introducing librarians to what DH is and what it can do? Examples of DH/library projects would be great, as well as sites that explain field and link out to more resources? (other than ACH, of course!) thanks
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Paige Morgan on "How do we introduce undergraduates to the digital humanities?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-do-we-introduce-undergraduates-to-the-digital-humanities/page/2#post-1594</link>
+			<pubDate>Tue, 10 Apr 2012 02:57:13 +0000</pubDate>
+			<dc:creator>Paige Morgan</dc:creator>
+			<guid isPermaLink="false">1594@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @Ethan Gruber's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/how-do-we-introduce-undergraduates-to-the-digital-humanities/page/2#post-1593&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;I hear you on this; and I don't think it has to be. It's as much teaching undergraduates* how to use the already effective tools that are out there -- how 18th century English Lit studies are changed by the accessibility of ECCO, EEBO, and the Burney Collection,** for example.&#60;/p&#62;
+&#60;p&#62;*And even graduate students, staff, faculty, in some cases.&#60;br /&#62;
+**Not that I'm blithely assuming that all colleges and unis have access to these tools.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Ethan Gruber on "How do we introduce undergraduates to the digital humanities?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-do-we-introduce-undergraduates-to-the-digital-humanities/page/2#post-1593</link>
+			<pubDate>Tue, 10 Apr 2012 01:06:19 +0000</pubDate>
+			<dc:creator>Ethan Gruber</dc:creator>
+			<guid isPermaLink="false">1593@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I agree with you that interpretations of textual, visual, geographical, archaeological, etc. data within the humanities are digital humanities.  Almost everything I have done professionally or academically over the last six years has been DH, from GIS to 3D visualization to cultural heritage informatics.  I'm not going split hairs as to whether TEI and data mining are web-based or not, but I find myself increasingly frustrated by conversations about &#34;How do we teach/introduce students to DH,&#34; and all of the answers relate to some form of web development: designing a database schema, learning HTML/CSS.  These are things that are of limited usefulness in many humanities disciplines.  I understand that people will suggest skills based on their own experience, but DH is losing out a lot of experienced technologists and scholars from non-textual fields, and as I have observed DH becoming more and more narrowly focused, voices in the textual humanities fields have greater and greater influence (control, even) over what is or is not &#34;Digital Humanities.&#34;  That is why I suggest that people who call themselves digital humanists ought to reconsider their notion of DH.  I think the field is much bigger than they realize, and thus needs to be more inclusive.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Patrick Murray-John on "How do we introduce undergraduates to the digital humanities?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-do-we-introduce-undergraduates-to-the-digital-humanities/page/2#post-1584</link>
+			<pubDate>Sat, 07 Apr 2012 17:41:08 +0000</pubDate>
+			<dc:creator>Patrick Murray-John</dc:creator>
+			<guid isPermaLink="false">1584@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @Ethan Gruber's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/how-do-we-introduce-undergraduates-to-the-digital-humanities/page/2#post-1583&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;I have to say, I disagree with most, if not all, of this. There is plenty of coding work in DH that is not web-related. Text-mining and distant reading are examples, as is work encoding texts in TEI. I think I remember some very awesome visualizations of ancient architecture, too, that I would call non-web DH coding? :)&#60;/p&#62;
+&#60;p&#62;The thing that I disagree with most is the idea that we (counting myself as a digital humanist) need to rethink our notion of the Digital Humanities. Like the #transformDH hashtag, it is predicated on a set idea of DH that I do not think exists. It seems like less than a year ago that there was still very active discussion about the role of code in DH, what skills could/should be part of it, and how it all fits together. No one, I think, ever came up with a notion of DH that had widespread consensus as being a good definition. Now, it seems, we are chasing after responses to a non-existent notion. &#60;/p&#62;
+&#60;p&#62;That said, I do see the existence of two branches of DH, with different histories. In broad strokes, one is the &#34;Humanities Computing&#34; branch, on is indeed the more web-oriented branch (which shares more in common with ed tech). This has been recounted many times before, sometimes in this very site.&#60;/p&#62;
+&#60;p&#62;I'd ask that we all recognize the youth of DH, and this it is -- whatever it is! -- still developing through informal channels like THATCamps and blogs and twitter conversation, and through the institutional decisions made by administrators and through cluster hires. In short, I think it is far too early to say that DH is far too focused on textual disciplines. It might be at present, but the ultimate constitution of DH is still very much to be determined. Awesome visualization and interpretation of data -- textual, architectual, visual, geographical, temporal, archaeological, and more -- through digital/code-based means can and should be part of DH. I consider it to be implicit that it _is_, but maybe hasn't had as much attention as other aspects. Seems parallel to the Theory and DH questions that way?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Ethan Gruber on "How do we introduce undergraduates to the digital humanities?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-do-we-introduce-undergraduates-to-the-digital-humanities/page/2#post-1583</link>
+			<pubDate>Thu, 05 Apr 2012 20:15:50 +0000</pubDate>
+			<dc:creator>Ethan Gruber</dc:creator>
+			<guid isPermaLink="false">1583@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Is learning to code even important in Digital Humanities?  I argue that it's not.  There are particular technologies that are relevant to various disciplines in the humanities, and web development isn't necessarily one of them (since coding always refers to web development in DH contexts).  Digital Humanities, capital D capital H, is far too focused on the textual disciplines and hardly inclusive of the humanities as a whole.  Digital Humanists ought to reconsider their notion of the Digital Humanities.  If you wonder why computer scientists are reluctant to get involved in Capital D Capital H, it's for this reason.  There are actually a great many computer scientists involved elsewhere in the humanities.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>frostdavis on "How do we introduce undergraduates to the digital humanities?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-do-we-introduce-undergraduates-to-the-digital-humanities/page/2#post-1563</link>
+			<pubDate>Thu, 15 Mar 2012 16:10:11 +0000</pubDate>
+			<dc:creator>frostdavis</dc:creator>
+			<guid isPermaLink="false">1563@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Thanks for all the great answers!&#60;/p&#62;
+&#60;p&#62;To update this forum, two of the respondents (Brian Croxall and Jeff McClurken) along with Ryan Cordell spoke about &#34;Teaching DH 101: Introduction to the Digital Humanities&#34; for NITLE's Digital Scholarship Seminars in December.  You can access the recording from the event website:&#60;br /&#62;
+&#60;a href=&#34;http://www.nitle.org/live/events/129-teaching-dh-101-introduction-to-the-digital&#34; rel=&#34;nofollow&#34;&#62;http://www.nitle.org/live/events/129-teaching-dh-101-introduction-to-the-digital&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;This seminar prompted a couple of posts on the NITLE blog because the presenters didn't really address coding for undergrads.  Here are a couple of posts that adress that issue:&#60;br /&#62;
+Can Humanities Undergrads Learn to Code? by undergrads who learned to code in a humanities course at Pitt &#60;a href=&#34;http://blogs.nitle.org/2012/01/31/can-humanities-undergrads-learn-to-code/&#34; rel=&#34;nofollow&#34;&#62;http://blogs.nitle.org/2012/01/31/can-humanities-undergrads-learn-to-code/&#60;/a&#62; (The answer is yes!!)&#60;br /&#62;
+More Coding for Humanities Undergrads by Kathryn Tomasek, Wheaton College (again yes!!) &#60;a href=&#34;http://blogs.nitle.org/2012/02/02/more-coding-for-humanities-undergrads/&#34; rel=&#34;nofollow&#34;&#62;http://blogs.nitle.org/2012/02/02/more-coding-for-humanities-undergrads/&#60;/a&#62;
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>elotroalex on "What is one topic or source you&#039;d use in a History of the Information Age class?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-is-one-topic-or-source-youd-use-in-a-history-of-the-information-age-class#post-1343</link>
+			<pubDate>Sat, 13 Aug 2011 21:22:14 +0000</pubDate>
+			<dc:creator>elotroalex</dc:creator>
+			<guid isPermaLink="false">1343@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I would do something with Ted Nelson and Xanadu. &#60;a href=&#34;http://www.youtube.com/watch?v=En_2T7KH6RA&#34; rel=&#34;nofollow&#34;&#62;http://www.youtube.com/watch?v=En_2T7KH6RA&#60;/a&#62;
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

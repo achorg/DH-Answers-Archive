@@ -1,0 +1,472 @@
+<?
+/*
+Plugin Name: bb Topic Icons
+Plugin URI: http://devt.caffeinatedbliss.com/bbpress/topic-icons
+Description: Adds configurable icons next to topics based on their status
+Author: Paul Hawke
+Author URI: http://paul.caffeinatedbliss.com/
+Version: 0.6
+*/
+
+/****************************************************************************
+ *
+ * Configure the following constants to fine-tune the CSS classes that are
+ * generated, the icon filenames that are used, and the text used in the
+ * legend (if you have one displayed).  Note: filenames are likely to be
+ * taken away in a future version and replaced with the concept of "icon sets"
+ * whose filenames are fixed, so dont get used to editing the filenames,
+ * as this will break in future versions.
+ *
+ ****************************************************************************/
+
+// css class for the unsorted list used in the legend display
+define( LEGEND_CLASS, 'topic_icon_legend' );
+
+// busy threshold - a topic with more posts than this is counted as "busy"
+// for purposes of picking an icon.
+define( BUSY_THRESHOLD, 15 );
+
+// width of the images, in pixels
+define( ICON_WIDTH, '20' );
+
+// height of the images, in pixels
+define( ICON_HEIGHT, '20' );
+
+// the URL base for where to find the default icon set.
+define( ICON_SET_URL_BASE, BB_PLUGIN_URL.'bb-topic-icons/icon-sets/' );
+
+/****************************************************************************
+ *
+ * Shouldnt be much need to edit anything beyond this point - configuration
+ * is all done via the constants (above) and through and admin area page in
+ * bbPress at runtime.
+ *
+ ****************************************************************************/
+
+require( 'bb-topic-icons-api.php' );
+require( 'bb-topic-icons-admin.php' );
+require( 'interface.status-interpreter.php' );
+require( 'interface.status-renderer.php' );
+require( 'class.default-status-interpreter.php' );
+require( 'class.default-status-renderer.php' );
+
+function topic_icons_legend() {
+	$icon_set_name = topic_icons_get_active_icon_set();
+	$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+	$statuses = get_active_status_interpreter()->getAllStatuses();
+	$renderer = get_active_status_renderer();
+	
+	echo '<ul id="'.LEGEND_CLASS.'">';
+	for ($i=0; $i < count($statuses); $i++) {
+		$image = $renderer->renderStatus($statuses[$i]);
+		$tooltip = $renderer->renderStatusTooltip($statuses[$i]);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (isset($image) && strlen($image) > 0 &&
+			isset($tooltip) && strlen($tooltip) > 0 && $exists) {
+			echo '<li><img src="'.$icon_set_url.'/'.$image.
+				'" width="'.ICON_WIDTH.'" height="'.ICON_HEIGHT.
+				'" align="absmiddle">&nbsp;'.$tooltip.'</li>';
+		}
+	}
+	echo '</ul>';
+}
+
+function topic_icons_css() {
+	echo "\n<style type=\"text/css\"><!--\n";
+	require( 'bb-topic-icons.css' );
+	echo "\n--></style>";
+}
+
+function topic_icons_label( $label ) {
+	global $topic;
+	
+	if (bb_is_front() || bb_is_forum() || bb_is_view() || bb_is_tag()) {		
+		$icon_set_name = topic_icons_get_active_icon_set();
+		$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+
+		$status = get_active_status_interpreter()->getStatus(bb_get_location(), $topic);
+		$renderer = get_active_status_renderer();
+		$image = $renderer->renderStatus($status);
+		$tooltip = $renderer->renderStatusTooltip($status);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (!$exists) {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), ICON_SET_URL_BASE.'/empty.png', ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		} else if (strlen($tooltip) > 0) {		
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"><span>%s</span></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $tooltip, $label);
+		} else {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		}
+	}
+	
+	return $label;
+}
+
+function topic_icons_init( ) {
+	remove_filter('bb_topic_labels', 'bb_closed_label', 10);
+	remove_filter('bb_topic_labels', 'bb_sticky_label', 20);
+
+	add_filter('bb_topic_labels', 'topic_icons_label', 11);
+
+	add_action('bb_head', 'topic_icons_css');
+
+	add_action('bb_admin_menu_generator', 'topic_icons_admin_page_add');
+	add_action('bb_admin-header.php', 'topic_icons_admin_page_process');
+	
+	topic_icons_register_status_interpreter('default', new DefaultStatusInterpreter(BUSY_THRESHOLD));
+	topic_icons_register_status_renderer('default', new DefaultStatusRenderer());
+}
+
+topic_icons_init();
+
+?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Forum: New Media &#38; Games - Recent Posts</title>
+		<link>http://digitalhumanities.org/answers/forum/media-games</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Forum: New Media &amp; Games - Recent Posts</description>
+		<language>en-US</language>
+		<pubDate>Sun, 24 Mar 2019 17:09:12 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/forum/media-games" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>friscopaul on "How can we stop Evidence Tampering by police department?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-can-we-stop-evidence-tampering-by-police-department-1#post-2175</link>
+			<pubDate>Sun, 25 May 2014 17:06:07 +0000</pubDate>
+			<dc:creator>friscopaul</dc:creator>
+			<guid isPermaLink="false">2175@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;How can we stop Evidence Tampering by police department? Everywhere police tampering and brutality we can see. day by day it's increasing they miss used their power and position.&#60;/p&#62;
+&#60;p&#62;Paul bailey faced evidence tampering from the police, read complete story here : friscopauldotblogspotdotcom
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>friscopaul on "How can we stop Evidence Tampering by police department?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-can-we-stop-evidence-tampering-by-police-department#post-2174</link>
+			<pubDate>Sun, 25 May 2014 17:05:00 +0000</pubDate>
+			<dc:creator>friscopaul</dc:creator>
+			<guid isPermaLink="false">2174@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;How can we stop Evidence Tampering by police department? Everywhere police tampering and brutality we can see. day by day it's increasing they miss used their power and position.&#60;/p&#62;
+&#60;p&#62;Paul bailey faced evidence tampering from the police, read complete story here : &#60;a href=&#34;http://friscopaul.blogspot.com/2014/02/writ-of-habeas-frisco-police-department.html&#34; rel=&#34;nofollow&#34;&#62;http://friscopaul.blogspot.com/2014/02/writ-of-habeas-frisco-police-department.html&#60;/a&#62;
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>m.brown4 on "Anyone know any Interdisciplinary STEM/Humanities academic competitions in HE?"</title>
+						<link>http://digitalhumanities.org/answers/topic/anyone-know-any-interdisciplinary-stemhumanities-academic-competitions-in-he#post-2106</link>
+			<pubDate>Fri, 11 Oct 2013 11:45:40 +0000</pubDate>
+			<dc:creator>m.brown4</dc:creator>
+			<guid isPermaLink="false">2106@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I am a mature, Natural Sciences undergraduate student, studying at the University of East Anglia, Norwich, England.&#60;/p&#62;
+&#60;p&#62;I am writing an article entitled:&#60;br /&#62;
+Academic Competitions in Higher Education – Opening a gateway for student initiative, creativity and interdisciplinarity.&#60;/p&#62;
+&#60;p&#62;More specifically:&#60;br /&#62;
+How academic competitions in HE (International, National or Localised) can allow UNDERGRADUATE students to:&#60;br /&#62;
+ - Operate academic skills in a more creative and initiative-based way.&#60;br /&#62;
+ - Facilitate the real application of learned material.&#60;br /&#62;
+ - Facilitate the application of knowledge to real-world challenges outside of academia. (e.g Engineering competitions, such as the ones listed below).&#60;br /&#62;
+ - Facilitate cooperation between academic disciplines.&#60;/p&#62;
+&#60;p&#62;For the article I am trying to find as many varied examples as I can, ranging from purely STEM based competitions,( &#60;a href=&#34;http://innovation.wisc.edu/sustainability/&#34; rel=&#34;nofollow&#34;&#62;http://innovation.wisc.edu/sustainability/&#60;/a&#62; )&#60;br /&#62;
+Interdisciplinary examples ( &#60;a href=&#34;http://igem.org/About&#34; rel=&#34;nofollow&#34;&#62;http://igem.org/About&#60;/a&#62; ) and Humanities examples ( &#60;a href=&#34;http://openhumanitiesawards.org/&#34; rel=&#34;nofollow&#34;&#62;http://openhumanitiesawards.org/&#60;/a&#62; ).&#60;/p&#62;
+&#60;p&#62;I am also interested in any other forms of extra curricular activities which facilitate undergraduate student initiative, creativity and interdisciplinarity. &#60;/p&#62;
+&#60;p&#62;Any help, or a point in the direction of someone who might be able to, would be much appreciated. &#60;/p&#62;
+&#60;p&#62;All the best&#60;br /&#62;
+Michael Brown&#60;br /&#62;
+University of East Anglia&#60;br /&#62;
+Student Initiative Society UEA &#60;a href=&#34;http://mbrown6.wix.com/sisuea&#34; rel=&#34;nofollow&#34;&#62;http://mbrown6.wix.com/sisuea&#60;/a&#62;
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>neuromancien on "what is the essentiel literacies in DH ?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-is-the-essentiel-literacies-in-dh#post-2023</link>
+			<pubDate>Sat, 08 Jun 2013 12:54:11 +0000</pubDate>
+			<dc:creator>neuromancien</dc:creator>
+			<guid isPermaLink="false">2023@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Following the results of the survey “Who are you digital humanists ?”, it’s time to announce that our survey is online now. The survey is conducted in the context of the research project Humanlit (Digital Humanities and Literacies) funded by the ISCC.&#60;/p&#62;
+&#60;p&#62;You have one month to answer. The survey will be closed at 3rd of July.&#60;/p&#62;
+&#60;p&#62;Our goal is to examine the literacies and the skills needed in digital humanities project.&#60;/p&#62;
+&#60;p&#62;The results will be published on license CC0.&#60;/p&#62;
+&#60;p&#62;This survey is for scholars. Another survey is planned for librarians.&#60;/p&#62;
+&#60;p&#62;The survey in English version :&#60;/p&#62;
+&#60;p&#62;&#60;a href=&#34;http://www.megatopie.info/limesurvey/index.php/998655/lang-en&#34; rel=&#34;nofollow&#34;&#62;http://www.megatopie.info/limesurvey/index.php/998655/lang-en&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;And in French :&#60;/p&#62;
+&#60;p&#62;&#60;a href=&#34;http://www.megatopie.info/limesurvey/index.php/998655/lang-fr&#34; rel=&#34;nofollow&#34;&#62;http://www.megatopie.info/limesurvey/index.php/998655/lang-fr&#60;/a&#62;
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>alangpike on "Big data projects using IMDB?"</title>
+						<link>http://digitalhumanities.org/answers/topic/big-data-projects-using-imdb#post-2022</link>
+			<pubDate>Fri, 07 Jun 2013 12:21:48 +0000</pubDate>
+			<dc:creator>alangpike</dc:creator>
+			<guid isPermaLink="false">2022@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Thanks Ben, I'll report back after more investigation.&#60;/p&#62;
+&#60;p&#62;Cheers.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Ben Schmidt on "Big data projects using IMDB?"</title>
+						<link>http://digitalhumanities.org/answers/topic/big-data-projects-using-imdb#post-2020</link>
+			<pubDate>Fri, 07 Jun 2013 03:06:22 +0000</pubDate>
+			<dc:creator>Ben Schmidt</dc:creator>
+			<guid isPermaLink="false">2020@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I've looked some at the &#60;a href=&#34;http://www.imdb.com/interfaces&#34;&#62;plain text data files&#60;/a&#62; they provide, and was surprised at the amount of stuff one could do with them--they don't include reviews, but they do include most of the other stuff one might want--biographical information, fully standardized lists of cast and crew, etc.. And you can just download all the data straightaway without needing permission, and without having to write a crawler. There are some restraints on redistribution, but nothing that seems like it would be onerous for scholarly research. Social scientists have used it for some of the network stuff, eg &#60;a href=&#34;http://sydney.edu.au/engineering/it/~dmerrick/papers/AhmedEtAl2007.pdf&#34;&#62;here&#60;/a&#62; and &#60;a href=&#34;http://nwb.cns.iu.edu/papers/2007-herr-movieact.pdf&#34;&#62;here.&#60;/a&#62; &#60;/p&#62;
+&#60;p&#62;I don't have any experience with the stuff that you &#38;lt;i&#38;gt;can't&#38;lt;/i&#38;gt; get through the textfiles.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>alangpike on "Big data projects using IMDB?"</title>
+						<link>http://digitalhumanities.org/answers/topic/big-data-projects-using-imdb#post-2019</link>
+			<pubDate>Thu, 06 Jun 2013 12:42:29 +0000</pubDate>
+			<dc:creator>alangpike</dc:creator>
+			<guid isPermaLink="false">2019@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I am in the early stages of my dissertation and, as I explore the possible DH methods that might apply to my work, am wondering if there might be a way for the DH community to take advantage of the mountain of data at IMDB. I have heard from some folks that they have been unfriendly to researchers, but thought it might be worth some serious effort to make some (all!) of their data, reviews, etc. available to film and media studies scholars. The possibilities for DH methods are virtually limitless. For my own work, data visualizations, social network analysis of cast and crew, etc. are all intriguing possibilities. Has anyone out there gotten permission from IMDB to use data crawlers for scholarly research? Has anyone tried to do so and been denied?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>cayci on "Some popular questions and News on New ipad 5"</title>
+						<link>http://digitalhumanities.org/answers/topic/some-popular-questions-and-news-on-new-ipad-5#post-1991</link>
+			<pubDate>Sun, 28 Apr 2013 03:14:05 +0000</pubDate>
+			<dc:creator>cayci</dc:creator>
+			<guid isPermaLink="false">1991@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;The next are some popular questions on ipad 5 from yahoo answer.&#60;br /&#62;
+1.When will iPad 5 come out?&#60;br /&#62;
+When will the iPad 5 be released cuz I'm wanting to sell my 3rd generation.&#60;br /&#62;
+2. how heavy will the ipad5 be?&#60;br /&#62;
+With the current ipad weighing in at 652g how much weight will apple take off the ipad 5.I'll be happy if it weighed 400g.&#60;/p&#62;
+&#60;p&#62;Here are some news from internet about ipad 5.&#60;br /&#62;
+Welcome to our new iPad 5 release date, rumours and leaked images article. Here we plan to do everything that the title suggests. We'll be bringing you everything we know about the new iPad 5 release date so you can know exactly when the new iPad 5 is coming out. Also we are going to bring you a few of the juiciest spec rumours that are flying round the web's most trusted tech websites too. Finally we have some ideas of how the iPad 5 will look, and we'll include any leaked iPad 5 images in this article. So sit back and relax we've got the new iPad 5 covered. Updated 18 March 2013.&#60;br /&#62;
+While many people are focusing on the next generation of iPhone or iPad mini, the iPad 5 release date itself is perhaps more important. The iPad 5 is expected to be Apple's best-selling iPad, and there are lots of rumours already about what the new iPad 5 will be like.&#60;br /&#62;
+Apple itself has typically kept quiet about any developments on the iPad front, but we expect iPad 5 rumours, especially regarding the new iPad 5 release date to intensify over the next few months. SEE: Apple: The next generation - our iPhone mini, iPad 5, iWatch and iOS 7 wishlist.&#60;br /&#62;
+Speculation regarding a new iPad 5 release date is rampant at the moment, but we do expect a new iPad 5 model to be released at some point in 2013.&#60;/p&#62;
+&#60;p&#62;Narrowing the new iPad 5 release date down further than that requires some speculation. We can look at Apple's history with iPad release dates. It's interesting to note that the first iPad was released less than two years ago in April 2010. Apple then followed that with an iPad 2 in March 2011, iPad 3 in March 2012, and a surprise iPad 4 in November 2012.&#60;/p&#62;
+&#60;p&#62;How to enjoy dvd movies on the new iPad 5?&#60;br /&#62;
+We like to watch dvd movies, we could play dvd with some dvd player software, such as dvd x player. But with the most popular tablet-iPad, how can I watch dvd on it? We couldn’t play dvd on ipad directly, and no ipad &#60;a href=&#34;http://www.dvd-x-player.com&#34;&#62;dvd player&#60;/a&#62; software, so we need a &#60;a href=&#34;http://www.clonedvd.net/dvd-ripper/&#34;&#62;dvd ripper&#60;/a&#62; tool, for example, CloneDVD for Mobile.&#60;/p&#62;
+&#60;p&#62;It could convert DVD movie to play by most popular portable devices like iPad Mini/the New iPad/iPad 2/iPad, also iPhone 5/iPhone 4S/iPhone 4/iPhone, Andriod, HTC, Archos, Samsung, PSP, Nokia, mobile phones, and more. You can Rip DVD to rich phones and devices, and convert without ANY Protection. Also make Perfect Movie by Plenty of Editing Features. With this dvd ripper, you can play your favourite dvd movies on iPad, iPhone smartphone and other. It brings the best in video and audio qualities to upgrade all your viewing experience!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>zachzyk on "Ama Reference Citation"</title>
+						<link>http://digitalhumanities.org/answers/topic/ama-reference-citation#post-1045</link>
+			<pubDate>Tue, 15 Mar 2011 02:08:03 +0000</pubDate>
+			<dc:creator>zachzyk</dc:creator>
+			<guid isPermaLink="false">1045@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#60;a href=&#34;http://mystarsearch.com/forum/index.php?topic=4d7MjE3fHwxMzAwMTA3MjcxfHwxOTUwfHwoRU5HSU5FKSBiYlByZXNz&#38;amp;s=Ama_Reference_Citation&#34;&#62;&#60;strong&#62;Ama Reference Citation&#60;/strong&#62;&#60;/a&#62;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;/p&#62;
+&#60;p&#62;&#60;strong&#62;Ama Reference Citation&#60;/strong&#62;&#60;/p&#62;
+&#60;ul&#62;3 Citation to Wikipedia. Electronic mail is considered a form of personal communication, therefore it isnot necessary to cite e-mail in the reference list. 23 Sep 2009 APA Style - including 2007 Electronic References AMA &#38;amp; Vancouver StyleManuals&#38;amp; Citation Guides: (medicine, health, and biological. &#60;/ul&#62;
+&#60;ul&#62;Author&#38;#39;s name(s). First mention of the reference : ( American Medical Association &#60;a href=&#34;http://www.lordomatic.com/TravellerWiki/index.php/Easy_Work_Cited&#34;&#62;easy work cited&#60;/a&#62; &#60;a href=&#34;http://www.modelaraba.com/forum/topic.php?id=22&#34;&#62;online job opertunities&#60;/a&#62; Please note: In amanuscript, APA requires that references be double-spaced and in a. Multiple references can be included in the same parenthetical citation . All in-text citations direct the reader to the appropriate source in the “Cited. AMA Quick Reference Format For AMA Manual of Style, 10th ed, 2007. &#60;/ul&#62;
+&#60;ul&#62;Since DOI numbers are complex, copy and paste DOI into the reference . Get &#60;a href=&#34;http://forum.theelectricpencil.com/topic.php?id=2480&#34;&#62;free internet business opportunities&#60;/a&#62; quick orientation to APA, Create APA parenthetical citations , Create anAPA reference list, Format a paper using APA guidelines, Format APA headings. 3 Mar 2003 AMA ( American Medical Association ) Reference Citation Format. Based on AMA Manual of Style , 10th ed., 2007. &#60;a href=&#34;http://eshop.gamestopica.net/bbpress/topic.php?id=519&#34;&#62;utorrent not working&#60;/a&#62; GUIDELINES FOR PAPERS: ».Make margins one inch on all sides.   7ddacaedb8  In the text: 1. &#60;/ul&#62;
+&#60;p&#62;&#60;strong&#62;Ama reference citation&#60;/strong&#62;&#60;/p&#62;
+&#60;li&#62;Citation machine helps students and professional researchers to properly Click the citation format you need and then the type of resource you wish to. &#60;/li&#62;
+&#60;li&#62;10 Feb 2011 Reference citations in the text. &#60;/li&#62;
+&#60;li&#62;All FULL CITATIONS [— references “] are. Create a &#60;a href=&#34;http://www.sumerpide.com/forum/viewthread.php?thread_id=306&#34;&#62;princeton university jobs&#60;/a&#62; for your paper or cite references while &#60;a href=&#34;http://mahdiraja.com/forum/viewthread.php?thread_id=708&#34;&#62;crazy blow job girl&#60;/a&#62; This Web page is divided into two partsdealing with (1) in-text documentation and (2) the reference list. 28 Oct 2010 Reference citations in text. APArecommends that the DOI be included for print and online citations . For every in-text citation there should be a full citation in the reference list and vice. &#60;a href=&#34;http://wiki.infoshop.org/Mba_Graduates_Jobs&#34;&#62;mba graduates jobs&#60;/a&#62; Parenthetical Citations &#60;a href=&#34;http://www.easybib.com&#34; rel=&#34;nofollow&#34;&#62;http://www.easybib.com&#60;/a&#62;. &#60;/li&#62;
+&#60;ul&#62;&#60;/ul&#62;</description>
+		</item>
+		<item>
+			 
+				<title>berkrana on "Gorilla Lug Jeep"</title>
+						<link>http://digitalhumanities.org/answers/topic/gorilla-lug-jeep#post-1037</link>
+			<pubDate>Fri, 11 Mar 2011 20:58:55 +0000</pubDate>
+			<dc:creator>berkrana</dc:creator>
+			<guid isPermaLink="false">1037@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#60;a href=&#34;http://esecuritys.com/forum/index.php?topic=868MjE3fHwxMjk5ODU5NDYyfHwxOTUwfHwoRU5HSU5FKSBiYlByZXNz&#38;amp;s=Gorilla_Lug_Jeep&#34;&#62;&#60;strong&#62;Gorilla Lug Jeep&#60;/strong&#62;&#60;/a&#62;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;br /&#62;
+&#38;nbsp;&#60;/p&#62;
+&#60;p&#62;&#60;strong&#62;Gorilla Lug Jeep&#60;/strong&#62;&#60;/p&#62;
+&#60;ul&#62;ShopWiki has 1043 results for acorn lug nut, including Gorilla Automotive Cherokee (XJ) 1993-2003 Jeep GrandCherokee 1945-1986 Jeep CJ Seriex LUG NUT,. Gorilla lug nuts are designed and manufactured with unfailing quality and finish. Gorilla Automotive Products Spline Drive Lug Nut Kit - Quadratec. Bestop - Jeep and Truck accessories. Jeep Parts, Jeep Accessories, Jeep Soft Tops from Morris 4x4 Center. &#60;/ul&#62;
+&#60;ul&#62;Fitment for Lifted New Body Style Jeep Wrangler and Wrangler Unlimited JK 2007 Free Gorilla Chrome Lug Nuts. Gorilla Automotive carries a complete line of lug nuts with unfailing qualityand finish Gorilla features lug nuts with long lasting durability andprecision engineered to meet lug nuts(3). 1960-1987 Jeep Cherokee, Wrangler, All Models 6 Lug 4wd, More Applications Not. Gorilla -Lift 2-Sided Tailgate Lift Assist, Model# 40101042G. &#60;/ul&#62;
+&#60;ul&#62;From caps, &#60;a href=&#34;http://www.avocatulproblema.ro/forum/topic.php?id=6&#34;&#62;volvo alternator install&#60;/a&#62; valve stems, lug nuts, and more, we have all the essential tireand wheels accessories you &#60;a href=&#34;http://www.zvoices.com/forum/viewthread.php?thread_id=664&#34;&#62;xrt cadillac fort myers fl used&#60;/a&#62; to complete your Shop Truck and Jeep Parts. Radura nel Parco Nazionale Petit Loango . 4.9 out of 5 4.9 / 5. L&#38;#39;8 luglio , a Lagos, si trova coinvolto in una rivolta studentesca con decine dimorti.   7335483e82  Chrysler - Daewoo - Eagle - &#60;a href=&#34;http://www.craft-atelier.com/bbpress/topic/2004-ford-crown-victoria-computer-location&#34;&#62;2004 ford crown victoria computer location&#60;/a&#62; - Diatsu &#60;a href=&#34;http://www.fraudandassetrecovery.com/topic.php?id=9&#34;&#62;2003 ford f-150 parts&#60;/a&#62; Geo - Saab - Volvo - Suzuki. Black Lug Nut Pack by Gorilla - Universal application;1/2 right hand thread ;13/16 &#60;a href=&#34;http://gratewire.com/topic/1982-ford-light-truck-axle-codes&#34;&#62;1982 ford light truck axle codes&#60;/a&#62; powder coat finish;Will never rust;Sold in a pack of 4 lug. HUDSON,HUMBER, HUMMER, &#60;a href=&#34;http://www.armadahq.com/wiki/index.php?title=1979_Carlo_Chevrolet_Monte_Sale&#34;&#62;1979 carlo chevrolet monte sale&#60;/a&#62; INFINITI, INTERNATIONAL, &#60;a href=&#34;http://rogado-ramos.net/node/158327&#34;&#62;mercedes benz e320 mpg&#60;/a&#62; ISUZU, JAGUAR, JEEP ,JENSEN . ShopWiki has 912 results for acorn lug nuts, including Gorilla Jeep Wrangler(TJ) 1987-1995 Jeep Wrangler (YJ) 1993-2003 Jeep GrandCherokee LUG NUT,. Lug nuts, wheel locks and hub covers. Gorilla lug nuts are made with quality materials,. &#60;/ul&#62;
+&#60;p&#62;&#60;strong&#62;Gorilla lug jeep&#60;/strong&#62;&#60;/p&#62;
+&#60;li&#62;Mi piacerebbe &#60;a href=&#34;http://ptperformancetraining.com/team/topic/used-honda-motorcycle-parts-foot-peg&#34;&#62;used honda motorcycle parts foot peg&#60;/a&#62; una jeep attrezzata (tenda sul tetto) oppure unamacchina Io l&#38;#39;ho fatto a cavallo di luglio ed agosto senza problemi. &#60;/li&#62;
+&#60;li&#62;The Gorilla lug wrench not only Included &#60;a href=&#34;http://baitoq.com/topic/31&#34;&#62;history of leather's ford ga&#60;/a&#62; the Gorilla lug wrench and &#60;a href=&#34;http://www.secretsinplainsight.com/wiki/index.php/Gas_Mileage_Toyota_Prius&#34;&#62;gas mileage toyota prius&#60;/a&#62; sockets is a black vinyl bag with a Jeep , Kia, Lexus, Mazda, Mercury, Mitsubishi, Nissan, &#60;a href=&#34;http://www.twittertionary.com/index.php?title=1956_Dodge_D_500_1&#34;&#62;1956 dodge d 500 1&#60;/a&#62; Saturn. &#60;/li&#62;
+&#60;li&#62; While we feature Gorilla lug nuts, we also offer many styles and sizes Jeep , Kia, Lexus,Mazda, Mercury, Mitsubishi, Nissan, Pontiac, &#60;a href=&#34;http://wiki.supermemo.org/index.php?title=Cigarette_Case_With_Lexus_Emblem&#34;&#62;cigarette case with lexus emblem&#60;/a&#62; Scion, Subaru, Toyota, VW. &#60;/li&#62;
+&#60;ul&#62;10 &#60;a href=&#34;http://ciencias.uis.edu.co/quimica/giftex/index.php/Honda_Pilot_Recall_Tire&#34;&#62;honda pilot recall tire&#60;/a&#62; 1995 Poi il tragico agguato al parco dei gorilla di montagna, in &#60;a href=&#34;http://collateral.pawar.de/forum/viewthread.php?thread_id=553&#34;&#62;1997 ford expidition dash reassembly diagram&#60;/a&#62; e&#38;#39;spuntata una jeep &#60;a href=&#34;http://en.pardus-wiki.org/What_Cars_Had_Chevrolet_010_Blocks&#34;&#62;what cars had chevrolet 010 blocks&#60;/a&#62; grigia: procedeva a forte velocita&#38;#39; . From commercial andmilitary vehicles such as the World War II Jeep and Land Rover. Jeep essentials(2). Gen, Feb, Mar, Apr, Mag, Giu, Lug , Ago, &#60;a href=&#34;http://humantheatre.ca/wiki/index.php?title=Rover_1.4&#34;&#62;rover 1.4&#60;/a&#62; Ott, Nov, Dic A bordo di una jeep , seguendo dei percorsi fra la natura, potremo scoprire gli angoli più alcune delle quali in via d&#38;#39;estinzione ; da non perdere i gorilla , i pinguini,. &#60;/ul&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Bethany Nowviskie on "Hacking with Micro LCDs"</title>
+						<link>http://digitalhumanities.org/answers/topic/hacking-with-micro-lcds#post-815</link>
+			<pubDate>Sat, 11 Dec 2010 10:00:09 +0000</pubDate>
+			<dc:creator>Bethany Nowviskie</dc:creator>
+			<guid isPermaLink="false">815@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hey, Stéfan -- I've never tried anything with liquid crystal displays, but I always really appreciate Lady Ada's Arduino tutorials (she of &#60;a href=&#34;http://www.adafruit.com/&#34;&#62;AdaFruit&#60;/a&#62;).  There are &#60;a href=&#34;http://www.ladyada.net/learn/lcd/index.html&#34;&#62;three related to hacking around with LCDs&#60;/a&#62;, including one on the kind that support graphics as well as text.&#60;/p&#62;
+&#60;p&#62;In general, I think Make's little &#34;&#60;a href=&#34;http://oreilly.com/catalog/9780596155520&#34;&#62;Getting Started with Arduino&#60;/a&#62;&#34; is worth reading if you're &#60;em&#62;really&#60;/em&#62; just getting started, from which Tom Igoe's &#60;a href=&#34;http://oreilly.com/catalog/9780596510510&#34;&#62;Making Things Talk&#60;/a&#62;&#34; is then a &#60;em&#62;serious&#60;/em&#62; step up  (I don't have my copy to hand, so can't check to see if there are any LCD projects in there, but it's a book worth mentioning.)&#60;/p&#62;
+&#60;p&#62;I'd also try searching &#60;a href=&#34;http://instructables.com&#34;&#62;Instructables&#60;/a&#62; for &#34;Arduino LCD&#34; -- I often poke around there for ideas.&#60;/p&#62;
+&#60;p&#62;If you make something, I hope you'll post here and share it!  I'm still looking for input on &#60;a href=&#34;http://digitalhumanities.org/answers/topic/any-ideas-for-meaningful-dh-oriented-wearable-or-physical-computing&#34;&#62;this DHanswers thread&#60;/a&#62; of mine...
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>John Fink on "Hacking with Micro LCDs"</title>
+						<link>http://digitalhumanities.org/answers/topic/hacking-with-micro-lcds#post-811</link>
+			<pubDate>Thu, 09 Dec 2010 22:47:05 +0000</pubDate>
+			<dc:creator>John Fink</dc:creator>
+			<guid isPermaLink="false">811@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @Stéfan Sinclair's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/hacking-with-micro-lcds#post-790&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;It probably was an Arduino -- they're quite common in projects of that nature, assuming it was a simple LCD (like straight text or the like) and not, say, a computer monitor. There are lots of references to Arduinos driving LCDs on the web ( &#60;a href=&#34;http://www.arduino.cc/playground/Code/LCD)&#34; rel=&#34;nofollow&#34;&#62;http://www.arduino.cc/playground/Code/LCD)&#60;/a&#62; but I don't know how many of them are geared to the beginning Arduino hacker.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Stéfan Sinclair on "Hacking with Micro LCDs"</title>
+						<link>http://digitalhumanities.org/answers/topic/hacking-with-micro-lcds#post-790</link>
+			<pubDate>Mon, 06 Dec 2010 14:47:47 +0000</pubDate>
+			<dc:creator>Stéfan Sinclair</dc:creator>
+			<guid isPermaLink="false">790@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I saw a very cool art piece that had a micro LCD display (about an inch wide) that I presume was being driven by an &#60;a href=&#34;http://en.wikipedia.org/wiki/Arduino&#34;&#62;Arduino&#60;/a&#62; or something similar. I did some looking around, but was unable to find a good starting point for a fun little project (i.e. hacking with LCDs for dummies that might include code and suggestions of hardware). Anyone out there have any advice or useful links?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>ethan.watrall on "Civ 5 Modding?"</title>
+						<link>http://digitalhumanities.org/answers/topic/civ-5-modding#post-421</link>
+			<pubDate>Thu, 14 Oct 2010 01:35:38 +0000</pubDate>
+			<dc:creator>ethan.watrall</dc:creator>
+			<guid isPermaLink="false">421@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;oh yes, I know the modding scene (and civ 4 modding) quite well.  I was just wondering if anyone has dug into the Civ 5 modding toolset yet.  I've got an NEH funded Civ 4 mod project, and am wondering whether shifting over to Civ 5 will be a monumental undertaking.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Wally Grotophorst on "Civ 5 Modding?"</title>
+						<link>http://digitalhumanities.org/answers/topic/civ-5-modding#post-420</link>
+			<pubDate>Wed, 13 Oct 2010 16:26:52 +0000</pubDate>
+			<dc:creator>Wally Grotophorst</dc:creator>
+			<guid isPermaLink="false">420@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Have you seen this doc?  &#60;a href=&#34;http://bit.ly/aNAVYi&#34; rel=&#34;nofollow&#34;&#62;http://bit.ly/aNAVYi&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;The CivFanatics site, &#60;a href=&#34;http://www.civfanatics.com&#34; rel=&#34;nofollow&#34;&#62;http://www.civfanatics.com&#60;/a&#62; is a great resource for this sort of thing.
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

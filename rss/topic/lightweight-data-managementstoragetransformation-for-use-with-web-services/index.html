@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Topic: Lightweight data management/storage/transformation for use with web services?</title>
+		<link>http://digitalhumanities.org/answers/topic/lightweight-data-managementstoragetransformation-for-use-with-web-services</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Topic: Lightweight data management/storage/transformation for use with web services?</description>
+		<language>en-US</language>
+		<pubDate>Sun, 28 Aug 2016 10:06:47 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/topic/lightweight-data-managementstoragetransformation-for-use-with-web-services" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>Shane Landrum on "Lightweight data management/storage/transformation for use with web services?"</title>
+						<link>http://digitalhumanities.org/answers/topic/lightweight-data-managementstoragetransformation-for-use-with-web-services#post-1074</link>
+			<pubDate>Thu, 24 Mar 2011 16:05:11 +0000</pubDate>
+			<dc:creator>Shane Landrum</dc:creator>
+			<guid isPermaLink="false">1074@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @william.j.turkel@gmail.com's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/lightweight-data-managementstoragetransformation-for-use-with-web-services#post-1063&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;See, that's what I'm thinking. I like the lightweight text formats; JSON can lend itself to marginalia in the form of comments (citations, etc), which seems particularly handy to me. OTOH, I also find JSON a lot clunkier to edit, UI-wise. (Maybe I just haven't committed sufficiently to a particular editor.)&#60;/p&#62;
+&#60;p&#62;When you &#60;em&#62;do&#60;/em&#62; need to do something relational with data and choose not to put it into a SQL database, what are the factors in that choice? What do you do instead?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>william.j.turkel@gmail.com on "Lightweight data management/storage/transformation for use with web services?"</title>
+						<link>http://digitalhumanities.org/answers/topic/lightweight-data-managementstoragetransformation-for-use-with-web-services#post-1063</link>
+			<pubDate>Tue, 22 Mar 2011 18:50:08 +0000</pubDate>
+			<dc:creator>william.j.turkel@gmail.com</dc:creator>
+			<guid isPermaLink="false">1063@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;The advantage of keeping your data sets in a lightweight, plain text format (like JSON or CSV) is that they remain human readable and usable for the foreseeable future.  This is especially the case if you try to make the data self-describing (by using meaningful fieldnames, etc.)  A SQL dump or XML are also human readable, but often less so.  I don't put my stuff into a SQL database until I know that I need to do something relational with it and sometimes not even then.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Wayne Graham on "Lightweight data management/storage/transformation for use with web services?"</title>
+						<link>http://digitalhumanities.org/answers/topic/lightweight-data-managementstoragetransformation-for-use-with-web-services#post-1061</link>
+			<pubDate>Tue, 22 Mar 2011 11:30:30 +0000</pubDate>
+			<dc:creator>Wayne Graham</dc:creator>
+			<guid isPermaLink="false">1061@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Taking these on completely out of order, there are pretty good libraries for Python and Ruby to access Google Docs. The 'official' ruby library is at &#60;a href=&#34;http://code.google.com/apis/gdata/articles/using_ruby.html&#34; rel=&#34;nofollow&#34;&#62;http://code.google.com/apis/gdata/articles/using_ruby.html&#60;/a&#62; and essentially you pass an http header with your credentials. The Python client docs are over at &#60;a href=&#34;http://code.google.com/apis/gdata/articles/python_client_lib.html&#34; rel=&#34;nofollow&#34;&#62;http://code.google.com/apis/gdata/articles/python_client_lib.html&#60;/a&#62;. Both are pretty straight forward, especially if you're just using this for your own smallish project.&#60;/p&#62;
+&#60;p&#62;I would also stick with the CSV parsers that Ruby and Python both have, and just use string manipulations for massaging the data as you need. You can use the CSV parser built in to both Python and Ruby (though you may want to go with something like FasterCSV if you're in Ruby). These are implemented in C, so they're reasonably fast and should get you everything you need. &#60;/p&#62;
+&#60;p&#62;For you first question, I think it really depends on your needs. I typically suggest one datastore and shape the data to the format needed for the visualization tool as a view of the data, but I know some folks prefer the opposite. However, you'll still need to massage data if you drop one visualization library for another, so just make sure to write down good notes on how the data is preserved.&#60;/p&#62;
+&#60;p&#62;With your last question, I've done some preliminary work on a rubygem called acts-as-citable which allows you to attach a zotero id to a model. If you're working in spread sheets, I would suggest a column with the zotero id and use the rzotero gem (I believe there's a python package as well).
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Shane Landrum on "Lightweight data management/storage/transformation for use with web services?"</title>
+						<link>http://digitalhumanities.org/answers/topic/lightweight-data-managementstoragetransformation-for-use-with-web-services#post-1054</link>
+			<pubDate>Mon, 21 Mar 2011 13:03:25 +0000</pubDate>
+			<dc:creator>Shane Landrum</dc:creator>
+			<guid isPermaLink="false">1054@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;For visualizing some historical data, I've recently been &#60;a href=&#34;http://cliotropic.org/wip/2011/03/19/mapping-birth-registration-with-protovis/&#34;&#62;toying around with Protovis&#60;/a&#62; and &#60;a href=&#34;http://cliotropic.org/wip/2011/03/16/a-brief-note-on-geocommons/&#34;&#62;GeoCommons&#60;/a&#62;. In the past, I've played with &#60;a href=&#34;http://code.google.com/p/timemap/&#34;&#62;TimeMap&#60;/a&#62; and other SIMILE widgets. All of these tools take input in structured text forms, but the format each tool wants is different.&#60;/p&#62;
+&#60;p&#62; For learning what these tools can do, I usually  just &#60;a href=&#34;https://github.com/cliotropic/sandbox/raw/master/regarea_maps/birthreg_grid_simple.js&#34;&#62;hack the data together in a source file&#60;/a&#62;. With GeoCommons, I've been exporting CSV data from a Google Docs spreadsheet using &#60;a href=&#34;http://blog.ouseful.info/2009/05/18/using-google-spreadsheets-as-a-databace-with-the-google-visualisation-api-query-language/&#34;&#62;URL-based queries&#60;/a&#62;. Figuring out the URL queries is a little complex, but I like the ease-of-use of the Google Docs UI.  More and more, though, I keep coming up with little data sets that I'd rather not have to think about hardcoding into a particular JSON/CSV/etc format, so that I can get on with the intellectual work of my research. &#60;/p&#62;
+&#60;p&#62;As a historian, I should probably be keeping my data in more citationally-rigorous formats than JSON will support, but my datasets are still small and idiosyncratic enough that going to a full-scale database seems like overkill to me. So, I've got a few questions:&#60;/p&#62;
+&#60;ol&#62;
+&#60;li&#62;When I'm doing experimental, exploratory visualization work with different tools, and when the structure of my data isn't always apparent at the beginning, how should I assess whether to it into a database first and then export views of that data out to my visualization tools?&#60;/li&#62;
+&#60;li&#62;If I want to keep using Google Docs for simple data storage and querying but don't want to have to make my data sets public, what's the easiest-to-use library for interacting with their authorization API?&#60;/li&#62;
+&#60;li&#62;Once I've settled on the best way to store various data sets, what tools/libraries can I use to transform it easily into the formats and data structures that different web services want to see? (Please, nothing having to do with XSLT, unless you've got pointers that'll make that learning curve flatter.)&#60;/li&#62;
+&#60;/ol&#62;
+&#60;p&#62;I use OS X primarily, and I'm not afraid of working with the shell; my preferred languages are Python and Ruby, though obviously I'm having to do lots with Javascript too. I just hate debugging Javascript if I can avoid it.&#60;/p&#62;
+&#60;p&#62;&#60;em&#62;(&#60;strong&#62;Edited to add:&#60;/strong&#62; If anyone has bright ideas on good ways to preserve citational rigor in my data storage, that's important to me too. Lots of the data sets I'm creating are composited from facts found in particular manuscript items, and I need to be able to preserve the provenance of each data point. That could be as simple as an extra field with a Zotero citation code in it, but I can't lose sight of where the data comes from.)&#60;/em&#62;
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

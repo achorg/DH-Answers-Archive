@@ -1,0 +1,306 @@
+<?
+/*
+Plugin Name: bb Topic Icons
+Plugin URI: http://devt.caffeinatedbliss.com/bbpress/topic-icons
+Description: Adds configurable icons next to topics based on their status
+Author: Paul Hawke
+Author URI: http://paul.caffeinatedbliss.com/
+Version: 0.6
+*/
+
+/****************************************************************************
+ *
+ * Configure the following constants to fine-tune the CSS classes that are
+ * generated, the icon filenames that are used, and the text used in the
+ * legend (if you have one displayed).  Note: filenames are likely to be
+ * taken away in a future version and replaced with the concept of "icon sets"
+ * whose filenames are fixed, so dont get used to editing the filenames,
+ * as this will break in future versions.
+ *
+ ****************************************************************************/
+
+// css class for the unsorted list used in the legend display
+define( LEGEND_CLASS, 'topic_icon_legend' );
+
+// busy threshold - a topic with more posts than this is counted as "busy"
+// for purposes of picking an icon.
+define( BUSY_THRESHOLD, 15 );
+
+// width of the images, in pixels
+define( ICON_WIDTH, '20' );
+
+// height of the images, in pixels
+define( ICON_HEIGHT, '20' );
+
+// the URL base for where to find the default icon set.
+define( ICON_SET_URL_BASE, BB_PLUGIN_URL.'bb-topic-icons/icon-sets/' );
+
+/****************************************************************************
+ *
+ * Shouldnt be much need to edit anything beyond this point - configuration
+ * is all done via the constants (above) and through and admin area page in
+ * bbPress at runtime.
+ *
+ ****************************************************************************/
+
+require( 'bb-topic-icons-api.php' );
+require( 'bb-topic-icons-admin.php' );
+require( 'interface.status-interpreter.php' );
+require( 'interface.status-renderer.php' );
+require( 'class.default-status-interpreter.php' );
+require( 'class.default-status-renderer.php' );
+
+function topic_icons_legend() {
+	$icon_set_name = topic_icons_get_active_icon_set();
+	$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+	$statuses = get_active_status_interpreter()->getAllStatuses();
+	$renderer = get_active_status_renderer();
+	
+	echo '<ul id="'.LEGEND_CLASS.'">';
+	for ($i=0; $i < count($statuses); $i++) {
+		$image = $renderer->renderStatus($statuses[$i]);
+		$tooltip = $renderer->renderStatusTooltip($statuses[$i]);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (isset($image) && strlen($image) > 0 &&
+			isset($tooltip) && strlen($tooltip) > 0 && $exists) {
+			echo '<li><img src="'.$icon_set_url.'/'.$image.
+				'" width="'.ICON_WIDTH.'" height="'.ICON_HEIGHT.
+				'" align="absmiddle">&nbsp;'.$tooltip.'</li>';
+		}
+	}
+	echo '</ul>';
+}
+
+function topic_icons_css() {
+	echo "\n<style type=\"text/css\"><!--\n";
+	require( 'bb-topic-icons.css' );
+	echo "\n--></style>";
+}
+
+function topic_icons_label( $label ) {
+	global $topic;
+	
+	if (bb_is_front() || bb_is_forum() || bb_is_view() || bb_is_tag()) {		
+		$icon_set_name = topic_icons_get_active_icon_set();
+		$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+
+		$status = get_active_status_interpreter()->getStatus(bb_get_location(), $topic);
+		$renderer = get_active_status_renderer();
+		$image = $renderer->renderStatus($status);
+		$tooltip = $renderer->renderStatusTooltip($status);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (!$exists) {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), ICON_SET_URL_BASE.'/empty.png', ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		} else if (strlen($tooltip) > 0) {		
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"><span>%s</span></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $tooltip, $label);
+		} else {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		}
+	}
+	
+	return $label;
+}
+
+function topic_icons_init( ) {
+	remove_filter('bb_topic_labels', 'bb_closed_label', 10);
+	remove_filter('bb_topic_labels', 'bb_sticky_label', 20);
+
+	add_filter('bb_topic_labels', 'topic_icons_label', 11);
+
+	add_action('bb_head', 'topic_icons_css');
+
+	add_action('bb_admin_menu_generator', 'topic_icons_admin_page_add');
+	add_action('bb_admin-header.php', 'topic_icons_admin_page_process');
+	
+	topic_icons_register_status_interpreter('default', new DefaultStatusInterpreter(BUSY_THRESHOLD));
+	topic_icons_register_status_renderer('default', new DefaultStatusRenderer());
+}
+
+topic_icons_init();
+
+?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Tag: collaboration - Recent Topics</title>
+		<link>http://digitalhumanities.org/answers/tags/collaboration</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Tag: collaboration - Recent Topics</description>
+		<language>en-US</language>
+		<pubDate>Sun, 24 Mar 2019 17:08:36 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/tags/collaboration/topics" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>Ramkumar on "What are some of the easily understood examples on small-world networks"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-are-some-of-the-easily-understood-examples-on-small-world-networks#post-2420</link>
+			<pubDate>Sun, 17 Dec 2017 10:00:41 +0000</pubDate>
+			<dc:creator>Ramkumar</dc:creator>
+			<guid isPermaLink="false">2420@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I am looking for more examples to explain the 'small world' network phenomenon.&#60;/p&#62;
+&#60;p&#62;I am working on an article on the same. An example which I have taken up is - a modern well connected cluster of villages. &#60;/p&#62;
+&#60;p&#62;Smart and digitally enabled cluster of villages with urban and social infrastructure are the way forward. In such clusters, every body is connected to everybody. Information passes through all them seamlessly. Everybody stays informed and there are numerous advantages from eliminating village feuds to sharing farm practices and social welfare schemes. Similarly, there could be others. Cheers, Ramkumar
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>ebuhe on "Feedback on Digital Humanities Best Practices document"</title>
+						<link>http://digitalhumanities.org/answers/topic/feedback-on-digital-humanities-best-practices-document#post-2306</link>
+			<pubDate>Sun, 22 Mar 2015 00:51:16 +0000</pubDate>
+			<dc:creator>ebuhe</dc:creator>
+			<guid isPermaLink="false">2306@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I'm working on a Digital Humanities Best Practices document that would serve as a list of questions humanities scholars could ask themselves as they get started on a collaborative project--something that is widely applicable, accessible, and quick and easy to read (meaning: not written in prose, not one person's reflections about their DH experience, not behind a paywall). The scope is specifically geared toward setting expectations and the issues to consider including in a charter / contract.&#60;/p&#62;
+&#60;p&#62;It currently exists as an editable document on Google Drive -- and I'd love feedback!! What's missing, what's too broad/specific? Other great links to share? I'd especially like thoughts on integrating language re: open source, creative commons, code.&#60;/p&#62;
+&#60;p&#62;Here's the link:&#60;br /&#62;
+&#60;a href=&#34;http://www.nyu.edu/gsas/dept/fineart/research/digital-humanities-best-practices.htm&#34; rel=&#34;nofollow&#34;&#62;http://www.nyu.edu/gsas/dept/fineart/research/digital-humanities-best-practices.htm&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;Thanks!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>David Michelson on "What are some models for governance/editorial oversight for DH projects?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-are-some-models-for-governanceeditorial-oversight-for-dh-projects#post-1974</link>
+			<pubDate>Wed, 10 Apr 2013 17:24:24 +0000</pubDate>
+			<dc:creator>David Michelson</dc:creator>
+			<guid isPermaLink="false">1974@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I am looking for models and best practices to ensure long term sustainability of a collaborative DH project. Could you please point me to long running DH projects whose protocols for governance, editorial oversight, institutional ownership/hosting I might emulate? I am thinking of medium sized DH projects as models, so bigger than one scholar publishing a digital project, but smaller than the TEI consortium or Jstor. Something the size of Nines or another project that has multiple contributors and a focused but regular scholarly user base.&#60;/p&#62;
+&#60;p&#62;Given the concerns over sustainability inherent in DH, I am also interested in thoughts and advice on how to transition a project from the stage where a grant-funded PI is the leader in getting content online to where an editorial board (and institutional hosts) maintain a project longer term. Also, how do DH projects handle the preservation of content for such a project? The data will be licensed open source, but who should hold the copyright after the project is launched? A university library, an s-corporation independent of any institution (like some non-profit scholarly journals or professional societies), the public domain, the original scholarly contributors?&#60;/p&#62;
+&#60;p&#62;Please provide links to governance structures and legal arrangement of existing projects if you are aware of them.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Shane Landrum on "Collaboration/project management tools for a small distributed team?"</title>
+						<link>http://digitalhumanities.org/answers/topic/collaborationproject-management-tools-for-a-small-distributed-team#post-1715</link>
+			<pubDate>Wed, 27 Jun 2012 02:00:22 +0000</pubDate>
+			<dc:creator>Shane Landrum</dc:creator>
+			<guid isPermaLink="false">1715@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I'm starting some contract work on a small, new website for a grant-funded curricular program. Between now and when the site launches, I need to communicate with a small group of non-technical faculty stakeholders/collaborators about all the usual components of a new site: wireframe prototypes, sample graphic designs, current status of work, bugs/enhancement requests, and such. For reasons related to travel and scheduling, it'll be difficult to get everyone in the same physical space before the site launches, and I need some good tools to streamline that communication.&#60;/p&#62;
+&#60;p&#62;For these faculty, the default communication method would usually be email, but that quickly becomes unwieldy for &#60;a href=&#34;http://en.wikipedia.org/wiki/Agile_software_development&#34;&#62;agile development approaches&#60;/a&#62;. For some of what I need, I could cobble something together from Google tools, but I'm not ready to teach humanities faculty how to file bugs/enhancements into a &#60;a href=&#34;http://trac.edgewall.org/&#34;&#62;Trac&#60;/a&#62; system.  I'm looking for something a little cleaner and smoother. I don't have a private server, so I'll need either a hosted service or something that can run happily on a shared webhost. &#60;/p&#62;
+&#60;p&#62;My software-developer friends in industry tell me that &#60;a href=&#34;http://www.atlassian.com/software/confluence/overview&#34;&#62;Atlassian Confluence&#60;/a&#62; is a really good option for what I need. At $10/month for the hosted version with 10 users, it's cheap, but I'm reluctant to deploy something that'll be an ongoing budget expense unless it really is better than other options (i.e. less work for me). What other tools should I be considering?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>acrymble on "Faircite: Who should we cite in collaborative DH Projects?"</title>
+						<link>http://digitalhumanities.org/answers/topic/faircite-who-should-we-cite-in-collaborative-dh-projects#post-1536</link>
+			<pubDate>Tue, 28 Feb 2012 15:38:29 +0000</pubDate>
+			<dc:creator>acrymble</dc:creator>
+			<guid isPermaLink="false">1536@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;How does one cite a digital humanities project? The &#60;a href=&#34;http://faircite.wordpress.com&#34;&#62;Fair Cite&#60;/a&#62; initiative is looking for your feedback on citation in collaborative projects. How should we incorporate the efforts of people such as project managers, students, community participants, programmers, designers, etc? What type of contribution is &#34;enough&#34; for someone to appear in the project citation? And why?&#60;/p&#62;
+&#60;p&#62;For more background information on the issue please see &#60;a href=&#34;http://faircite.wordpress.com/2012/02/15/citation-practices-in-academia/&#34;&#62;Current Citation Practices&#60;/a&#62;. &#60;/p&#62;
+&#60;p&#62;We invite members of the community to contribute your opinions on what those guidelines should look like. Who should be cited? What criteria should someone meet before being included as an &#34;author&#34; or &#34;editor&#34;? How do we best emphasize the different types of contributions people make? Your help will be instrumental in fostering a fairer model of citation for those whose contributions are all too often invisible.&#60;/p&#62;
+&#60;p&#62;The guidelines of the International Committee of Medical Journal Editors is perhaps a good place to start the discussion:&#60;/p&#62;
+&#60;ol&#62;
+&#60;li&#62;the conception and design of the study, or acquisition of data, or analysis and interpretation of data&#60;/li&#62;
+&#60;li&#62;drafting the article or revising it critically for important intellectual content&#60;/li&#62;
+&#60;li&#62;final approval of the version to be submitted&#60;/li&#62;
+&#60;/ol&#62;
+&#60;p&#62;Can these be adapted to meet the needs of the DH community? Is there a better starting point elsewhere?&#60;/p&#62;
+&#60;p&#62;Please distribute this to anyone you think may be interested including those outside of the digital humanities and Alt-ac communities.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>snehaadesai@gmail.com on "Support for a multi-media poetry translation website?"</title>
+						<link>http://digitalhumanities.org/answers/topic/support-for-a-multi-media-poetry-translation-website#post-1559</link>
+			<pubDate>Thu, 15 Mar 2012 08:36:31 +0000</pubDate>
+			<dc:creator>snehaadesai@gmail.com</dc:creator>
+			<guid isPermaLink="false">1559@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hi, I am a Fulbright Scholar working on translation practice and theory. I'd like to solicit ideas for organizations that would support a multi-media presentation of the translations I am writing. Ideally, I would work with an organization that it invested in innovation in digital publishing, and the humanities.&#60;/p&#62;
+&#60;p&#62;Just throwing this out there for ideas--thanks!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Miriam Posner on "Help us design a DH workspace!"</title>
+						<link>http://digitalhumanities.org/answers/topic/help-us-design-a-dh-workspace#post-475</link>
+			<pubDate>Mon, 18 Oct 2010 11:56:23 +0000</pubDate>
+			<dc:creator>Miriam Posner</dc:creator>
+			<guid isPermaLink="false">475@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;We have this insane opportunity to design a space for our new DH program, in a beautiful, light-filled area of the library. We've got pros involved, and of course we're getting advice from everyone concerned, but I'd love to hear your &#34;musts&#34; for an inspiring, collaborative research environment. Here are some parameters:&#60;/p&#62;
+&#60;p&#62;• It will provide drop-in consulting as well as more in-depth project workspace and space for full-time research staff (these spaces don't necessarily need to be separated).&#60;/p&#62;
+&#60;p&#62;• It's very important for visitors (primarily graduate students and faculty members) to feel welcome.&#60;/p&#62;
+&#60;p&#62;• One of the primary goals of this space is to encourage collaboration, particularly among people in different disciplines.&#60;/p&#62;
+&#60;p&#62;In your experience, what are must-haves? What are must-not-haves? &#60;/p&#62;
+&#60;p&#62;For example, in my mind, an obvious must-have is a whiteboard. Obvious must-not-haves are rigidly divided study carrels. So what else?&#60;/p&#62;
+&#60;p&#62;And thank you!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>tanyaclement on "Collaborative editing HTML in the cloud"</title>
+						<link>http://digitalhumanities.org/answers/topic/collaborative-editing-html-in-the-cloud#post-1455</link>
+			<pubDate>Mon, 21 Nov 2011 18:59:05 +0000</pubDate>
+			<dc:creator>tanyaclement</dc:creator>
+			<guid isPermaLink="false">1455@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Do folks have thoughts on the best way to collaborate on editing an HTML doc? I was considering using GoogleDocs but I'd love to know if there are problems with that and/or if there are other applications or environments people like to use.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>georginalgreen@gmail.com on "Microsoft access on sharepoint to create database ultimately destined 4 website?"</title>
+						<link>http://digitalhumanities.org/answers/topic/microsoft-access-on-sharepoint-to-create-database-ultimately-destined-4-website#post-1404</link>
+			<pubDate>Sun, 09 Oct 2011 17:04:21 +0000</pubDate>
+			<dc:creator>georginalgreen@gmail.com</dc:creator>
+			<guid isPermaLink="false">1404@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;We are at the very start of a project which will populate a relational database with information from archives across the world. There will be three people working on the database and ultimately we want it to be openly available and searchable as an online research tool. Would Microsoft access on sharepoint be a good way of facilitating the collaborative research?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Stéfan Sinclair on "Assessing Coauthored Contributions in DH"</title>
+						<link>http://digitalhumanities.org/answers/topic/assessing-coauthored-contributions-in-dh#post-1144</link>
+			<pubDate>Fri, 29 Apr 2011 16:32:39 +0000</pubDate>
+			<dc:creator>Stéfan Sinclair</dc:creator>
+			<guid isPermaLink="false">1144@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#34;5 authors on the paper? why, that's clearly a fifth of the work and worth only a fifth of a publication for your tenure case.&#34; There's a useful and growing set of documents about assessing digital scholarship in the humanities (see &#60;a href=&#34;http://www.mla.org/resources/documents/rep_it/dig_eval&#34; rel=&#34;nofollow&#34;&#62;http://www.mla.org/resources/documents/rep_it/dig_eval&#60;/a&#62; for instance), but there's less discussion of how to assess co-authorship. Lone scholarship is so deeply entrenched in humanities culture that even the best arguments won't likely carry much weight until major, recognized organizations make statements about it. It's certainly been my experience that coauthored papers are rarely less work than single authored papers, and in many cases more work. Even if the words/author ratio is lower in some cases (depending on how the work was done), there's also a lot of coordination and refinement that needs to happen, not to mention (maybe even more importantly) the depth of the background work that made the article possible. Personally, I just enjoy co-authorship more and I think what's produced is better. Actually, all of my work is collaborative, so I don't really have much choice in the matter.&#60;/p&#62;
+&#60;p&#62;Anyway, a colleague asked me if I knew of any resources to point to for assessing co-authorship in the digital humanities, and I have nothing solid at hand. I'm hesitant to adopt outright models from other disciplines (e.g. computer science), because – at the risk of sounding exceptionalist – I think some aspects of digital humanities research are fairly unique.&#60;/p&#62;
+&#60;p&#62;Can anyone point to helpful guidelines for assessing co-authorship in the digital humanities?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Brian Rosenblum on "Readings on or models of collaboration in DH projects?"</title>
+						<link>http://digitalhumanities.org/answers/topic/models-of-collaboration-in-digital-humanities-project#post-620</link>
+			<pubDate>Fri, 29 Oct 2010 03:53:51 +0000</pubDate>
+			<dc:creator>Brian Rosenblum</dc:creator>
+			<guid isPermaLink="false">620@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I have been asked to give a talk to our faculty on &#34;Models of Collaboration in Digital Humanities Projects&#34; focusing on &#34;the possibilities and challenges of collaboration.&#34; It will probably be a general audience of humanities scholars, whose experience with digital projects may range from a lot to none.&#60;/p&#62;
+&#60;p&#62;This topic could be approached at so many levels that I'm not quite sure where to begin. I'm finding the following pages very helpful&#60;/p&#62;
+&#60;p&#62;&#60;a href=&#34;http://digitalscholarship.wordpress.com/category/collaboration/&#34; rel=&#34;nofollow&#34;&#62;http://digitalscholarship.wordpress.com/category/collaboration/&#60;/a&#62;&#60;br /&#62;
+&#60;a href=&#34;http://www.dancohen.org/category/collaboration/&#34; rel=&#34;nofollow&#34;&#62;http://www.dancohen.org/category/collaboration/&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;but would also be interested in pointers to other readings, or seeing a discussion here at DHanswers on how &#34;collaboration&#34; relates to &#34;digital humanities.&#34;&#60;/p&#62;
+&#60;p&#62;For the immediate purposes of my upcoming talk, I am most interested in discussing this at a practical level: What kinds of collaborations are needed to enable faculty to participate in or create digital humanities projects. And, conversely, what kinds of new collaborations does digital technology enable? And what is an effective way to introduce this topic to a general scholarly audience?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Vika Zafrin on "What&#039;s wrong with python?"</title>
+						<link>http://digitalhumanities.org/answers/topic/whats-wrong-with-python#post-117</link>
+			<pubDate>Wed, 22 Sep 2010 13:25:09 +0000</pubDate>
+			<dc:creator>Vika Zafrin</dc:creator>
+			<guid isPermaLink="false">117@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;A collaborator I worked with a few years ago was in love with python.  According to him, python's strictly regimented syntax and its indentation requirements essentially forced good coding practices on people while providing a powerful engine for Doing Things.  To my collaborator, using it was as freeing as some people consider constrained writing to be.  Plus, I hear it's sometimes used to take advantage of the Java environment without having to learn Java.  So it's been in the back of my mind as a language I'd like to learn when an appropriate project presents itself.  (I'm terrible at learning programming by doing exercises.)&#60;/p&#62;
+&#60;p&#62;Then yesterday, on Twitter, one of my DH friends said &#34;friends don't let friends program python.&#34;  What's that about?  Is it a matter of personal preference, or are there functions that we often need in DH but that python is unable to provide?  Or is there something else I need to know about it, a lurking dark secret?&#60;/p&#62;
+&#60;p&#62;And related, I guess: what programming language have you found to be the most versatile, in your DH work?
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

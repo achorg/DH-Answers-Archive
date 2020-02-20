@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Topic: Best way to create COinS or other metadata from TEI using XSLT?</title>
+		<link>http://digitalhumanities.org/answers/topic/best-way-to-create-coins-or-other-metadata-from-tei-using-xslt</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Topic: Best way to create COinS or other metadata from TEI using XSLT?</description>
+		<language>en-US</language>
+		<pubDate>Wed, 14 Sep 2016 20:41:23 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/topic/best-way-to-create-coins-or-other-metadata-from-tei-using-xslt" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>laura.mandell@gmail.com on "Best way to create COinS or other metadata from TEI using XSLT?"</title>
+						<link>http://digitalhumanities.org/answers/topic/best-way-to-create-coins-or-other-metadata-from-tei-using-xslt#post-1494</link>
+			<pubDate>Mon, 19 Dec 2011 15:49:16 +0000</pubDate>
+			<dc:creator>laura.mandell@gmail.com</dc:creator>
+			<guid isPermaLink="false">1494@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @Karin Dalziel's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/best-way-to-create-coins-or-other-metadata-from-tei-using-xslt#post-137&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;Here is what I put in my XSLT param file, from the TEI-provided xslts, in order to generate COINS metadata in HTML pages that have been generated from a TEI P5 master:&#60;/p&#62;
+&#60;p&#62;&#38;lt;!-- COINS Metadata --&#38;gt;&#60;br /&#62;
+	&#38;lt;xd:doc class=&#34;hook&#34;&#38;gt;&#60;br /&#62;
+		&#38;lt;xd:short&#38;gt;for adding COINS metadata&#38;lt;/xd:short&#38;gt;&#60;br /&#62;
+		&#38;lt;xd:detail&#38;gt;coins metadata for the edition generated at &#60;a href=&#34;http://generator.ocoins.info/.&#38;#038;lt;/xd:detail&#38;#038;gt&#34; rel=&#34;nofollow&#34;&#62;http://generator.ocoins.info/.&#38;#038;lt;/xd:detail&#38;#038;gt&#60;/a&#62;;&#60;br /&#62;
+	&#38;lt;/xd:doc&#38;gt;&#60;br /&#62;
+	&#38;lt;!-- Here is what it should look like when in the HTML:	&#38;lt;span&#60;br /&#62;
+		class=&#34;Z3988&#34;&#60;br /&#62;
+		title=&#34;ctx_ver=Z39.88-2004&#38;amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&#38;amp;rfr_id=info%3Asid%2Focoins.info%3Agenerator&#60;br /&#62;
+		&#38;amp;rft.genre=article&#38;amp;rft.atitle=TITLE&#38;amp;rft.title=Poetess+Archive%3A+The+Criticism+Archive&#38;amp;rft.stitle=PACA&#60;br /&#62;
+		&#38;amp;rft.date=2011-01-01&#38;amp;rft.aulast=AUTHORLAST&#38;amp;rft.aufirst=AUTHORFIRST&#38;amp;rft.au=AUTHORFIRST+AUTHORLAST&#38;amp;rft.au=Mary+Waters&#34;&#38;gt;&#60;br /&#62;
+		(Insert Default Text Here)&#60;br /&#62;
+		&#38;lt;/span&#38;gt;&#60;/p&#62;
+&#60;p&#62;	--&#38;gt;&#60;br /&#62;
+	&#38;lt;xsl:template name=&#34;COINS&#34;&#38;gt;&#60;br /&#62;
+		&#38;lt;xsl:variable name=&#34;TITLE&#34;&#38;gt;&#60;br /&#62;
+			&#38;lt;xsl:value-of select=&#34;normalize-space(ancestor-or-self::tei:TEI/tei:teiHeader/tei:fileDesc/tei:sourceDesc/tei:biblStruct/tei:analytic/tei:title)&#34;/&#38;gt;&#60;br /&#62;
+		&#38;lt;/xsl:variable&#38;gt;&#60;br /&#62;
+		&#38;lt;xsl:variable name=&#34;AUTHORLAST&#34;&#38;gt;&#60;br /&#62;
+			&#38;lt;xsl:value-of select=&#34;normalize-space(substring-before(ancestor-or-self::tei:TEI/tei:teiHeader/tei:fileDesc/tei:sourceDesc/tei:biblStruct/tei:analytic/tei:author/tei:name, ','))&#34;/&#38;gt;&#60;br /&#62;
+		&#38;lt;/xsl:variable&#38;gt;&#60;br /&#62;
+		&#38;lt;xsl:variable name=&#34;AUTHORFIRST&#34;&#38;gt;&#60;br /&#62;
+			&#38;lt;xsl:value-of select=&#34;normalize-space(substring-before(substring-after(ancestor-or-self::tei:TEI/tei:teiHeader/tei:fileDesc/tei:sourceDesc/tei:biblStruct/tei:analytic/tei:author/tei:name, ','), ','))&#34;/&#38;gt;&#60;br /&#62;
+		&#38;lt;/xsl:variable&#38;gt;&#60;br /&#62;
+		&#38;lt;xsl:text disable-output-escaping=&#34;yes&#34;&#38;gt;&#38;lt;![CDATA[&#38;lt;span&#60;br /&#62;
+		class=&#34;Z3988&#34;&#60;br /&#62;
+		title=&#34;ctx_ver=Z39.88-2004&#38;amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&#38;amp;rfr_id=info%3Asid%2Focoins.info%3Agenerator&#60;br /&#62;
+		&#38;amp;rft.genre=article&#38;amp;rft.atitle=]]&#38;gt;&#38;lt;/xsl:text&#38;gt;&#38;lt;xsl:value-of select=&#34;translate($TITLE, ' ', '+')&#34;/&#38;gt;&#60;br /&#62;
+		&#38;lt;xsl:text disable-output-escaping=&#34;yes&#34;&#38;gt;&#38;lt;![CDATA[&#38;amp;rft.title=Poetess+Archive%3A+The+Criticism+Archive&#38;amp;rft.stitle=PACA&#60;br /&#62;
+		&#38;amp;rft.date=]]&#38;gt;&#38;lt;/xsl:text&#38;gt;&#38;lt;xsl:value-of select=&#34;translate(normalize-space(ancestor-or-self::tei:TEI/tei:teiHeader/tei:fileDesc/tei:sourceDesc/tei:biblStruct/tei:monogr/tei:imprint/tei:date/@when), ' ', '+')&#34;/&#38;gt;&#60;br /&#62;
+		&#38;lt;xsl:text disable-output-escaping=&#34;yes&#34;&#38;gt;&#38;lt;![CDATA[&#38;amp;rft.aulast=]]&#38;gt;&#38;lt;/xsl:text&#38;gt;&#60;br /&#62;
+		&#38;lt;xsl:value-of select=&#34;translate($AUTHORLAST, ' ', '+')&#34;/&#38;gt;&#60;br /&#62;
+		&#38;lt;xsl:text disable-output-escaping=&#34;yes&#34;&#38;gt;&#38;lt;![CDATA[&#38;amp;rft.aufirst=]]&#38;gt;&#38;lt;/xsl:text&#38;gt;&#60;br /&#62;
+		&#38;lt;xsl:value-of select=&#34;translate($AUTHORFIRST, ' ', '+')&#34;/&#38;gt;&#60;br /&#62;
+		&#38;lt;xsl:text disable-output-escaping=&#34;yes&#34;&#38;gt;&#38;lt;![CDATA[&#38;amp;rft.au=]]&#38;gt;&#38;lt;/xsl:text&#38;gt;&#60;br /&#62;
+		&#38;lt;xsl:value-of select=&#34;concat($AUTHORFIRST, '+', $AUTHORLAST)&#34;/&#38;gt;&#60;br /&#62;
+		&#38;lt;xsl:text disable-output-escaping=&#34;yes&#34;&#38;gt;&#38;lt;![CDATA[&#38;amp;rft.au=Mary+Waters&#34;&#38;gt;    &#38;lt;/span&#38;gt;]]&#38;gt;&#38;lt;/xsl:text&#38;gt;&#60;br /&#62;
+	&#38;lt;/xsl:template&#38;gt;
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Patrick Murray-John on "Best way to create COinS or other metadata from TEI using XSLT?"</title>
+						<link>http://digitalhumanities.org/answers/topic/best-way-to-create-coins-or-other-metadata-from-tei-using-xslt#post-215</link>
+			<pubDate>Wed, 29 Sep 2010 10:41:52 +0000</pubDate>
+			<dc:creator>Patrick Murray-John</dc:creator>
+			<guid isPermaLink="false">215@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @Wayne Graham's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/best-way-to-create-coins-or-other-metadata-from-tei-using-xslt#post-135&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;Want to echo and reinforce Wayne's point about how the header elements are encoded. Not sure the degree to which this is others' experience, but I've seen wide variation there. I'm guessing that you might need to spend some time understanding the original encoding as you move to producing those mappings. Hopefully the info to guide you will be there in the encoding description. &#60;/p&#62;
+&#60;p&#62;Good luck!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Dorothea Salo on "Best way to create COinS or other metadata from TEI using XSLT?"</title>
+						<link>http://digitalhumanities.org/answers/topic/best-way-to-create-coins-or-other-metadata-from-tei-using-xslt#post-199</link>
+			<pubDate>Wed, 29 Sep 2010 09:30:55 +0000</pubDate>
+			<dc:creator>Dorothea Salo</dc:creator>
+			<guid isPermaLink="false">199@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;COinS is awful because OpenURL is awful, but it works. Something else you might want to look at is &#60;a href=&#34;http://research.talis.com/2005/erdf/wiki/Main/RdfInHtml&#34;&#62;embedded RDF&#60;/a&#62;.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>unsworth on "Best way to create COinS or other metadata from TEI using XSLT?"</title>
+						<link>http://digitalhumanities.org/answers/topic/best-way-to-create-coins-or-other-metadata-from-tei-using-xslt#post-139</link>
+			<pubDate>Fri, 24 Sep 2010 01:05:26 +0000</pubDate>
+			<dc:creator>unsworth</dc:creator>
+			<guid isPermaLink="false">139@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @Karin Dalziel's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/best-way-to-create-coins-or-other-metadata-from-tei-using-xslt#post-137&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;Coins is what you want if you aim to integrate with Zotero. Or park on the street in Chicago.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Karin Dalziel on "Best way to create COinS or other metadata from TEI using XSLT?"</title>
+						<link>http://digitalhumanities.org/answers/topic/best-way-to-create-coins-or-other-metadata-from-tei-using-xslt#post-137</link>
+			<pubDate>Thu, 23 Sep 2010 17:23:19 +0000</pubDate>
+			<dc:creator>Karin Dalziel</dc:creator>
+			<guid isPermaLink="false">137@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;We are using TEI P4 or P5 (depending on the age of the file), and the Saxon 9 processor (the free one, is that 9b?) I think the method you described will work- I'll give it a try.&#60;/p&#62;
+&#60;p&#62;Followup question: is COinS still the recommended data format for adding metadata of items to pages?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Wayne Graham on "Best way to create COinS or other metadata from TEI using XSLT?"</title>
+						<link>http://digitalhumanities.org/answers/topic/best-way-to-create-coins-or-other-metadata-from-tei-using-xslt#post-136</link>
+			<pubDate>Thu, 23 Sep 2010 14:56:15 +0000</pubDate>
+			<dc:creator>Wayne Graham</dc:creator>
+			<guid isPermaLink="false">136@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;BTW, if you don't have URL encoding available on the processor, check out this xslt &#60;a href=&#34;http://skew.org/xml/stylesheets/url-encode/url-encode.xsl&#34; rel=&#34;nofollow&#34;&#62;http://skew.org/xml/stylesheets/url-encode/url-encode.xsl&#60;/a&#62;
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Wayne Graham on "Best way to create COinS or other metadata from TEI using XSLT?"</title>
+						<link>http://digitalhumanities.org/answers/topic/best-way-to-create-coins-or-other-metadata-from-tei-using-xslt#post-135</link>
+			<pubDate>Thu, 23 Sep 2010 14:50:44 +0000</pubDate>
+			<dc:creator>Wayne Graham</dc:creator>
+			<guid isPermaLink="false">135@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I would definitely categorize this as a programming question; the metadata is there, now you want to do something else with it.&#60;/p&#62;
+&#60;p&#62;The answer is, well, it depends. Really this depends on what version of TEI you're using and how the header elements are encoded. The &#34;hard&#34; part of this is really encoding the special characters contained in the text (spaces, etc.). There is, however, a nice function (I believe it's in Saxon) named url:encode(string). &#60;/p&#62;
+&#60;p&#62;As an approach, take the fields you want to provide to the z39.88 standard (&#60;a href=&#34;http://ocoins.info/&#34; rel=&#34;nofollow&#34;&#62;http://ocoins.info/&#60;/a&#62;) and assign them in to key-value pairs (e.g. &#38;lt;xsl:variable name=&#34;btitle&#34; value=&#34;/TEI.2/teiHeader/fileDesc/titleStmt/title&#34; /&#38;gt; and string them together in your span element that is nested somewhere in your HTML body element:&#60;/p&#62;
+&#60;p&#62;&#38;lt;span class=&#34;Z3988&#34; title=&#34;url:encode($btitle...)&#34; /&#38;gt;&#60;/p&#62;
+&#60;p&#62;Knowing more about the TEI version, and which XSLT processor you're using would also help.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Karin Dalziel on "Best way to create COinS or other metadata from TEI using XSLT?"</title>
+						<link>http://digitalhumanities.org/answers/topic/best-way-to-create-coins-or-other-metadata-from-tei-using-xslt#post-134</link>
+			<pubDate>Thu, 23 Sep 2010 12:31:50 +0000</pubDate>
+			<dc:creator>Karin Dalziel</dc:creator>
+			<guid isPermaLink="false">134@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I feel way behind in this area. I have successfully used XSLT to insert in Dublin Core metadata into the header of an HTML page, but I would like to support multiple resources, etc. From looking around, it seems the best format to use is COinS, but the format is a bit more, er, obtuse than dublin core. &#60;/p&#62;
+&#60;p&#62;Has anyone done this? care to share some sample XSLT? Am I going about this all wrong?&#60;/p&#62;
+&#60;p&#62;(Also, I debated whether this should go in metadata or programming. Feel free to chime in on that as well)
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

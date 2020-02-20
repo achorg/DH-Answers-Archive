@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Topic: Sync MAMP Install Over Multiple Macs</title>
+		<link>http://digitalhumanities.org/answers/topic/sync-mamp-install-over-multiple-macs</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Topic: Sync MAMP Install Over Multiple Macs</description>
+		<language>en-US</language>
+		<pubDate>Mon, 04 May 2015 04:37:26 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/topic/sync-mamp-install-over-multiple-macs" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>Wayne Graham on "Sync MAMP Install Over Multiple Macs"</title>
+						<link>http://digitalhumanities.org/answers/topic/sync-mamp-install-over-multiple-macs#post-85</link>
+			<pubDate>Mon, 20 Sep 2010 20:10:51 +0000</pubDate>
+			<dc:creator>Wayne Graham</dc:creator>
+			<guid isPermaLink="false">85@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I'm not aware of an &#34;easy&#34; way to do this, but I've used rsync to achieve this in the past, but there are a lot of permission issues to work with the data. &#60;/p&#62;
+&#60;p&#62;There's another way too; there's a ruby gem that can help these sync issues called taps (&#60;a href=&#34;http://rubygems.org/gems/taps&#34; rel=&#34;nofollow&#34;&#62;http://rubygems.org/gems/taps&#60;/a&#62;) which is used by the awesome folks at heroku to sync your database with the one in production. You could set up a script that would do something along these lines on each of the servers running mysql:&#60;/p&#62;
+&#60;p&#62;taps server mysql://localdbuser:localdbpass@localhost/dbname?encoding=latin1 httpuser httppassword&#60;/p&#62;
+&#60;p&#62;Then, to pull the copy of the database, you can do this:&#60;/p&#62;
+&#60;p&#62;taps pull mysql://localdbuser:localdbpass@localhost/dbname &#60;a href=&#34;http://httpuser:httppassword@example.com:5000&#34; rel=&#34;nofollow&#34;&#62;http://httpuser:httppassword@example.com:5000&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;and push your updates&#60;/p&#62;
+&#60;p&#62;taps push &#60;a href=&#34;http://httpuser:httppassword@example.com:5000&#34; rel=&#34;nofollow&#34;&#62;http://httpuser:httppassword@example.com:5000&#60;/a&#62; &#60;a href=&#34;http://httpuser:httppassword@example.com:5000&#34; rel=&#34;nofollow&#34;&#62;http://httpuser:httppassword@example.com:5000&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;If you've not run any ruby stuff on your mac, make sure you update rubygems before you try this out with&#60;/p&#62;
+&#60;p&#62;sudo gem update --system&#60;/p&#62;
+&#60;p&#62;Then install the taps gems with&#60;/p&#62;
+&#60;p&#62;sudo gem install taps
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Meagan Timney on "Sync MAMP Install Over Multiple Macs"</title>
+						<link>http://digitalhumanities.org/answers/topic/sync-mamp-install-over-multiple-macs#post-81</link>
+			<pubDate>Mon, 20 Sep 2010 15:15:29 +0000</pubDate>
+			<dc:creator>Meagan Timney</dc:creator>
+			<guid isPermaLink="false">81@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I have MAMP Pro installed on three computers: one at work and two at home.  I'd like to be able to keep my MAMP installs synced.  Is there a way to sync the databases (using dropbox, perhaps)?
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

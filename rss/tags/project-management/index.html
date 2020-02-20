@@ -1,0 +1,345 @@
+<?
+/*
+Plugin Name: bb Topic Icons
+Plugin URI: http://devt.caffeinatedbliss.com/bbpress/topic-icons
+Description: Adds configurable icons next to topics based on their status
+Author: Paul Hawke
+Author URI: http://paul.caffeinatedbliss.com/
+Version: 0.6
+*/
+
+/****************************************************************************
+ *
+ * Configure the following constants to fine-tune the CSS classes that are
+ * generated, the icon filenames that are used, and the text used in the
+ * legend (if you have one displayed).  Note: filenames are likely to be
+ * taken away in a future version and replaced with the concept of "icon sets"
+ * whose filenames are fixed, so dont get used to editing the filenames,
+ * as this will break in future versions.
+ *
+ ****************************************************************************/
+
+// css class for the unsorted list used in the legend display
+define( LEGEND_CLASS, 'topic_icon_legend' );
+
+// busy threshold - a topic with more posts than this is counted as "busy"
+// for purposes of picking an icon.
+define( BUSY_THRESHOLD, 15 );
+
+// width of the images, in pixels
+define( ICON_WIDTH, '20' );
+
+// height of the images, in pixels
+define( ICON_HEIGHT, '20' );
+
+// the URL base for where to find the default icon set.
+define( ICON_SET_URL_BASE, BB_PLUGIN_URL.'bb-topic-icons/icon-sets/' );
+
+/****************************************************************************
+ *
+ * Shouldnt be much need to edit anything beyond this point - configuration
+ * is all done via the constants (above) and through and admin area page in
+ * bbPress at runtime.
+ *
+ ****************************************************************************/
+
+require( 'bb-topic-icons-api.php' );
+require( 'bb-topic-icons-admin.php' );
+require( 'interface.status-interpreter.php' );
+require( 'interface.status-renderer.php' );
+require( 'class.default-status-interpreter.php' );
+require( 'class.default-status-renderer.php' );
+
+function topic_icons_legend() {
+	$icon_set_name = topic_icons_get_active_icon_set();
+	$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+	$statuses = get_active_status_interpreter()->getAllStatuses();
+	$renderer = get_active_status_renderer();
+	
+	echo '<ul id="'.LEGEND_CLASS.'">';
+	for ($i=0; $i < count($statuses); $i++) {
+		$image = $renderer->renderStatus($statuses[$i]);
+		$tooltip = $renderer->renderStatusTooltip($statuses[$i]);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (isset($image) && strlen($image) > 0 &&
+			isset($tooltip) && strlen($tooltip) > 0 && $exists) {
+			echo '<li><img src="'.$icon_set_url.'/'.$image.
+				'" width="'.ICON_WIDTH.'" height="'.ICON_HEIGHT.
+				'" align="absmiddle">&nbsp;'.$tooltip.'</li>';
+		}
+	}
+	echo '</ul>';
+}
+
+function topic_icons_css() {
+	echo "\n<style type=\"text/css\"><!--\n";
+	require( 'bb-topic-icons.css' );
+	echo "\n--></style>";
+}
+
+function topic_icons_label( $label ) {
+	global $topic;
+	
+	if (bb_is_front() || bb_is_forum() || bb_is_view() || bb_is_tag()) {		
+		$icon_set_name = topic_icons_get_active_icon_set();
+		$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+
+		$status = get_active_status_interpreter()->getStatus(bb_get_location(), $topic);
+		$renderer = get_active_status_renderer();
+		$image = $renderer->renderStatus($status);
+		$tooltip = $renderer->renderStatusTooltip($status);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (!$exists) {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), ICON_SET_URL_BASE.'/empty.png', ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		} else if (strlen($tooltip) > 0) {		
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"><span>%s</span></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $tooltip, $label);
+		} else {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		}
+	}
+	
+	return $label;
+}
+
+function topic_icons_init( ) {
+	remove_filter('bb_topic_labels', 'bb_closed_label', 10);
+	remove_filter('bb_topic_labels', 'bb_sticky_label', 20);
+
+	add_filter('bb_topic_labels', 'topic_icons_label', 11);
+
+	add_action('bb_head', 'topic_icons_css');
+
+	add_action('bb_admin_menu_generator', 'topic_icons_admin_page_add');
+	add_action('bb_admin-header.php', 'topic_icons_admin_page_process');
+	
+	topic_icons_register_status_interpreter('default', new DefaultStatusInterpreter(BUSY_THRESHOLD));
+	topic_icons_register_status_renderer('default', new DefaultStatusRenderer());
+}
+
+topic_icons_init();
+
+?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Tag: project management - Recent Posts</title>
+		<link>http://digitalhumanities.org/answers/tags/project-management</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Tag: project management - Recent Posts</description>
+		<language>en-US</language>
+		<pubDate>Sun, 24 Mar 2019 17:09:08 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/tags/project-management" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>Arno Bosse on "Best DH project-management system?"</title>
+						<link>http://digitalhumanities.org/answers/topic/best-dh-project-management-system#post-2336</link>
+			<pubDate>Mon, 22 Jun 2015 09:04:20 +0000</pubDate>
+			<dc:creator>Arno Bosse</dc:creator>
+			<guid isPermaLink="false">2336@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Returning to this since there are now a lot (and when I say &#34;a lot&#34;... &#60;a href=&#34;https://en.wikipedia.org/wiki/Comparison_of_project_management_software)&#34; rel=&#34;nofollow&#34;&#62;https://en.wikipedia.org/wiki/Comparison_of_project_management_software)&#60;/a&#62; of web-based options for project management out there.&#60;/p&#62;
+&#60;p&#62;I've started testing Active Collab (&#60;a href=&#34;https://www.activecollab.com/features.html&#34; rel=&#34;nofollow&#34;&#62;https://www.activecollab.com/features.html&#60;/a&#62;) and would be grateful for feedback from anyone else who has used this. I'd also love to hear about first hand experience with other alternatives now that 4 years have passed since the question was first posted.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>ebuhe on "Feedback on Digital Humanities Best Practices document"</title>
+						<link>http://digitalhumanities.org/answers/topic/feedback-on-digital-humanities-best-practices-document#post-2306</link>
+			<pubDate>Sun, 22 Mar 2015 00:51:16 +0000</pubDate>
+			<dc:creator>ebuhe</dc:creator>
+			<guid isPermaLink="false">2306@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I'm working on a Digital Humanities Best Practices document that would serve as a list of questions humanities scholars could ask themselves as they get started on a collaborative project--something that is widely applicable, accessible, and quick and easy to read (meaning: not written in prose, not one person's reflections about their DH experience, not behind a paywall). The scope is specifically geared toward setting expectations and the issues to consider including in a charter / contract.&#60;/p&#62;
+&#60;p&#62;It currently exists as an editable document on Google Drive -- and I'd love feedback!! What's missing, what's too broad/specific? Other great links to share? I'd especially like thoughts on integrating language re: open source, creative commons, code.&#60;/p&#62;
+&#60;p&#62;Here's the link:&#60;br /&#62;
+&#60;a href=&#34;http://www.nyu.edu/gsas/dept/fineart/research/digital-humanities-best-practices.htm&#34; rel=&#34;nofollow&#34;&#62;http://www.nyu.edu/gsas/dept/fineart/research/digital-humanities-best-practices.htm&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;Thanks!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Ryan Cordell on "Founding staff for a new DH Center?"</title>
+						<link>http://digitalhumanities.org/answers/topic/founding-staff-for-a-new-dh-center#post-1607</link>
+			<pubDate>Wed, 18 Apr 2012 01:10:47 +0000</pubDate>
+			<dc:creator>Ryan Cordell</dc:creator>
+			<guid isPermaLink="false">1607@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='http://digitalhumanities.org/answers/profile/hopegreenberg'&#62;hopegreenberg&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/founding-staff-for-a-new-dh-center#post-1606&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;That's an excellent idea, Hope. We will also work to build partnerships with the library. It's not yet clear where our center will be located in the library; if so, we'll be close to the EdTech Center (&#60;a href=&#34;http://www.northeastern.edu/edtech/)&#34; rel=&#34;nofollow&#34;&#62;http://www.northeastern.edu/edtech/)&#60;/a&#62;.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>hopegreenberg on "Founding staff for a new DH Center?"</title>
+						<link>http://digitalhumanities.org/answers/topic/founding-staff-for-a-new-dh-center#post-1606</link>
+			<pubDate>Tue, 17 Apr 2012 20:56:17 +0000</pubDate>
+			<dc:creator>hopegreenberg</dc:creator>
+			<guid isPermaLink="false">1606@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Here's another angle: Northeastern has, I believe, an Academic Technologies group and a Center for Teaching and Learning. There might be some opportunities there for collaboration on aspects of integrating digital humanities projects into the classroom and curriculum.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Ryan Cordell on "Founding staff for a new DH Center?"</title>
+						<link>http://digitalhumanities.org/answers/topic/founding-staff-for-a-new-dh-center#post-1605</link>
+			<pubDate>Tue, 17 Apr 2012 20:38:42 +0000</pubDate>
+			<dc:creator>Ryan Cordell</dc:creator>
+			<guid isPermaLink="false">1605@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Thank you for these detailed suggestions, Brian and Hugh. Your very practical suggestions will help us craft a clear plan next year--and I hope I can continue to bend your ears though the year. &#60;/p&#62;
+&#60;p&#62;One question: do either of you have CS faculty working with your centers? There will be several CS faculty (including one new hire specifically hired for the center) actively involved in ours, and I wonder if that shifts priorities at all--or simply complicates them!&#60;/p&#62;
+&#60;p&#62;--Ryan
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Hugh Cayless on "Founding staff for a new DH Center?"</title>
+						<link>http://digitalhumanities.org/answers/topic/founding-staff-for-a-new-dh-center#post-1604</link>
+			<pubDate>Tue, 17 Apr 2012 14:13:49 +0000</pubDate>
+			<dc:creator>Hugh Cayless</dc:creator>
+			<guid isPermaLink="false">1604@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Just a couple more thoughts to follow up to Brian's good observations:&#60;/p&#62;
+&#60;p&#62;Ultimately, you'll have to do what you can with the resources you have available, so don't be paralyzed if you don't start out with enough funding to hire a good core staff, but do realize that a steady buildup is better than cycles of boom and bust.&#60;/p&#62;
+&#60;p&#62;It is *really* hard to hire good developers, so realize that a search might take you months. This can seriously affect progress on grant-funded projects, incidentally. On the one I'm currently working on, it took us 6 months to hire a second developer, meaning we had to get an extension and parts of the project had to happen out of sync.&#60;/p&#62;
+&#60;p&#62;I realize I left out another function: software architect. Ideally, before your codebase gets too big, you'll have someone who knows how all the diverse pieces of your codebase go together and can make plans for it at a higher level. This person can (and probably should) be a programmer, but it is a distinct function.&#60;/p&#62;
+&#60;p&#62;And finally, I'd say that you'll reap long term benefits if you can give your technical staff their own research time. Again, administrators may have a hard time getting this, but a) more talented people will want to work with you if you give them some scope to do their own thing, and b) they will make cool things for you.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>briancroxall on "Founding staff for a new DH Center?"</title>
+						<link>http://digitalhumanities.org/answers/topic/founding-staff-for-a-new-dh-center#post-1603</link>
+			<pubDate>Tue, 17 Apr 2012 13:40:10 +0000</pubDate>
+			<dc:creator>briancroxall</dc:creator>
+			<guid isPermaLink="false">1603@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I'm not sure that I can add much to the really useful advice Hugh has already given. But I'll give some different +1s to what he's said.&#60;/p&#62;
+&#60;p&#62;First, you do yourself a great disservice if you plan to rely on temporary labor. Undergraduates, graduate students, and post-docs can bring energy and new ideas to a space, but the loss of them after a year or two means you'll constantly be rebuilding. As much as possible, you want to make an argument that you need a few permanent people to help build momentum. I'd rather have one permanent position than four full-time post-docs. What &#34;permanent&#34; means will of course vary by your institution, but if you want to build something you need to be sure that you will have someone there to run it in a few years. &#60;/p&#62;
+&#60;p&#62;I'll also agree that a developer is a great place to start. Project managers are useful, but most academics already have experience managing projects. You can get by without someone dedicated to this work in the beginning. On the other hand, if you don't have someone who can help realize the vision of the projects you're working on, you'll be stuck trying to borrow expertise from other sectors of the organization. &#60;/p&#62;
+&#60;p&#62;Also, don't assume that a programmer is the same thing as a server administrator. You will need someplace to develop / stage / host eventual projects, and it's nowhere near as easy as running your own WordPress site. Getting someone--or part of someone's time--who can help you manage this infrastructure will serve to grease the wheels on all the different work you end up doing.&#60;/p&#62;
+&#60;p&#62;Remember that being able to continue making the case to administrators and departments that your center should exist and be funded will for the most part depend on your being able to get work out the door. With that as the imperative, make sure you hire the people that will actually help you get something done. It need not be the biggest, best, or flashiest thing the world has ever seen, but at the end of the day, it needs to work, be stable, and be interesting.&#60;/p&#62;
+&#60;p&#62;Is there room in the plan for some of the affiliated faculty to be given course releases for the work that they will do? That will help create some solid continuity in the center.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Hugh Cayless on "Founding staff for a new DH Center?"</title>
+						<link>http://digitalhumanities.org/answers/topic/founding-staff-for-a-new-dh-center#post-1602</link>
+			<pubDate>Tue, 17 Apr 2012 00:13:57 +0000</pubDate>
+			<dc:creator>Hugh Cayless</dc:creator>
+			<guid isPermaLink="false">1602@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='http://digitalhumanities.org/answers/profile/ryan'&#62;Ryan&#60;/a&#62; Cordell's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/founding-staff-for-a-new-dh-center#post-1601&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;Well, really, you need staff who can fill all of those roles. You will get some coverage from students and (probably) from grant-funded projects, but you should plan for, and try hard to get, a core staff who can handle programming, project management, design, consulting, and grant writing. At this early stage, you should probably aim for people who can wear more than one of these hats. Specialization can come later when you've grown. Who you start with should probably depend on the mix of projects and skills you'll have on board at the start, but a programmer with some design chops (or vice versa) is probably a higher priority than a project manager at the outset. What system resources you'll have available is another important question, and may dictate what you're able to do. You may need a sysadmin too.&#60;/p&#62;
+&#60;p&#62;This is all really an exercise in risk management. If you don't have a solid core of people, on hard money, then you will always be one proposal rejection away from losing big chunks of your brain trust. Likewise, if you rely on students/postdocs, you will shed knowledge when they leave. &#60;/p&#62;
+&#60;p&#62;You can, on the other hand, grow much faster and get more done faster by relying on students, postdocs, and grant money, but if you're relying on these to service core functions, then you're committing to spending a lot of your time on the treadmill (running fast, but not making forward progress). You may spend years where you don't get much done at all, and ultimately this risk makes your unit more vulnerable to being taken over or shut down.&#60;/p&#62;
+&#60;p&#62;More food for thought: Good programmers are expensive—as expensive or more expensive than Humanities faculty in fact. People (like myself :-) are generally willing to take a pay cut in exchange for the often superior working conditions offered by academia, but you won't be doing yourself any favors by under-budgeting positions. You can save money by assigning the programming function to students, postdocs, or people on soft money, but you will be taking on the risk of accumulating too much technical debt by not having a long-term vision for and management of your codebase. You might end up with a pile of un-maintainable code, stuff that breaks when you upgrade components, etc. One thing to consider when recruiting technical staff is whether you'll allow them to work remotely. You do lose having daily face-to-face interactions, but you gain access to a much larger talent pool for less money. And you can always bring people in for meetings every so often. Make sure you budget for professional development for your staff. They are your collaborators, not your minions. This can be a hard sell to administrators, but technical people whose skills are stagnating will either leave (the *good* ones will leave) or become less and less effective over time.&#60;/p&#62;
+&#60;p&#62;Hope this helps!&#60;/p&#62;
+&#60;p&#62;Hugh
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Ryan Cordell on "Founding staff for a new DH Center?"</title>
+						<link>http://digitalhumanities.org/answers/topic/founding-staff-for-a-new-dh-center#post-1601</link>
+			<pubDate>Mon, 16 Apr 2012 23:13:25 +0000</pubDate>
+			<dc:creator>Ryan Cordell</dc:creator>
+			<guid isPermaLink="false">1601@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;This fall I will join a group of faculty starting a new center for digital humanities and computational social sciences at Northeastern University. We should have physical space by fall, but next year will be primarily a planning year. We will have a few founding projects: mostly projects already underway that will be federated under the banner of the new center. The founding faculty come from English, History, Political Science, and Computer Science, and there's significant overlap of intellectual interest that should generate collaboration among those faculty. There's also a pool of post-docs in computational social science who will be associated with the center and may be able to provide some project support for affiliated faculty. &#60;/p&#62;
+&#60;p&#62;The new center also has rhetorical support from the dean, president, and other administrators. Right now we're developing priorities for our initial budget request, and we'll soon know how that rhetorical support translates into resources. I do expect that we'll have to grow slowly, perhaps by a position or two each year. If you were charged with such a task--as perhaps you have been--what would be your priorities--especially in terms of staffing the center--in the first year? Would you most want a project manager? Designer? Programmer? I realize of course that all of these positions &#60;em&#62;should&#60;/em&#62; be filled immediately, but I'm trying to think strategically in case that's not possible.&#60;/p&#62;
+&#60;p&#62;Thanks for your help, friends. All suggestions are most welcome.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Ethan Gruber on "Tips on performing an environmental scan?"</title>
+						<link>http://digitalhumanities.org/answers/topic/tips-on-performing-an-environmental-scan#post-1598</link>
+			<pubDate>Thu, 12 Apr 2012 03:09:24 +0000</pubDate>
+			<dc:creator>Ethan Gruber</dc:creator>
+			<guid isPermaLink="false">1598@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;This is an issue I have come up against on several occasions recently with metadata standards, particularly linked data ontologies.  My first instinct is to use standards that already exist rather than creating my own ontology to describe concepts.  RDF is so open-ended and flexible that there are an infinite number of ways to do anything, and ontologies are often poorly published.  It would be great if there was a single location that indexed ontologies and metadata standards, making it easier to choose one that suits my needs.  Currently I use Google and ask code4lib.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Miriam Posner on "Tips on performing an environmental scan?"</title>
+						<link>http://digitalhumanities.org/answers/topic/tips-on-performing-an-environmental-scan#post-1582</link>
+			<pubDate>Tue, 03 Apr 2012 23:53:46 +0000</pubDate>
+			<dc:creator>Miriam Posner</dc:creator>
+			<guid isPermaLink="false">1582@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @Arno Bosse's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/tips-on-performing-an-environmental-scan#post-1575&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;br /&#62;
+Arno, I just saw this — thank you, that's very helpful. Do you think enough people are even citing enough digital resources to make that technique useful? Maybe they are! I'll have to give that a shot. I love your idea, too, of searching through the ADHO conference abstracts. Definitely using that one!&#60;/p&#62;
+&#60;p&#62;Miriam
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Arno Bosse on "Tips on performing an environmental scan?"</title>
+						<link>http://digitalhumanities.org/answers/topic/tips-on-performing-an-environmental-scan#post-1575</link>
+			<pubDate>Thu, 22 Mar 2012 18:30:37 +0000</pubDate>
+			<dc:creator>Arno Bosse</dc:creator>
+			<guid isPermaLink="false">1575@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;This definitely is a hard task for someone new to DH (and even those with a lot of DH experience, if the disciplinary leap is large). You've already mentioned a lot of excellent places to look. Two other places to include in this list might be the NEH's own &#60;a href=&#34;https://securegrants.neh.gov/publicquery/main.aspx&#34;&#62;database of past grant awards&#60;/a&#62; and the ADHO &#60;a href=&#34;http://67.207.129.15:8080/dh-abstracts/search&#34;&#62;database of past DH conference abstracts&#60;/a&#62; where such tools &#38;amp; resources could have been presented (with the not insignificant benefit of additional context).&#60;/p&#62;
+&#60;p&#62;I wonder though, if in the end, it might not be necessary to also approach this problem orthogonally, and search for citations &#38;amp; references to digital tools &#38;amp; resources in full text academic publication databases such as WorldCat or Google Scholar. That way you can see (with caveats, obviously) who is citing and using a resource. These will likely be the more established, respected and widely-used digital resources - precisely the kinds of resources (I am assuming) one would not want to inadvertently overlook. &#60;/p&#62;
+&#60;p&#62;The biggest difficulty I have with projects such as arts-humanities.net or Bamboo DiRT is that in their perfectly understandable, even necessary, desire to categorize the many available resources on the internet they flatten out and over-simplify the reasons that led to a tool or resource being used (or not used) by teachers/researchers or use categories that are predominantly technical and not closely linked to specific disciplinary practice. In addition, the best tools, which often end up being the best documented tools (via manuals, blog entries, screencasts, howtos, blog entries, reviews..etc) catalog themselves, via Google. &#60;/p&#62;
+&#60;p&#62;So sure, I'd have the students look at DiRT, at arts-humanities.net and the grant and conference databases, but if possible, I'd also combine this with an attempt to find out what researchers are talking about, what's being cited, what's being used - and try to discover this by deliberately looking in venues that track traditional modes of publication.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>quinnanya on "Tips on performing an environmental scan?"</title>
+						<link>http://digitalhumanities.org/answers/topic/tips-on-performing-an-environmental-scan#post-1568</link>
+			<pubDate>Mon, 19 Mar 2012 14:03:00 +0000</pubDate>
+			<dc:creator>quinnanya</dc:creator>
+			<guid isPermaLink="false">1568@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @Miriam Posner's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/tips-on-performing-an-environmental-scan#post-1566&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;br /&#62;
+This may be more circular than helpful, but we're working on integrating DHCommons and Bamboo DiRT so that projects that use a given tool appear on that tool's profile in DiRT, and information about the tools (pulled from DiRT) is available when you're browsing DHCommons projects by tool. &#60;/p&#62;
+&#60;p&#62;That said, if there's ways we could improve either DHCommons and/or Bamboo DiRT to make it easier for for people to conduct an environmental scan, please let us know.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Miriam Posner on "Tips on performing an environmental scan?"</title>
+						<link>http://digitalhumanities.org/answers/topic/tips-on-performing-an-environmental-scan#post-1566</link>
+			<pubDate>Fri, 16 Mar 2012 18:54:29 +0000</pubDate>
+			<dc:creator>Miriam Posner</dc:creator>
+			<guid isPermaLink="false">1566@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Those of you who have initiated DH projects are, I'm sure, familiar with the environmental scan, in which one surveys existing projects, both to make sure someone hasn't already done what you're about to do and to see if others have developed technology on which you might build. It's a big part of &#60;a href=&#34;http://www.neh.gov/grants/guidelines/digitalhumanitiesstartup.html#howto&#34;&#62;NEH Office of Digital Humanities start-up grants&#60;/a&#62; (as well as just generally good practice).&#60;/p&#62;
+&#60;p&#62;At UCLA, we've been asking our grad students to do environmental scans as part of their final projects, and I've noticed that this can pose a challenge for some of them. Here are the challenges, as I see them:&#60;/p&#62;
+&#60;ul&#62;
+&#60;li&#62;Students have trouble surveying projects outside their home discipline (e.g., art history projects that may be relevant to students in literature).&#60;/li&#62;
+&#60;li&#62;Before they've embarked on the &#34;building&#34; part of their projects, students have trouble understanding what kinds of technology might be relevant to what they're doing (e.g., understanding that what they're about to do is a network visualization).&#60;/li&#62;
+&#60;li&#62;The number of potentially relevant projects is overwhelming.&#60;/li&#62;
+&#60;/ul&#62;
+&#60;p&#62;I'm thinking of ways I can help them overcome these challenges. So far, this is what I've come up with:&#60;/p&#62;
+&#60;ul&#62;
+&#60;li&#62;Check various directories of projects (e.g., &#60;a href=&#34;http://arts-humanities.net/project&#34;&#62;arts-humanities.net&#60;/a&#62;, &#60;a href=&#34;http://dirt.projectbamboo.org/&#34;&#62;DiRT&#60;/a&#62;, &#60;a href=&#34;http://spatial.scholarslab.org/&#34;&#62;Spatial Humanities&#60;/a&#62;, &#60;a href=&#34;http://dhcommons.org/&#34;&#62;DH Commons&#60;/a&#62;). Still, this can be confusing, because it can be hard for students to tell what they should be looking for.&#60;/li&#62;
+&#60;li&#62;Ask! Tweet, ask at DH Answers, ask me, ask librarians. However, when the project is in its infancy, it can be difficult for them to articulate it to others.&#60;/li&#62;
+&#60;/ul&#62;
+&#60;p&#62;Those of you who have completed many projects: Do you have an informal checklist that you run through when you embark on something new? What else might I tell these students?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Ethan Gruber on "What would your dream DH apprenticeship opportunity involve?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-would-your-dream-dh-apprenticeship-opportunity-involve#post-1211</link>
+			<pubDate>Tue, 14 Jun 2011 13:28:36 +0000</pubDate>
+			<dc:creator>Ethan Gruber</dc:creator>
+			<guid isPermaLink="false">1211@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;My dream apprenticeship would involve little or no web development.  Programming is useful in the digital humanities, but it is important to keep in mind that code isn't restricted to publishing on the web.  I know computer scientists who have made extraordinary contributions to the humanities without writing a single line of HTML or CSS.  If the Scholars' Lab seeks to bring computer science students into the fold, they need to be attracted by challenging problems (i.e., not web design).  This could include optical recognition of 3D geometry, quantitative analysis of massive volumes of humanities or social sciences data (not just text, but that could be a start), or augmented reality.  &#60;/p&#62;
+&#60;p&#62;Looking back on my own career development, I wish I had learned information architecture a lot sooner: semantically correct ways of representing information and learning how information systems interact with one another.  And linked data.
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

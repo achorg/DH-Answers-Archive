@@ -1,0 +1,321 @@
+<?
+/*
+Plugin Name: bb Topic Icons
+Plugin URI: http://devt.caffeinatedbliss.com/bbpress/topic-icons
+Description: Adds configurable icons next to topics based on their status
+Author: Paul Hawke
+Author URI: http://paul.caffeinatedbliss.com/
+Version: 0.6
+*/
+
+/****************************************************************************
+ *
+ * Configure the following constants to fine-tune the CSS classes that are
+ * generated, the icon filenames that are used, and the text used in the
+ * legend (if you have one displayed).  Note: filenames are likely to be
+ * taken away in a future version and replaced with the concept of "icon sets"
+ * whose filenames are fixed, so dont get used to editing the filenames,
+ * as this will break in future versions.
+ *
+ ****************************************************************************/
+
+// css class for the unsorted list used in the legend display
+define( LEGEND_CLASS, 'topic_icon_legend' );
+
+// busy threshold - a topic with more posts than this is counted as "busy"
+// for purposes of picking an icon.
+define( BUSY_THRESHOLD, 15 );
+
+// width of the images, in pixels
+define( ICON_WIDTH, '20' );
+
+// height of the images, in pixels
+define( ICON_HEIGHT, '20' );
+
+// the URL base for where to find the default icon set.
+define( ICON_SET_URL_BASE, BB_PLUGIN_URL.'bb-topic-icons/icon-sets/' );
+
+/****************************************************************************
+ *
+ * Shouldnt be much need to edit anything beyond this point - configuration
+ * is all done via the constants (above) and through and admin area page in
+ * bbPress at runtime.
+ *
+ ****************************************************************************/
+
+require( 'bb-topic-icons-api.php' );
+require( 'bb-topic-icons-admin.php' );
+require( 'interface.status-interpreter.php' );
+require( 'interface.status-renderer.php' );
+require( 'class.default-status-interpreter.php' );
+require( 'class.default-status-renderer.php' );
+
+function topic_icons_legend() {
+	$icon_set_name = topic_icons_get_active_icon_set();
+	$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+	$statuses = get_active_status_interpreter()->getAllStatuses();
+	$renderer = get_active_status_renderer();
+	
+	echo '<ul id="'.LEGEND_CLASS.'">';
+	for ($i=0; $i < count($statuses); $i++) {
+		$image = $renderer->renderStatus($statuses[$i]);
+		$tooltip = $renderer->renderStatusTooltip($statuses[$i]);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (isset($image) && strlen($image) > 0 &&
+			isset($tooltip) && strlen($tooltip) > 0 && $exists) {
+			echo '<li><img src="'.$icon_set_url.'/'.$image.
+				'" width="'.ICON_WIDTH.'" height="'.ICON_HEIGHT.
+				'" align="absmiddle">&nbsp;'.$tooltip.'</li>';
+		}
+	}
+	echo '</ul>';
+}
+
+function topic_icons_css() {
+	echo "\n<style type=\"text/css\"><!--\n";
+	require( 'bb-topic-icons.css' );
+	echo "\n--></style>";
+}
+
+function topic_icons_label( $label ) {
+	global $topic;
+	
+	if (bb_is_front() || bb_is_forum() || bb_is_view() || bb_is_tag()) {		
+		$icon_set_name = topic_icons_get_active_icon_set();
+		$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+
+		$status = get_active_status_interpreter()->getStatus(bb_get_location(), $topic);
+		$renderer = get_active_status_renderer();
+		$image = $renderer->renderStatus($status);
+		$tooltip = $renderer->renderStatusTooltip($status);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (!$exists) {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), ICON_SET_URL_BASE.'/empty.png', ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		} else if (strlen($tooltip) > 0) {		
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"><span>%s</span></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $tooltip, $label);
+		} else {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		}
+	}
+	
+	return $label;
+}
+
+function topic_icons_init( ) {
+	remove_filter('bb_topic_labels', 'bb_closed_label', 10);
+	remove_filter('bb_topic_labels', 'bb_sticky_label', 20);
+
+	add_filter('bb_topic_labels', 'topic_icons_label', 11);
+
+	add_action('bb_head', 'topic_icons_css');
+
+	add_action('bb_admin_menu_generator', 'topic_icons_admin_page_add');
+	add_action('bb_admin-header.php', 'topic_icons_admin_page_process');
+	
+	topic_icons_register_status_interpreter('default', new DefaultStatusInterpreter(BUSY_THRESHOLD));
+	topic_icons_register_status_renderer('default', new DefaultStatusRenderer());
+}
+
+topic_icons_init();
+
+?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Forum: Applications, Tools, Formats - Recent Posts</title>
+		<link>http://digitalhumanities.org/answers/forum/applications-tools-formats</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Forum: Applications, Tools, Formats - Recent Posts</description>
+		<language>en-US</language>
+		<pubDate>Sun, 24 Mar 2019 17:08:32 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/forum/applications-tools-formats" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>Waliya.Y.Joseph on "What are the links between transhumanism and digital humanities?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-are-the-links-between-transhumanism-and-digital-humanities-1#post-2419</link>
+			<pubDate>Tue, 21 Nov 2017 13:56:14 +0000</pubDate>
+			<dc:creator>Waliya.Y.Joseph</dc:creator>
+			<guid isPermaLink="false">2419@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I need as many answers as you can?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Waliya.Y.Joseph on "What are the links between transhumanism and digital humanities?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-are-the-links-between-transhumanism-and-digital-humanities#post-2418</link>
+			<pubDate>Tue, 21 Nov 2017 13:50:55 +0000</pubDate>
+			<dc:creator>Waliya.Y.Joseph</dc:creator>
+			<guid isPermaLink="false">2418@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I need as many answers as you can?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>mnaeimi on "Atlas.ti and Gephi"</title>
+						<link>http://digitalhumanities.org/answers/topic/atlasti-and-gephi#post-2415</link>
+			<pubDate>Fri, 07 Jul 2017 15:08:43 +0000</pubDate>
+			<dc:creator>mnaeimi</dc:creator>
+			<guid isPermaLink="false">2415@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hello,&#60;/p&#62;
+&#60;p&#62;Does anybody know how I can convert xml data of Atlas.ti to CSV files for Gephi? &#60;/p&#62;
+&#60;p&#62;Thanks&#60;br /&#62;
+M.N.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>stustu12 on "Harvest Historical Twitter Data"</title>
+						<link>http://digitalhumanities.org/answers/topic/harvest-historical-twitter-data#post-2414</link>
+			<pubDate>Sat, 24 Jun 2017 23:16:17 +0000</pubDate>
+			<dc:creator>stustu12</dc:creator>
+			<guid isPermaLink="false">2414@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='http://digitalhumanities.org/answers/profile/justinlittman'&#62;justinlittman&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/harvest-historical-twitter-data#post-2412&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;Thanks Justin. DiscoverText (&#60;a href=&#34;https://discovertext.com&#34; rel=&#34;nofollow&#34;&#62;https://discovertext.com&#60;/a&#62;) is an option for day-forward Twitter via the Search API or using the Gnip PowerTrack. For historical Twitter, people need to use Sifter (&#60;a href=&#34;https://sifter.texifter.com&#34; rel=&#34;nofollow&#34;&#62;https://sifter.texifter.com&#60;/a&#62;) to generate up to three free estimates per day. If there is an estimate you like, there is a price to access the data using DiscoverText.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>justinlittman on "Harvest Historical Twitter Data"</title>
+						<link>http://digitalhumanities.org/answers/topic/harvest-historical-twitter-data#post-2412</link>
+			<pubDate>Mon, 05 Jun 2017 13:19:26 +0000</pubDate>
+			<dc:creator>justinlittman</dc:creator>
+			<guid isPermaLink="false">2412@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='http://digitalhumanities.org/answers/profile/kdonovan11'&#62;kdonovan11&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/harvest-historical-twitter-data#post-2410&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;The Twitter API supports retrieving the last 3,200 tweets from a user's timeline. A commandline tool like Twarc (&#60;a href=&#34;https://github.com/docnow/twarc&#34; rel=&#34;nofollow&#34;&#62;https://github.com/docnow/twarc&#60;/a&#62;) can be used to get the user's timeline from the API. If you're looking for web interface, Social Feed Manager (&#60;a href=&#34;https://gwu-libraries.github.io/sfm-ui/)&#34; rel=&#34;nofollow&#34;&#62;https://gwu-libraries.github.io/sfm-ui/)&#60;/a&#62;, which I work on, is another option.&#60;/p&#62;
+&#60;p&#62;Options for getting historical tweets for a hashtag are much more limited. The Search API only indexes the last 7-9 days. The search on Twitter's website indexes further back in time, but the nature of what is indexed (and not indexed) is unknown.&#60;/p&#62;
+&#60;p&#62;Data service providers such as DiscoverText (&#60;a href=&#34;https://discovertext.com/&#34; rel=&#34;nofollow&#34;&#62;https://discovertext.com/&#60;/a&#62;) allow for greater access to historical data, but obviously at a cost.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>kdonovan11 on "Harvest Historical Twitter Data"</title>
+						<link>http://digitalhumanities.org/answers/topic/harvest-historical-twitter-data#post-2411</link>
+			<pubDate>Fri, 02 Jun 2017 08:00:33 +0000</pubDate>
+			<dc:creator>kdonovan11</dc:creator>
+			<guid isPermaLink="false">2411@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='http://digitalhumanities.org/answers/profile/kdonovan11'&#62;kdonovan11&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/harvest-historical-twitter-data#post-2410&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;I see that it is possible to use Twitter's Advanced Search to search for a particular account's tweets during a given time period; however, that requires scrolling through it all on their site. What would be best is the ability to export them (links, images, and all).
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>kdonovan11 on "Harvest Historical Twitter Data"</title>
+						<link>http://digitalhumanities.org/answers/topic/harvest-historical-twitter-data#post-2410</link>
+			<pubDate>Thu, 01 Jun 2017 19:25:33 +0000</pubDate>
+			<dc:creator>kdonovan11</dc:creator>
+			<guid isPermaLink="false">2410@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I would like to capture tweets from last year which centered on a particular social movement in Kenya. Many of them were sent or retweeted by @ConsumersKenya, so simply getting an archive of their tweets within a certain timeframe would be quite helpful. Being able to get those who used relevant hashtags during that period would also be fruitful.&#60;/p&#62;
+&#60;p&#62;There seem to be plenty of services to archive ongoing tweets, but is there a good way to get historical tweets for certain dates?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>acrymble on "How do I best convert hundreds of TEI P5 documents to plaintext?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-do-i-best-convert-hundreds-of-tei-p5-documents-to-plaintext#post-2408</link>
+			<pubDate>Sat, 11 Mar 2017 11:17:39 +0000</pubDate>
+			<dc:creator>acrymble</dc:creator>
+			<guid isPermaLink="false">2408@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;There is a good tutorial on XSLT on the Programming Historian if you'd like to learn more.&#60;/p&#62;
+&#60;p&#62;&#60;a href=&#34;http://programminghistorian.org/lessons/transforming-xml-with-xsl&#34; rel=&#34;nofollow&#34;&#62;http://programminghistorian.org/lessons/transforming-xml-with-xsl&#60;/a&#62;
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>scottkleinman on "How do I best convert hundreds of TEI P5 documents to plaintext?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-do-i-best-convert-hundreds-of-tei-p5-documents-to-plaintext#post-2407</link>
+			<pubDate>Tue, 31 Jan 2017 19:52:22 +0000</pubDate>
+			<dc:creator>scottkleinman</dc:creator>
+			<guid isPermaLink="false">2407@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I just saw that this topic had been revived, and I thought I'd point out that &#60;a href=&#34;http://lexos.wheatoncollege.edu/&#34;&#62;Lexos&#60;/a&#62; enables the user to strip tags selectively customising how each tag is handled. This can be really useful if, for example, you want to keep readings in &#60;code&#62;&#38;lt;orig&#38;gt;&#60;/code&#62; and delete readings in &#60;code&#62;&#38;lt;reg&#38;gt;&#60;/code&#62;. We haven't tested it with large numbers of files, but you can always do your processing in small batches if it gets too slow.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Stéfan Sinclair on "How do I best convert hundreds of TEI P5 documents to plaintext?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-do-i-best-convert-hundreds-of-tei-p5-documents-to-plaintext#post-2406</link>
+			<pubDate>Tue, 06 Dec 2016 19:53:53 +0000</pubDate>
+			<dc:creator>Stéfan Sinclair</dc:creator>
+			<guid isPermaLink="false">2406@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;This is an older post, so it's probably not worth offering many more solutions, but I want to mention that some simple document conversion, including TEI, is available through Voyant.&#60;/p&#62;
+&#60;p&#62;You would create a Voyant corpus as usual (say a zip file with TEI documents):&#60;/p&#62;
+&#60;p&#62;&#60;a href=&#34;http://voyant-tools.org/docs/#!/guide/corpuscreator&#34; rel=&#34;nofollow&#34;&#62;&#60;a href=&#34;http://voyant-tools.org/docs/#&#34; rel=&#34;nofollow&#34;&#62;http://voyant-tools.org/docs/#&#60;/a&#62;!/guide/corpuscreator&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;And then you could use the Documents tool (middle tab in the lower left-hand panel of the default skin) to download the corpus in one or more formats (original, minimal HTML for Voyant, plain text):&#60;/p&#62;
+&#60;p&#62;&#60;a href=&#34;http://voyant-tools.org/docs/#!/guide/documents&#34; rel=&#34;nofollow&#34;&#62;&#60;a href=&#34;http://voyant-tools.org/docs/#&#34; rel=&#34;nofollow&#34;&#62;http://voyant-tools.org/docs/#&#60;/a&#62;!/guide/documents&#60;/a&#62;
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Kevin Hawkins on "How do I best convert hundreds of TEI P5 documents to plaintext?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-do-i-best-convert-hundreds-of-tei-p5-documents-to-plaintext#post-2405</link>
+			<pubDate>Tue, 06 Dec 2016 01:21:13 +0000</pubDate>
+			<dc:creator>Kevin Hawkins</dc:creator>
+			<guid isPermaLink="false">2405@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I should have also noted that OxGarage ( &#60;a href=&#34;http://www.tei-c.org/oxgarage/&#34; rel=&#34;nofollow&#34;&#62;http://www.tei-c.org/oxgarage/&#60;/a&#62; ) allows conversion from P5 to &#34;plain text&#34;. This page explains how to get the sourcecode behind it: &#60;a href=&#34;http://wiki.tei-c.org/index.php/OxGarage&#34; rel=&#34;nofollow&#34;&#62;http://wiki.tei-c.org/index.php/OxGarage&#60;/a&#62; .
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Kevin Hawkins on "How do I best convert hundreds of TEI P5 documents to plaintext?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-do-i-best-convert-hundreds-of-tei-p5-documents-to-plaintext#post-2404</link>
+			<pubDate>Tue, 06 Dec 2016 01:16:02 +0000</pubDate>
+			<dc:creator>Kevin Hawkins</dc:creator>
+			<guid isPermaLink="false">2404@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I should have also noted that OxGarage ( &#60;a href=&#34;http://www.tei-c.org/oxgarage/&#34; rel=&#34;nofollow&#34;&#62;http://www.tei-c.org/oxgarage/&#60;/a&#62; ) allows conversion from P5 to &#34;plain text&#34;. This page explains how to get the sourcecode behind it: &#60;a href=&#34;http://wiki.tei-c.org/index.php/OxGarage&#34; rel=&#34;nofollow&#34;&#62;http://wiki.tei-c.org/index.php/OxGarage&#60;/a&#62; .
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>shmerritt on "Most effective software for building searchable digital bibliographic database?"</title>
+						<link>http://digitalhumanities.org/answers/topic/most-effective-software-for-building-searchable-digital-bibliographic-database#post-2392</link>
+			<pubDate>Sun, 01 May 2016 15:46:56 +0000</pubDate>
+			<dc:creator>shmerritt</dc:creator>
+			<guid isPermaLink="false">2392@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Thank you very much. That post's question seems very similar to mine indeed! I'm just now looking into the replies you've directed me to via CODE4LIB in LISTSERV.  (I had to register first.)&#60;/p&#62;
+&#60;p&#62;One reply mentions Zotero, which some of the above posts suggest. The other replies seem related to library cataloguing purposes and are pretty technical in nature. But I am keeping an open mind.&#60;/p&#62;
+&#60;p&#62;So far I've been doing some practice conversion of my printed entries into Zotero in Firefox. I will be reading up on Drupal, exploring Drupal's Biblio Zotero plug in, etc., as suggested above.&#60;/p&#62;
+&#60;p&#62;Still open to further suggestions, however.&#60;/p&#62;
+&#60;p&#62;I've just applied for funding this project. Outcome will not be until December. So I expect to be researching possibilities further and, as I say, still welcome further suggestions. &#60;/p&#62;
+&#60;p&#62;[Update: the link to my website in my first post is no longer active; the archived link is &#60;a href=&#34;https://web.archive.org/web/20131209052925/http://susanhollismerritt.org/index.html&#34;&#62;susanhollismerritt.org&#60;/a&#62;.]
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Kevin Hawkins on "Most effective software for building searchable digital bibliographic database?"</title>
+						<link>http://digitalhumanities.org/answers/topic/most-effective-software-for-building-searchable-digital-bibliographic-database#post-2391</link>
+			<pubDate>Sun, 01 May 2016 02:09:11 +0000</pubDate>
+			<dc:creator>Kevin Hawkins</dc:creator>
+			<guid isPermaLink="false">2391@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;You might be interested in a recent discussion on CODE4LIB on a similar question: &#60;a href=&#34;https://listserv.nd.edu/cgi-bin/wa?A2=CODE4LIB;44fd042d.1604&#34; rel=&#34;nofollow&#34;&#62;https://listserv.nd.edu/cgi-bin/wa?A2=CODE4LIB;44fd042d.1604&#60;/a&#62;
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>shmerritt on "Most effective software for building searchable digital bibliographic database?"</title>
+						<link>http://digitalhumanities.org/answers/topic/most-effective-software-for-building-searchable-digital-bibliographic-database#post-2390</link>
+			<pubDate>Sat, 30 Apr 2016 15:07:01 +0000</pubDate>
+			<dc:creator>shmerritt</dc:creator>
+			<guid isPermaLink="false">2390@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Further update:&#60;br /&#62;
+I have posted some more recent information pertaining to the proposed project to which this thread relates in the Day of DH 2016 (April 8) site.  Please see my Day of DH 2016 blog &#60;a href=&#34;http://dayofdh2016.linhd.es/merritt/&#34;&#62; The Harold Pinter Bibliography (Searchable Digital Database) project&#60;/a&#62;, especially my first post &#60;a href=&#34;http://dayofdh2016.linhd.es/merritt/2016/03/18/hello-world/&#34;&#62; Hello world!&#60;/a&#62;, created on March 18, 2016.&#60;/p&#62;
+&#60;p&#62;If you have additional suggestions to add to the earlier ones, please post them here, at DH Q&#38;amp;A.  I will greatly appreciate them. Thank you.
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

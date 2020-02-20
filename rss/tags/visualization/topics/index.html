@@ -1,0 +1,322 @@
+<?
+/*
+Plugin Name: bb Topic Icons
+Plugin URI: http://devt.caffeinatedbliss.com/bbpress/topic-icons
+Description: Adds configurable icons next to topics based on their status
+Author: Paul Hawke
+Author URI: http://paul.caffeinatedbliss.com/
+Version: 0.6
+*/
+
+/****************************************************************************
+ *
+ * Configure the following constants to fine-tune the CSS classes that are
+ * generated, the icon filenames that are used, and the text used in the
+ * legend (if you have one displayed).  Note: filenames are likely to be
+ * taken away in a future version and replaced with the concept of "icon sets"
+ * whose filenames are fixed, so dont get used to editing the filenames,
+ * as this will break in future versions.
+ *
+ ****************************************************************************/
+
+// css class for the unsorted list used in the legend display
+define( LEGEND_CLASS, 'topic_icon_legend' );
+
+// busy threshold - a topic with more posts than this is counted as "busy"
+// for purposes of picking an icon.
+define( BUSY_THRESHOLD, 15 );
+
+// width of the images, in pixels
+define( ICON_WIDTH, '20' );
+
+// height of the images, in pixels
+define( ICON_HEIGHT, '20' );
+
+// the URL base for where to find the default icon set.
+define( ICON_SET_URL_BASE, BB_PLUGIN_URL.'bb-topic-icons/icon-sets/' );
+
+/****************************************************************************
+ *
+ * Shouldnt be much need to edit anything beyond this point - configuration
+ * is all done via the constants (above) and through and admin area page in
+ * bbPress at runtime.
+ *
+ ****************************************************************************/
+
+require( 'bb-topic-icons-api.php' );
+require( 'bb-topic-icons-admin.php' );
+require( 'interface.status-interpreter.php' );
+require( 'interface.status-renderer.php' );
+require( 'class.default-status-interpreter.php' );
+require( 'class.default-status-renderer.php' );
+
+function topic_icons_legend() {
+	$icon_set_name = topic_icons_get_active_icon_set();
+	$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+	$statuses = get_active_status_interpreter()->getAllStatuses();
+	$renderer = get_active_status_renderer();
+	
+	echo '<ul id="'.LEGEND_CLASS.'">';
+	for ($i=0; $i < count($statuses); $i++) {
+		$image = $renderer->renderStatus($statuses[$i]);
+		$tooltip = $renderer->renderStatusTooltip($statuses[$i]);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (isset($image) && strlen($image) > 0 &&
+			isset($tooltip) && strlen($tooltip) > 0 && $exists) {
+			echo '<li><img src="'.$icon_set_url.'/'.$image.
+				'" width="'.ICON_WIDTH.'" height="'.ICON_HEIGHT.
+				'" align="absmiddle">&nbsp;'.$tooltip.'</li>';
+		}
+	}
+	echo '</ul>';
+}
+
+function topic_icons_css() {
+	echo "\n<style type=\"text/css\"><!--\n";
+	require( 'bb-topic-icons.css' );
+	echo "\n--></style>";
+}
+
+function topic_icons_label( $label ) {
+	global $topic;
+	
+	if (bb_is_front() || bb_is_forum() || bb_is_view() || bb_is_tag()) {		
+		$icon_set_name = topic_icons_get_active_icon_set();
+		$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+
+		$status = get_active_status_interpreter()->getStatus(bb_get_location(), $topic);
+		$renderer = get_active_status_renderer();
+		$image = $renderer->renderStatus($status);
+		$tooltip = $renderer->renderStatusTooltip($status);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (!$exists) {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), ICON_SET_URL_BASE.'/empty.png', ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		} else if (strlen($tooltip) > 0) {		
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"><span>%s</span></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $tooltip, $label);
+		} else {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		}
+	}
+	
+	return $label;
+}
+
+function topic_icons_init( ) {
+	remove_filter('bb_topic_labels', 'bb_closed_label', 10);
+	remove_filter('bb_topic_labels', 'bb_sticky_label', 20);
+
+	add_filter('bb_topic_labels', 'topic_icons_label', 11);
+
+	add_action('bb_head', 'topic_icons_css');
+
+	add_action('bb_admin_menu_generator', 'topic_icons_admin_page_add');
+	add_action('bb_admin-header.php', 'topic_icons_admin_page_process');
+	
+	topic_icons_register_status_interpreter('default', new DefaultStatusInterpreter(BUSY_THRESHOLD));
+	topic_icons_register_status_renderer('default', new DefaultStatusRenderer());
+}
+
+topic_icons_init();
+
+?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Tag: Visualization - Recent Topics</title>
+		<link>http://digitalhumanities.org/answers/tags/visualization</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Tag: Visualization - Recent Topics</description>
+		<language>en-US</language>
+		<pubDate>Sun, 24 Mar 2019 17:09:17 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/tags/visualization/topics" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>alangpike on "Big data projects using IMDB?"</title>
+						<link>http://digitalhumanities.org/answers/topic/big-data-projects-using-imdb#post-2019</link>
+			<pubDate>Thu, 06 Jun 2013 12:42:29 +0000</pubDate>
+			<dc:creator>alangpike</dc:creator>
+			<guid isPermaLink="false">2019@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I am in the early stages of my dissertation and, as I explore the possible DH methods that might apply to my work, am wondering if there might be a way for the DH community to take advantage of the mountain of data at IMDB. I have heard from some folks that they have been unfriendly to researchers, but thought it might be worth some serious effort to make some (all!) of their data, reviews, etc. available to film and media studies scholars. The possibilities for DH methods are virtually limitless. For my own work, data visualizations, social network analysis of cast and crew, etc. are all intriguing possibilities. Has anyone out there gotten permission from IMDB to use data crawlers for scholarly research? Has anyone tried to do so and been denied?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Ryan Cordell on "Automatically Preparing Edge/Node Data for Gephi"</title>
+						<link>http://digitalhumanities.org/answers/topic/automatically-preparing-edgenode-data-for-gephi#post-1785</link>
+			<pubDate>Mon, 12 Nov 2012 18:51:15 +0000</pubDate>
+			<dc:creator>Ryan Cordell</dc:creator>
+			<guid isPermaLink="false">1785@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Okay,&#60;/p&#62;
+&#60;p&#62;I've done some work with Gephi lately, but I find myself with a problem I can't quite solve. I work on reprinting networks, and thus far have generated network graphs from spreadsheets of reprinting with the original newspaper in one column (source) and reprinting newspaper in the second (target). Import edge table--&#38;gt;Gephi creates a pretty graph.&#60;/p&#62;
+&#60;p&#62;I now have a much larger spreadsheet generated from a text-mining experiment I've started with a colleague in computer science. This  spreadsheet includes for each found text: &#60;/p&#62;
+&#60;p&#62;an ID number identifying a particular reprinted text (ex: 8679:5136:18458:8488:5042:872:3924:2547:21444) &#124; Date of each reprinting &#124; URL of source text &#124; Name of each publication &#124; City and State of Publication &#124; Longitude of Publication &#124; the text matched&#60;/p&#62;
+&#60;p&#62;So there might be 10 lines with the same ID number--the &#34;same text&#34;--but different values in the other columns for each new reprinting of that text we found. I want to generate two opposite but complementary graphs from this data: &#60;/p&#62;
+&#60;p&#62;1.) in the first, the nodes would be Newspaper titles, and the edges would represent shared reprints--the ID field, I suppose. In other words, edges would be drawn between papers that reprinted the same text. Edges would be larger the more texts the two shared. I suspect there will be multi-stage process to prepare my data to do this, but I'm honestly not sure where to start.&#60;/p&#62;
+&#60;p&#62;2.) in the second, the nodes would be individual reprinted texts (the ID field for now, though we're working on generating titles) and the edges would be publications. Edges would be drawn between texts that appeared in the same newspaper. &#60;/p&#62;
+&#60;p&#62;Any help you can offer would be appreciated. I can't find a way to do this in one step through Gephi, so I'm sure there's some data massaging ahead of me.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Lisa Rhody on "What tools can be used to create topic model network graphs?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-tools-can-be-used-to-create-topic-model-network-graphs#post-1620</link>
+			<pubDate>Wed, 02 May 2012 12:42:48 +0000</pubDate>
+			<dc:creator>Lisa Rhody</dc:creator>
+			<guid isPermaLink="false">1620@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I'm looking for a tool that can generate a network graph that creates nodes for documents and topics where the edge pull is determined by topic weight.  In other words, if I have a topic model of 40 topics run on a dataset of several thousand documents, I want to be able to display how strongly each document is pulled toward each topic in the network.  I've seen it done in several instances, but I'm wondering what tools people are using to do this and to what degree of satisfaction... I've tried SNA visualization tools (Gephi, NodeXL, and yEd), but those generally require that the edge weight be internally computed.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Rosvita TEXTWinder on "Best way to map &#38; track debates through several little 1920s magazines?"</title>
+						<link>http://digitalhumanities.org/answers/topic/best-way-to-map-track-debates-through-several-little-1920s-magazines#post-1610</link>
+			<pubDate>Wed, 18 Apr 2012 15:28:25 +0000</pubDate>
+			<dc:creator>Rosvita TEXTWinder</dc:creator>
+			<guid isPermaLink="false">1610@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I'd like to map and track ideas that were debated in several little magazines of the 1920s to present a visualisation of where those &#34;conversations&#34; took place and how they changed with each contribution. It would be great to learn how others would approach this. Thanks!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>briancroxall on "What should I read and what software should I use to do textual studies well?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-should-i-read-and-what-software-should-i-use-to-do-textual-studies-well#post-1311</link>
+			<pubDate>Thu, 28 Jul 2011 19:58:22 +0000</pubDate>
+			<dc:creator>briancroxall</dc:creator>
+			<guid isPermaLink="false">1311@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I'm super excited to be &#34;Introduction to Digital Humanities&#34; this fall. As I've been turning over the course in my mind, I've known that I've wanted to do one or more projects with the students, probably using our special collections, which tend to be quite strong in particular swaths of literature. This week I sat down with &#60;a href=&#34;http://twitter.com/#!/LizChaseMARBL&#34;&#62;Liz Chase&#60;/a&#62;, one of our special collections librarians, and brainstormed. We came up with a great project involving &#60;a href=&#34;http://findingaids.library.emory.edu/documents/duffy834/?keywords=duffy&#34;&#62;our holdings of Carol Ann Duffy's notebooks&#60;/a&#62;. In short, we want to do some comparisons between how she writes in her 1999 volume, &#60;a href=&#34;http://www.amazon.com/Worlds-Wife-Carol-Ann-Duffy/dp/057119995X/briacrox-20&#34;&#62;The World's Wife&#60;/a&#62;, and her previous volumes. We're interested in thematic material, vocabulary she uses, poetic styles, and so forth. But as I've been working to design the project, I've come to realize that the students' work (to say nothing of my teaching) will be improved by the inclusion of some readings on textual scholarship along these lines. &#60;strong&#62;But I don't know this field at all.&#60;/strong&#62;&#60;/p&#62;
+&#60;p&#62;What's more, I've been trying to think about what sort of software we might most profitably use to help push our analysis after creating a dataset of the texts. I'm guessing we'll want to represent word counts, word clouds, line structures, and more. My first thought is &#60;a href=&#34;http://seasr.org/&#34;&#62;SEASR&#60;/a&#62;, but I'm not familiar with the tool and I'm not sure if it's overkill or underkill or totally off the mark. I can always use &#60;a href=&#34;http://www.wordle.net/&#34;&#62;Wordle&#60;/a&#62;, but I would like to have more options. And perhaps if I really knew this field of scholarship then it would be easier for me to know which tools I should be using.&#60;/p&#62;
+&#60;p&#62;What I really need, then, is a suggestion of books or articles that I should read so that our class proceeds thoughtfully on the project with an understanding of what's been done in the past. Any tool suggestions would be welcome as well.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Miriam Posner on "Cool ways of displaying influence over time and space?"</title>
+						<link>http://digitalhumanities.org/answers/topic/cool-ways-of-displaying-influence-over-time-and-space#post-1308</link>
+			<pubDate>Thu, 28 Jul 2011 16:00:52 +0000</pubDate>
+			<dc:creator>Miriam Posner</dc:creator>
+			<guid isPermaLink="false">1308@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I've been talking to an art historian who wants to create a website that will map the influence of a particular body of works over time and space. Like: this work influenced that work, in this place, at this time. I'm having trouble picturing what this could look like, so I'm hoping you can point me to sites that do something like this in an interesting way.&#60;/p&#62;
+&#60;p&#62;This is, I think, a design and interface question, not a data analysis question -- the art historian will create links among works using her own expertise, not large datasets.&#60;/p&#62;
+&#60;p&#62;Thanks, as always!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>elotroalex on "How do you overlap different words on the same graph using voyeurtools?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-do-you-overlap-different-words-on-the-same-graph-using-voyeurtools#post-1302</link>
+			<pubDate>Fri, 22 Jul 2011 19:21:18 +0000</pubDate>
+			<dc:creator>elotroalex</dc:creator>
+			<guid isPermaLink="false">1302@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;In honor of the small technical question, for which this forum promised a safe haven from the beginning: I'm having a hard time figuring out how to map different words on a corpus of 11 texts using &#60;a href=&#34;http://voyeurtools.org/&#34;&#62;voyeurtools&#60;/a&#62;. So I want to map out surréalisme, surréaliste and surréalité. I imagine two graphs would be useful: a) One that would add them all up as a lemma; and b) One that would simply overlap them. I have seen Stéfan &#60;a href=&#34;http://stefansinclair.name/correspondence-analysis/&#34;&#62;do it,&#60;/a&#62; so I know it can be done, but my figure-out-stuff-on-your-own switch is not working today for some reason.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Shawn on "Software for stereoscopy?"</title>
+						<link>http://digitalhumanities.org/answers/topic/software-for-stereoscopy#post-1104</link>
+			<pubDate>Thu, 31 Mar 2011 18:43:27 +0000</pubDate>
+			<dc:creator>Shawn</dc:creator>
+			<guid isPermaLink="false">1104@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;My colleague has a collection of stereoscopic views from the 19th century that he'd like to reproduce online, in such a way that they appear in 3d, without the need for a stereoscopic viewer. I know this isn't exactly a digital humanities type question, but on the other hand, I figured if anybody'd know, it'd be around here. Thank you!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Shane Landrum on "Lightweight data management/storage/transformation for use with web services?"</title>
+						<link>http://digitalhumanities.org/answers/topic/lightweight-data-managementstoragetransformation-for-use-with-web-services#post-1054</link>
+			<pubDate>Mon, 21 Mar 2011 17:03:25 +0000</pubDate>
+			<dc:creator>Shane Landrum</dc:creator>
+			<guid isPermaLink="false">1054@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;For visualizing some historical data, I've recently been &#60;a href=&#34;http://cliotropic.org/wip/2011/03/19/mapping-birth-registration-with-protovis/&#34;&#62;toying around with Protovis&#60;/a&#62; and &#60;a href=&#34;http://cliotropic.org/wip/2011/03/16/a-brief-note-on-geocommons/&#34;&#62;GeoCommons&#60;/a&#62;. In the past, I've played with &#60;a href=&#34;http://code.google.com/p/timemap/&#34;&#62;TimeMap&#60;/a&#62; and other SIMILE widgets. All of these tools take input in structured text forms, but the format each tool wants is different.&#60;/p&#62;
+&#60;p&#62; For learning what these tools can do, I usually  just &#60;a href=&#34;https://github.com/cliotropic/sandbox/raw/master/regarea_maps/birthreg_grid_simple.js&#34;&#62;hack the data together in a source file&#60;/a&#62;. With GeoCommons, I've been exporting CSV data from a Google Docs spreadsheet using &#60;a href=&#34;http://blog.ouseful.info/2009/05/18/using-google-spreadsheets-as-a-databace-with-the-google-visualisation-api-query-language/&#34;&#62;URL-based queries&#60;/a&#62;. Figuring out the URL queries is a little complex, but I like the ease-of-use of the Google Docs UI.  More and more, though, I keep coming up with little data sets that I'd rather not have to think about hardcoding into a particular JSON/CSV/etc format, so that I can get on with the intellectual work of my research. &#60;/p&#62;
+&#60;p&#62;As a historian, I should probably be keeping my data in more citationally-rigorous formats than JSON will support, but my datasets are still small and idiosyncratic enough that going to a full-scale database seems like overkill to me. So, I've got a few questions:&#60;/p&#62;
+&#60;ol&#62;
+&#60;li&#62;When I'm doing experimental, exploratory visualization work with different tools, and when the structure of my data isn't always apparent at the beginning, how should I assess whether to it into a database first and then export views of that data out to my visualization tools?&#60;/li&#62;
+&#60;li&#62;If I want to keep using Google Docs for simple data storage and querying but don't want to have to make my data sets public, what's the easiest-to-use library for interacting with their authorization API?&#60;/li&#62;
+&#60;li&#62;Once I've settled on the best way to store various data sets, what tools/libraries can I use to transform it easily into the formats and data structures that different web services want to see? (Please, nothing having to do with XSLT, unless you've got pointers that'll make that learning curve flatter.)&#60;/li&#62;
+&#60;/ol&#62;
+&#60;p&#62;I use OS X primarily, and I'm not afraid of working with the shell; my preferred languages are Python and Ruby, though obviously I'm having to do lots with Javascript too. I just hate debugging Javascript if I can avoid it.&#60;/p&#62;
+&#60;p&#62;&#60;em&#62;(&#60;strong&#62;Edited to add:&#60;/strong&#62; If anyone has bright ideas on good ways to preserve citational rigor in my data storage, that's important to me too. Lots of the data sets I'm creating are composited from facts found in particular manuscript items, and I need to be able to preserve the provenance of each data point. That could be as simple as an extra field with a Zotero citation code in it, but I can't lose sight of where the data comes from.)&#60;/em&#62;
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>dot.porter on "Open-source historical GIS tools"</title>
+						<link>http://digitalhumanities.org/answers/topic/open-source-historical-gis-tools#post-162</link>
+			<pubDate>Fri, 24 Sep 2010 15:20:47 +0000</pubDate>
+			<dc:creator>dot.porter</dc:creator>
+			<guid isPermaLink="false">162@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Do you know of any existing open-source tools that can handle the layered visualization of historic data on maps and the visualization of that data over time? Like, extract data out of a relational database and layered to create different visualizations. Or something like this?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>slubar@gmail.com on "Visualization in digital humanities: what are the possibilities?"</title>
+						<link>http://digitalhumanities.org/answers/topic/visualization-in-digital-humanities-what-are-the-possibilities#post-401</link>
+			<pubDate>Sun, 10 Oct 2010 23:54:57 +0000</pubDate>
+			<dc:creator>slubar@gmail.com</dc:creator>
+			<guid isPermaLink="false">401@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I have the opportunity to develop a proposal to work with Brown's visualization group - supercomputers, a CAVE for 3-D presentation, great computer imaging possibilities. I've come up with schemes involving presentation of artifacts and landscapes... but I'm sure there are other possibilities, either that someone's tried, or someone has considered trying. What's the state of the field, the most interesting work so far? What needs more research?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Chris_Dilworth on "Visual mapping of keywords, synonyms, &#38; antonyms in text?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-2-visualize-keyword-occurrences-in-1gb-plaintext-database-of-7000-documents#post-765</link>
+			<pubDate>Thu, 25 Nov 2010 13:35:01 +0000</pubDate>
+			<dc:creator>Chris_Dilworth</dc:creator>
+			<guid isPermaLink="false">765@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;As part of my intellectual process I digitize (scan/OCR) all textual documents of use in my research and compile them into a focused text database which I mine using boolean searches and regular expressions.&#60;/p&#62;
+&#60;p&#62;Over the course of five years I have accumulated over 1.0 GB of plain text comprised of over 7,000 full-text documents all of which are related to my specialization: Posthuman Studies.&#60;/p&#62;
+&#60;p&#62;Specifically, what I'm looking for is a stand-alone visual mapping tool that can spatially link key terms, their synonyms and antonyms, etc., in real-time for my entire text database of 7,000 items.&#60;/p&#62;
+&#60;p&#62;Thanks in advance,&#60;/p&#62;
+&#60;p&#62;Chris.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Miriam Posner on "Drupal modules for displaying data"</title>
+						<link>http://digitalhumanities.org/answers/topic/drupal-modules-for-displaying-data#post-636</link>
+			<pubDate>Wed, 03 Nov 2010 16:54:34 +0000</pubDate>
+			<dc:creator>Miriam Posner</dc:creator>
+			<guid isPermaLink="false">636@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;So I know someone (I swear, it's not me) who has collected a bunch of data from a bunch of survey respondents in a bunch of formats: PDF, Word docs, spreadsheets. Some of it is quantitative, some of it is narrative. There's about 150 pages of it. So kind of not a best-case scenario.&#60;/p&#62;
+&#60;p&#62;What he'd like to do is display this (anonymized) data on a website for the benefit of the community from which it was collected. He's already obtained consent. He'd like to be able to display the data by anonymized &#34;person&#34; (i.e., by profile), but also allow for the possibility of some rudimentary analysis or visualization (e.g., how many of these respondents are female? how many are both female and of this ethnicity?)&#60;/p&#62;
+&#60;p&#62;My hunch is that he's best off using Drupal + CCK + Views. I have warned him that he has a lot of data-entry and a steep learning curve ahead of him. Important caveat: he does not know any programming languages. &#60;/p&#62;
+&#60;p&#62;So my questions are these:&#60;/p&#62;
+&#60;p&#62;• Do you agree that Drupal is his best option?&#60;br /&#62;
+• If Drupal is the way to go, are there modules that make sense for collecting, displaying, and visualizing this kind of information?&#60;br /&#62;
+• Can you recommend particularly good books or other resources for this use of Drupal?&#60;/p&#62;
+&#60;p&#62;Thank you, as always.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Daniel Allington on "Web application for visualisation of variance across multiple witnesses?"</title>
+						<link>http://digitalhumanities.org/answers/topic/advice-web-application-for-visualisation-of-variance-across-multiple-witnesses#post-413</link>
+			<pubDate>Wed, 13 Oct 2010 14:26:47 +0000</pubDate>
+			<dc:creator>Daniel Allington</dc:creator>
+			<guid isPermaLink="false">413@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I’d just like to ask the community for advice on a possible project I’ve been discussing with a colleague who works in information technology. The idea began with a little scholarly dream I have had for a while, which is of an interactive website that visualises the variance between all the texts of a particular work and enables the user to navigate through that variance intuitively, encountering (and perhaps adding) notes on the way and (if necessary) reporting errors. Rather than construct a one-off website, I think it could be more productive to create an open source web application that could be used in the production of websites based around other works: you’d upload digital versions of the texts (and if possible, scans of the originals), and the application (suitably customised) would form the user interface. The website could then be made public in stages, eg. first to a group of editors, then to a community of peer reviewers, and finally to everyone. This also opens the possibility of using the application as a communal transcription tool. As I see it, however, the central challenge will be to find creative ways of visualising variance: I’ve seen various ways of visualising the variance between pairs of witnesses, for example, but the question of how to visualise variance between larger numbers of texts seems to me to be quite open (as does the question of how to make such visualisations comprehensible on the small screen of a smartphone).&#60;/p&#62;
+&#60;p&#62;These are very early days yet (no code written, no funding secured), and any advice that can be offered on any aspect of this project would be appreciated. Particularly helpful would be an indication of how useful people think an application like this might be (or of how it could be made more useful): if I’m the only one who thinks it would be interesting to produce editions of the kind and in the way I’ve described, then I had better drop the application idea and try to put together my website by hand!
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Topic: Have you used MongoDB for DH project?</title>
+		<link>http://digitalhumanities.org/answers/topic/have-you-used-mongodb-for-dh-project</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Topic: Have you used MongoDB for DH project?</description>
+		<language>en-US</language>
+		<pubDate>Fri, 04 Oct 2013 22:17:25 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/topic/have-you-used-mongodb-for-dh-project" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>jlmcdonald@gmail.com on "Have you used MongoDB for DH project?"</title>
+						<link>http://digitalhumanities.org/answers/topic/have-you-used-mongodb-for-dh-project#post-1851</link>
+			<pubDate>Sat, 05 Jan 2013 18:49:03 +0000</pubDate>
+			<dc:creator>jlmcdonald@gmail.com</dc:creator>
+			<guid isPermaLink="false">1851@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I think MongoDB has a lot to offer DH projects -- it basically incorporates some of the best features of a document-oriented database and a relational database all in one. For so much of the data often worked with in DH projects, that are sometimes squished and squeezed so much to fit a relational model that never quite works, a schemaless approach to indexing and storing data like Mongo has works very well. I especially see value for those projects that don't need a full-blown structured repository like FEDORA, but that need more than flat files or relational DBs can do.&#60;/p&#62;
+&#60;p&#62;Having said that, the biggest thing to consider is that you say using MySQL works very well already for you. If you can't tell that there is something missing, not-quite-right, or not efficient enough with your current setup, the transition to Mongo may not be worth the effort in the long run. Mongo is pretty straightforward to set up, but it does approach data differently and doesn't use SQL at all, so when you say you'd be rewriting the backend, you'd really be rewriting it! You have to evaluate your data itself to know if the effort is worth it. Is your data tabular, or document-based? Are you mostly dealing with numbers and simple structured data (with some relationships), or heavily semantic data with complex metadata?&#60;/p&#62;
+&#60;p&#62;Perhaps another path to consider, if you decide to rewrite your back end, is to completely decouple it from your front end. Create a thin layer that is nothing but a RESTful API -- the api talks to the DB and only spits out structured JSON on the other end. This would also likely require some tweaking of your front end, but it will A) make it so you can then very easily write multiple other front ends (mobile, TV, etc) without a hitch, and B) 3 years from now, if you decide to change out the DB layer again, it's much easier to then create a new API generator that will offer the same data structures than it is to create an all new backend interface. There are lots of starting point solutions for quickly generating RESTful APIs whether your DB is MySQL, Mongo, or something else.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>boybot16@gmail.com on "Have you used MongoDB for DH project?"</title>
+						<link>http://digitalhumanities.org/answers/topic/have-you-used-mongodb-for-dh-project#post-1850</link>
+			<pubDate>Sat, 05 Jan 2013 15:19:42 +0000</pubDate>
+			<dc:creator>boybot16@gmail.com</dc:creator>
+			<guid isPermaLink="false">1850@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;We have a DH project that's currently uses MySQL for the database, and it works very well.&#60;/p&#62;
+&#60;p&#62;There has been much recent talk about NoSQL databases, particularly MongoDB, promising flexibility and scalability. We're considering re-writing the backend. Is anyone in the DH community seriously using MongoDB?&#60;/p&#62;
+&#60;p&#62;If you have used MongoDB for a DH project, what has been your experience with it? Biggest joy? Gotchas to look out for? Is conversion worth it for libraries and archives open source projects?
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

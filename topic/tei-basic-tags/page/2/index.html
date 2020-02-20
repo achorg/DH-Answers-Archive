@@ -1,0 +1,481 @@
+<?
+/*
+Plugin Name: bb Topic Icons
+Plugin URI: http://devt.caffeinatedbliss.com/bbpress/topic-icons
+Description: Adds configurable icons next to topics based on their status
+Author: Paul Hawke
+Author URI: http://paul.caffeinatedbliss.com/
+Version: 0.6
+*/
+
+/****************************************************************************
+ *
+ * Configure the following constants to fine-tune the CSS classes that are
+ * generated, the icon filenames that are used, and the text used in the
+ * legend (if you have one displayed).  Note: filenames are likely to be
+ * taken away in a future version and replaced with the concept of "icon sets"
+ * whose filenames are fixed, so dont get used to editing the filenames,
+ * as this will break in future versions.
+ *
+ ****************************************************************************/
+
+// css class for the unsorted list used in the legend display
+define( LEGEND_CLASS, 'topic_icon_legend' );
+
+// busy threshold - a topic with more posts than this is counted as "busy"
+// for purposes of picking an icon.
+define( BUSY_THRESHOLD, 15 );
+
+// width of the images, in pixels
+define( ICON_WIDTH, '20' );
+
+// height of the images, in pixels
+define( ICON_HEIGHT, '20' );
+
+// the URL base for where to find the default icon set.
+define( ICON_SET_URL_BASE, BB_PLUGIN_URL.'bb-topic-icons/icon-sets/' );
+
+/****************************************************************************
+ *
+ * Shouldnt be much need to edit anything beyond this point - configuration
+ * is all done via the constants (above) and through and admin area page in
+ * bbPress at runtime.
+ *
+ ****************************************************************************/
+
+require( 'bb-topic-icons-api.php' );
+require( 'bb-topic-icons-admin.php' );
+require( 'interface.status-interpreter.php' );
+require( 'interface.status-renderer.php' );
+require( 'class.default-status-interpreter.php' );
+require( 'class.default-status-renderer.php' );
+
+function topic_icons_legend() {
+	$icon_set_name = topic_icons_get_active_icon_set();
+	$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+	$statuses = get_active_status_interpreter()->getAllStatuses();
+	$renderer = get_active_status_renderer();
+	
+	echo '<ul id="'.LEGEND_CLASS.'">';
+	for ($i=0; $i < count($statuses); $i++) {
+		$image = $renderer->renderStatus($statuses[$i]);
+		$tooltip = $renderer->renderStatusTooltip($statuses[$i]);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (isset($image) && strlen($image) > 0 &&
+			isset($tooltip) && strlen($tooltip) > 0 && $exists) {
+			echo '<li><img src="'.$icon_set_url.'/'.$image.
+				'" width="'.ICON_WIDTH.'" height="'.ICON_HEIGHT.
+				'" align="absmiddle">&nbsp;'.$tooltip.'</li>';
+		}
+	}
+	echo '</ul>';
+}
+
+function topic_icons_css() {
+	echo "\n<style type=\"text/css\"><!--\n";
+	require( 'bb-topic-icons.css' );
+	echo "\n--></style>";
+}
+
+function topic_icons_label( $label ) {
+	global $topic;
+	
+	if (bb_is_front() || bb_is_forum() || bb_is_view() || bb_is_tag()) {		
+		$icon_set_name = topic_icons_get_active_icon_set();
+		$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+
+		$status = get_active_status_interpreter()->getStatus(bb_get_location(), $topic);
+		$renderer = get_active_status_renderer();
+		$image = $renderer->renderStatus($status);
+		$tooltip = $renderer->renderStatusTooltip($status);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (!$exists) {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), ICON_SET_URL_BASE.'/empty.png', ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		} else if (strlen($tooltip) > 0) {		
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"><span>%s</span></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $tooltip, $label);
+		} else {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		}
+	}
+	
+	return $label;
+}
+
+function topic_icons_init( ) {
+	remove_filter('bb_topic_labels', 'bb_closed_label', 10);
+	remove_filter('bb_topic_labels', 'bb_sticky_label', 20);
+
+	add_filter('bb_topic_labels', 'topic_icons_label', 11);
+
+	add_action('bb_head', 'topic_icons_css');
+
+	add_action('bb_admin_menu_generator', 'topic_icons_admin_page_add');
+	add_action('bb_admin-header.php', 'topic_icons_admin_page_process');
+	
+	topic_icons_register_status_interpreter('default', new DefaultStatusInterpreter(BUSY_THRESHOLD));
+	topic_icons_register_status_renderer('default', new DefaultStatusRenderer());
+}
+
+topic_icons_init();
+
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=8" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+	<title>TEI Basic Tags &laquo; Digital Humanities Questions &amp; Answers</title>
+	<link rel="stylesheet" href="http://digitalhumanities.org/answers/bb-templates/dhqa/style.css" type="text/css" />
+	<link rel="stylesheet" href="http://digitalhumanities.org/answers/bb-templates/dhqa/blueprint/screen.css" type="text/css" media="screen" title="blueprint-print" charset="utf-8"/>
+	<link rel="stylesheet" href="http://digitalhumanities.org/answers/bb-templates/dhqa/blueprint/print.css" type="text/css" media="print" title="blueprint-print" charset="utf-8"/>
+	<!--[if lt IE 8]>
+	  <link rel="stylesheet" href="http://digitalhumanities.org/answers/bb-templates/dhqa/blueprint/ie.css" type="text/css" media="screen, projection">
+	<![endif]-->
+	<!--[if IE]>
+		<style type="text/css" media="screen">
+			.header-button, form.login input, input[type="submit"], #header div.search, form.login input {
+				border-radius:4px;
+				behavior: url(border-radius.htc);
+			}
+		</style>
+	<![endif]-->
+	<!--[if IE 7]>
+		<style type="text/css" media="screen">
+			#header .search .search-form input.submit {
+				padding: 0;
+				margin: 0;
+				height: 29px;
+				width: 70px;
+			}
+		</style>
+	<![endif]-->
+
+<link rel="alternate" type="application/rss+xml" title="Digital Humanities Questions &amp; Answers &raquo; Topic: TEI Basic Tags" href="http://digitalhumanities.org/answers/rss/topic/tei-basic-tags" />
+<meta name="generator" content="bbPress 1.0.2" />
+
+<link rel="stylesheet" href="http://digitalhumanities.org/answers/my-plugins/bb-syntax/bb-syntax.css" type="text/css" media="screen" />
+<style type="text/css">
+	.best_answer {text-decoration:none; border:0; white-space:nowrap; display:block; margin:1em 0;		
+		border:0; text-decoration:none; width:20px; height:16px;
+		background: url(http://digitalhumanities.org/answers/my-plugins/best-answer/best-answer.png) no-repeat scroll 0px 1px transparent;} 
+	span.best_answer {margin: 0px; float: left;}
+	#thread .threadauthor .best_answer {padding-left: 20px;}
+	a.best_answer, a.best_answer:link {color:#999;}
+	a.best_answer:hover {color:green;}	
+	a.best_answer_selected {color: green;}
+	a.best_answer_selected:hover {color:red;}		
+	#thread li.best_answer_background { background-color: transparent; }
+	#thread li.best_answer_background .threadpost { background-color: #afa; }
+	#thread li.alt.best_answer_background .threadpost { background-color: #afa; }
+	.best_answer_meta { background: url(http://digitalhumanities.org/answers/my-plugins/best-answer/best-answer.png) no-repeat scroll 5px 40% transparent; padding-left: 26px; }
+</style>
+
+<!-- Start Of Code Generated By Social It Plugin By www.gaut.am -->
+<link rel='stylesheet' id='social-it-css'  href='http://digitalhumanities.org/answers/my-plugins/social-it/css/style.css?ver=1.5' type='text/css' media='all' />
+<script type='text/javascript' src='http://digitalhumanities.org/answers/bb-includes/js/jquery/jquery.js?ver=1.2.6'></script>
+<script type='text/javascript' src='http://digitalhumanities.org/answers/my-plugins/social-it/js/social-it-public.js?ver=1.5'></script>
+<!-- End Of Code Generated By Social It Plugin By www.gaut.am -->
+
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-18811436-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+</head>
+<body id="topic-page">
+	<div class="container prepend-top append-bottom">
+		<div id="util-login">
+		<a href="http://digitalhumanities.org/answers/bb-login.php">Log in</a> | <a href="http://digitalhumanities.org/answers/register.php">Register</a>		</div>
+		<div id="header" class="prepend-6 span-18">
+			<a id="ach-logo" href="http://www.ach.org">ACH</a>
+			<h1><a href="http://digitalhumanities.org/answers/">Digital Humanities Questions &amp; Answers</a></h1>
+						<div class="login-container span-12">
+				<form class="login" method="post" action="http://digitalhumanities.org/answers/bb-login.php">
+		<div class="header-button ask-link"><a href="http://digitalhumanities.org/answers/bb-login.php">Ask a Question</a></div></form>			</div>
+
+			<div class="search span-6 last">
+<form class="search-form" role="search" action="http://digitalhumanities.org/answers/search.php" method="get">
+	<p>
+		<label class="hidden" for="q">Search:</label>
+		<input type="text" size="10" maxlength="100" name="q" id="q" />
+		<input class="submit" type="submit" value="Search &raquo;" />
+	</p>
+</form>
+			</div>
+		</div>
+		<div id="main" class="span-24">
+
+<div class="bbcrumb"><a href="http://digitalhumanities.org/answers/">Digital Humanities Questions &amp; Answers</a> &raquo; <a href="http://digitalhumanities.org/answers/forum/markup-metadata">Markup &amp; Metadata</a></div>
+<div class="infobox" role="main">
+
+<div id="topic-info">
+<span id="topic_labels"></span>
+<h2 class="topictitle">TEI Basic Tags</h2>
+<span id="topic_posts">(24 posts)</span>
+<span id="topic_voices">(13 voices)</span>
+
+<ul class="topicmeta">
+	<li>Asked 8 years ago by IanRobertson</li>
+	<li><a href="http://digitalhumanities.org/answers/topic/tei-basic-tags/page/2#post-1675">Latest answer</a> from Sharon K. Goetz</li>
+<li class='best_answer_meta'>This question has a <a href='http://digitalhumanities.org/answers/topic/tei-basic-tags#post-677'>best answer</a>.</li></ul>
+</div>
+
+<div id="topic-tags">
+<p>Tags:</p>
+
+
+<ul id="tags-list" class="tags-list list:tag">
+	<li id="tag-226_261"><a href="http://digitalhumanities.org/answers/tags/code" rel="tag">code</a> </li>
+	<li id="tag-325_11" class="alt"><a href="http://digitalhumanities.org/answers/tags/dh-answers" rel="tag">DH Answers</a> </li>
+	<li id="tag-60_261"><a href="http://digitalhumanities.org/answers/tags/metadata" rel="tag">metadata</a> </li>
+	<li id="tag-241_261" class="alt"><a href="http://digitalhumanities.org/answers/tags/tags" rel="tag">tags</a> </li>
+	<li id="tag-89_261"><a href="http://digitalhumanities.org/answers/tags/tei" rel="tag">TEI</a> </li>
+	<li id="tag-324_4" class="alt"><a href="http://digitalhumanities.org/answers/tags/tei-p4" rel="tag">TEI P4</a> </li>
+	<li id="tag-322_11"><a href="http://digitalhumanities.org/answers/tags/tei-p5" rel="tag">TEI P5</a> </li>
+	<li id="tag-323_11" class="alt"><a href="http://digitalhumanities.org/answers/tags/unicode" rel="tag">Unicode</a> </li>
+	<li id="tag-54_261"><a href="http://digitalhumanities.org/answers/tags/xml" rel="tag">XML</a> </li>
+</ul>
+
+
+</div>
+
+<div style="clear:both;"></div>
+</div>
+<div class="nav"><a class="prev page-numbers" href="/answers/topic/tei-basic-tags" title="Previous page">&laquo; Previous</a><a class="page-numbers" href="/answers/topic/tei-basic-tags" title="Page 1">1</a><span class="page-numbers current" title="Page 2">2</span></div><div id="ajax-response"></div>
+<ol id="thread" class="list:post">
+
+	<li id="post-1086">
+		<div id="position-15">
+			<div class="threadauthor">
+				<a href="http://ryan.cordells.us"><img alt="" src="http://www.gravatar.com/avatar/1c834f35c4f5bbc9f4e62574f31a7ab9?s=48&amp;d=identicon&amp;r=pg" class="photo avatar avatar-48" style="height:48px; width:48px;" /></a>				<p>
+					<strong><a href="http://ryan.cordells.us">Ryan Cordell</a></strong><br />
+					<small><a href="http://digitalhumanities.org/answers/profile/rccordellgmailcom">Member</a></small>
+				</p>
+				<div class="author-badges"><span title='5+ Posts' class='badge bronze-poster 12'><!-- 10-19 posts --></span><span class='badge 1'><!-- fewer than 3 answers --></span></div>
+			</div>
+			<div class="threadpost">
+				<div class="post"><p>I should add that for now we're following Laura's suggestion and using ampersand pound 8212 semicolon
+</p></div>
+				<div class="poststuff">Posted 7 years ago <a class="post-perma-link" href="#post-1086">Permalink</a> </div>
+			</div>
+		</div>
+	</li>
+	<li id="post-1088" class="alt">
+		<div id="position-16">
+			<div class="threadauthor">
+				<a href="http://dsalo.info/"><img alt="" src="http://www.gravatar.com/avatar/837b357dc46c47fc99560e03b8841a27?s=48&amp;d=identicon&amp;r=pg" class="photo avatar avatar-48" style="height:48px; width:48px;" /></a>				<p>
+					<strong><a href="http://dsalo.info/">Dorothea Salo</a></strong><br />
+					<small><a href="http://digitalhumanities.org/answers/profile/dsalo">Member</a></small>
+				</p>
+				<div class="author-badges"><span title='50+ Posts' class='badge gold-poster 103'><!-- 50+ posts! --></span><span title='3+ Best Answers' class='badge bronze-answerer 4'><!-- 3-9 answers --></span></div>
+			</div>
+			<div class="threadpost">
+				<div class="post"><p>I favor Unicode numerical entities, because it's less hassle for me than either using entity definitions or using finicky character palettes, but I am a HUGE NERD and have quite a few of the commonest Unicode punctuation codepoints memorized. If you prefer the HTML-ish formulations, Wayne's suggestion above should work just fine.
+</p></div>
+				<div class="poststuff">Posted 7 years ago <a class="post-perma-link" href="#post-1088">Permalink</a> </div>
+			</div>
+		</div>
+	</li>
+	<li id="post-1089">
+		<div id="position-17">
+			<div class="threadauthor">
+				<img alt="" src="http://www.gravatar.com/avatar/cc27d9b031946c4f0453765ac8433e12?s=48&amp;d=identicon&amp;r=pg" class="photo avatar avatar-48" style="height:48px; width:48px;" />				<p>
+					<strong>sebastian.rahtz@gmail.com</strong><br />
+					<small><a href="http://digitalhumanities.org/answers/profile/sebastianrahtzgmailcom">Member</a></small>
+				</p>
+				<div class="author-badges"><span title='5+ Posts' class='badge bronze-poster 9'><!-- 10-19 posts --></span><span class='badge 0'><!-- fewer than 3 answers --></span></div>
+			</div>
+			<div class="threadpost">
+				<div class="post"><p>The best way to do characters like mdashes is surely to just write them in your file in UTF-8. Forget numerical entities, whatever, just put the character in... your editing application is sure to have way of doing it via a character map or menu or the like. Why treat them differently from any other character your normally type?
+</p></div>
+				<div class="poststuff">Posted 7 years ago <a class="post-perma-link" href="#post-1089">Permalink</a> </div>
+			</div>
+		</div>
+	</li>
+	<li id="post-1090" class="alt">
+		<div id="position-18">
+			<div class="threadauthor">
+				<a href="http://www.ultraslavonic.info/"><img alt="" src="http://www.gravatar.com/avatar/5cb228f555140867095f67fd98c3264d?s=48&amp;d=identicon&amp;r=pg" class="photo avatar avatar-48" style="height:48px; width:48px;" /></a>				<p>
+					<strong><a href="http://www.ultraslavonic.info/">Kevin Hawkins</a></strong><br />
+					<small><a href="http://digitalhumanities.org/answers/profile/kevinshawkins">Member</a></small>
+				</p>
+				<div class="author-badges"><span title='50+ Posts' class='badge gold-poster 53'><!-- 50+ posts! --></span><span title='3+ Best Answers' class='badge bronze-answerer 4'><!-- 3-9 answers --></span></div>
+			</div>
+			<div class="threadpost">
+				<div class="post"><p>Some people avoid putting non-ASCII characters into their XML for any of the following reasons:</p>
+<p>* The project's encoders or quality-control team have trouble distinguishing between characters with similar glyphs (like the ASCII hyphen and the em dash).  While this can be mitigated by choosing a different font, you don't always have control over the font used if users are working in various environments.  See the next point.</p>
+<p>* There are tools in use (text editors, scripts, etc.) that do not read and write Unicode, at least without proper configuration that users might not always remember to undertake.  So if all text is in ASCII (using entity references when not), you ensure fidelity of interchange.</p>
+<p>Mneumonic entities (like &mdash;) are easy to proofread but require extra configuration for validation (as mentioned previously in this thread).  Decimal and hexadecimal entity references are always allowed and are functionally interchangeable.  If consulting Unicode charts, hexadecimal entity references are more convenient since they match the Unciode code points.
+</p></div>
+				<div class="poststuff">Posted 7 years ago <a class="post-perma-link" href="#post-1090">Permalink</a> </div>
+			</div>
+		</div>
+	</li>
+	<li id="post-1091">
+		<div id="position-19">
+			<div class="threadauthor">
+				<img alt="" src="http://www.gravatar.com/avatar/cc27d9b031946c4f0453765ac8433e12?s=48&amp;d=identicon&amp;r=pg" class="photo avatar avatar-48" style="height:48px; width:48px;" />				<p>
+					<strong>sebastian.rahtz@gmail.com</strong><br />
+					<small><a href="http://digitalhumanities.org/answers/profile/sebastianrahtzgmailcom">Member</a></small>
+				</p>
+				<div class="author-badges"><span title='5+ Posts' class='badge bronze-poster 9'><!-- 10-19 posts --></span><span class='badge 0'><!-- fewer than 3 answers --></span></div>
+			</div>
+			<div class="threadpost">
+				<div class="post"><p>Would you say the same for someone encoding texts in more or less any European language (let alone the scripts the majority of people in the world read and write)? I don't think French readers would like it if you suggested they write <code>&lt;![CDATA[&lt;hi&gt;t&#234;te-&#224;-t&#234;te&lt;/hi&gt;]]&gt;</code> in their files and proof-read like that. The case of endash vs emdash vs hyphen vs minus sign may be a special case, I admit.</p>
+<p>That there are tools which cannot do UTF-8 Unicode properly is true, but for how long do we have to tolerate the tyranny of old software? that a tool would be Unicode aware, yet not do UTF-8, stretches credibility, and if a tool be not Unicode aware, should we not cast it into the outer darkness?
+</p></div>
+				<div class="poststuff">Posted 7 years ago <a class="post-perma-link" href="#post-1091">Permalink</a> </div>
+			</div>
+		</div>
+	</li>
+	<li id="post-1092" class="alt">
+		<div id="position-20">
+			<div class="threadauthor">
+				<img alt="" src="http://www.gravatar.com/avatar/cc27d9b031946c4f0453765ac8433e12?s=48&amp;d=identicon&amp;r=pg" class="photo avatar avatar-48" style="height:48px; width:48px;" />				<p>
+					<strong>sebastian.rahtz@gmail.com</strong><br />
+					<small><a href="http://digitalhumanities.org/answers/profile/sebastianrahtzgmailcom">Member</a></small>
+				</p>
+				<div class="author-badges"><span title='5+ Posts' class='badge bronze-poster 9'><!-- 10-19 posts --></span><span class='badge 0'><!-- fewer than 3 answers --></span></div>
+			</div>
+			<div class="threadpost">
+				<div class="post"><p>ach, I should have guessed that would happen. an editor which claimed to HTML but is a pale shadow. My code example should have been</p>
+<p>&lt;hi&gt;t&#234;te-&#224;-t&#234;te&lt;/hi&gt;
+</p></div>
+				<div class="poststuff">Posted 7 years ago <a class="post-perma-link" href="#post-1092">Permalink</a> </div>
+			</div>
+		</div>
+	</li>
+	<li id="post-1093">
+		<div id="position-21">
+			<div class="threadauthor">
+				<img alt="" src="http://www.gravatar.com/avatar/cc27d9b031946c4f0453765ac8433e12?s=48&amp;d=identicon&amp;r=pg" class="photo avatar avatar-48" style="height:48px; width:48px;" />				<p>
+					<strong>sebastian.rahtz@gmail.com</strong><br />
+					<small><a href="http://digitalhumanities.org/answers/profile/sebastianrahtzgmailcom">Member</a></small>
+				</p>
+				<div class="author-badges"><span title='5+ Posts' class='badge bronze-poster 9'><!-- 10-19 posts --></span><span class='badge 0'><!-- fewer than 3 answers --></span></div>
+			</div>
+			<div class="threadpost">
+				<div class="post"><p>try the third <code>&lt;hi&gt;t&#234;te-&#224;-t&#234;te&lt;/hi&gt;</code>
+</p></div>
+				<div class="poststuff">Posted 7 years ago <a class="post-perma-link" href="#post-1093">Permalink</a> </div>
+			</div>
+		</div>
+	</li>
+	<li id="post-1094" class="alt">
+		<div id="position-22">
+			<div class="threadauthor">
+				<a href="http://www.oucs.ox.ac.uk/"><img alt="" src="http://www.gravatar.com/avatar/53e2967fb01a14afccee508208c10d7d?s=48&amp;d=identicon&amp;r=pg" class="photo avatar avatar-48" style="height:48px; width:48px;" /></a>				<p>
+					<strong><a href="http://www.oucs.ox.ac.uk/">jamesc</a></strong><br />
+					<small><a href="http://digitalhumanities.org/answers/profile/jamesc">Member</a></small>
+				</p>
+				<div class="author-badges"><span title='5+ Posts' class='badge bronze-poster 14'><!-- 10-19 posts --></span><span class='badge 2'><!-- fewer than 3 answers --></span></div>
+			</div>
+			<div class="threadpost">
+				<div class="post"><p>I'd generally second what Sebastian says here. But, I'd also add a software-specific hint:</p>
+<p>If you happen to be using oXygen then you can do what are called 'code templates'.  This could consist of highly complex markup, or even just a single character.</p>
+<p>So for example, although I can go to their character map and find a capital thorn character and click on it I find it easier to create a code template once with a capital thorn and name it THORN and thorn for the lowercase.  That means I can start writing 'thor' and hit control-space to see if there are any templates that this matches and select the one that comes up.  typing tho-ctrl-space-enter is certainly more keystrokes, but much easier than needing to remember unicode code points, and it puts an actual thorn character in there.</p>
+<p>One could do the same with mdash or any manner of things.  I realise that is software-specific to a single editor, but any _good_ editor should allow you to do similar forms of abbreviation expansion or something. (So you can probably do something similar in whatever editor you are using.)</p>
+<p>-James
+</p></div>
+				<div class="poststuff">Posted 7 years ago <a class="post-perma-link" href="#post-1094">Permalink</a> </div>
+			</div>
+		</div>
+	</li>
+	<li id="post-1106">
+		<div id="position-23">
+			<div class="threadauthor">
+				<a href="http://www.ultraslavonic.info/"><img alt="" src="http://www.gravatar.com/avatar/5cb228f555140867095f67fd98c3264d?s=48&amp;d=identicon&amp;r=pg" class="photo avatar avatar-48" style="height:48px; width:48px;" /></a>				<p>
+					<strong><a href="http://www.ultraslavonic.info/">Kevin Hawkins</a></strong><br />
+					<small><a href="http://digitalhumanities.org/answers/profile/kevinshawkins">Member</a></small>
+				</p>
+				<div class="author-badges"><span title='50+ Posts' class='badge gold-poster 53'><!-- 50+ posts! --></span><span title='3+ Best Answers' class='badge bronze-answerer 4'><!-- 3-9 answers --></span></div>
+			</div>
+			<div class="threadpost">
+				<div class="post"><p>In response to Sebastian, when I said that some people do not put non-ASCII characters into their XML, this was meant simply as an observation of the current state of affairs and is not a recommendation.  That is, I'm trying to explain why some people might say not to do this.  Naturally French speakers creating XML will use their keyboard layout to directly enter characters used in French and will have no trouble reading and proofreading these.</p>
+<p>As for use of tools, not everyone has full control over the environment in which everyone in their project operates.
+</p></div>
+				<div class="poststuff">Posted 7 years ago <a class="post-perma-link" href="#post-1106">Permalink</a> </div>
+			</div>
+		</div>
+	</li>
+	<li id="post-1675" class="alt">
+		<div id="position-24">
+			<div class="threadauthor">
+				<img alt="" src="http://www.gravatar.com/avatar/b0547d87dcd79b9e7191ff00c3e1e8ea?s=48&amp;d=identicon&amp;r=pg" class="photo avatar avatar-48" style="height:48px; width:48px;" />				<p>
+					<strong>Sharon K. Goetz</strong><br />
+					<small><a href="http://digitalhumanities.org/answers/profile/skgoetz">Member</a></small>
+				</p>
+				<div class="author-badges"><span class='badge 3'><!-- fewer than 5 posts --></span><span class='badge 0'><!-- fewer than 3 answers --></span></div>
+			</div>
+			<div class="threadpost">
+				<div class="post"><p>Belatedly, since I was checking to see what the current received wisdom is: character entities in P4 are also handy for glyphs for which no Unicode exists (yet?). Though I like Junicode, I'm leery of pasting in glyphs from its Private Use section. Very much in agreement with @kevin.s.hawkins here, also. </p>
+<p>I'm glad to see @<a href='http://digitalhumanities.org/answers/profile/jamesc'>jamesc</a>'s reminder about oXygen's code templates, at any rate, and will define a few templates for the glyphs in my manuscripts which aren't satisfied by the many Unicode hex points I've memorized....
+</p></div>
+				<div class="poststuff">Posted 6 years ago <a class="post-perma-link" href="#post-1675">Permalink</a> </div>
+			</div>
+		</div>
+	</li>
+
+</ol>
+<div class="clearit"><br style=" clear: both;" /></div>
+<p class="rss-link"><a href="http://digitalhumanities.org/answers/rss/topic/tei-basic-tags" class="rss-link"><abbr title="Really Simple Syndication">RSS</abbr> feed for this topic</a></p>
+<div class="nav"><a class="prev page-numbers" href="/answers/topic/tei-basic-tags" title="Previous page">&laquo; Previous</a><a class="page-numbers" href="/answers/topic/tei-basic-tags" title="Page 1">1</a><span class="page-numbers current" title="Page 2">2</span></div><h2 class="post-form">Reply</h2>
+<p>You must <a href="http://digitalhumanities.org/answers/bb-login.php">log in</a> to post.</p>		</div>
+			<div id="footer" role="contentinfo" class="span-24">
+				<div id="lang-switch">
+					<span class="lang-label">Language</span>
+					<form id="bb_language_switcher" style="display:inline-block;"><select  style="width:150px;" name="bb_language_switcher" onchange="location.href='/answers/topic/tei-basic-tags/page/2?bblang=' + this.options[this.selectedIndex].value;">
+<option value=''>Select...</option>	<option value="bg_BG">&nbsp;Bulgarian (BG) </option>
+	<option value="continents-cities-sr_RS">&nbsp;Corsican</option>
+	<option value="da_DK">&nbsp;Danish (DK) </option>
+	<option style='background:#ECE9D8;color:#000;font-weight:bold;' value=" ">&nbsp;English</option>
+	<option value="et_EE">&nbsp;Estonian (EE) </option>
+	<option value="fr_FR">&nbsp;French (FR) </option>
+	<option value="de">&nbsp;German</option>
+	<option value="he_IL">&nbsp;Hebrew (IL) </option>
+	<option value="hu_HU">&nbsp;Hungarian (HU) </option>
+	<option value="id_ID">&nbsp;Indonesian (ID) </option>
+	<option value="it_IT">&nbsp;Italian (IT) </option>
+	<option value="ja">&nbsp;Japanese</option>
+	<option value="pl_PL">&nbsp;Polish (PL) </option>
+	<option value="pt_BR">&nbsp;Portuguese (BR) </option>
+	<option value="pt_PT">&nbsp;Portuguese (PT) </option>
+	<option value="ro_RO">&nbsp;Romanian (RO) </option>
+	<option value="ru_RU">&nbsp;Russian (RU) </option>
+	<option value="sr_RS">&nbsp;Serbian (RS) </option>
+	<option value="sk">&nbsp;Slovak</option>
+	<option value="sk_SK">&nbsp;Slovak (SK) </option>
+	<option value="es_ES">&nbsp;Spanish (ES) </option>
+	<option value="sv_SE">&nbsp;Swedish (SE) </option>
+	<option value="th">&nbsp;Thai</option>
+	<option value="ug_CN">&nbsp;Uyghur (CN) </option>
+	<option value="uz_UZ">&nbsp;Uzbek (UZ) </option>
+	<option value="vi">&nbsp;Vietnamese</option>
+</select></form>
+				</div>			
+				<p>A project of the <a href="http://www.ach.org">Association for Computers and the Humanities</a> and the Chronicle of Higher Education's <a href="http://profhacker.com">ProfHacker</a></p>
+				<p>Icons by <a href="http://www.famfamfam.com/lab/icons/silk/">famfamfam</a></p>
+				<p><a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/"><img alt="Creative Commons License" src="http://i.creativecommons.org/l/by-nc-sa/3.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License</a>.</p>
+				<p><a href="http://lib.virginia.edu/scholarslab"><img src="http://digitalhumanities.org/answers/bb-templates/dhqa/images/slab-logo.jpg" alt="Scholars' Lab" title="Scholars' Lab"/></a></p>
+			</div>
+	</div>
+
+
+</body>
+</html>

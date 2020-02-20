@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Topic: What is the easiest way to automate Omeka backups to a local machine?</title>
+		<link>http://digitalhumanities.org/answers/topic/what-is-the-easiest-way-to-automate-omeka-backups-to-a-local-machine</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Topic: What is the easiest way to automate Omeka backups to a local machine?</description>
+		<language>en-US</language>
+		<pubDate>Fri, 14 Apr 2017 18:51:37 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/topic/what-is-the-easiest-way-to-automate-omeka-backups-to-a-local-machine" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>Wayne Graham on "What is the easiest way to automate Omeka backups to a local machine?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-is-the-easiest-way-to-automate-omeka-backups-to-a-local-machine#post-1792</link>
+			<pubDate>Tue, 13 Nov 2012 17:58:05 +0000</pubDate>
+			<dc:creator>Wayne Graham</dc:creator>
+			<guid isPermaLink="false">1792@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I run a lot of different Omeka instances and have to do all kinds of crazy deployments and maintenance. I packaged these all up in to a library that you can install (depends on Ruby) called &#60;a href=&#34;https://rubygems.org/gems/omeka-recipes&#34;&#62;omeka-recipes&#60;/a&#62;. You can set up pretty complex server configurations (e.g. staging, production, development) and move databases around with the database tasks. It also has the ability to sync assets (images, etc.), as well as help manage deployments. It may be way overkill for your needs, but for me, it's what I use to manage all of my Omeka instances.&#60;/p&#62;
+&#60;p&#62;Basic usage:&#60;/p&#62;
+
+
+&#60;div class=&#34;bb_syntax&#34;&#62;&#60;div class=&#34;code&#34;&#62;&#60;pre class=&#34;ruby&#34; style=&#34;font-family:monospace;&#34;&#62;cap db:mysql:dump
+cap db:mysql:fetch_dump
+cap omeka:sync_assets&#60;/pre&#62;&#60;/div&#62;&#60;/div&#62;
+
+
+
+&#60;p&#62;The first command will log on to your sever and generate a backup file for you (reading the db.ini file). The second will download the file to your local machine and the third will download everything in your archive directory to your local computer.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Patrick Murray-John on "What is the easiest way to automate Omeka backups to a local machine?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-is-the-easiest-way-to-automate-omeka-backups-to-a-local-machine#post-1783</link>
+			<pubDate>Tue, 30 Oct 2012 13:40:34 +0000</pubDate>
+			<dc:creator>Patrick Murray-John</dc:creator>
+			<guid isPermaLink="false">1783@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Good advice above. I'll add, though, that if you can back up the archives directory from the Omeka installation itself, it will be very valuable if you ever need it (hopefully not!).&#60;/p&#62;
+&#60;p&#62;That's because the database dump stores the connection between files and items via its own generated filename -- not what you have in the identifier field. That is, without having the files as Omeka recognizes them in the archives directory, you would risk losing the connection between item, metadata, and file, and would still end up having to recreate the connections. Trust me, this has the potential to make you cry!&#60;/p&#62;
+&#60;p&#62;So, if you use the script Lincoln linked to, modifying it to make sure you grab a copy of the archives directory as well (or the whole kit and kaboodle of your installation) will be very helpful.&#60;/p&#62;
+&#60;p&#62;Good luck
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>jean_bauer on "What is the easiest way to automate Omeka backups to a local machine?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-is-the-easiest-way-to-automate-omeka-backups-to-a-local-machine#post-1782</link>
+			<pubDate>Tue, 30 Oct 2012 12:38:31 +0000</pubDate>
+			<dc:creator>jean_bauer</dc:creator>
+			<guid isPermaLink="false">1782@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;The script Lincoln linked to looks very good.  &#60;/p&#62;
+&#60;p&#62;mysqldump is exactly the command you want for this kind of backup.  It will create a file that contains everything you need to completely restore a MySQL database (the database schema and all your data).  For future reference, it is also possible to have mysqldump return just the data or just the schema.  On the command line type &#60;/p&#62;
+&#60;p&#62;&#38;gt;&#38;gt;mysqldump --help &#60;/p&#62;
+&#60;p&#62;to see all your options.  (If you've installed MySQL using MacPorts then the command is mysqldump5).
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>calebmcd@gmail.com on "What is the easiest way to automate Omeka backups to a local machine?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-is-the-easiest-way-to-automate-omeka-backups-to-a-local-machine#post-1781</link>
+			<pubDate>Tue, 30 Oct 2012 12:11:16 +0000</pubDate>
+			<dc:creator>calebmcd@gmail.com</dc:creator>
+			<guid isPermaLink="false">1781@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Thanks for the help. The shell script strategy was the way I was going to go, as I had already figured out how to do mysqldump. Not knowing anything about MySQL, I wanted some confirmation that this backup file &#60;em&#62;really would&#60;/em&#62; contain everything I would need to restore the whole project. I'll also check out the script Lincoln recommends.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>lmullen on "What is the easiest way to automate Omeka backups to a local machine?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-is-the-easiest-way-to-automate-omeka-backups-to-a-local-machine#post-1779</link>
+			<pubDate>Mon, 29 Oct 2012 14:19:11 +0000</pubDate>
+			<dc:creator>lmullen</dc:creator>
+			<guid isPermaLink="false">1779@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @calebmcd@gmail.com's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/what-is-the-easiest-way-to-automate-omeka-backups-to-a-local-machine#post-1776&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;Caleb,&#60;/p&#62;
+&#60;p&#62;You might take a look at &#60;a href=&#34;http://theme.fm/2011/06/a-shell-script-for-a-complete-wordpress-backup-4/&#34;&#62;this post that describes a shell script&#60;/a&#62; for automatically backing up WordPress. Since WordPress and Omeka run on the same stack, the script is probably pretty close to what you need.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Willy Lee on "What is the easiest way to automate Omeka backups to a local machine?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-is-the-easiest-way-to-automate-omeka-backups-to-a-local-machine#post-1778</link>
+			<pubDate>Mon, 29 Oct 2012 12:49:31 +0000</pubDate>
+			<dc:creator>Willy Lee</dc:creator>
+			<guid isPermaLink="false">1778@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I haven't spent much time in Omeka, but you could write a pretty simple shell script to manage this.&#60;/p&#62;
+&#60;p&#62;The first thing you should do is use mysqldump to output the database to a SQL export. Then either rsync of git push it to the local machine. After you get these mashed together into a script, add that to the /etc/crontab to schedule it.&#60;/p&#62;
+&#60;p&#62;That's an off the top of my head strategy, let me know if you want further detail and I'll try to make time to get you something to work with.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>calebmcd@gmail.com on "What is the easiest way to automate Omeka backups to a local machine?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-is-the-easiest-way-to-automate-omeka-backups-to-a-local-machine#post-1776</link>
+			<pubDate>Mon, 29 Oct 2012 11:38:06 +0000</pubDate>
+			<dc:creator>calebmcd@gmail.com</dc:creator>
+			<guid isPermaLink="false">1776@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I have no experience at all with PHP or MySQL, but I have recently put an Omeka installation on a server I have running on a virtual machine, where I have root privileges. If at all possible, I would like to be able to automatically back up my database to my local Unix-based machine at regular intervals, perhaps using something like Git or scp.&#60;/p&#62;
+&#60;p&#62;I don't necessarily have to backup all of the Omeka item files, as I have a folder on my local machine that contains all my PDFs and images in the Omeka database, with filenames that are identical to the &#34;Identifier&#34; field in my Omeka items. But I do want to get all of the metadata backed up, even just by grabbing the XML output. But I do want to be able to do this without having to think about it often or log in to Omeka to do the backup. Is there a way to do this?
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

@@ -1,0 +1,335 @@
+<?
+/*
+Plugin Name: bb Topic Icons
+Plugin URI: http://devt.caffeinatedbliss.com/bbpress/topic-icons
+Description: Adds configurable icons next to topics based on their status
+Author: Paul Hawke
+Author URI: http://paul.caffeinatedbliss.com/
+Version: 0.6
+*/
+
+/****************************************************************************
+ *
+ * Configure the following constants to fine-tune the CSS classes that are
+ * generated, the icon filenames that are used, and the text used in the
+ * legend (if you have one displayed).  Note: filenames are likely to be
+ * taken away in a future version and replaced with the concept of "icon sets"
+ * whose filenames are fixed, so dont get used to editing the filenames,
+ * as this will break in future versions.
+ *
+ ****************************************************************************/
+
+// css class for the unsorted list used in the legend display
+define( LEGEND_CLASS, 'topic_icon_legend' );
+
+// busy threshold - a topic with more posts than this is counted as "busy"
+// for purposes of picking an icon.
+define( BUSY_THRESHOLD, 15 );
+
+// width of the images, in pixels
+define( ICON_WIDTH, '20' );
+
+// height of the images, in pixels
+define( ICON_HEIGHT, '20' );
+
+// the URL base for where to find the default icon set.
+define( ICON_SET_URL_BASE, BB_PLUGIN_URL.'bb-topic-icons/icon-sets/' );
+
+/****************************************************************************
+ *
+ * Shouldnt be much need to edit anything beyond this point - configuration
+ * is all done via the constants (above) and through and admin area page in
+ * bbPress at runtime.
+ *
+ ****************************************************************************/
+
+require( 'bb-topic-icons-api.php' );
+require( 'bb-topic-icons-admin.php' );
+require( 'interface.status-interpreter.php' );
+require( 'interface.status-renderer.php' );
+require( 'class.default-status-interpreter.php' );
+require( 'class.default-status-renderer.php' );
+
+function topic_icons_legend() {
+	$icon_set_name = topic_icons_get_active_icon_set();
+	$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+	$statuses = get_active_status_interpreter()->getAllStatuses();
+	$renderer = get_active_status_renderer();
+	
+	echo '<ul id="'.LEGEND_CLASS.'">';
+	for ($i=0; $i < count($statuses); $i++) {
+		$image = $renderer->renderStatus($statuses[$i]);
+		$tooltip = $renderer->renderStatusTooltip($statuses[$i]);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (isset($image) && strlen($image) > 0 &&
+			isset($tooltip) && strlen($tooltip) > 0 && $exists) {
+			echo '<li><img src="'.$icon_set_url.'/'.$image.
+				'" width="'.ICON_WIDTH.'" height="'.ICON_HEIGHT.
+				'" align="absmiddle">&nbsp;'.$tooltip.'</li>';
+		}
+	}
+	echo '</ul>';
+}
+
+function topic_icons_css() {
+	echo "\n<style type=\"text/css\"><!--\n";
+	require( 'bb-topic-icons.css' );
+	echo "\n--></style>";
+}
+
+function topic_icons_label( $label ) {
+	global $topic;
+	
+	if (bb_is_front() || bb_is_forum() || bb_is_view() || bb_is_tag()) {		
+		$icon_set_name = topic_icons_get_active_icon_set();
+		$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+
+		$status = get_active_status_interpreter()->getStatus(bb_get_location(), $topic);
+		$renderer = get_active_status_renderer();
+		$image = $renderer->renderStatus($status);
+		$tooltip = $renderer->renderStatusTooltip($status);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (!$exists) {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), ICON_SET_URL_BASE.'/empty.png', ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		} else if (strlen($tooltip) > 0) {		
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"><span>%s</span></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $tooltip, $label);
+		} else {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		}
+	}
+	
+	return $label;
+}
+
+function topic_icons_init( ) {
+	remove_filter('bb_topic_labels', 'bb_closed_label', 10);
+	remove_filter('bb_topic_labels', 'bb_sticky_label', 20);
+
+	add_filter('bb_topic_labels', 'topic_icons_label', 11);
+
+	add_action('bb_head', 'topic_icons_css');
+
+	add_action('bb_admin_menu_generator', 'topic_icons_admin_page_add');
+	add_action('bb_admin-header.php', 'topic_icons_admin_page_process');
+	
+	topic_icons_register_status_interpreter('default', new DefaultStatusInterpreter(BUSY_THRESHOLD));
+	topic_icons_register_status_renderer('default', new DefaultStatusRenderer());
+}
+
+topic_icons_init();
+
+?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Tag: digital humanities - Recent Posts</title>
+		<link>http://digitalhumanities.org/answers/tags/digital-humanities</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Tag: digital humanities - Recent Posts</description>
+		<language>en-US</language>
+		<pubDate>Sun, 24 Mar 2019 17:08:25 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/tags/digital-humanities" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>gscottrobinson on "Reasonable goals for a first DH project?"</title>
+						<link>http://digitalhumanities.org/answers/topic/reasonable-goals-for-a-first-dh-project#post-2389</link>
+			<pubDate>Fri, 15 Apr 2016 14:05:14 +0000</pubDate>
+			<dc:creator>gscottrobinson</dc:creator>
+			<guid isPermaLink="false">2389@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Thank you so much, Patrick. The advice is appreciated. I've managed to download several years of the text, but the OCR is pretty terrible. Also, I've read a bit about topic modeling, but I'll look into it a bit more.&#60;/p&#62;
+&#60;p&#62;Gregory
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Patrick Murray-John on "Reasonable goals for a first DH project?"</title>
+						<link>http://digitalhumanities.org/answers/topic/reasonable-goals-for-a-first-dh-project#post-2388</link>
+			<pubDate>Mon, 11 Apr 2016 19:06:31 +0000</pubDate>
+			<dc:creator>Patrick Murray-John</dc:creator>
+			<guid isPermaLink="false">2388@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Goals and scope for the project might depend on the difficulty of the part of the project that's implicit in all your questions -- getting OCR'd text or some other electronic form out of the articles. A quick look at their site makes it look expensive, and some publishers get squeemish, at least, about this kind of project.&#60;/p&#62;
+&#60;p&#62;Depending on how you can get reasonably in machine-readable form, you might have to limit the scope to only one issue a year, or to a smaller date range, or both. That might make the 4th question a bit more feasible than the others.&#60;/p&#62;
+&#60;p&#62;On the other hand, if you can get everything, the 1st question sounds like a good topic modeling project.&#60;/p&#62;
+&#60;p&#62;Getting cited texts sounds pretty hard, or at least labor intensive. It would be difficult to parse out citations from the plain text. However, if you can't get plain text and only have images to work from, then that sounds like the most feasible question to pursue after you do that labor intensive work of collecting the data.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>gscottrobinson on "Reasonable goals for a first DH project?"</title>
+						<link>http://digitalhumanities.org/answers/topic/reasonable-goals-for-a-first-dh-project#post-2387</link>
+			<pubDate>Mon, 11 Apr 2016 17:56:35 +0000</pubDate>
+			<dc:creator>gscottrobinson</dc:creator>
+			<guid isPermaLink="false">2387@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hi!&#60;/p&#62;
+&#60;p&#62;I'm interested in learning more about computer-based textual analysis, so I developed a project using the journal Literature/Film Quarterly (LFQ). I haven't done this sort of research before, so I'm trying to determine the best questions to ask and the tools that will help me answer them. I'm hoping someone might be able to tell me if these are reasonable questions to ask. I'd also appreciate any suggestions. &#60;/p&#62;
+&#60;p&#62;LFQ began in 1973 and continues now. As the oldest journal in the field, looking at the text should be able to provide some insights about how adaptation studies developed.  At about 50 articles a year for 43 years, I'm looking at 2150 articles.&#60;/p&#62;
+&#60;p&#62;Questions: &#60;/p&#62;
+&#60;p&#62;Can an examination of the entire text of LFQ reveal anything substantial about the way adaptation studies has changed from 1973-present?&#60;br /&#62;
+What are the most frequently cited texts in each year? WebofScience doesn't support this journal.&#60;br /&#62;
+What names (other scholars) appear most frequently each year?&#60;br /&#62;
+What kinds of terms are used in earlier years (e.g. “fidelity,” &#34;intertextuality&#34;) and do they continue throughout the journal’s history?&#60;/p&#62;
+&#60;p&#62;If there are other questions that I could explore, I'd appreciate any suggestions.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>ijohnson222@gmail.com on "What are people using to manage large collections of images?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-are-people-using-to-manage-large-collections-of-images#post-2317</link>
+			<pubDate>Sat, 04 Apr 2015 13:26:37 +0000</pubDate>
+			<dc:creator>ijohnson222@gmail.com</dc:creator>
+			<guid isPermaLink="false">2317@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;You might like to take a look at Heurist - &#60;a href=&#34;http://HeuristNetwork.org&#34; rel=&#34;nofollow&#34;&#62;http://HeuristNetwork.org&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;It might not at first appear to be what you are looking for - it's a generic database for Humanities data - but it is easily configured to handle image metadata, including DC, so out-of-the-box might be a day to get set up. It handles remotely stored images eg. in Picasa, as well as indexing images in situ. It has good querying, including facetted queries in version 4 (to be released this month). Out-of-the box it gives you mapping and timelines, as well as connections between entities (which can include images, creators, owner, collections, auctions etc). It's currently handling in the 25,000 image range for a first world war project and a study on Balinese artists, including a mixture of jpg, tif and PDF.&#60;/p&#62;
+&#60;p&#62;I'm happy to assist with setting up an out-of-the-box image database - it's something I need to do for another project - and once that's done it really will be a 5 minute job to build a new image database. Email me on: &#60;a href=&#34;mailto:ian.johnson@sydney.edu.au&#34;&#62;ian.johnson@sydney.edu.au&#60;/a&#62; (in western Europe time zone until late June).
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>ijohnson222@gmail.com on "What are people using to manage large collections of images?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-are-people-using-to-manage-large-collections-of-images#post-2316</link>
+			<pubDate>Sat, 04 Apr 2015 13:25:50 +0000</pubDate>
+			<dc:creator>ijohnson222@gmail.com</dc:creator>
+			<guid isPermaLink="false">2316@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;You might like to take a look at Heurist - &#60;a href=&#34;http://HeuristNetwork.org&#34; rel=&#34;nofollow&#34;&#62;http://HeuristNetwork.org&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;It might not at first appear to be what you are looking for - it's a generic database for Humanities data - but it is easily configured to handle image metadata, including DC, so out-of-the-box might be a day to get set up. It handles remotely stored images eg. in Picasa, as well as indexing images in situ. It has good querying, including facetted queries in version 4 (to be released this month). Out-of-the box it gives you mapping and timelines, as well as connections between entities (which can include images, creators, owner, collections, auctions etc). It's currently handling in the 25,000 image range for a first world war project and a study on Balinese artists, including a mixture of jpg, tif and PDF.&#60;/p&#62;
+&#60;p&#62;I'm happy to assist with setting up an out-of-the-box image database - it's something I need to do for another project - and once that's done it really will be a 5 minute job to build a new image database. Email me on: &#60;a href=&#34;mailto:ian.johnson@sydney.edu.au&#34;&#62;ian.johnson@sydney.edu.au&#60;/a&#62; (in western Europe time zone until late June).
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Arno Bosse on "What are people using to manage large collections of images?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-are-people-using-to-manage-large-collections-of-images#post-2315</link>
+			<pubDate>Fri, 03 Apr 2015 21:29:27 +0000</pubDate>
+			<dc:creator>Arno Bosse</dc:creator>
+			<guid isPermaLink="false">2315@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I don't have time now to post a proper description, but take a look at &#60;a href=&#34;https://wolffapp.com&#34; rel=&#34;nofollow&#34;&#62;https://wolffapp.com&#60;/a&#62; as well.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>hopegreenberg on "What are people using to manage large collections of images?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-are-people-using-to-manage-large-collections-of-images#post-2314</link>
+			<pubDate>Fri, 03 Apr 2015 19:31:39 +0000</pubDate>
+			<dc:creator>hopegreenberg</dc:creator>
+			<guid isPermaLink="false">2314@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @Arno Bosse's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/what-are-people-using-to-manage-large-collections-of-images#post-2312&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;I like the &#34;back in the day&#34; phrase - I remember these conferences at ALLC/ACH conferences in the mid-90s. The proffered solutions cost thousands of dollars. You'd think by now...*sigh*
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>hopegreenberg on "What are people using to manage large collections of images?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-are-people-using-to-manage-large-collections-of-images#post-2313</link>
+			<pubDate>Fri, 03 Apr 2015 19:23:48 +0000</pubDate>
+			<dc:creator>hopegreenberg</dc:creator>
+			<guid isPermaLink="false">2313@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I, too, have been looking for a solution but perhaps should define what I mean by solution before assuming this is what everyone wants. I want:&#60;br /&#62;
+- to handle a collection of hundreds of images.&#60;br /&#62;
+- ability to browse through them quickly (by image, not just by name--rather like you can do in a &#34;Cover Flow&#34; view in a Finder window on a Mac) because sometimes it's easier to see the one you want rather than try to remember what text strings are associated with it to search on.&#60;br /&#62;
+- ability to assign standard metadata (probably Dublin Core) as well as tags, then sort on those. Faceted sorting/browsing would be nice too.&#60;br /&#62;
+- ability to sort based on any metadata or tag field and deliver the browse view described above. (This is where things break down.)&#60;/p&#62;
+&#60;p&#62;So, I've used dSpace - tedious metadata entry (when is that not the case?) but easy searching and the resulting view is reasonably browse-able. I've used Omeka: ditto on the metadata, not so great on the searching/browsing unless you can customize your own Collection display view. I've used iPhoto but as soon as you try to port the images somewhere else there always seem to be problems, not to mention the metadata is...metadata? what metadata? And other things that were even worse.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Arno Bosse on "What are people using to manage large collections of images?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-are-people-using-to-manage-large-collections-of-images#post-2312</link>
+			<pubDate>Fri, 03 Apr 2015 19:23:22 +0000</pubDate>
+			<dc:creator>Arno Bosse</dc:creator>
+			<guid isPermaLink="false">2312@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Back in the day, some of our Art History faculty in Chicago swore by Extensis Portfolio (&#60;a href=&#34;http://www.extensis.com/digital-asset-management/portfolio/)&#34; rel=&#34;nofollow&#34;&#62;http://www.extensis.com/digital-asset-management/portfolio/)&#60;/a&#62;. Another possibility for desktop tools might be Canto Cumulus (though it may not pass your &#34;out of the box&#34; test).&#60;/p&#62;
+&#60;p&#62;I'm sure if you (or someone who is a member) posted this to a forum used by the Visual Resources Association community (&#38;lt;VRA-L@LISTSERV.UARK.EDU&#38;gt;) you'd get additional and fuller answers. Also (just guessing though) you might even be able to find some discussion of this in the abstracts for their annual conference.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Miriam Posner on "What are people using to manage large collections of images?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-are-people-using-to-manage-large-collections-of-images#post-2311</link>
+			<pubDate>Fri, 03 Apr 2015 18:21:09 +0000</pubDate>
+			<dc:creator>Miriam Posner</dc:creator>
+			<guid isPermaLink="false">2311@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Since a number of people are responding to this question directly on Twitter, I made a &#60;a href=&#34;https://storify.com/miriamkp/managing-large-image-collections&#34;&#62;Storify&#60;/a&#62; of the responses I got.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Miriam Posner on "What are people using to manage large collections of images?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-are-people-using-to-manage-large-collections-of-images#post-2310</link>
+			<pubDate>Fri, 03 Apr 2015 16:51:13 +0000</pubDate>
+			<dc:creator>Miriam Posner</dc:creator>
+			<guid isPermaLink="false">2310@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @Patrick Murray-John's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/what-are-people-using-to-manage-large-collections-of-images#post-2309&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;I kind of think … not? Unless I'm missing something. The problem is that, while Zotero does a lovely job with metadata, attachments are hard to see unless you deliberately open them up. That's why scholars are using iPhoto, I think — you can at least see at a glance what you have in your collection.&#60;/p&#62;
+&#60;p&#62;I also have never tried bulk-importing things into Zotero, and I don't know how well that works. My sense is that a lot of people (*cough* me *cough*) already have large, disorganized collections of archival images, and entering metadata for them one at a time would be a lot to handle.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Patrick Murray-John on "What are people using to manage large collections of images?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-are-people-using-to-manage-large-collections-of-images#post-2309</link>
+			<pubDate>Fri, 03 Apr 2015 13:40:32 +0000</pubDate>
+			<dc:creator>Patrick Murray-John</dc:creator>
+			<guid isPermaLink="false">2309@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Not that I have, or know anyone who has, but would that other RRCHNM project Zotero work for some of these needs?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Cynthia B Meyers on "What are people using to manage large collections of images?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-are-people-using-to-manage-large-collections-of-images#post-2308</link>
+			<pubDate>Fri, 03 Apr 2015 01:46:31 +0000</pubDate>
+			<dc:creator>Cynthia B Meyers</dc:creator>
+			<guid isPermaLink="false">2308@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I am trying to deal with thousands of archival images--mostly documents but lots of visuals too--and am also struggling for a solution. A colleague has suggested that I convert the JPGs into PDFs, OCR them, and then manage them in DevonThinkPro, where I can tag, annotate, search, organize. I am new to this and am still figuring out a workflow. Adobe Acrobat is balking at OCR'ing PDFs I made from iPhone JPGs (saying they are too large in inches, not data) and I haven't worked with DevonThinkPro enough to say if it is the right solution for me. But I'm hoping DevonThinkPro, which can handle most formats, allows me to manage the images. Yes, it's a lot of steps, so if you come up with other solutions, I'm all ears!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Miriam Posner on "What are people using to manage large collections of images?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-are-people-using-to-manage-large-collections-of-images#post-2307</link>
+			<pubDate>Thu, 02 Apr 2015 23:05:22 +0000</pubDate>
+			<dc:creator>Miriam Posner</dc:creator>
+			<guid isPermaLink="false">2307@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I'm curious to know what software humanities scholars are using to wrangle large collections of images. I often encounter scholars who struggle to manage large image collections — it's not at all unusual to find people managing collections of historical images with iPhoto — and wondered if there are databases that make sense for visual collections. I'm especially interested in programs that:&#60;/p&#62;
+&#60;ul&#62;
+&#60;li&#62;work out of the box and have a GUI (sorry)&#60;/li&#62;
+&#60;li&#62;are designed for individuals, not enterprises&#60;/li&#62;
+&#60;li&#62;allow a scholar to quickly apprehend many images at once&#60;/li&#62;
+&#60;li&#62;allow one to add metadata (like place and date) — something beyond tags would be nice — and construct queries&#60;/li&#62;
+&#60;li&#62;make sense for people who have a lot of digital surrogates of primary sources (which is to say, systems that are optimized to retrieve the EXIF data from a photo of an archival document won't make a whole lot of sense)&#60;/li&#62;
+&#60;/ul&#62;
+&#60;p&#62;I know about Picasa, LightRoom, and ImagePlot. I don't think an enterprise-level system like ContenDM or the like makes sense for individual scholars. Omeka, of course, is nice, but it's a bit unwieldy if you're just trying to manage a collection. What am I missing?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Ethan Gruber on "DH &#38; Biography"</title>
+						<link>http://digitalhumanities.org/answers/topic/dh-biography#post-2162</link>
+			<pubDate>Fri, 07 Mar 2014 14:18:00 +0000</pubDate>
+			<dc:creator>Ethan Gruber</dc:creator>
+			<guid isPermaLink="false">2162@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Prosopographies are the next big thing in Classical Studies, and there's a tremendous amount of work being done in the library and archival communities with aligning name authority systems to enable large-scale aggregation and access to LAM content. EAC-CPF is an emerging standard for the description of people, families, and corporate bodies, but TEI has also been used for prosopographies ( &#60;a href=&#34;http://wiki.tei-c.org/index.php/Prosopography&#34; rel=&#34;nofollow&#34;&#62;http://wiki.tei-c.org/index.php/Prosopography&#60;/a&#62; ), and certainly TEI could serve as a container for more detailed individual biographies. As for EAC-CPF, the highest-profile project is IATH's Social Networks and Archival Context Project ( &#60;a href=&#34;http://socialarchive.iath.virginia.edu/&#34; rel=&#34;nofollow&#34;&#62;http://socialarchive.iath.virginia.edu/&#60;/a&#62; ). It is still in the prototype phase, but it contains several million entity records derived from name authority files and archival finding aids contributed by dozens of organizations (OCLC, Library of Congress, BnF, Getty, etc.). SNAC will eventually evolve into an international consortium maintaining millions of entities, each expressed as a URI in semantic web terms. Holders of content will be able to link their records to SNAC identifiers. The specific workflow is a bit fuzzy at the moment, but the end goal is to allow researchers of, say, Thomas Jefferson, to view the EAC-CPF record of Jefferson, and archival materials held at multiple institutions will be made available through one interface.&#60;/p&#62;
+&#60;p&#62;A similar project is evolving in the Classical Studies community: Standards for Networking Ancient Prosopographies (SNAP, &#60;a href=&#34;http://snapdrgn.net/&#34; rel=&#34;nofollow&#34;&#62;http://snapdrgn.net/&#60;/a&#62; ). The idea here is to align various prosopographies in linked open data methodologies to enable the aggregation of content based on people as well as experiment with social network graphs. A researcher of Augustus would be able to read biographical information as well as gain access to epigraphy mentioning him, coins and statues depicting him, or architectural monuments that he commissioned. The model for this project is Pelagios ( &#60;a href=&#34;http://pelagios-project.blogspot.com/&#34; rel=&#34;nofollow&#34;&#62;http://pelagios-project.blogspot.com/&#60;/a&#62; ), which has similarly aggregated content based on ancient geographical places defined by Pleiades ( &#60;a href=&#34;http://pleiades.stoa.org/&#34; rel=&#34;nofollow&#34;&#62;http://pleiades.stoa.org/&#60;/a&#62; ). I am planning on participating in this initiative in several capacities. We are beginning to build a prosopography of the Roman Empire, formed in EAC-CPF initially generated from open data and supplemented by biographical context added through an EAC-CPF editor that I have been developing for about 18 months called xEAC ( &#60;a href=&#34;https://github.com/ewg118/xEAC&#34; rel=&#34;nofollow&#34;&#62;https://github.com/ewg118/xEAC&#60;/a&#62; ).&#60;/p&#62;
+&#60;p&#62;So, back to your point about individual biographies. EAC-CPF is more data-oriented than document-oriented, so TEI is a more capable vessel for individual biographies. There's an awful lot you can do in TEI: implement machine readable dates, link places mentioned in texts to gazetteers on the web (like Geonames.org), link related or mentioned people to resources defined on SNAC. So you could build your biography from the ground up to become part of the larger linked open data cloud while simultaneously being able to harness existing web services to gather and display content related to people and places that you've tagged in your TEI. Suppose you've written a biography of Thomas Jefferson. You've linked your record to the SNAC-defined URI for Jefferson. SNAC would eventually be able to harvest some RDF or EAC-CPF about your person so that when a researcher comes to the SNAC portal for Jefferson, he or she will be able to follow links back to your biography, archival materials held at the University of Virginia, or books by or about him that have been catalogued in Worldcat.
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

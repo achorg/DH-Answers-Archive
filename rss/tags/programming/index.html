@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Tag: programming - Recent Posts</title>
+		<link>http://digitalhumanities.org/answers/tags/programming</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Tag: programming - Recent Posts</description>
+		<language>en-US</language>
+		<pubDate>Sun, 04 Aug 2013 17:25:17 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/tags/programming" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>jlmcdonald@gmail.com on "Have you used MongoDB for DH project?"</title>
+						<link>http://digitalhumanities.org/answers/topic/have-you-used-mongodb-for-dh-project#post-1851</link>
+			<pubDate>Sat, 05 Jan 2013 18:49:03 +0000</pubDate>
+			<dc:creator>jlmcdonald@gmail.com</dc:creator>
+			<guid isPermaLink="false">1851@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I think MongoDB has a lot to offer DH projects -- it basically incorporates some of the best features of a document-oriented database and a relational database all in one. For so much of the data often worked with in DH projects, that are sometimes squished and squeezed so much to fit a relational model that never quite works, a schemaless approach to indexing and storing data like Mongo has works very well. I especially see value for those projects that don't need a full-blown structured repository like FEDORA, but that need more than flat files or relational DBs can do.&#60;/p&#62;
+&#60;p&#62;Having said that, the biggest thing to consider is that you say using MySQL works very well already for you. If you can't tell that there is something missing, not-quite-right, or not efficient enough with your current setup, the transition to Mongo may not be worth the effort in the long run. Mongo is pretty straightforward to set up, but it does approach data differently and doesn't use SQL at all, so when you say you'd be rewriting the backend, you'd really be rewriting it! You have to evaluate your data itself to know if the effort is worth it. Is your data tabular, or document-based? Are you mostly dealing with numbers and simple structured data (with some relationships), or heavily semantic data with complex metadata?&#60;/p&#62;
+&#60;p&#62;Perhaps another path to consider, if you decide to rewrite your back end, is to completely decouple it from your front end. Create a thin layer that is nothing but a RESTful API -- the api talks to the DB and only spits out structured JSON on the other end. This would also likely require some tweaking of your front end, but it will A) make it so you can then very easily write multiple other front ends (mobile, TV, etc) without a hitch, and B) 3 years from now, if you decide to change out the DB layer again, it's much easier to then create a new API generator that will offer the same data structures than it is to create an all new backend interface. There are lots of starting point solutions for quickly generating RESTful APIs whether your DB is MySQL, Mongo, or something else.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>boybot16@gmail.com on "Have you used MongoDB for DH project?"</title>
+						<link>http://digitalhumanities.org/answers/topic/have-you-used-mongodb-for-dh-project#post-1850</link>
+			<pubDate>Sat, 05 Jan 2013 15:19:42 +0000</pubDate>
+			<dc:creator>boybot16@gmail.com</dc:creator>
+			<guid isPermaLink="false">1850@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;We have a DH project that's currently uses MySQL for the database, and it works very well.&#60;/p&#62;
+&#60;p&#62;There has been much recent talk about NoSQL databases, particularly MongoDB, promising flexibility and scalability. We're considering re-writing the backend. Is anyone in the DH community seriously using MongoDB?&#60;/p&#62;
+&#60;p&#62;If you have used MongoDB for a DH project, what has been your experience with it? Biggest joy? Gotchas to look out for? Is conversion worth it for libraries and archives open source projects?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>acrymble on "What do you want to learn from the Programming Historian?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-do-you-want-to-learn-from-the-programming-historian#post-1803</link>
+			<pubDate>Thu, 29 Nov 2012 10:46:38 +0000</pubDate>
+			<dc:creator>acrymble</dc:creator>
+			<guid isPermaLink="false">1803@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Thanks for these suggestions (and we welcome more!).&#60;/p&#62;
+&#60;p&#62;I'd like to invite anyone who would like to contribute lessons on these or any other topics to contact me (adam.crymble@gmail.com). We do write lessons, but we also encourage others to take the opportunity to share what they know or what they'd like to know. Nothing teaches you about a new coding principle faster than having to teach someone else.&#60;/p&#62;
+&#60;p&#62;We're happy to guide you through the learning process and be as hands-on as you need.&#60;/p&#62;
+&#60;p&#62;Adam
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>cforster on "What do you want to learn from the Programming Historian?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-do-you-want-to-learn-from-the-programming-historian#post-1801</link>
+			<pubDate>Wed, 28 Nov 2012 04:03:46 +0000</pubDate>
+			<dc:creator>cforster</dc:creator>
+			<guid isPermaLink="false">1801@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;As a big fan of the Programming Historian, I'll echo most of what's been said. I know that I have at times struggled through working with XML. Andrew's suggestion about a discussion of objects makes a lot of sense to me; largely I'd be interested in seeing as much someone's judgement about where building a class makes sense and when it's overkill. (I have some distant memory of building a class POEM which would inherit LITERARY_TEXT and then rapidly suspecting that I was nearing madness). &#60;/p&#62;
+&#60;p&#62;Topic modeling seems like the hot thing and I appreciated the first Topic Modeling tutorial. I'd love to see a second tutorial on topic modeling (right now I'm trying to look into charting changes in topics over time...)&#60;/p&#62;
+&#60;p&#62;Does anyone do visualization with Python? I have always turned to Processing when I was going to try to generate images...
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Andrew Berger on "What do you want to learn from the Programming Historian?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-do-you-want-to-learn-from-the-programming-historian#post-1799</link>
+			<pubDate>Tue, 27 Nov 2012 21:27:27 +0000</pubDate>
+			<dc:creator>Andrew Berger</dc:creator>
+			<guid isPermaLink="false">1799@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I've been very impressed with the Programming Historian; I'm now through all of the tutorials except the one on topic modeling. I agree with the suggestions above, particularly on parsing xml and using object-oriented techniques. &#60;/p&#62;
+&#60;p&#62;A couple of additional suggestions:&#60;/p&#62;
+&#60;p&#62;1. A tutorial on using web services/APIs.&#60;/p&#62;
+&#60;p&#62;2. Advice on how to handle special characters. I don't know if this would require another tutorial (on character encoding?) or if it would be better to incorporate it into the existing ones. Searching around, there seem to be various methods for dealing with this and I'd find it helpful to get a more general idea of what's going on than the (very helpful, but brief) code snippets I've found in places like Stack Overflow.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>cljim22@gmail.com on "What do you want to learn from the Programming Historian?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-do-you-want-to-learn-from-the-programming-historian#post-1795</link>
+			<pubDate>Fri, 23 Nov 2012 20:44:30 +0000</pubDate>
+			<dc:creator>cljim22@gmail.com</dc:creator>
+			<guid isPermaLink="false">1795@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I agree with Andrew that the Programming History is great. I could use some help with working with XML. I wrote a program to download all of the UK Hansard (Parliamentary Debates) and I would like to figure out how to parse them better. I can simply strip all of the tags out by adapting earlier lessons and create large text files, but it would be better if I could extract some of the metadata in the XML (particularly the dates). As XML seems like a common database format for digital humanities content, a few basic lessons on working with XML and Python would be a big help.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Andrew Goldstone on "What do you want to learn from the Programming Historian?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-do-you-want-to-learn-from-the-programming-historian#post-1794</link>
+			<pubDate>Wed, 21 Nov 2012 17:04:14 +0000</pubDate>
+			<dc:creator>Andrew Goldstone</dc:creator>
+			<guid isPermaLink="false">1794@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Programming Historian is fantastic. Definitely helpful to this non-historian humanist.&#60;/p&#62;
+&#60;p&#62;I'd love to have lessons that follow on &#60;a href=&#34;http://programminghistorian.org/lessons/computing-frequencies&#34;&#62;Computing Frequencies&#60;/a&#62;. Once you have made the word-count list, what are some of the elementary things to do next? How do you normalize the counts reasonably? What is this tf-idf I keep trying to read about on wikipedia? I am thinking that the lesson could show how to do a little math over a big list of data points, and perhaps point out a module or two to import to help with this (maybe installing and importing modules is a lesson in itself).&#60;/p&#62;
+&#60;p&#62;Another, more programming-centric idea would be to show a little bit more how python's object-oriented features work. Is there a good application for some of its abstraction features for humanists? E.g.: I have a big csv file with 11 columns and a whole lot of rows of text data about some documents. How I get that into a suitable object in python?&#60;/p&#62;
+&#60;p&#62;Possibly this could go along with: a lesson on python's database connections.&#60;/p&#62;
+&#60;p&#62;Apologies if these are too random or too specialized or otherwise silly.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Miriam Posner on "What do you want to learn from the Programming Historian?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-do-you-want-to-learn-from-the-programming-historian#post-1793</link>
+			<pubDate>Wed, 21 Nov 2012 00:39:04 +0000</pubDate>
+			<dc:creator>Miriam Posner</dc:creator>
+			<guid isPermaLink="false">1793@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Over at the &#60;a href=&#34;http://programminghistorian.org/&#34;&#62;Programming Historian&#60;/a&#62;, we're seeking to add to our collection of lessons, which already covers things like grabbing text from webpages, counting word frequencies, and the basics of topic modeling. We have a lot of ideas about what other lessons we might provide, but we thought we'd ask first: What do you want to learn?&#60;/p&#62;
+&#60;p&#62;As a humanist (you don't need to be a historian), are there some specific programming tasks you'd like to perform? What are they?&#60;/p&#62;
+&#60;p&#62;(We find that the lessons work best when they're targeted at accomplishing a particular task, so the more specific the better!)
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>dot.porter on "Resources for sharpening programming skills?"</title>
+						<link>http://digitalhumanities.org/answers/topic/resources-for-sharpening-programming-skills#post-1713</link>
+			<pubDate>Mon, 25 Jun 2012 17:53:36 +0000</pubDate>
+			<dc:creator>dot.porter</dc:creator>
+			<guid isPermaLink="false">1713@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Thanks Wayne and everyone else! I had a busy week last week, set myself up with a web host, installed some stuff and basically jumped in with both feet. &#60;/p&#62;
+&#60;p&#62;dotporterdigital.org&#60;/p&#62;
+&#60;p&#62;Wayne, right now I'm playing with the Internet Archive BookReader, but I'll have a look at the page flipper. IABR does some things that aren't perfect for the data I'm working with, I have a friend who is helping work it out (someone associated with the project whose data I'm using, which is really helpful) but since what I'm wanting to do is to experiment, once I've figured out how to get the IABR to do what I want, I'll want to try something else too  :-)&#60;/p&#62;
+&#60;p&#62;Another friend recommended Javascript the good parts so I will definitely be checking that book out. Over the weekend my friend who is helping with the BookReader walked me through some really simple ways to use javascript to access the XML metadata files directly (what I'd done was to write XSLT to read those files and output javascript with that data hard-coded, which isn't very flexible). It's just a different way to think about it, I'm all in XML-land in my head and I need to crack out of that. &#60;/p&#62;
+&#60;p&#62;I'll check out those single-page apps too. That might be a good way to help my head get around how these programs work. It's tough having one simple js file that points to a bunch of other stuff... just overwhelming. But even after a week I'm feeling more comfortable... and like I'm having a lot of fun.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Wayne Graham on "Resources for sharpening programming skills?"</title>
+						<link>http://digitalhumanities.org/answers/topic/resources-for-sharpening-programming-skills#post-1711</link>
+			<pubDate>Fri, 22 Jun 2012 20:55:36 +0000</pubDate>
+			<dc:creator>Wayne Graham</dc:creator>
+			<guid isPermaLink="false">1711@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;This is a bit more meta, but &#60;a href=&#34;http://pragprog.com/book/ahptl/pragmatic-thinking-and-learning&#34;&#62;Pragmatic Thinking and Learning: Refactor Your Wetware&#60;/a&#62; is a great book on training your brain to think like computers (and write better software). &#60;/p&#62;
+&#60;p&#62;I always encourage people to also read as much code as they possibly can. I wouldn't start with framework code, but a nice library for something that you want to do. You mentioned a page turner, so you may want to take a look at the code from this project: &#60;a href=&#34;http://jpageflipper.codeplex.com/&#34; rel=&#34;nofollow&#34;&#62;http://jpageflipper.codeplex.com/&#60;/a&#62;. I would also be sure to get Doug Crockford's JavaScript: The Good Parts and Marjin Haverbeke's &#60;a href=&#34;http://eloquentjavascript.net/&#34;&#62;Eloquent JavaScript&#60;/a&#62;. &#60;/p&#62;
+&#60;p&#62;If you're interested in how single-page web applications work, I'd check out Ember.js and Knockout.js. &#60;/p&#62;
+&#60;p&#62;If you're looking at the Web Stack, Julie Meloni's books are great. And, if you want to build video games in HTML 5, you can always check out &#60;a href=&#34;http://www.apress.com/9781430241706&#34;&#62;my latest book&#60;/a&#62;.&#60;/p&#62;
+&#60;p&#62;HTH,&#60;br /&#62;
+Wayne
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>dot.porter on "Resources for sharpening programming skills?"</title>
+						<link>http://digitalhumanities.org/answers/topic/resources-for-sharpening-programming-skills#post-1702</link>
+			<pubDate>Wed, 20 Jun 2012 03:54:19 +0000</pubDate>
+			<dc:creator>dot.porter</dc:creator>
+			<guid isPermaLink="false">1702@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @Patrick Murray-John's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/resources-for-sharpening-programming-skills#post-1701&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;Thank you Patrick!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Patrick Murray-John on "Resources for sharpening programming skills?"</title>
+						<link>http://digitalhumanities.org/answers/topic/resources-for-sharpening-programming-skills#post-1701</link>
+			<pubDate>Tue, 19 Jun 2012 20:48:17 +0000</pubDate>
+			<dc:creator>Patrick Murray-John</dc:creator>
+			<guid isPermaLink="false">1701@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I've responded to similar questions in the same way before, so forgive me being a broken record. But at least I'm consistent!&#60;/p&#62;
+&#60;p&#62;The best way to sharped coding skills is to code, just as the best way to sharped writing skills is to write.&#60;/p&#62;
+&#60;p&#62;So, I'd say look for little etude-like projects that'll push you to learn more to accomplish a task.&#60;/p&#62;
+&#60;p&#62;So start with wanting to work with XML and dive into doing some basic manipulation. Especially if your XML experience involves TEI, maybe dive into the &#60;a href=&#34;https://github.com/mlaa/nvs-challenge&#34;&#62;New Variorum Shakespeare Digital Challenge&#60;/a&#62; data.&#60;/p&#62;
+&#60;p&#62;Some possible little things to do might be:&#60;/p&#62;
+&#60;ul&#62;
+&#60;li&#62;Count how many lines each speaker has&#60;/li&#62;
+&#60;li&#62;Calculate the average length of each speakers' lines&#60;/li&#62;
+&#60;li&#62;See which characters use the longest or shortest words&#60;/li&#62;
+&#60;/ul&#62;
+&#60;p&#62;These likely won't win you the $500 prize, but so what? They, or things like them, might be fun little coding exercises to sharpen your skills. You might even discover that, after you hit on a couple that sharpen some skills, you discover -- and push -- your own coding boundaries.&#60;/p&#62;
+&#60;p&#62;The above is just one suggestion for how to get at that principle -- to sharpen your coding skills, put the books and tutorials down and write some code that does small, quick-gratification tasks. Turn back to the tutorials only when you're stuck in how to proceed with writing the code.&#60;/p&#62;
+&#60;p&#62;HTH
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>dot.porter on "Resources for sharpening programming skills?"</title>
+						<link>http://digitalhumanities.org/answers/topic/resources-for-sharpening-programming-skills#post-1700</link>
+			<pubDate>Tue, 19 Jun 2012 19:22:21 +0000</pubDate>
+			<dc:creator>dot.porter</dc:creator>
+			<guid isPermaLink="false">1700@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @Ben Brumfield's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/resources-for-sharpening-programming-skills#post-1698&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;Thanks Ben. I have a scanned manuscript that I've been wanting to play with (I'm actually processing the derivatives now), so I at least have some files I could do things with. My first step will be getting them into some kind of page turning system, I guess, then I can kind of mess around and see what else comes to mind. Regarding Ruby, that's one language I've never looked at but if there are good tutorials for easing into it I will give it a try. Thank you!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Ben Brumfield on "Resources for sharpening programming skills?"</title>
+						<link>http://digitalhumanities.org/answers/topic/resources-for-sharpening-programming-skills#post-1698</link>
+			<pubDate>Tue, 19 Jun 2012 17:26:58 +0000</pubDate>
+			<dc:creator>Ben Brumfield</dc:creator>
+			<guid isPermaLink="false">1698@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Most of the resources I'm aware of are language-specific; often geared for programmers who want to switch from one technology to another.  The Ruby and Ruby on Rails communities have put a lot of effort into eliminating barriers for new learners, however, including building websites and tutorials that allow learners to start experimenting with the technology within their browsers -- without having to install an application framework at all.  The two I'm aware of are &#60;a href=&#34;http://tryruby.org/&#34;&#62;TryRuby&#60;/a&#62; and &#60;a href=&#34;http://railsforzombies.org/&#34;&#62;Rails for Zombies&#60;/a&#62;.  You can find other Ruby-specific resources at Amanda Wagener's community-contributed directory &#60;a href=&#34;http://iwanttolearnruby.com&#34;&#62;iwanttolearnruby.com&#60;/a&#62;.&#60;/p&#62;
+&#60;p&#62;One last suggestion -- it's usually best to have a project in mind when you're working on these things, rather than learning programming in the abstract.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>dot.porter on "Resources for sharpening programming skills?"</title>
+						<link>http://digitalhumanities.org/answers/topic/resources-for-sharpening-programming-skills#post-1696</link>
+			<pubDate>Tue, 19 Jun 2012 14:31:19 +0000</pubDate>
+			<dc:creator>dot.porter</dc:creator>
+			<guid isPermaLink="false">1696@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I have a long history of technical work in DH (mainly XML related). I've been working as a manager for a couple of years and although I still get to do some coding I'd like to sharpen my skills, and maybe learn something new. I'm particularly interested in tools for working with XML documents, and in website development. I have taken a couple of courses through my university's IT services (perl and python), they offer other courses too but three hours really isn't enough time to get much out of it and there's no follow-up. I've also done some of the codeacademy tutorials but again it's not really enough to do much with. Maybe I just need to do more of them? I have access to Lynda.com, which seems to be chock full of courses but that is a bit overwhelming. Ideally I would take a web development course of some sort at the U. but my life and work schedule doesn't make that a very good option right now. &#60;/p&#62;
+&#60;p&#62;Anyone with experience with Lynda.com, maybe recommendations on where to start? Or are there other options available I'm not aware of? Thanks so much DHers!
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

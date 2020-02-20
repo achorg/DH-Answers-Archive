@@ -1,0 +1,347 @@
+<?
+/*
+Plugin Name: bb Topic Icons
+Plugin URI: http://devt.caffeinatedbliss.com/bbpress/topic-icons
+Description: Adds configurable icons next to topics based on their status
+Author: Paul Hawke
+Author URI: http://paul.caffeinatedbliss.com/
+Version: 0.6
+*/
+
+/****************************************************************************
+ *
+ * Configure the following constants to fine-tune the CSS classes that are
+ * generated, the icon filenames that are used, and the text used in the
+ * legend (if you have one displayed).  Note: filenames are likely to be
+ * taken away in a future version and replaced with the concept of "icon sets"
+ * whose filenames are fixed, so dont get used to editing the filenames,
+ * as this will break in future versions.
+ *
+ ****************************************************************************/
+
+// css class for the unsorted list used in the legend display
+define( LEGEND_CLASS, 'topic_icon_legend' );
+
+// busy threshold - a topic with more posts than this is counted as "busy"
+// for purposes of picking an icon.
+define( BUSY_THRESHOLD, 15 );
+
+// width of the images, in pixels
+define( ICON_WIDTH, '20' );
+
+// height of the images, in pixels
+define( ICON_HEIGHT, '20' );
+
+// the URL base for where to find the default icon set.
+define( ICON_SET_URL_BASE, BB_PLUGIN_URL.'bb-topic-icons/icon-sets/' );
+
+/****************************************************************************
+ *
+ * Shouldnt be much need to edit anything beyond this point - configuration
+ * is all done via the constants (above) and through and admin area page in
+ * bbPress at runtime.
+ *
+ ****************************************************************************/
+
+require( 'bb-topic-icons-api.php' );
+require( 'bb-topic-icons-admin.php' );
+require( 'interface.status-interpreter.php' );
+require( 'interface.status-renderer.php' );
+require( 'class.default-status-interpreter.php' );
+require( 'class.default-status-renderer.php' );
+
+function topic_icons_legend() {
+	$icon_set_name = topic_icons_get_active_icon_set();
+	$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+	$statuses = get_active_status_interpreter()->getAllStatuses();
+	$renderer = get_active_status_renderer();
+	
+	echo '<ul id="'.LEGEND_CLASS.'">';
+	for ($i=0; $i < count($statuses); $i++) {
+		$image = $renderer->renderStatus($statuses[$i]);
+		$tooltip = $renderer->renderStatusTooltip($statuses[$i]);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (isset($image) && strlen($image) > 0 &&
+			isset($tooltip) && strlen($tooltip) > 0 && $exists) {
+			echo '<li><img src="'.$icon_set_url.'/'.$image.
+				'" width="'.ICON_WIDTH.'" height="'.ICON_HEIGHT.
+				'" align="absmiddle">&nbsp;'.$tooltip.'</li>';
+		}
+	}
+	echo '</ul>';
+}
+
+function topic_icons_css() {
+	echo "\n<style type=\"text/css\"><!--\n";
+	require( 'bb-topic-icons.css' );
+	echo "\n--></style>";
+}
+
+function topic_icons_label( $label ) {
+	global $topic;
+	
+	if (bb_is_front() || bb_is_forum() || bb_is_view() || bb_is_tag()) {		
+		$icon_set_name = topic_icons_get_active_icon_set();
+		$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+
+		$status = get_active_status_interpreter()->getStatus(bb_get_location(), $topic);
+		$renderer = get_active_status_renderer();
+		$image = $renderer->renderStatus($status);
+		$tooltip = $renderer->renderStatusTooltip($status);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (!$exists) {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), ICON_SET_URL_BASE.'/empty.png', ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		} else if (strlen($tooltip) > 0) {		
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"><span>%s</span></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $tooltip, $label);
+		} else {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		}
+	}
+	
+	return $label;
+}
+
+function topic_icons_init( ) {
+	remove_filter('bb_topic_labels', 'bb_closed_label', 10);
+	remove_filter('bb_topic_labels', 'bb_sticky_label', 20);
+
+	add_filter('bb_topic_labels', 'topic_icons_label', 11);
+
+	add_action('bb_head', 'topic_icons_css');
+
+	add_action('bb_admin_menu_generator', 'topic_icons_admin_page_add');
+	add_action('bb_admin-header.php', 'topic_icons_admin_page_process');
+	
+	topic_icons_register_status_interpreter('default', new DefaultStatusInterpreter(BUSY_THRESHOLD));
+	topic_icons_register_status_renderer('default', new DefaultStatusRenderer());
+}
+
+topic_icons_init();
+
+?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Forum: Interfaces, Design &#38; Usability - Recent Topics</title>
+		<link>http://digitalhumanities.org/answers/forum/design-viz</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Forum: Interfaces, Design &amp; Usability - Recent Topics</description>
+		<language>en-US</language>
+		<pubDate>Sun, 24 Mar 2019 17:08:46 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/forum/design-viz/topics" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>mlholloway251 on "Does anyone have resources or examples on how to write about website design?"</title>
+						<link>http://digitalhumanities.org/answers/topic/does-anyone-have-resources-or-examples-on-how-to-write-about-website-design#post-2425</link>
+			<pubDate>Fri, 19 Jan 2018 22:39:31 +0000</pubDate>
+			<dc:creator>mlholloway251</dc:creator>
+			<guid isPermaLink="false">2425@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I am creating a website via wordpress for my dissertation and I need help on how to write about design choices, layout, what I chose to include, etc. If you have any resources that might help me please let me know. Thanks!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Ramkumar on "What are some of the easily understood examples on small-world networks"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-are-some-of-the-easily-understood-examples-on-small-world-networks#post-2420</link>
+			<pubDate>Sun, 17 Dec 2017 10:00:41 +0000</pubDate>
+			<dc:creator>Ramkumar</dc:creator>
+			<guid isPermaLink="false">2420@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I am looking for more examples to explain the 'small world' network phenomenon.&#60;/p&#62;
+&#60;p&#62;I am working on an article on the same. An example which I have taken up is - a modern well connected cluster of villages. &#60;/p&#62;
+&#60;p&#62;Smart and digitally enabled cluster of villages with urban and social infrastructure are the way forward. In such clusters, every body is connected to everybody. Information passes through all them seamlessly. Everybody stays informed and there are numerous advantages from eliminating village feuds to sharing farm practices and social welfare schemes. Similarly, there could be others. Cheers, Ramkumar
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Gogol71 on "I&#039;d like to visualize two or three pictures side by side"</title>
+						<link>http://digitalhumanities.org/answers/topic/id-like-to-visualize-two-or-three-pictures-side-by-side#post-2393</link>
+			<pubDate>Wed, 01 Jun 2016 08:00:40 +0000</pubDate>
+			<dc:creator>Gogol71</dc:creator>
+			<guid isPermaLink="false">2393@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I'm working with scalar (&#60;a href=&#34;http://scalar.usc.edu&#34; rel=&#34;nofollow&#34;&#62;http://scalar.usc.edu&#60;/a&#62;) and would like to compare pictures and transcriptions in columns. I guess three and even four columns of pictures or transcriptions should be possible. Many thanks for your help.&#60;br /&#62;
+Guillaume
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>pfyfe on "Examples of web-based galleries or historical architecture?"</title>
+						<link>http://digitalhumanities.org/answers/topic/examples-of-web-based-galleries-or-historical-architecture#post-2116</link>
+			<pubDate>Mon, 21 Oct 2013 19:30:00 +0000</pubDate>
+			<dc:creator>pfyfe</dc:creator>
+			<guid isPermaLink="false">2116@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;A colleague of mine has been admiring the &#60;a href=&#34;http://www.whatjanesaw.org/&#34;&#62;What Jane Saw&#60;/a&#62; project and has asked for help with an idea for a related immersive web-based gallery based on a historical model. I'm wondering if anyone can recommend similar sites that model gallery spaces or that use architectural models for site navigation and display. (And not Second Life.) There must be great architectural projects and museum sites out there that do this. Grateful for your suggestions.&#60;/p&#62;
+&#60;p&#62;We're also interested in suggestions for what kinds of platforms or software would be most useful for creating such a web-based project: making an architectural model, overlaying images, providing some kind of spatial navigation, etc. (It seems that What Jane Saw is built from SketchUp models, rendered into background images, and serving room and picture info with PHP and JavaScript.) What approaches would you recommend or avoid? Thanks for your time --
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>gaelicmichael on "Questions to facilitate design of Digital Humanities projects"</title>
+						<link>http://digitalhumanities.org/answers/topic/questions-to-facilitate-design-of-digital-humanities-projects#post-2073</link>
+			<pubDate>Tue, 13 Aug 2013 18:47:12 +0000</pubDate>
+			<dc:creator>gaelicmichael</dc:creator>
+			<guid isPermaLink="false">2073@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;What is the best set of questions that I could pose to a humanities scholar without any particular knowledge of computer technology to figure out what s/he is trying to do so that I design the best possible implementation in digital format?&#60;/p&#62;
+&#60;p&#62;(I've just written a &#60;a href=&#34;http://virtualgael.wordpress.com/2013/08/12/facilitating-digital-humanities-designs/&#34;&#62;blog post&#60;/a&#62; with some possible answers, which might be of interest to those trying to help humanities scholars design and plan digital projects. Perhaps others can offer further suggestions, comments or nuances here.)
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>daniel.odonnell@gmail.com on "Examples of hybrid free online + for-sale Print on Demand/ePub?"</title>
+						<link>http://digitalhumanities.org/answers/topic/examples-of-hybrid-free-online-for-sale-print-on-demandepub#post-2069</link>
+			<pubDate>Mon, 12 Aug 2013 21:35:23 +0000</pubDate>
+			<dc:creator>daniel.odonnell@gmail.com</dc:creator>
+			<guid isPermaLink="false">2069@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I'm in discussions with a press about a second edition of a 100k word edition of an Old English poem. I'm pushing for an open, on-line release of the text with Print-on-Demand and ePub sales from the site. Since the introduction is frequently cited, and is available in part on Google Books already (ironically for a print-and-CD-ROM digital edition, Google just scanned the print copy), my argument is the following:&#60;/p&#62;
+&#60;p&#62;1) People who are really in the market for a 100k word book on a 9-line poem are going to want to buy a copy in a format they can annotate, read off line, and that is generally more pleasing on the eye than a standard web-page (you'd be surprised how many people have wanted a copy in the last 8 years!)&#60;br /&#62;
+2) People who are prepared to put up with poorer-quality, long-form presentation because they can get it for free on-line are basically already being lost to the Google Books site&#60;br /&#62;
+3) Putting the whole argument and text out on the web will help keep the book central to debates in the field, presumably increasing the number of people buying copies under argument 1 above.&#60;br /&#62;
+4) Reprinting a book+CD-ROM digital text today captures the worst of all worlds: we miss the exposure on-line publication provides via search engines and we lock the most flexible format (the digital) in a medium that is increasingly difficult to use and is certainly not multi-platform.&#60;/p&#62;
+&#60;p&#62;I can think of one somewhat parallel case that seems to show these arguments: Peter Baker's Introduction to Old English which, I am told, has sold very well through the years even though it has always been freely available on-line in a version that, if anything, is actually more feature-rich than the print copy. Does anybody know of any other examples?&#60;/p&#62;
+&#60;p&#62;Some background: the edition was published in 2005 in a Print-and-CD-ROM, where the CD-ROM contained the full text of the print book and additional views, tools, and features. The edition itself has done better than you might think for a pretty long edition of a 9-line poem (I believe it sold through 3+ print runs) and it was runner up for MLA's best edition in 2007 (first medieval edition and I believe first digital to be so recognised). What I want to do now is publish a revised version of the contents of the CD-ROM to the web and offer POD copies and ePubs of the book content for sale from the site. My theory is that they are likely to sell for much the same reason the book sold in the first place: people use digital texts but given the choice they are still happy doing long-form reading in a format that is better suited to it that the browser.&#60;/p&#62;
+&#60;p&#62;Any advice? Parallel examples? Other ideas?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>thatdrmaz on "Digital textual design: On the hunt for projects/tools/toolsets/good designs"</title>
+						<link>http://digitalhumanities.org/answers/topic/digital-textual-design-on-the-hunt-for-projectstoolstoolsetsgood-designs#post-2052</link>
+			<pubDate>Thu, 01 Aug 2013 11:38:18 +0000</pubDate>
+			<dc:creator>thatdrmaz</dc:creator>
+			<guid isPermaLink="false">2052@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hello all,&#60;/p&#62;
+&#60;p&#62;I'm on the hunt for projects/tools/toolsets/good designs that are involved with the digital replication of texts, creating a range of ways to search, interact with, browse and investigate any text. &#60;/p&#62;
+&#60;p&#62;I am based at the university of durham, and what we hope this will enable us to identify are new forms of digital curating and scholarly ‘good practice’.  Our aim is to be able to outline the important underlying principles for anyone interested in discovering and editing versions of physical texts as a digital entity.&#60;/p&#62;
+&#60;p&#62;Does anyone know of any technologies that we should incorporate into our research?... Or other similar projects / interesting people we should contact?... As part of a larger research we'd like to interview anyone involved with this kind of work - as a Curator, designer etc. &#60;/p&#62;
+&#60;p&#62;Thanks terribly in advance.&#60;br /&#62;
+Mariann
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>jennriley on "How do you want full text provided to you for analysis?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-do-you-want-full-text-provided-to-you-for-analysis#post-1893</link>
+			<pubDate>Tue, 19 Feb 2013 01:02:25 +0000</pubDate>
+			<dc:creator>jennriley</dc:creator>
+			<guid isPermaLink="false">1893@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;We're in the early planning stages of an initiative that will make available full text for some of our special collections library's manuscript holdings. We'll definitely provide a search interface, but we'd also like to allow the full text of these resources to be downloaded for researchers to use in text mining and whatever other applications suit their fancy. As a researcher doing this kind of work, what's the most useful way for us to make this full text available to you? One big download? Something else? Are there examples out there of sites that do this particularly well that we should model our capabilities after?&#60;/p&#62;
+&#60;p&#62;Thanks for your input!&#60;br /&#62;
+Jenn
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Trip Kirkpatrick on "Rich Interfaces for Scrolls"</title>
+						<link>http://digitalhumanities.org/answers/topic/rich-interfaces-for-scrolls#post-1668</link>
+			<pubDate>Tue, 29 May 2012 18:49:03 +0000</pubDate>
+			<dc:creator>Trip Kirkpatrick</dc:creator>
+			<guid isPermaLink="false">1668@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;In surveying for existing web/mobile interfaces for digitized scrolls or scroll paintings, I'm mostly seeing fairly straightforward examples, interface-wise. I'm not finding many with rich annotation built in, for example, to say nothing of user-contributed content. Almost all are Flash-based enlargements with, in some cases, accompanying text and/or media. Strangely enough, I'm also finding very few of recent vintage. Are there any good examples out there of sophisticated UI/UX work with horizontal scrolls?&#60;/p&#62;
+&#60;p&#62;A handful of examples of what I'm finding:&#60;br /&#62;
+&#60;a href=&#34;http://lucian.uchicago.edu/blogs/caea/scrolling-paintings/&#34; rel=&#34;nofollow&#34;&#62;http://lucian.uchicago.edu/blogs/caea/scrolling-paintings/&#60;/a&#62; (good for comparison tool)&#60;br /&#62;
+&#60;a href=&#34;http://library.brown.edu/cds/perry/scroll_bul.html&#34; rel=&#34;nofollow&#34;&#62;http://library.brown.edu/cds/perry/scroll_bul.html&#60;/a&#62; (good for paratext)&#60;br /&#62;
+&#60;a href=&#34;http://ocw.mit.edu/ans7870/21f/21f.027/black_ships_and_samurai_02/scroll_home.html&#34; rel=&#34;nofollow&#34;&#62;http://ocw.mit.edu/ans7870/21f/21f.027/black_ships_and_samurai_02/scroll_home.html&#60;/a&#62;&#60;br /&#62;
+&#60;a href=&#34;http://etcweb.princeton.edu/asianart/interactives/koetsu/scroll.html&#34; rel=&#34;nofollow&#34;&#62;http://etcweb.princeton.edu/asianart/interactives/koetsu/scroll.html&#60;/a&#62; (starting to get there)&#60;br /&#62;
+&#60;a href=&#34;http://www.courses.fas.harvard.edu/~icgzmod/qingming_student.html&#34; rel=&#34;nofollow&#34;&#62;http://www.courses.fas.harvard.edu/~icgzmod/qingming_student.html&#60;/a&#62; (closest I've found to what I would like to do)&#60;br /&#62;
+&#60;a href=&#34;http://learn.bowdoin.edu/heijiscroll/viewer.html&#34; rel=&#34;nofollow&#34;&#62;http://learn.bowdoin.edu/heijiscroll/viewer.html&#60;/a&#62; (also very good)&#60;br /&#62;
+&#60;a href=&#34;http://dss.collections.imj.org.il/isaiah&#34; rel=&#34;nofollow&#34;&#62;http://dss.collections.imj.org.il/isaiah&#60;/a&#62; (also good)&#60;br /&#62;
+&#60;a href=&#34;http://academic.reed.edu/hellscrolls/scrolls/Aseries/A01/index.html&#34; rel=&#34;nofollow&#34;&#62;http://academic.reed.edu/hellscrolls/scrolls/Aseries/A01/index.html&#60;/a&#62; (a little naive but some good ideas)
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>earchsvc11@gmail.com on "Regarding better solution towards building a forum related to elder care"</title>
+						<link>http://digitalhumanities.org/answers/topic/regarding-better-solution-towards-building-a-forum-related-to-elder-care#post-1742</link>
+			<pubDate>Mon, 08 Oct 2012 14:53:05 +0000</pubDate>
+			<dc:creator>earchsvc11@gmail.com</dc:creator>
+			<guid isPermaLink="false">1742@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I intend to build a forum/community related to elder care.&#60;br /&#62;
+The end users would typically use this as a support tool for QA, collaborate with others and also be able to link to various associated systems.&#60;br /&#62;
+I did consider Drupal for the solution. Are there other options that I should be looking at?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>rlee13 on "Looking for color-coded transcription displays of manuscripts"</title>
+						<link>http://digitalhumanities.org/answers/topic/looking-for-color-coded-transcription-displays-of-manuscripts#post-1725</link>
+			<pubDate>Tue, 07 Aug 2012 17:53:43 +0000</pubDate>
+			<dc:creator>rlee13</dc:creator>
+			<guid isPermaLink="false">1725@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I'm looking for projects which are transcribing manuscripts using a color-coded display. &#60;/p&#62;
+&#60;p&#62;The William Blake Archive is re-assessing both our current tagset for encoding manuscripts and our color-coded transcriptions. We've looked at: &#60;/p&#62;
+&#60;p&#62;the Whitman Archive (&#60;a href=&#34;http://whitmanarchive.org/manuscripts/transcriptions/index.html&#34; rel=&#34;nofollow&#34;&#62;http://whitmanarchive.org/manuscripts/transcriptions/index.html&#60;/a&#62;)&#60;br /&#62;
+the Rotunda edition of Melville's &#34;Typee&#34; (&#60;a href=&#34;http://rotunda.upress.virginia.edu/melville/&#34; rel=&#34;nofollow&#34;&#62;http://rotunda.upress.virginia.edu/melville/&#60;/a&#62;) the transcriptions available as part of the Shelley's Ghost exhibit from the Bodleian and the NYPL (&#60;a href=&#34;http://shelleysghost.bodleian.ox.ac.uk/?location_id=79#Transcript&#34; rel=&#34;nofollow&#34;&#62;http://shelleysghost.bodleian.ox.ac.uk/?location_id=79#Transcript&#60;/a&#62;)&#60;/p&#62;
+&#60;p&#62;Where else should we look?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>snehaadesai@gmail.com on "Support for a multi-media poetry translation website?"</title>
+						<link>http://digitalhumanities.org/answers/topic/support-for-a-multi-media-poetry-translation-website#post-1559</link>
+			<pubDate>Thu, 15 Mar 2012 08:36:31 +0000</pubDate>
+			<dc:creator>snehaadesai@gmail.com</dc:creator>
+			<guid isPermaLink="false">1559@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hi, I am a Fulbright Scholar working on translation practice and theory. I'd like to solicit ideas for organizations that would support a multi-media presentation of the translations I am writing. Ideally, I would work with an organization that it invested in innovation in digital publishing, and the humanities.&#60;/p&#62;
+&#60;p&#62;Just throwing this out there for ideas--thanks!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>pianissimo.nyc@gmail.com on "What to look for in a freelance DH web designer/developer?"</title>
+						<link>http://digitalhumanities.org/answers/topic/seeking-web-designerdeveloper-for-small-subscription-based-electronic-edition#post-1421</link>
+			<pubDate>Mon, 31 Oct 2011 00:47:50 +0000</pubDate>
+			<dc:creator>pianissimo.nyc@gmail.com</dc:creator>
+			<guid isPermaLink="false">1421@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;strong&#62;[Since &#60;em&#62;DH Answers&#60;/em&#62; isn't really meant to be a jobs board, I'm exercising an admin's privilege and changing the title of this post to gear discussion more toward general advice. What should people like Brian be looking for, when seeking freelance help to execute DH projects? -- Ed.]&#60;/strong&#62;&#60;/p&#62;
+&#60;p&#62;Hello,&#60;/p&#62;
+&#60;p&#62;I'm an independent scholar preparing a modern-spelling, heavily annotated edition of a 16th-century text. Eventually I hope to publish my edition in book form, but for various reasons I'd first like to make it available to subscribers online.&#60;/p&#62;
+&#60;p&#62;Can anyone recommend a freelance web designer/developer, familiar with subscription software, who could help me create a website for an electronic edition and make the content available to individual and institutional subscribers? Ideally he or she would be in New York City, but location isn't critical.&#60;/p&#62;
+&#60;p&#62;I've worked out roughly how I'd like the site to look and function, but I don't have the skills to implement my ideas. And I'm even more clueless about subscription software.&#60;/p&#62;
+&#60;p&#62;The site will consist of about five small web pages, with a few paragraphs of copy and 5 or 10 captioned images on each page. These will provide a context for the original 60,000-word text (plus 100,000 words comprising my 1,000 substantive footnotes and 2,000 word glosses). The text won't be downloadable but only viewable by scrolling from page to page. If I can get the proper permission, I'd also like to include&#60;br /&#62;
+facsimile pages from the original book, but this may be beyond my means right now.&#60;/p&#62;
+&#60;p&#62;Many thanks in advance for any recommendations,&#60;/p&#62;
+&#60;p&#62;Brian&#60;br /&#62;
+&#60;a href=&#34;mailto:pianissimo.nyc@gmail.com&#34;&#62;pianissimo.nyc@gmail.com&#60;/a&#62;
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>tdbowman on "List of scholarly resources focused on usability studies of DH projects?"</title>
+						<link>http://digitalhumanities.org/answers/topic/list-of-scholarly-resources-focused-on-usability-studies-of-dh-projects#post-1344</link>
+			<pubDate>Wed, 17 Aug 2011 15:25:40 +0000</pubDate>
+			<dc:creator>tdbowman</dc:creator>
+			<guid isPermaLink="false">1344@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I'm interested in academic articles focusing on usability studies of digital humanities projects.  I would like to put together a list of projects and usability resources.  I am interested in usability methods used; more specifically I would like to examine questions from surveys, tasks required, average number of users sampled, intent of study, etc. &#60;/p&#62;
+&#60;p&#62;I am happy to compose this resource and place it online if the community can start me on my way.  I've done basic Google Scholar searches with &#34;digital humanities&#34; and &#34;usability&#34; and have found a few older resources... I'm looking for current and past examples.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Miriam Posner on "Cool ways of displaying influence over time and space?"</title>
+						<link>http://digitalhumanities.org/answers/topic/cool-ways-of-displaying-influence-over-time-and-space#post-1308</link>
+			<pubDate>Thu, 28 Jul 2011 16:00:52 +0000</pubDate>
+			<dc:creator>Miriam Posner</dc:creator>
+			<guid isPermaLink="false">1308@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I've been talking to an art historian who wants to create a website that will map the influence of a particular body of works over time and space. Like: this work influenced that work, in this place, at this time. I'm having trouble picturing what this could look like, so I'm hoping you can point me to sites that do something like this in an interesting way.&#60;/p&#62;
+&#60;p&#62;This is, I think, a design and interface question, not a data analysis question -- the art historian will create links among works using her own expertise, not large datasets.&#60;/p&#62;
+&#60;p&#62;Thanks, as always!
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

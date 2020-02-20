@@ -1,0 +1,348 @@
+<?
+/*
+Plugin Name: bb Topic Icons
+Plugin URI: http://devt.caffeinatedbliss.com/bbpress/topic-icons
+Description: Adds configurable icons next to topics based on their status
+Author: Paul Hawke
+Author URI: http://paul.caffeinatedbliss.com/
+Version: 0.6
+*/
+
+/****************************************************************************
+ *
+ * Configure the following constants to fine-tune the CSS classes that are
+ * generated, the icon filenames that are used, and the text used in the
+ * legend (if you have one displayed).  Note: filenames are likely to be
+ * taken away in a future version and replaced with the concept of "icon sets"
+ * whose filenames are fixed, so dont get used to editing the filenames,
+ * as this will break in future versions.
+ *
+ ****************************************************************************/
+
+// css class for the unsorted list used in the legend display
+define( LEGEND_CLASS, 'topic_icon_legend' );
+
+// busy threshold - a topic with more posts than this is counted as "busy"
+// for purposes of picking an icon.
+define( BUSY_THRESHOLD, 15 );
+
+// width of the images, in pixels
+define( ICON_WIDTH, '20' );
+
+// height of the images, in pixels
+define( ICON_HEIGHT, '20' );
+
+// the URL base for where to find the default icon set.
+define( ICON_SET_URL_BASE, BB_PLUGIN_URL.'bb-topic-icons/icon-sets/' );
+
+/****************************************************************************
+ *
+ * Shouldnt be much need to edit anything beyond this point - configuration
+ * is all done via the constants (above) and through and admin area page in
+ * bbPress at runtime.
+ *
+ ****************************************************************************/
+
+require( 'bb-topic-icons-api.php' );
+require( 'bb-topic-icons-admin.php' );
+require( 'interface.status-interpreter.php' );
+require( 'interface.status-renderer.php' );
+require( 'class.default-status-interpreter.php' );
+require( 'class.default-status-renderer.php' );
+
+function topic_icons_legend() {
+	$icon_set_name = topic_icons_get_active_icon_set();
+	$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+	$statuses = get_active_status_interpreter()->getAllStatuses();
+	$renderer = get_active_status_renderer();
+	
+	echo '<ul id="'.LEGEND_CLASS.'">';
+	for ($i=0; $i < count($statuses); $i++) {
+		$image = $renderer->renderStatus($statuses[$i]);
+		$tooltip = $renderer->renderStatusTooltip($statuses[$i]);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (isset($image) && strlen($image) > 0 &&
+			isset($tooltip) && strlen($tooltip) > 0 && $exists) {
+			echo '<li><img src="'.$icon_set_url.'/'.$image.
+				'" width="'.ICON_WIDTH.'" height="'.ICON_HEIGHT.
+				'" align="absmiddle">&nbsp;'.$tooltip.'</li>';
+		}
+	}
+	echo '</ul>';
+}
+
+function topic_icons_css() {
+	echo "\n<style type=\"text/css\"><!--\n";
+	require( 'bb-topic-icons.css' );
+	echo "\n--></style>";
+}
+
+function topic_icons_label( $label ) {
+	global $topic;
+	
+	if (bb_is_front() || bb_is_forum() || bb_is_view() || bb_is_tag()) {		
+		$icon_set_name = topic_icons_get_active_icon_set();
+		$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+
+		$status = get_active_status_interpreter()->getStatus(bb_get_location(), $topic);
+		$renderer = get_active_status_renderer();
+		$image = $renderer->renderStatus($status);
+		$tooltip = $renderer->renderStatusTooltip($status);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (!$exists) {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), ICON_SET_URL_BASE.'/empty.png', ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		} else if (strlen($tooltip) > 0) {		
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"><span>%s</span></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $tooltip, $label);
+		} else {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		}
+	}
+	
+	return $label;
+}
+
+function topic_icons_init( ) {
+	remove_filter('bb_topic_labels', 'bb_closed_label', 10);
+	remove_filter('bb_topic_labels', 'bb_sticky_label', 20);
+
+	add_filter('bb_topic_labels', 'topic_icons_label', 11);
+
+	add_action('bb_head', 'topic_icons_css');
+
+	add_action('bb_admin_menu_generator', 'topic_icons_admin_page_add');
+	add_action('bb_admin-header.php', 'topic_icons_admin_page_process');
+	
+	topic_icons_register_status_interpreter('default', new DefaultStatusInterpreter(BUSY_THRESHOLD));
+	topic_icons_register_status_renderer('default', new DefaultStatusRenderer());
+}
+
+topic_icons_init();
+
+?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Forum: Applications, Tools, Formats - Recent Topics</title>
+		<link>http://digitalhumanities.org/answers/forum/applications-tools-formats</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Forum: Applications, Tools, Formats - Recent Topics</description>
+		<language>en-US</language>
+		<pubDate>Sun, 24 Mar 2019 17:08:38 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/forum/applications-tools-formats/topics" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>mnaeimi on "Atlas.ti and Gephi"</title>
+						<link>http://digitalhumanities.org/answers/topic/atlasti-and-gephi#post-2415</link>
+			<pubDate>Fri, 07 Jul 2017 15:08:43 +0000</pubDate>
+			<dc:creator>mnaeimi</dc:creator>
+			<guid isPermaLink="false">2415@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hello,&#60;/p&#62;
+&#60;p&#62;Does anybody know how I can convert xml data of Atlas.ti to CSV files for Gephi? &#60;/p&#62;
+&#60;p&#62;Thanks&#60;br /&#62;
+M.N.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>kdonovan11 on "Harvest Historical Twitter Data"</title>
+						<link>http://digitalhumanities.org/answers/topic/harvest-historical-twitter-data#post-2410</link>
+			<pubDate>Thu, 01 Jun 2017 19:25:33 +0000</pubDate>
+			<dc:creator>kdonovan11</dc:creator>
+			<guid isPermaLink="false">2410@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I would like to capture tweets from last year which centered on a particular social movement in Kenya. Many of them were sent or retweeted by @ConsumersKenya, so simply getting an archive of their tweets within a certain timeframe would be quite helpful. Being able to get those who used relevant hashtags during that period would also be fruitful.&#60;/p&#62;
+&#60;p&#62;There seem to be plenty of services to archive ongoing tweets, but is there a good way to get historical tweets for certain dates?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Arno Bosse on "How do I best convert hundreds of TEI P5 documents to plaintext?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-do-i-best-convert-hundreds-of-tei-p5-documents-to-plaintext#post-2227</link>
+			<pubDate>Thu, 28 Aug 2014 14:47:32 +0000</pubDate>
+			<dc:creator>Arno Bosse</dc:creator>
+			<guid isPermaLink="false">2227@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I'd like to use the available corpora in the German Text Archive (&#60;a href=&#34;http://www.deutschestextarchiv.de/download&#34; rel=&#34;nofollow&#34;&#62;http://www.deutschestextarchiv.de/download&#60;/a&#62;) to train OCR software. For this I need these texts as plaintext. All the German Text Archive texts however are all TEI P5 tagged. How do I best convert these (hundreds..) of documents into plaintext? &#60;/p&#62;
+&#60;p&#62;I'm comfortable on the command line and with small shell scripts but I wouldn't be able to write an app to make use of a public API to such a service. Ideally I'd like to find some tei2text-ish command line tool but the ones I've found in googling around and looking on GitHub don't appear (to me, leastways) to be suitable for TEI texts.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>shmerritt on "Most effective software for building searchable digital bibliographic database?"</title>
+						<link>http://digitalhumanities.org/answers/topic/most-effective-software-for-building-searchable-digital-bibliographic-database#post-1856</link>
+			<pubDate>Wed, 16 Jan 2013 02:07:48 +0000</pubDate>
+			<dc:creator>shmerritt</dc:creator>
+			<guid isPermaLink="false">1856@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;[Stéfan Sinclair (via DH Commons mentorship program) suggested that I post here.  I have described this project in my &#34;collaborator&#34; or user profile on DH Commons at &#60;a href=&#34;http://dhcommons.org&#34; rel=&#34;nofollow&#34;&#62;http://dhcommons.org&#60;/a&#62; ; direct link from the &#34;Collaborators&#34; section at &#60;a href=&#34;http://dhcommons.org/users/susan-hollis-merritt&#34; rel=&#34;nofollow&#34;&#62;http://dhcommons.org/users/susan-hollis-merritt&#60;/a&#62; and in my member profile on MLA Commons at &#60;a href=&#34;http://commons.mla.org&#34; rel=&#34;nofollow&#34;&#62;http://commons.mla.org&#60;/a&#62; ; direct member link at &#60;a href=&#34;http://commons.mla.org/members/shmerritt/&#34; rel=&#34;nofollow&#34;&#62;http://commons.mla.org/members/shmerritt/&#60;/a&#62;; direct links are also provided in the Pinter Bibliography and CV sections on my website at &#60;a href=&#34;http://www.susanhollismerritt.org&#34; rel=&#34;nofollow&#34;&#62;http://www.susanhollismerritt.org&#60;/a&#62; , where there are related details.]&#60;/p&#62;
+&#60;p&#62;I am requesting advice and guidance as I explore the possibility of building a searchable digital database for my &#34;Harold Pinter Bibliography&#34; published in print in volumes of &#60;em&#62;The Pinter Review&#60;/em&#62; (Tampa: The University of Tampa Press, 1987-2011).  Each annual/biennial/special edition of this bibliography is published in MLA format (whatever the most current MLA format has been at the time).  I would plan to continue with MLA format for consistency of documentation style throughout.  (I understand that users of such a bibliography could convert easily to whatever format is desired on their end later.)&#60;/p&#62;
+&#60;p&#62;I have word-processed files (WordPerfect) for all of the 14 editions of this bibliography.  The same typist working for The University of Tampa Press prepared my word-processed files into a format to be used by the printer.  For several years, she converted my &#34;Harold Pinter Bibliography&#34; files initially to MS Word document files or various versions of PDF files for the printer.  More recently, I gave her my own PDF file versions of my WordPerfect files, which I believe she also converted to Word or to another format for the printer.  The typist's and printer's digital files may be accessible if I need to have them for easier digital conversion.&#60;/p&#62;
+&#60;p&#62;A problem with the typist's conversions from one word-processing software program to another has been the loss of accents, punctuation, and other typesetting features, which at times have had to be corrected in printer's proofs.  I have maintained hard copies (original books and parts of books, offprints, photocopies, or print outs) and handwritten index cards (for every entry) to check as back ups of the bibliographic entries in the printed bibliographies for purposes of such error-correction of occasional printer's errors that were missed even in corrected proof.&#60;/p&#62;
+&#60;p&#62;From looking into this matter over a decade ago (when ProCite was initially popular), I believe that the printed information (even though digitized) would need to be converted into records featuring bibliographic fields (including annotations, sometimes lengthy, most often very brief) for each printed entry, and each entry would need to have key words and/or phrases (e.g., to accommodate multiple authors, editors, titles, subjects, etc.) so that it could be capable of classification by key words for searching by users.  Also, there are categories and subsections of categories in each published edition of this bibliography that may need some kind of &#34;field&#34;/key word/phrase identification for sorting electronically.&#60;/p&#62;
+&#60;p&#62;I am not familiar with mark up language beyond HTML, but it is possible that I might be able to learn about additional mark up languages if needed (e.g., RIS Format, SML format, etc.).  When I asked this question of a presenter after a DH session at the MLA Convention in Boston, she advised me to look at Drupal (which I have done somewhat), but I am not trained in using it for anything.  It appears to me to be involved in the stage of actually putting an already developed database online.  Another piece of advice I have received is possibly to create an EXCEL type spreadsheet which could be searched.  But before I would begin doing any of this work, I would like to have a plan to use one mode of conversion (one kind of software, so as to avoid duplication of effort).&#60;/p&#62;
+&#60;p&#62;Thus, a main question that I am asking is: What would be the most effective current software package or packages to use for this entire process?&#60;/p&#62;
+&#60;p&#62;Prior to deciding this project's feasibility and how and where this database would be hosted (institutional partners/support), I need to explore such matters as: (1) the technical requirements for such conversion from printed material to searchable digital format; (2) the estimated cost of such conversion (including the costs of any commercial software packages involved (if any) and of assistance with the physical input of the records); (3) whether or not applying for grant support is warranted; and so on.&#60;/p&#62;
+&#60;p&#62;I welcome suggestions, advice, and guidance.  Thank you very much.&#60;/p&#62;
+&#60;p&#62;[(updated on January 17, 2013)Since first posting this, I have been exploring some earlier DH Q&#38;amp;A threads and found Bethany Nowviskie's suggesting that updates are in progress for &#60;a href=&#34;http://arts-humanities.net/&#34; rel=&#34;nofollow&#34;&#62;http://arts-humanities.net/&#60;/a&#62;, and I will be exploring the &#34;tools&#34; forum there; the &#34;bibliography&#34; section returned an error message when I tried it, so I'll try it again later.]&#60;/p&#62;
+&#60;p&#62;Susan Hollis Merritt, PhD&#60;br /&#62;
+Founding Bibliographical Editor&#60;br /&#62;
+&#60;em&#62;The Pinter Review&#60;/em&#62;&#60;br /&#62;
+&#60;a href=&#34;http://www.susanhollismerritt.org&#34; rel=&#34;nofollow&#34;&#62;http://www.susanhollismerritt.org&#60;/a&#62;
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>gscottrobinson on "Reasonable goals for a first DH project?"</title>
+						<link>http://digitalhumanities.org/answers/topic/reasonable-goals-for-a-first-dh-project#post-2387</link>
+			<pubDate>Mon, 11 Apr 2016 17:56:35 +0000</pubDate>
+			<dc:creator>gscottrobinson</dc:creator>
+			<guid isPermaLink="false">2387@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hi!&#60;/p&#62;
+&#60;p&#62;I'm interested in learning more about computer-based textual analysis, so I developed a project using the journal Literature/Film Quarterly (LFQ). I haven't done this sort of research before, so I'm trying to determine the best questions to ask and the tools that will help me answer them. I'm hoping someone might be able to tell me if these are reasonable questions to ask. I'd also appreciate any suggestions. &#60;/p&#62;
+&#60;p&#62;LFQ began in 1973 and continues now. As the oldest journal in the field, looking at the text should be able to provide some insights about how adaptation studies developed.  At about 50 articles a year for 43 years, I'm looking at 2150 articles.&#60;/p&#62;
+&#60;p&#62;Questions: &#60;/p&#62;
+&#60;p&#62;Can an examination of the entire text of LFQ reveal anything substantial about the way adaptation studies has changed from 1973-present?&#60;br /&#62;
+What are the most frequently cited texts in each year? WebofScience doesn't support this journal.&#60;br /&#62;
+What names (other scholars) appear most frequently each year?&#60;br /&#62;
+What kinds of terms are used in earlier years (e.g. “fidelity,” &#34;intertextuality&#34;) and do they continue throughout the journal’s history?&#60;/p&#62;
+&#60;p&#62;If there are other questions that I could explore, I'd appreciate any suggestions.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>LeahPowell on "How did you learn to code?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-did-you-learn-to-code#post-2368</link>
+			<pubDate>Wed, 03 Feb 2016 14:52:28 +0000</pubDate>
+			<dc:creator>LeahPowell</dc:creator>
+			<guid isPermaLink="false">2368@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I'm a PhD in English student, and I'm interested in (but very new to) DH. I will start working with TEI soon through a digital archive project I'm working on, so there's that. What other avenues should I explore in my quest to learn coding for the sake of DH research?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>oosa on "where do I change my password to one I easily remember?"</title>
+						<link>http://digitalhumanities.org/answers/topic/where-do-i-change-my-password-to-one-i-easily-remember#post-2367</link>
+			<pubDate>Wed, 03 Feb 2016 06:40:33 +0000</pubDate>
+			<dc:creator>oosa</dc:creator>
+			<guid isPermaLink="false">2367@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;the password sent to me is quite complex and I want to change it.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Welblaud on "TEI in Oxygen Author (problem with tables’ labels in XSL-FO)"</title>
+						<link>http://digitalhumanities.org/answers/topic/tei-in-oxygen-author-problem-with-tables%e2%80%99-labels-in-xsl-fo-1#post-2359</link>
+			<pubDate>Thu, 26 Nov 2015 08:30:49 +0000</pubDate>
+			<dc:creator>Welblaud</dc:creator>
+			<guid isPermaLink="false">2359@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Dear community,&#60;/p&#62;
+&#60;p&#62;I am intensively testing exports to PDF from TEI documents and can’t figure where could be the problem. The document is always fully valid, CSS rendition (default) work properly. However, in the result there is always missing the label, which is always coded as table’s head.&#60;/p&#62;
+&#60;p&#62;&#60;code&#62;&#60;br /&#62;
+  &#38;lt;table rendition=&#34;simple:frame&#34;&#38;gt;&#60;br /&#62;
+    &#38;lt;head&#38;gt;The head!&#38;lt;/head&#38;gt;&#60;br /&#62;
+&#60;/code&#62;&#60;/p&#62;
+&#60;p&#62;I have noticed it is really important to test several types of notation when testing outputs via XSLT (e.g. footnotes’ rendition is rather an adventure!) but here I tried almost everything and nothing helps. It seems the &#60;code&#62;tei:head&#60;/code&#62; part from XSL templates is not passed into the final output. In XeLaTeX it worked well.&#60;/p&#62;
+&#60;p&#62;Is there something I am omitting in the code and what Oxygen needs for proper rendition? (like rend=&#34;header&#34; or so?)&#60;/p&#62;
+&#60;p&#62;Any help more than welcome!&#60;/p&#62;
+&#60;p&#62;Honza Hejzl
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>inactinique on "Which Named Entity Recognition Tool?"</title>
+						<link>http://digitalhumanities.org/answers/topic/which-named-entity-recognition-tool#post-2346</link>
+			<pubDate>Mon, 13 Jul 2015 15:43:13 +0000</pubDate>
+			<dc:creator>inactinique</dc:creator>
+			<guid isPermaLink="false">2346@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Dear all,&#60;br /&#62;
+I have a database with more than one million tweets (about WW1). What I'd like to do now is to recognize dates and traces of time.&#60;br /&#62;
+Has anyone an idea of how to do this? (In French and English).&#60;br /&#62;
+Best
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>hopegreenberg on "Advice on tools for side by side pages of Latin and English translations"</title>
+						<link>http://digitalhumanities.org/answers/topic/advice-on-tools-for-side-by-side-pages-of-latin-and-english-translations#post-2353</link>
+			<pubDate>Tue, 03 Nov 2015 19:31:19 +0000</pubDate>
+			<dc:creator>hopegreenberg</dc:creator>
+			<guid isPermaLink="false">2353@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I'm working with a faculty member who has translated 2 16th century books from Latin to English and has extensively annotated them. Both are lightly TEI encoded and could be more heavily encoded as needed. He would like to display the original and the translation side by side. A page-by-page display, as opposed to a line-by-line display, would be sufficient. When he originally asked for advice a couple years ago I looked at Juxta and the Versioning Machine. Anything new since then that I should look at? He is not looking for witness comparisons, heat maps, or anything too sophisticated. A flip-book view (one page of Latin next to one page of English) would be ideal in terms of what he is visualizing.&#60;/p&#62;
+&#60;p&#62;- Hope
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>robbin_g on "How do I write a good research question for a Digital Humanities PhD proposal?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-do-i-write-a-good-research-question-for-a-digital-humanities-phd-proposal#post-2335</link>
+			<pubDate>Sun, 21 Jun 2015 17:20:28 +0000</pubDate>
+			<dc:creator>robbin_g</dc:creator>
+			<guid isPermaLink="false">2335@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hello to all and I am very thankful to find this forum!&#60;/p&#62;
+&#60;p&#62;I am wanting to attend a PhD program in Digital Humanities. (Eyes on King's College) I am struggling to write a proper research proposal to find an advisor there. &#60;/p&#62;
+&#60;p&#62;I am a technologist (not a programmer!) interested in how DH can be used in Food Studies. When I proposed this as an introduction I was told, that's really just a project, not a research question. Turns out, as a technologist, I am great at coming up with digital projects that involve food studies but they all seem to lack a research 'hook' to get me any further. &#60;/p&#62;
+&#60;p&#62;My current favorite idea, of a few scribbled down, is related to the study of wine (I am a certified sommelier):&#60;/p&#62;
+&#60;p&#62;What can a digital humanities approach to wine reveal about the definition of terroir in the region of Barolo, Italy?&#60;/p&#62;
+&#60;p&#62;Can anyone point me in a good direction? Thank you!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Sean O&#039;Brien on "What are some useful tools for creating timelines?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-are-some-useful-tools-for-creating-timelines#post-261</link>
+			<pubDate>Thu, 30 Sep 2010 14:52:09 +0000</pubDate>
+			<dc:creator>Sean O&#039;Brien</dc:creator>
+			<guid isPermaLink="false">261@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I want to give my students a range of options for tools that will help construct detailed timelines online and/or in printable documents.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>bender on "Has anybody used Office ACCESS or FilemakerPro for artworks?"</title>
+						<link>http://digitalhumanities.org/answers/topic/has-anybody-used-office-access-or-filemakerpro-for-artworks#post-2342</link>
+			<pubDate>Mon, 06 Jul 2015 15:22:50 +0000</pubDate>
+			<dc:creator>bender</dc:creator>
+			<guid isPermaLink="false">2342@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Neither Office ACCESS nor FilemakerPro have templates for collection management of artworks, though there are many products available on the WEB for commercial art galleries. I have been using such a commercial product for my digital collection of 30,000 works. However, it is no longer supported and I look out for an appropriate replacement for off-line desktop use.&#60;br /&#62;
+I assume many research art historians have spent lots of time and energy to design and build up relational database management systems, never made available to others.&#60;br /&#62;
+I would like to hear about their experiences or failures with ACCESS, FileMakerPro or other similar readily available software.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>John Handel on "How to Convert PDF&#039;s to Plain Text"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-to-convert-pdfs-to-plain-text#post-2211</link>
+			<pubDate>Mon, 14 Jul 2014 19:22:25 +0000</pubDate>
+			<dc:creator>John Handel</dc:creator>
+			<guid isPermaLink="false">2211@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I'm trying to create a corpus of texts to use for various data mining ends but can only access the texts in pdf form. I have 21  pdfs that range from 250-600 pages, most are within the 400-500 page range. I've tried online converters and they are not able to handle the process. Does anyone have a way of doing this?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>alyson.musser on "DH Thesaurus - Participate in an Evaluation Survey"</title>
+						<link>http://digitalhumanities.org/answers/topic/dh-thesaurus-participate-in-an-evaluation-survey#post-2322</link>
+			<pubDate>Fri, 24 Apr 2015 18:09:09 +0000</pubDate>
+			<dc:creator>alyson.musser</dc:creator>
+			<guid isPermaLink="false">2322@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hi all, I'm looking for researchers/enthusiasts of the digital humanities to participate in a survey evaluating a digital humanities thesaurus.  &#60;/p&#62;
+&#60;p&#62;The survey is here: &#60;a href=&#34;http://goo.gl/forms/DyKllxSLMC&#34; rel=&#34;nofollow&#34;&#62;http://goo.gl/forms/DyKllxSLMC&#60;/a&#62;  and the thesaurus is here: &#60;a href=&#34;http://dhthesaurus.com/&#34; rel=&#34;nofollow&#34;&#62;http://dhthesaurus.com/&#60;/a&#62; &#60;/p&#62;
+&#60;p&#62;The survey should only take about 15-20 minutes and I would greatly value your input and feedback. If you leave your email at the end of the survey, you'll be entered in a drawing to win a $5 Starbuck gift card. Thanks!
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

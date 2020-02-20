@@ -1,0 +1,334 @@
+<?
+/*
+Plugin Name: bb Topic Icons
+Plugin URI: http://devt.caffeinatedbliss.com/bbpress/topic-icons
+Description: Adds configurable icons next to topics based on their status
+Author: Paul Hawke
+Author URI: http://paul.caffeinatedbliss.com/
+Version: 0.6
+*/
+
+/****************************************************************************
+ *
+ * Configure the following constants to fine-tune the CSS classes that are
+ * generated, the icon filenames that are used, and the text used in the
+ * legend (if you have one displayed).  Note: filenames are likely to be
+ * taken away in a future version and replaced with the concept of "icon sets"
+ * whose filenames are fixed, so dont get used to editing the filenames,
+ * as this will break in future versions.
+ *
+ ****************************************************************************/
+
+// css class for the unsorted list used in the legend display
+define( LEGEND_CLASS, 'topic_icon_legend' );
+
+// busy threshold - a topic with more posts than this is counted as "busy"
+// for purposes of picking an icon.
+define( BUSY_THRESHOLD, 15 );
+
+// width of the images, in pixels
+define( ICON_WIDTH, '20' );
+
+// height of the images, in pixels
+define( ICON_HEIGHT, '20' );
+
+// the URL base for where to find the default icon set.
+define( ICON_SET_URL_BASE, BB_PLUGIN_URL.'bb-topic-icons/icon-sets/' );
+
+/****************************************************************************
+ *
+ * Shouldnt be much need to edit anything beyond this point - configuration
+ * is all done via the constants (above) and through and admin area page in
+ * bbPress at runtime.
+ *
+ ****************************************************************************/
+
+require( 'bb-topic-icons-api.php' );
+require( 'bb-topic-icons-admin.php' );
+require( 'interface.status-interpreter.php' );
+require( 'interface.status-renderer.php' );
+require( 'class.default-status-interpreter.php' );
+require( 'class.default-status-renderer.php' );
+
+function topic_icons_legend() {
+	$icon_set_name = topic_icons_get_active_icon_set();
+	$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+	$statuses = get_active_status_interpreter()->getAllStatuses();
+	$renderer = get_active_status_renderer();
+	
+	echo '<ul id="'.LEGEND_CLASS.'">';
+	for ($i=0; $i < count($statuses); $i++) {
+		$image = $renderer->renderStatus($statuses[$i]);
+		$tooltip = $renderer->renderStatusTooltip($statuses[$i]);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (isset($image) && strlen($image) > 0 &&
+			isset($tooltip) && strlen($tooltip) > 0 && $exists) {
+			echo '<li><img src="'.$icon_set_url.'/'.$image.
+				'" width="'.ICON_WIDTH.'" height="'.ICON_HEIGHT.
+				'" align="absmiddle">&nbsp;'.$tooltip.'</li>';
+		}
+	}
+	echo '</ul>';
+}
+
+function topic_icons_css() {
+	echo "\n<style type=\"text/css\"><!--\n";
+	require( 'bb-topic-icons.css' );
+	echo "\n--></style>";
+}
+
+function topic_icons_label( $label ) {
+	global $topic;
+	
+	if (bb_is_front() || bb_is_forum() || bb_is_view() || bb_is_tag()) {		
+		$icon_set_name = topic_icons_get_active_icon_set();
+		$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+
+		$status = get_active_status_interpreter()->getStatus(bb_get_location(), $topic);
+		$renderer = get_active_status_renderer();
+		$image = $renderer->renderStatus($status);
+		$tooltip = $renderer->renderStatusTooltip($status);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (!$exists) {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), ICON_SET_URL_BASE.'/empty.png', ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		} else if (strlen($tooltip) > 0) {		
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"><span>%s</span></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $tooltip, $label);
+		} else {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		}
+	}
+	
+	return $label;
+}
+
+function topic_icons_init( ) {
+	remove_filter('bb_topic_labels', 'bb_closed_label', 10);
+	remove_filter('bb_topic_labels', 'bb_sticky_label', 20);
+
+	add_filter('bb_topic_labels', 'topic_icons_label', 11);
+
+	add_action('bb_head', 'topic_icons_css');
+
+	add_action('bb_admin_menu_generator', 'topic_icons_admin_page_add');
+	add_action('bb_admin-header.php', 'topic_icons_admin_page_process');
+	
+	topic_icons_register_status_interpreter('default', new DefaultStatusInterpreter(BUSY_THRESHOLD));
+	topic_icons_register_status_renderer('default', new DefaultStatusRenderer());
+}
+
+topic_icons_init();
+
+?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Tag: history - Recent Posts</title>
+		<link>http://digitalhumanities.org/answers/tags/history</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Tag: history - Recent Posts</description>
+		<language>en-US</language>
+		<pubDate>Sun, 24 Mar 2019 17:08:27 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/tags/history" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>SharonHoward on "Open Corpora for Digital History Assignment"</title>
+						<link>http://digitalhumanities.org/answers/topic/open-corpora-for-digital-history-assignment#post-2365</link>
+			<pubDate>Tue, 08 Dec 2015 16:51:47 +0000</pubDate>
+			<dc:creator>SharonHoward</dc:creator>
+			<guid isPermaLink="false">2365@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Lists of corpora compiled by historical linguists (some may be restricted access): &#60;a href=&#34;http://www.helsinki.fi/varieng/corpora/index.html&#34; rel=&#34;nofollow&#34;&#62;http://www.helsinki.fi/varieng/corpora/index.html&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;Oxford Texts Archive is full of amazing things (including EEBO-TCP texts), though students might have to register for access: &#60;a href=&#34;http://ota.ox.ac.uk/&#34; rel=&#34;nofollow&#34;&#62;http://ota.ox.ac.uk/&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;This huge list of museums/libraries etc data compiled by Mia Ridge emphasises APIs and linked open data but it's actually very wide-ranging: &#60;a href=&#34;http://museum-api.pbworks.com/w/page/21933420/Museum%C2%A0APIs&#34; rel=&#34;nofollow&#34;&#62;http://museum-api.pbworks.com/w/page/21933420/Museum%C2%A0APIs&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;The British Library is also making a varied assortment of datasets and text collections available through its BL Labs project: &#60;a href=&#34;http://labs.bl.uk/Digital+Collections&#34; rel=&#34;nofollow&#34;&#62;http://labs.bl.uk/Digital+Collections&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;Corpora from Mark Davies, BYU (including Hansard): &#60;a href=&#34;http://corpus.byu.edu/&#34; rel=&#34;nofollow&#34;&#62;http://corpus.byu.edu/&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;Some smaller collections that I like:&#60;/p&#62;
+&#60;p&#62;Thomas Bodley Correspondence (XML) from the Centre for Lives and Letters: &#60;a href=&#34;https://github.com/livesandletters/bodley1&#34; rel=&#34;nofollow&#34;&#62;https://github.com/livesandletters/bodley1&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;Family Life and Work Experience Before 1918, 1870-1973 (transcripts of c. 450 oral history interviews + structured metadata): &#60;a href=&#34;https://discover.ukdataservice.ac.uk/catalogue/?sn=2000&#38;amp;type=Data%20catalogue&#34; rel=&#34;nofollow&#34;&#62;https://discover.ukdataservice.ac.uk/catalogue/?sn=2000&#38;amp;type=Data%20catalogue&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;Repository of Early American Datasets: &#60;a href=&#34;http://repository.upenn.edu/mead/&#34; rel=&#34;nofollow&#34;&#62;http://repository.upenn.edu/mead/&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;A new version of the Old Bailey Online Corpus is due to be released shortly and will be open data (the current version requires registration): &#60;a href=&#34;http://www1.uni-giessen.de/oldbaileycorpus/&#34; rel=&#34;nofollow&#34;&#62;http://www1.uni-giessen.de/oldbaileycorpus/&#60;/a&#62;
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Miriam Posner on "Open Corpora for Digital History Assignment"</title>
+						<link>http://digitalhumanities.org/answers/topic/open-corpora-for-digital-history-assignment#post-2364</link>
+			<pubDate>Tue, 08 Dec 2015 15:29:11 +0000</pubDate>
+			<dc:creator>Miriam Posner</dc:creator>
+			<guid isPermaLink="false">2364@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Oh, check &#60;a href=&#34;http://dhresourcesforprojectbuilding.pbworks.com/w/page/69244469/Data%20Collections%20and%20Datasets#demo-corpora&#34;&#62;this out&#60;/a&#62;, from Alan Liu.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Shawn on "Open Corpora for Digital History Assignment"</title>
+						<link>http://digitalhumanities.org/answers/topic/open-corpora-for-digital-history-assignment#post-2363</link>
+			<pubDate>Tue, 08 Dec 2015 15:13:53 +0000</pubDate>
+			<dc:creator>Shawn</dc:creator>
+			<guid isPermaLink="false">2363@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hi - check out Melodee Beal's 'scissors and paste' &#60;a href=&#34;http://www.scissorsandpaste.net/&#34; rel=&#34;nofollow&#34;&#62;http://www.scissorsandpaste.net/&#60;/a&#62; source &#60;a href=&#34;https://github.com/mhbeals/scissorsandpaste/tree/master/Outputs&#34; rel=&#34;nofollow&#34;&#62;https://github.com/mhbeals/scissorsandpaste/tree/master/Outputs&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;Also MSU libraries: &#60;a href=&#34;https://www.lib.msu.edu/dh/humdata/&#34; rel=&#34;nofollow&#34;&#62;https://www.lib.msu.edu/dh/humdata/&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;and this from Sharon Howard - &#60;a href=&#34;http://sharonhoward.github.io/cdt/&#34; rel=&#34;nofollow&#34;&#62;http://sharonhoward.github.io/cdt/&#60;/a&#62;
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>mattprice on "Open Corpora for Digital History Assignment"</title>
+						<link>http://digitalhumanities.org/answers/topic/open-corpora-for-digital-history-assignment#post-2362</link>
+			<pubDate>Tue, 08 Dec 2015 14:50:25 +0000</pubDate>
+			<dc:creator>mattprice</dc:creator>
+			<guid isPermaLink="false">2362@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hi,&#60;br /&#62;
+I'm putting together assignments for next semester's digital history class, and want to construct a simple distant reading for my students, probably using Voyant Tools (unless there is a very easy-to-use pure HTML/Javascript set of tools that will let my students use some of the basic JS skills they'll have acquired in their previous assignment).  &#60;/p&#62;
+&#60;p&#62;I would like to present them with existing corpora of historical texts: preferably not literature, but newspapers/government documents, letters etc. Most archives I've found use PDF images with mediocre to poor OCR.  Can anyone point me to a good collection of historical corpora that students can experiment with?  &#60;/p&#62;
+&#60;p&#62;Thank you!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>and1256 on "What is the best software package for social network analysis?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-is-the-best-software-package-for-social-network-analysis#post-2294</link>
+			<pubDate>Tue, 10 Mar 2015 04:42:14 +0000</pubDate>
+			<dc:creator>and1256</dc:creator>
+			<guid isPermaLink="false">2294@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;You may also want to consider using Polinode. At the moment, Polinode lets you not only visualize and analyze network data like Gephi, but also to collect network data via highly-flexible relationship surveys. You are also able to import network data for analysis from an Excel file or in JSON or GEXF format. If you are interested, you can check out a short video at our website (full disclosure: I am the founder):&#60;/p&#62;
+&#60;p&#62;&#60;a href=&#34;https://www.polinode.com&#34; rel=&#34;nofollow&#34;&#62;https://www.polinode.com&#60;/a&#62;
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Ethan Gruber on "Examples of Departments that Accept Digital Products for MA Degree?"</title>
+						<link>http://digitalhumanities.org/answers/topic/examples-of-departments-that-accept-digital-products-for-ma-degree#post-2288</link>
+			<pubDate>Thu, 26 Feb 2015 18:50:33 +0000</pubDate>
+			<dc:creator>Ethan Gruber</dc:creator>
+			<guid isPermaLink="false">2288@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I guess this topic was originally posted before I finished my MA. I got my MA in classical archaeology from the University of Virginia in 2013. Instead of a traditional research project, I wrote on the technical underpinnings of the Roman coin projects we are doing at the American Numismatic Society and the application of linked data to the UVA numismatic collection, which was basically the culmination of my academic career up to that point. The digital projects weren't accepted in lieu of a thesis however, and they should not have been. The thesis provided a background of the history of the description of coins from the Renaissance to the database era and beyond, with specific use cases detailing the digital future of the discipline. The thesis was basically the digital state of the field in 2013.&#60;/p&#62;
+&#60;p&#62;I'm not sure that a written thesis should be removed altogether. &#60;em&#62;Something&#60;/em&#62; should be written to place the project into context.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Stéfan Sinclair on "Examples of Departments that Accept Digital Products for MA Degree?"</title>
+						<link>http://digitalhumanities.org/answers/topic/examples-of-departments-that-accept-digital-products-for-ma-degree#post-2281</link>
+			<pubDate>Tue, 17 Feb 2015 02:08:40 +0000</pubDate>
+			<dc:creator>Stéfan Sinclair</dc:creator>
+			<guid isPermaLink="false">2281@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;We're working on an M.A. in DH at McGill and this is precisely the question I wanted to ask. I'd like to bump the thread in case anyone has anything recent to share. Thanks in advance!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Ethan Gruber on "Examples of projects that examine non-canonical figures?"</title>
+						<link>http://digitalhumanities.org/answers/topic/examples-of-projects-that-examine-non-canonical-figures#post-2248</link>
+			<pubDate>Mon, 13 Oct 2014 15:04:08 +0000</pubDate>
+			<dc:creator>Ethan Gruber</dc:creator>
+			<guid isPermaLink="false">2248@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;What do you mean by non-canonical? There is a fairly large number of prosopographical projects that are focused on people connected by a common thread, for example:&#60;/p&#62;
+&#60;p&#62;Syriac (&#60;a href=&#34;http://syriaca.org/&#34; rel=&#34;nofollow&#34;&#62;http://syriaca.org/&#60;/a&#62;)&#60;br /&#62;
+Prosopography of Anglo-Saxon England (&#60;a href=&#34;http://www.pase.ac.uk/index.html&#34; rel=&#34;nofollow&#34;&#62;http://www.pase.ac.uk/index.html&#60;/a&#62;)&#60;br /&#62;
+Roman Republican people (&#60;a href=&#34;http://www.digitalclassicist.org/wip/wip2012-07mr.html&#34; rel=&#34;nofollow&#34;&#62;http://www.digitalclassicist.org/wip/wip2012-07mr.html&#60;/a&#62;)&#60;/p&#62;
+&#60;p&#62;I'm also vaguely aware of projects to network people related to cuneiform or ancient papyri. All of these projects involve anonymous or otherwise barely-known people who are only attributed by scant fragments of evidence.&#60;/p&#62;
+&#60;p&#62;Linked data methodologies are fundamental in most or all of these projects.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>robertperry015 on "Examples of projects that examine non-canonical figures?"</title>
+						<link>http://digitalhumanities.org/answers/topic/examples-of-projects-that-examine-non-canonical-figures#post-2247</link>
+			<pubDate>Mon, 13 Oct 2014 14:21:07 +0000</pubDate>
+			<dc:creator>robertperry015</dc:creator>
+			<guid isPermaLink="false">2247@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I am looking for examples of digital humanities projects that examine non-canonical figures (individuals or small groups of people). I will use the information as context for a digital humanities project that I am working on.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Jim on "What is the best software package for social network analysis?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-is-the-best-software-package-for-social-network-analysis#post-2226</link>
+			<pubDate>Thu, 21 Aug 2014 11:35:42 +0000</pubDate>
+			<dc:creator>Jim</dc:creator>
+			<guid isPermaLink="false">2226@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;You might want to use Social Networks Visualizer from &#60;a href=&#34;http://socnetv.sourceforge.net&#34; rel=&#34;nofollow&#34;&#62;http://socnetv.sourceforge.net&#60;/a&#62; It is a open-source, cross-platform graphical application for analysis and visualization of social networks. It allows you to load or create and modify social networks in a canvas, rotate, zoom, change node attributes, analyse their social and mathematical properties and apply visualization layouts for relevant presentation in papers etc. Can create known social datasets automatically as well as random networks and small worlds. Computes basic graph properties, such as density, diameter, geodesics, connectedness, eccentricity, etc. It also calculates advanced measures for social network analysis such as centrality and prestige indices (i.e. closeness centrality, betweeness centrality, information centrality, proximity and rank prestige), triad census, cliques, clustering coefficient, etc.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>whitemarcy9@gmail.com on "What is the best software package for social network analysis?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-is-the-best-software-package-for-social-network-analysis#post-2176</link>
+			<pubDate>Thu, 05 Jun 2014 18:28:06 +0000</pubDate>
+			<dc:creator>whitemarcy9@gmail.com</dc:creator>
+			<guid isPermaLink="false">2176@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Try Lucid Chart's diagramming software and see what you think!&#60;br /&#62;
+&#60;em&#62;Replying to @msatlow@gmail.com's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/what-is-the-best-software-package-for-social-network-analysis#post-1098&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>leon.robichaud on "Recommendations for timeline tools?"</title>
+						<link>http://digitalhumanities.org/answers/topic/timeline-tools#post-2101</link>
+			<pubDate>Wed, 25 Sep 2013 23:24:36 +0000</pubDate>
+			<dc:creator>leon.robichaud</dc:creator>
+			<guid isPermaLink="false">2101@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Cécile Armand has written an analysis (in French) of different online timeline tools.&#60;br /&#62;
+&#60;a href=&#34;http://advertisinghistory.hypotheses.org/79&#34; rel=&#34;nofollow&#34;&#62;http://advertisinghistory.hypotheses.org/79&#60;/a&#62;&#60;br /&#62;
+I have used SIMILE. Dates came from an XML file and could be year only. But the position on the timeline was not where I would have liked. &#60;/p&#62;
+&#60;p&#62;Has anyone dealt with a large number of events (over 1,000) ? Is there a way to provide &#34;levels of detail&#34; so that the user is not submerged with an overloaded timeline?&#60;/p&#62;
+&#60;p&#62;Thanks for any suggestions on this.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Smallpiper on "History and theory question: lexicography / discourse analysis / text mining"</title>
+						<link>http://digitalhumanities.org/answers/topic/history-and-theory-question-lexicography-discourse-analysis-text-mining#post-2082</link>
+			<pubDate>Fri, 16 Aug 2013 23:04:02 +0000</pubDate>
+			<dc:creator>Smallpiper</dc:creator>
+			<guid isPermaLink="false">2082@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Perhaps at an angle to what you're describing, from time to time I post on lexicography and literary writing, especially poetry, here: &#60;a href=&#34;http://poetry-contingency.uwaterloo.ca/&#34; rel=&#34;nofollow&#34;&#62;http://poetry-contingency.uwaterloo.ca/&#60;/a&#62;, with an emphasis on text mining and comparison.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Trip Kirkpatrick on "Recommendations for timeline tools?"</title>
+						<link>http://digitalhumanities.org/answers/topic/timeline-tools#post-2077</link>
+			<pubDate>Fri, 16 Aug 2013 15:45:49 +0000</pubDate>
+			<dc:creator>Trip Kirkpatrick</dc:creator>
+			<guid isPermaLink="false">2077@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='http://digitalhumanities.org/answers/profile/milner_matt'&#62;milner_matt&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/timeline-tools#post-2071&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;Just a second vote for Timeline.js, though my main beef is the requirement to have data either hosted externally or in JSON format, a bit of a hurdle for many n00bs. I'm very interested to hear more about your work, @&#60;a href='http://digitalhumanities.org/answers/profile/milner_matt'&#62;milner_matt&#60;/a&#62;, with hooking it up (de facto) to a MySQL db. Are you working on a fork or just on your own? (I couldn't find you in GitHub.)&#60;/p&#62;
+&#60;p&#62;For what it's worth, I'm maintaining my running list of timeline tools at &#60;a href=&#34;http://delicious.com/triplingual/timeline+chronology&#34; rel=&#34;nofollow&#34;&#62;http://delicious.com/triplingual/timeline+chronology&#60;/a&#62;, including a link to @croxall's Google Spreadsheet from a while back.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>milner_matt on "Recommendations for timeline tools?"</title>
+						<link>http://digitalhumanities.org/answers/topic/timeline-tools#post-2071</link>
+			<pubDate>Tue, 13 Aug 2013 11:37:52 +0000</pubDate>
+			<dc:creator>milner_matt</dc:creator>
+			<guid isPermaLink="false">2071@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Oddly enough I'm actually building a timeline tool for the Intro to European History I'm teaching this fall. Basically I'm going to crowdsource a European timeline between 400AD-1700AD in the classroom.&#60;/p&#62;
+&#60;p&#62;I've looked a few things - yes, SIMILE is great and the de facto standard. But as an historian the date handling rubs me the wrong way - perhaps I'm reading the code wrong, but it requires a valid JS Date to work. I want more ambiguity and flexibility when it comes to date parts. I also wanted to place the entire timeline within a custom-designed course website rather than try and handle it with moodle, wordpress, drupal, etc. or even WebCT/Blackboard like 'things' (don't know what else to call them). SIMILE is ideal for most of this. That said, I decided to try something else.&#60;/p&#62;
+&#60;p&#62;Here's a link of some useful jQuery based timelines I looked at: &#60;a href=&#34;http://www.tripwiremagazine.com/2013/06/jquery-timeline-plugins.html&#34; rel=&#34;nofollow&#34;&#62;http://www.tripwiremagazine.com/2013/06/jquery-timeline-plugins.html&#60;/a&#62;&#60;br /&#62;
+I wanted something simple that could handle quite a bit of student-produced data. Timeliner.js at TechnoTarek looked about right, but I was really going for something horizontal and with a nice nav bar like SIMILE - so I went with VeriteCo's TimelineJS &#60;a href=&#34;http://timeline.verite.co/)&#34; rel=&#34;nofollow&#34;&#62;http://timeline.verite.co/)&#60;/a&#62;. It can handle BC dates as well as AD dates.&#60;/p&#62;
+&#60;p&#62;There are several advantages with this - first is being able to embed a timeline right away using their site and a published googlespreadsheet. The other is the code is pretty straightforward. I'm in the process of adapting it to run off of ajax-generated&#60;br /&#62;
+JSON from a MYSQL DB. The only thing is the viewable space for each item - though there's media handling (not using it for other reasons in my course), there's not enough place for a description of the event itself. So I'm using a dialog box to display the full contents, while the timeline itself has a teaser.&#60;/p&#62;
+&#60;p&#62;The big disadvantage is that TimelineJS uses LazyLoad to create the 'story' - meaning that I'm stuck at the moment with an awkward setTimeout after the ajax / rendering to make further jQuery-based selections. $.ajaxStop() doesn't work because of the small (but significant) space in between the completion of the ajax request and the rendering from JSON into html elements. If anyone has suggestions on how to add a callback (was thinking .always or someting .done / .when-.then - but these are all ajax, and I don't have time to crack the minified js and insert a callback variable...) - without too much trouble, please let me know.
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

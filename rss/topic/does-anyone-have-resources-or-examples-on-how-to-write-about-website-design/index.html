@@ -1,0 +1,184 @@
+<?
+/*
+Plugin Name: bb Topic Icons
+Plugin URI: http://devt.caffeinatedbliss.com/bbpress/topic-icons
+Description: Adds configurable icons next to topics based on their status
+Author: Paul Hawke
+Author URI: http://paul.caffeinatedbliss.com/
+Version: 0.6
+*/
+
+/****************************************************************************
+ *
+ * Configure the following constants to fine-tune the CSS classes that are
+ * generated, the icon filenames that are used, and the text used in the
+ * legend (if you have one displayed).  Note: filenames are likely to be
+ * taken away in a future version and replaced with the concept of "icon sets"
+ * whose filenames are fixed, so dont get used to editing the filenames,
+ * as this will break in future versions.
+ *
+ ****************************************************************************/
+
+// css class for the unsorted list used in the legend display
+define( LEGEND_CLASS, 'topic_icon_legend' );
+
+// busy threshold - a topic with more posts than this is counted as "busy"
+// for purposes of picking an icon.
+define( BUSY_THRESHOLD, 15 );
+
+// width of the images, in pixels
+define( ICON_WIDTH, '20' );
+
+// height of the images, in pixels
+define( ICON_HEIGHT, '20' );
+
+// the URL base for where to find the default icon set.
+define( ICON_SET_URL_BASE, BB_PLUGIN_URL.'bb-topic-icons/icon-sets/' );
+
+/****************************************************************************
+ *
+ * Shouldnt be much need to edit anything beyond this point - configuration
+ * is all done via the constants (above) and through and admin area page in
+ * bbPress at runtime.
+ *
+ ****************************************************************************/
+
+require( 'bb-topic-icons-api.php' );
+require( 'bb-topic-icons-admin.php' );
+require( 'interface.status-interpreter.php' );
+require( 'interface.status-renderer.php' );
+require( 'class.default-status-interpreter.php' );
+require( 'class.default-status-renderer.php' );
+
+function topic_icons_legend() {
+	$icon_set_name = topic_icons_get_active_icon_set();
+	$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+	$statuses = get_active_status_interpreter()->getAllStatuses();
+	$renderer = get_active_status_renderer();
+	
+	echo '<ul id="'.LEGEND_CLASS.'">';
+	for ($i=0; $i < count($statuses); $i++) {
+		$image = $renderer->renderStatus($statuses[$i]);
+		$tooltip = $renderer->renderStatusTooltip($statuses[$i]);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (isset($image) && strlen($image) > 0 &&
+			isset($tooltip) && strlen($tooltip) > 0 && $exists) {
+			echo '<li><img src="'.$icon_set_url.'/'.$image.
+				'" width="'.ICON_WIDTH.'" height="'.ICON_HEIGHT.
+				'" align="absmiddle">&nbsp;'.$tooltip.'</li>';
+		}
+	}
+	echo '</ul>';
+}
+
+function topic_icons_css() {
+	echo "\n<style type=\"text/css\"><!--\n";
+	require( 'bb-topic-icons.css' );
+	echo "\n--></style>";
+}
+
+function topic_icons_label( $label ) {
+	global $topic;
+	
+	if (bb_is_front() || bb_is_forum() || bb_is_view() || bb_is_tag()) {		
+		$icon_set_name = topic_icons_get_active_icon_set();
+		$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+
+		$status = get_active_status_interpreter()->getStatus(bb_get_location(), $topic);
+		$renderer = get_active_status_renderer();
+		$image = $renderer->renderStatus($status);
+		$tooltip = $renderer->renderStatusTooltip($status);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (!$exists) {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), ICON_SET_URL_BASE.'/empty.png', ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		} else if (strlen($tooltip) > 0) {		
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"><span>%s</span></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $tooltip, $label);
+		} else {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		}
+	}
+	
+	return $label;
+}
+
+function topic_icons_init( ) {
+	remove_filter('bb_topic_labels', 'bb_closed_label', 10);
+	remove_filter('bb_topic_labels', 'bb_sticky_label', 20);
+
+	add_filter('bb_topic_labels', 'topic_icons_label', 11);
+
+	add_action('bb_head', 'topic_icons_css');
+
+	add_action('bb_admin_menu_generator', 'topic_icons_admin_page_add');
+	add_action('bb_admin-header.php', 'topic_icons_admin_page_process');
+	
+	topic_icons_register_status_interpreter('default', new DefaultStatusInterpreter(BUSY_THRESHOLD));
+	topic_icons_register_status_renderer('default', new DefaultStatusRenderer());
+}
+
+topic_icons_init();
+
+?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Topic: Does anyone have resources or examples on how to write about website design?</title>
+		<link>http://digitalhumanities.org/answers/topic/does-anyone-have-resources-or-examples-on-how-to-write-about-website-design</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Topic: Does anyone have resources or examples on how to write about website design?</description>
+		<language>en-US</language>
+		<pubDate>Sun, 24 Mar 2019 17:08:17 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/topic/does-anyone-have-resources-or-examples-on-how-to-write-about-website-design" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>Amanda Visconti on "Does anyone have resources or examples on how to write about website design?"</title>
+						<link>http://digitalhumanities.org/answers/topic/does-anyone-have-resources-or-examples-on-how-to-write-about-website-design#post-2427</link>
+			<pubDate>Sun, 21 Jan 2018 14:50:55 +0000</pubDate>
+			<dc:creator>Amanda Visconti</dc:creator>
+			<guid isPermaLink="false">2427@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='http://digitalhumanities.org/answers/profile/mlholloway251'&#62;mlholloway251&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/does-anyone-have-resources-or-examples-on-how-to-write-about-website-design#post-2425&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;If you're not already involved there, it could also be useful to join &#60;a href=&#34;https://www.hastac.org/&#34;&#62;HASTAC&#60;/a&#62; and blog about your process/questions that come up—there's a pretty good community of commenters there.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Amanda Visconti on "Does anyone have resources or examples on how to write about website design?"</title>
+						<link>http://digitalhumanities.org/answers/topic/does-anyone-have-resources-or-examples-on-how-to-write-about-website-design#post-2426</link>
+			<pubDate>Sun, 21 Jan 2018 14:45:31 +0000</pubDate>
+			<dc:creator>Amanda Visconti</dc:creator>
+			<guid isPermaLink="false">2426@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Some of the pieces of my &#60;a href=&#34;http://dr.amandavisconti.com/&#34;&#62;(completed) digital dissertation&#60;/a&#62; using web design/development for literature scholarship might be useful? Some specific links below, but also check out &#60;a href=&#34;https://docs.google.com/document/d/1qJwx0nYam3aJazetVfmij6q92Owv-gu_pfl-Xci6BLM/edit?usp=sharing&#34;&#62;this great GoogleDoc&#60;/a&#62; some folks at CUNY curated with info on a variety of digital dissertation formats.&#60;/p&#62;
+&#60;p&#62;I have &#60;a href=&#34;http://literaturegeek.com/tag/dissertation/&#34;&#62;some blog posts&#60;/a&#62; both about the design of a digital edition website for my dissertation, and about the design of the websites presenting the dissertation (e.g. &#60;a href=&#34;http://literaturegeek.com/2014/04/02/digitaldissformat&#34;&#62;post on choosing and arguing for digital dissertation design&#60;/a&#62;, and &#60;a href=&#34;http://literaturegeek.com/2014/03/31/html5scholarlyarticle&#34;&#62;some design choices&#60;/a&#62;, and &#60;a href=&#34;http://literaturegeek.com/2014/09/16/user-testing-a-digital-edition-getting-the-feedback-you-need&#34;&#62;user testing dissertation websites&#60;/a&#62;). &#60;/p&#62;
+&#60;p&#62;A skim of the table of contents for &#60;a href=&#34;http://dr.amandavisconti.com/AmandaVisconti_DigitalDissertationWhitepaper_OfficialSubmission.pdf&#34;&#62;the whitepaper debriefing my digital dissertation&#60;/a&#62; might also be useful?&#60;/p&#62;
+&#60;p&#62;I also found it useful to &#60;a href=&#34;https://github.com/amandavisconti/infinite-ulysses-dissertation/blob/master/About%20the%20Dissertation/MANIFEST.md&#34;&#62;make a list of all the scholarly effort that went into the digital dissertation&#60;/a&#62;, annotated to explain the website-related work that might not be obvious to scholarly evaluators.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>mlholloway251 on "Does anyone have resources or examples on how to write about website design?"</title>
+						<link>http://digitalhumanities.org/answers/topic/does-anyone-have-resources-or-examples-on-how-to-write-about-website-design#post-2425</link>
+			<pubDate>Fri, 19 Jan 2018 22:39:31 +0000</pubDate>
+			<dc:creator>mlholloway251</dc:creator>
+			<guid isPermaLink="false">2425@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I am creating a website via wordpress for my dissertation and I need help on how to write about design choices, layout, what I chose to include, etc. If you have any resources that might help me please let me know. Thanks!
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

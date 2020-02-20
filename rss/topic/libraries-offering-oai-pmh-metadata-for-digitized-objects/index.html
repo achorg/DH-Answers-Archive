@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Topic: Libraries offering OAI-PMH metadata for digitized objects?</title>
+		<link>http://digitalhumanities.org/answers/topic/libraries-offering-oai-pmh-metadata-for-digitized-objects</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Topic: Libraries offering OAI-PMH metadata for digitized objects?</description>
+		<language>en-US</language>
+		<pubDate>Wed, 03 Aug 2016 05:32:44 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/topic/libraries-offering-oai-pmh-metadata-for-digitized-objects" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>Kevin Hawkins on "Libraries offering OAI-PMH metadata for digitized objects?"</title>
+						<link>http://digitalhumanities.org/answers/topic/libraries-offering-oai-pmh-metadata-for-digitized-objects#post-914</link>
+			<pubDate>Sat, 22 Jan 2011 22:55:25 +0000</pubDate>
+			<dc:creator>Kevin Hawkins</dc:creator>
+			<guid isPermaLink="false">914@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Many institutions providing metadata through OAI-PMH creating a listing in a registry such as &#60;a href=&#34;http://www.openarchives.org/data/registerasprovider.html&#34;&#62;the one at Illinois&#60;/a&#62; (which you can &#60;a href=&#34;http://www.openarchives.org/Register/BrowseSites&#34;&#62;browse&#60;/a&#62;).  Institutions listed here are likely to have their data harvested by &#60;a href=&#34;http://www.oaister.org/&#34;&#62;OAIster&#60;/a&#62; and other such projects that take advantage of OAI-PMH.&#60;/p&#62;
+&#60;p&#62;As for what software can be an OAI-PMH provider, it's true that ContentDM and other software has this built in.  Provider software is also included in the &#60;a href=&#34;http://sourceforge.net/projects/umoaitoolkit/&#34;&#62;UMich OAI Toolkit&#60;/a&#62;.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Conal Tuohy on "Libraries offering OAI-PMH metadata for digitized objects?"</title>
+						<link>http://digitalhumanities.org/answers/topic/libraries-offering-oai-pmh-metadata-for-digitized-objects#post-870</link>
+			<pubDate>Sun, 16 Jan 2011 21:16:07 +0000</pubDate>
+			<dc:creator>Conal Tuohy</dc:creator>
+			<guid isPermaLink="false">870@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;The &#60;a href=&#34;http://www.nzetc.org/&#34;&#62;New Zealand Electronic Text Centre&#60;/a&#62;, where I once worked, offers an OAI-PMH feed of &#60;a href=&#34;http://www.nzetc.org/oai-srg/tei-doc.xml&#34;&#62;their collection of TEI-encoded documents&#60;/a&#62; as a &#60;a href=&#34;http://www.openarchives.org/OAI/2.0/guidelines-static-repository.htm#SR&#34;&#62;&#34;Static Repository&#34;&#60;/a&#62;, which can be accessed by standard OAI-PMH clients via a &#60;a href=&#34;http://www.openarchives.org/OAI/2.0/guidelines-static-repository.htm#SRG&#34;&#62;&#34;Static Repository Gateway&#34;&#60;/a&#62;. The SRG technique is well worth looking into as a lightweight mechanism for supporting OAI-PMH.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Ben Brumfield on "Libraries offering OAI-PMH metadata for digitized objects?"</title>
+						<link>http://digitalhumanities.org/answers/topic/libraries-offering-oai-pmh-metadata-for-digitized-objects#post-842</link>
+			<pubDate>Wed, 15 Dec 2010 17:27:45 +0000</pubDate>
+			<dc:creator>Ben Brumfield</dc:creator>
+			<guid isPermaLink="false">842@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Although not a librarian, I know that at least a few Library CMSs support OAI-PMH. I've used the ruby &#60;code&#62;oai&#60;/code&#62; gem to interact with the built-in OAI service, and while I'm delighted with the code library, I'm a bit annoyed by the user-unfriendliness of the contents (especially the set naming conventions on Archive.org).&#60;/p&#62;
+&#60;p&#62;For example, UIowa runs ContentDM, so their API url is &#60;a href=&#34;http://digital.lib.uiowa.edu/cgi-bin/oai.exe&#34; rel=&#34;nofollow&#34;&#62;http://digital.lib.uiowa.edu/cgi-bin/oai.exe&#60;/a&#62;.  Here's an example of what you can scrape from it on my dev machine: &#60;a href=&#34;http://diary.aspengrovefarm.com/oai/set_list?repository_url=http://digital.lib.uiowa.edu/cgi-bin/oai.exe&#34;&#62;(click soon, this link may die)&#60;/a&#62; and here's the source code that presents it: &#60;a href=&#34;https://github.com/benwbrum/fromthepage/blob/master/app/controllers/oai_controller.rb&#34;&#62;controller&#60;/a&#62; &#60;a href=&#34;https://github.com/benwbrum/fromthepage/tree/master/app/views/oai&#34;&#62;views&#60;/a&#62;.  It's also pretty easy to just browse the repository via &#60;code&#62;irb&#60;/code&#62;.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Wally Grotophorst on "Libraries offering OAI-PMH metadata for digitized objects?"</title>
+						<link>http://digitalhumanities.org/answers/topic/libraries-offering-oai-pmh-metadata-for-digitized-objects#post-841</link>
+			<pubDate>Wed, 15 Dec 2010 14:06:18 +0000</pubDate>
+			<dc:creator>Wally Grotophorst</dc:creator>
+			<guid isPermaLink="false">841@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;The endeca link will crash Safari too...as will the MARCXML link they provide in another spot on that page :)
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>dana on "Libraries offering OAI-PMH metadata for digitized objects?"</title>
+						<link>http://digitalhumanities.org/answers/topic/libraries-offering-oai-pmh-metadata-for-digitized-objects#post-840</link>
+			<pubDate>Wed, 15 Dec 2010 13:29:58 +0000</pubDate>
+			<dc:creator>dana</dc:creator>
+			<guid isPermaLink="false">840@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @Wally Grotophorst's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/libraries-offering-oai-pmh-metadata-for-digitized-objects#post-839&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;My apologies, Wally, I provided the wrong link:&#60;/p&#62;
+&#60;p&#62;&#60;a href=&#34;http://digital.uflib.ufl.edu/digitalservices/&#34; rel=&#34;nofollow&#34;&#62;http://digital.uflib.ufl.edu/digitalservices/&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;Here's the full XML link:&#60;/p&#62;
+&#60;p&#62;&#60;a href=&#34;http://digital.uflib.ufl.edu/development/endeca/endeca.xml&#34; rel=&#34;nofollow&#34;&#62;http://digital.uflib.ufl.edu/development/endeca/endeca.xml&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;(will crash Firefox)
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Wally Grotophorst on "Libraries offering OAI-PMH metadata for digitized objects?"</title>
+						<link>http://digitalhumanities.org/answers/topic/libraries-offering-oai-pmh-metadata-for-digitized-objects#post-839</link>
+			<pubDate>Wed, 15 Dec 2010 13:24:21 +0000</pubDate>
+			<dc:creator>Wally Grotophorst</dc:creator>
+			<guid isPermaLink="false">839@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='http://digitalhumanities.org/answers/profile/dana'&#62;dana&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/libraries-offering-oai-pmh-metadata-for-digitized-objects#post-837&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;Is  this the page you meant to link to:&#60;/p&#62;
+&#60;p&#62;&#60;a href=&#34;http://digital.uflib.ufl.edu/digitalservices/&#34; rel=&#34;nofollow&#34;&#62;http://digital.uflib.ufl.edu/digitalservices/&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;I see the OAI base URL listed there:&#60;/p&#62;
+&#60;p&#62;&#60;a href=&#34;http://ufdc.ufl.edu/sobekcm_oai.aspx?&#34; rel=&#34;nofollow&#34;&#62;http://ufdc.ufl.edu/sobekcm_oai.aspx?&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;Will poke around to see what it supports.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>dana on "Libraries offering OAI-PMH metadata for digitized objects?"</title>
+						<link>http://digitalhumanities.org/answers/topic/libraries-offering-oai-pmh-metadata-for-digitized-objects#post-838</link>
+			<pubDate>Wed, 15 Dec 2010 11:04:54 +0000</pubDate>
+			<dc:creator>dana</dc:creator>
+			<guid isPermaLink="false">838@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @Dorothea Salo's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/libraries-offering-oai-pmh-metadata-for-digitized-objects#post-835&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;@Dorothea I'm the Project Manager for NINES, an aggregator of resources in nineteenth-century studies online (nines.org). We're benefiting from the availability of MARC XML from the LOC and UFL and I'd like to expand our collections to any library offering them. &#60;/p&#62;
+&#60;p&#62;Alas, it is very difficult to find them - and I suspect this is because of the very reason you supplied, that they are still under construction. My goal is to aggregate superior collections that are freely offered *and* learn enough about the process so that I can recommend it as a practice to our scholarly contributors.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>dana on "Libraries offering OAI-PMH metadata for digitized objects?"</title>
+						<link>http://digitalhumanities.org/answers/topic/libraries-offering-oai-pmh-metadata-for-digitized-objects#post-837</link>
+			<pubDate>Wed, 15 Dec 2010 11:03:19 +0000</pubDate>
+			<dc:creator>dana</dc:creator>
+			<guid isPermaLink="false">837@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @Wally Grotophorst's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/libraries-offering-oai-pmh-metadata-for-digitized-objects#post-836&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;@Wally The link University of Florida provides goes to an enormous XML file download, which is not optimal, in my opinion. I'm more in favor of the Library of Congress method, which breaks the returns down into increments of 200 objects. Here's the UFL page: &#60;a href=&#34;http://www.digital.uflib.ufl.edu/index.htm&#34; rel=&#34;nofollow&#34;&#62;http://www.digital.uflib.ufl.edu/index.htm&#60;/a&#62; .
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Wally Grotophorst on "Libraries offering OAI-PMH metadata for digitized objects?"</title>
+						<link>http://digitalhumanities.org/answers/topic/libraries-offering-oai-pmh-metadata-for-digitized-objects#post-836</link>
+			<pubDate>Tue, 14 Dec 2010 14:52:34 +0000</pubDate>
+			<dc:creator>Wally Grotophorst</dc:creator>
+			<guid isPermaLink="false">836@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Can you give a link to the downloadable metadata on the UF site? I poked around and didn't find it.   Many systems (e.g., DSpace, Omeka and others) expose metadata for 'harvesting' but it sounds like you're talking about something else.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Dorothea Salo on "Libraries offering OAI-PMH metadata for digitized objects?"</title>
+						<link>http://digitalhumanities.org/answers/topic/libraries-offering-oai-pmh-metadata-for-digitized-objects#post-835</link>
+			<pubDate>Tue, 14 Dec 2010 14:43:41 +0000</pubDate>
+			<dc:creator>Dorothea Salo</dc:creator>
+			<guid isPermaLink="false">835@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Oof. I know our digital collections do it, but I don't know the OAI URL off the top of my head, and I do know you wouldn't want to copy our spaghetti implementation (we're in the process of rearchitecting).&#60;/p&#62;
+&#60;p&#62;What form does your metadata live in natively? If it's XML, then crosswalking to OAI's Dublin Core profile should be doable. Also, is this a static or growing collection? If the former, you can do the work once and expose the result as a &#60;a href=&#34;http://www.openarchives.org/OAI/2.0/guidelines-static-repository.htm&#34;&#62;static OAI endpoint&#60;/a&#62;.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>dana on "Libraries offering OAI-PMH metadata for digitized objects?"</title>
+						<link>http://digitalhumanities.org/answers/topic/libraries-offering-oai-pmh-metadata-for-digitized-objects#post-834</link>
+			<pubDate>Tue, 14 Dec 2010 14:33:06 +0000</pubDate>
+			<dc:creator>dana</dc:creator>
+			<guid isPermaLink="false">834@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Recently, the University of Florida set up a free download link to the metadata of their digital objects. Does anyone know of other schools/institutions following suit? Please let me know, as I'd like to learn more about the implementation of this feature.
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

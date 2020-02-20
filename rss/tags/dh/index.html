@@ -1,0 +1,336 @@
+<?
+/*
+Plugin Name: bb Topic Icons
+Plugin URI: http://devt.caffeinatedbliss.com/bbpress/topic-icons
+Description: Adds configurable icons next to topics based on their status
+Author: Paul Hawke
+Author URI: http://paul.caffeinatedbliss.com/
+Version: 0.6
+*/
+
+/****************************************************************************
+ *
+ * Configure the following constants to fine-tune the CSS classes that are
+ * generated, the icon filenames that are used, and the text used in the
+ * legend (if you have one displayed).  Note: filenames are likely to be
+ * taken away in a future version and replaced with the concept of "icon sets"
+ * whose filenames are fixed, so dont get used to editing the filenames,
+ * as this will break in future versions.
+ *
+ ****************************************************************************/
+
+// css class for the unsorted list used in the legend display
+define( LEGEND_CLASS, 'topic_icon_legend' );
+
+// busy threshold - a topic with more posts than this is counted as "busy"
+// for purposes of picking an icon.
+define( BUSY_THRESHOLD, 15 );
+
+// width of the images, in pixels
+define( ICON_WIDTH, '20' );
+
+// height of the images, in pixels
+define( ICON_HEIGHT, '20' );
+
+// the URL base for where to find the default icon set.
+define( ICON_SET_URL_BASE, BB_PLUGIN_URL.'bb-topic-icons/icon-sets/' );
+
+/****************************************************************************
+ *
+ * Shouldnt be much need to edit anything beyond this point - configuration
+ * is all done via the constants (above) and through and admin area page in
+ * bbPress at runtime.
+ *
+ ****************************************************************************/
+
+require( 'bb-topic-icons-api.php' );
+require( 'bb-topic-icons-admin.php' );
+require( 'interface.status-interpreter.php' );
+require( 'interface.status-renderer.php' );
+require( 'class.default-status-interpreter.php' );
+require( 'class.default-status-renderer.php' );
+
+function topic_icons_legend() {
+	$icon_set_name = topic_icons_get_active_icon_set();
+	$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+	$statuses = get_active_status_interpreter()->getAllStatuses();
+	$renderer = get_active_status_renderer();
+	
+	echo '<ul id="'.LEGEND_CLASS.'">';
+	for ($i=0; $i < count($statuses); $i++) {
+		$image = $renderer->renderStatus($statuses[$i]);
+		$tooltip = $renderer->renderStatusTooltip($statuses[$i]);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (isset($image) && strlen($image) > 0 &&
+			isset($tooltip) && strlen($tooltip) > 0 && $exists) {
+			echo '<li><img src="'.$icon_set_url.'/'.$image.
+				'" width="'.ICON_WIDTH.'" height="'.ICON_HEIGHT.
+				'" align="absmiddle">&nbsp;'.$tooltip.'</li>';
+		}
+	}
+	echo '</ul>';
+}
+
+function topic_icons_css() {
+	echo "\n<style type=\"text/css\"><!--\n";
+	require( 'bb-topic-icons.css' );
+	echo "\n--></style>";
+}
+
+function topic_icons_label( $label ) {
+	global $topic;
+	
+	if (bb_is_front() || bb_is_forum() || bb_is_view() || bb_is_tag()) {		
+		$icon_set_name = topic_icons_get_active_icon_set();
+		$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+
+		$status = get_active_status_interpreter()->getStatus(bb_get_location(), $topic);
+		$renderer = get_active_status_renderer();
+		$image = $renderer->renderStatus($status);
+		$tooltip = $renderer->renderStatusTooltip($status);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (!$exists) {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), ICON_SET_URL_BASE.'/empty.png', ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		} else if (strlen($tooltip) > 0) {		
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"><span>%s</span></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $tooltip, $label);
+		} else {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		}
+	}
+	
+	return $label;
+}
+
+function topic_icons_init( ) {
+	remove_filter('bb_topic_labels', 'bb_closed_label', 10);
+	remove_filter('bb_topic_labels', 'bb_sticky_label', 20);
+
+	add_filter('bb_topic_labels', 'topic_icons_label', 11);
+
+	add_action('bb_head', 'topic_icons_css');
+
+	add_action('bb_admin_menu_generator', 'topic_icons_admin_page_add');
+	add_action('bb_admin-header.php', 'topic_icons_admin_page_process');
+	
+	topic_icons_register_status_interpreter('default', new DefaultStatusInterpreter(BUSY_THRESHOLD));
+	topic_icons_register_status_renderer('default', new DefaultStatusRenderer());
+}
+
+topic_icons_init();
+
+?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Tag: DH - Recent Posts</title>
+		<link>http://digitalhumanities.org/answers/tags/dh</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Tag: DH - Recent Posts</description>
+		<language>en-US</language>
+		<pubDate>Sun, 24 Mar 2019 17:08:07 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/tags/dh" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>alyson.musser on "DH Thesaurus - Participate in an Evaluation Survey"</title>
+						<link>http://digitalhumanities.org/answers/topic/dh-thesaurus-participate-in-an-evaluation-survey#post-2322</link>
+			<pubDate>Fri, 24 Apr 2015 18:09:09 +0000</pubDate>
+			<dc:creator>alyson.musser</dc:creator>
+			<guid isPermaLink="false">2322@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hi all, I'm looking for researchers/enthusiasts of the digital humanities to participate in a survey evaluating a digital humanities thesaurus.  &#60;/p&#62;
+&#60;p&#62;The survey is here: &#60;a href=&#34;http://goo.gl/forms/DyKllxSLMC&#34; rel=&#34;nofollow&#34;&#62;http://goo.gl/forms/DyKllxSLMC&#60;/a&#62;  and the thesaurus is here: &#60;a href=&#34;http://dhthesaurus.com/&#34; rel=&#34;nofollow&#34;&#62;http://dhthesaurus.com/&#60;/a&#62; &#60;/p&#62;
+&#60;p&#62;The survey should only take about 15-20 minutes and I would greatly value your input and feedback. If you leave your email at the end of the survey, you'll be entered in a drawing to win a $5 Starbuck gift card. Thanks!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>royalyoucef@gmail.com on "What&#039;s the difference between Digital Humanities and New Media?"</title>
+						<link>http://digitalhumanities.org/answers/topic/whats-the-difference-between-digital-humanities-and-new-media#post-2130</link>
+			<pubDate>Sun, 17 Nov 2013 20:07:26 +0000</pubDate>
+			<dc:creator>royalyoucef@gmail.com</dc:creator>
+			<guid isPermaLink="false">2130@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hope that you will continue doing nice&#60;br /&#62;
+&#60;a href=&#34;http://hidemybody.com/&#34; title=&#34;proxy sites&#34;&#62;proxy sites&#60;/a&#62;&#60;br /&#62;
+&#60;a href=&#34;http://hidemybody.com/&#34; title=&#34;proxy&#34;&#62;proxy&#60;/a&#62;&#60;br /&#62;
+&#60;a href=&#34;http://hidemybody.com/&#34; title=&#34;Surf The Web Anonymously&#34;&#62;Surf The Web Anonymously&#60;/a&#62;&#60;br /&#62;
+&#60;a href=&#34;http://hidemybody.com/&#34; title=&#34;school proxy&#34;&#62;school proxy&#60;/a&#62;
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Kevin Hawkins on "TEI question"</title>
+						<link>http://digitalhumanities.org/answers/topic/tei-question#post-2053</link>
+			<pubDate>Fri, 02 Aug 2013 02:33:56 +0000</pubDate>
+			<dc:creator>Kevin Hawkins</dc:creator>
+			<guid isPermaLink="false">2053@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;DigitalHumanitiesScholar, let me make sure I understand the situation.  You have a transcription of a source document in plain text and you want to add just enough markup to identify section headings, people, places, and footnotes.  Is that right?&#60;/p&#62;
+&#60;p&#62;An XML schema only allows certain elements to nest within certain others, and the TEI schemas that come with &#38;lt;oXygen/&#38;gt; XML Editor similarly allow only certain elements in certain places.  So you can't take a plain text document and add only &#38;lt;head&#38;gt;, &#38;lt;person&#38;gt;, &#38;lt;place&#38;gt;, and &#38;lt;note&#38;gt;.  Now, perhaps you are already planning to have &#38;lt;TEI&#38;gt; containing a &#38;lt;teiHeader&#38;gt; and a &#38;lt;text&#38;gt;, and the &#38;lt;text&#38;gt; will contain a &#38;lt;body&#38;gt;, and then you wanted to put your whole transcription inside &#38;lt;body&#38;gt;.  While such a document would validate according to the schemas in &#38;lt;oXygen/&#38;gt; XML Editor, as soon as you begin adding &#38;lt;head&#38;gt;s, you will need to break the document into &#38;lt;div&#38;gt; or &#38;lt;div1&#38;gt; elements, each of which starts with a &#38;lt;head&#38;gt;.&#60;/p&#62;
+&#60;p&#62;For a personal or place name mentioned in passing in the text, you should use &#38;lt;name type=&#34;person&#34;&#38;gt; or &#38;lt;persName&#38;gt; and &#38;lt;name type=&#34;place&#34;&#38;gt; or &#38;lt;placeName&#38;gt;.  The &#38;lt;person&#38;gt; and &#38;lt;place&#38;gt; elements are meant only for providing biographical and prosopographical data that occurs in certain types of documents, or which is added when creating a scholarly edition in TEI.  See chapter 13 of the TEI Guidelines.&#60;/p&#62;
+&#60;p&#62;As for encoding footnotes, see section 3.8.1, which discusses whether to insert the &#38;lt;note&#38;gt; at the point of attachment (as in the examples in this section) or whether to use &#38;lt;ptr&#38;gt; or &#38;lt;ref&#38;gt; at that location instead.  For an example that uses &#38;lt;ref&#38;gt;, see the cross-reference to section 3.6, which gives this example:&#60;/p&#62;
+&#60;pre&#62;
+annotated text &#38;lt;ref target=&#34;#a51&#34; type=&#34;noteAnchor&#34;&#38;gt;⁵¹&#38;lt;/ref&#38;gt;
+&#38;lt;!-- ... --&#38;gt;
+&#38;lt;note xml:id=&#34;a51&#34; type=&#34;footnote&#34;&#38;gt;text of annotation&#38;lt;/note&#38;gt;
+&#60;/pre&#62;</description>
+		</item>
+		<item>
+			 
+				<title>DigitalHumanitiesScholar on "TEI question"</title>
+						<link>http://digitalhumanities.org/answers/topic/tei-question#post-2051</link>
+			<pubDate>Mon, 29 Jul 2013 06:51:21 +0000</pubDate>
+			<dc:creator>DigitalHumanitiesScholar</dc:creator>
+			<guid isPermaLink="false">2051@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hi,&#60;/p&#62;
+&#60;p&#62;I have a beginners question re TEI 5 and would be grateful for any suggestions re same.&#60;/p&#62;
+&#60;p&#62;How does one begin to encode metdata? ie: I have a transcription and am doing a very light encoding thereof - just &#38;lt;head&#38;gt;&#38;lt;/head&#38;gt;, &#38;lt;person&#38;gt;&#38;lt;/person&#38;gt;, &#38;lt;place&#38;gt;&#38;lt;/place&#38;gt; (which hopefully are correct!). If I have footnotes re certain parts of the main body of text, how to encode it and where to I place it in the TEI that I am writing in Oxygen Editor (ie: How do I show what the info refers to? Do I keep the footnote system?)&#60;/p&#62;
+&#60;p&#62;Thanks.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>mbranson_1993 on "What is Digital Humanities?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-is-digital-humanities-1#post-2046</link>
+			<pubDate>Tue, 23 Jul 2013 17:57:50 +0000</pubDate>
+			<dc:creator>mbranson_1993</dc:creator>
+			<guid isPermaLink="false">2046@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;And this last one is perhaps the most useful for me:&#60;/p&#62;
+&#60;p&#62;&#34;I would define it as the intersection between computing technologies and research and teaching in the humanities. Influenced by web technologies, it also promotes collaborative approaches to scholarship.&#34; — Alexandra Guerson&#60;/p&#62;
+&#60;p&#62;This definition resonates with me in a couple of ways: first, I concur with the idea of &#34;collaborative approaches to scholarship.&#34; Our digital world certainly allows--perhaps, encourages--collaboration. Also, as Terry Heick asserts: &#34;. . .the 21st century’s model is form and interdependence.&#34; Web 2.0, I believe, has positioned us for Heick's assertion and the very collaboration in this definition.&#60;/p&#62;
+&#60;p&#62;I have to &#34;ditto&#34; what I have just said to the idea in the definition of &#34;computing technologies and research.&#34; It is far easier to access information with something as mundane as a search function on my browser as it was keeping hundreds of note cards and multiple legal pads from my dissertation research. This &#34;intersection&#34; has radically changed research across all disciplines.&#60;/p&#62;
+&#60;p&#62;So far--this definition helps me understand the term, but I am puzzled by how this definition informs my teaching and my students' learning.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>mbranson_1993 on "What is Digital Humanities?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-is-digital-humanities-1#post-2045</link>
+			<pubDate>Tue, 23 Jul 2013 16:51:13 +0000</pubDate>
+			<dc:creator>mbranson_1993</dc:creator>
+			<guid isPermaLink="false">2045@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;From the same source as above this definition: &#34;As a social construct.&#34;— louburnard. . .&#60;/p&#62;
+&#60;p&#62;This definition certainly avoids the implicit absolutism of the previous one I noted, but it seems incomplete: a social construct of what? who is the &#34;constructor&#34;? from what is this &#34;construction&#34; built?&#60;/p&#62;
+&#60;p&#62;A problem with metaphors (and construct here is obviously metaphoric) is that they can lead us into directions we did not intend.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>mbranson_1993 on "What is Digital Humanities?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-is-digital-humanities-1#post-2044</link>
+			<pubDate>Tue, 23 Jul 2013 16:45:05 +0000</pubDate>
+			<dc:creator>mbranson_1993</dc:creator>
+			<guid isPermaLink="false">2044@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Here is one definition: &#34;Digital Humanities allow people a new possibility to access knowledge and in turn generates new knowledge.&#34; — Michelle Moore&#60;/p&#62;
+&#60;p&#62;Do I access knowledge or do I access information that, after some reflection and discussion, becomes knowledge?  Also, is &#34;knowledge&#34; (which in this quote seems to suggest something &#34;absolute&#34;) constant or does it change? For example, we once accepted as &#34;knowledge&#34; that the world as flat (Thomas Friedman notwithstanding), yet today we do not accept this knowledge.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>alangpike on "Big data projects using IMDB?"</title>
+						<link>http://digitalhumanities.org/answers/topic/big-data-projects-using-imdb#post-2022</link>
+			<pubDate>Fri, 07 Jun 2013 12:21:48 +0000</pubDate>
+			<dc:creator>alangpike</dc:creator>
+			<guid isPermaLink="false">2022@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Thanks Ben, I'll report back after more investigation.&#60;/p&#62;
+&#60;p&#62;Cheers.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Ben Schmidt on "Big data projects using IMDB?"</title>
+						<link>http://digitalhumanities.org/answers/topic/big-data-projects-using-imdb#post-2020</link>
+			<pubDate>Fri, 07 Jun 2013 03:06:22 +0000</pubDate>
+			<dc:creator>Ben Schmidt</dc:creator>
+			<guid isPermaLink="false">2020@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I've looked some at the &#60;a href=&#34;http://www.imdb.com/interfaces&#34;&#62;plain text data files&#60;/a&#62; they provide, and was surprised at the amount of stuff one could do with them--they don't include reviews, but they do include most of the other stuff one might want--biographical information, fully standardized lists of cast and crew, etc.. And you can just download all the data straightaway without needing permission, and without having to write a crawler. There are some restraints on redistribution, but nothing that seems like it would be onerous for scholarly research. Social scientists have used it for some of the network stuff, eg &#60;a href=&#34;http://sydney.edu.au/engineering/it/~dmerrick/papers/AhmedEtAl2007.pdf&#34;&#62;here&#60;/a&#62; and &#60;a href=&#34;http://nwb.cns.iu.edu/papers/2007-herr-movieact.pdf&#34;&#62;here.&#60;/a&#62; &#60;/p&#62;
+&#60;p&#62;I don't have any experience with the stuff that you &#38;lt;i&#38;gt;can't&#38;lt;/i&#38;gt; get through the textfiles.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>alangpike on "Big data projects using IMDB?"</title>
+						<link>http://digitalhumanities.org/answers/topic/big-data-projects-using-imdb#post-2019</link>
+			<pubDate>Thu, 06 Jun 2013 12:42:29 +0000</pubDate>
+			<dc:creator>alangpike</dc:creator>
+			<guid isPermaLink="false">2019@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I am in the early stages of my dissertation and, as I explore the possible DH methods that might apply to my work, am wondering if there might be a way for the DH community to take advantage of the mountain of data at IMDB. I have heard from some folks that they have been unfriendly to researchers, but thought it might be worth some serious effort to make some (all!) of their data, reviews, etc. available to film and media studies scholars. The possibilities for DH methods are virtually limitless. For my own work, data visualizations, social network analysis of cast and crew, etc. are all intriguing possibilities. Has anyone out there gotten permission from IMDB to use data crawlers for scholarly research? Has anyone tried to do so and been denied?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>DigitalHumanitiesScholar on "What is Digital Humanities?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-is-digital-humanities-1#post-2000</link>
+			<pubDate>Thu, 09 May 2013 07:47:50 +0000</pubDate>
+			<dc:creator>DigitalHumanitiesScholar</dc:creator>
+			<guid isPermaLink="false">2000@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @Josh Honn's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/what-is-digital-humanities-1#post-1999&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;Many thanks for the links!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Josh on "What is Digital Humanities?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-is-digital-humanities-1#post-1999</link>
+			<pubDate>Sun, 05 May 2013 12:47:17 +0000</pubDate>
+			<dc:creator>Josh</dc:creator>
+			<guid isPermaLink="false">1999@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;There are already some great resources for this, particularly &#60;a href=&#34;http://whatisdigitalhumanities.com/&#34;&#62;http://whatisdigitalhumanities.com/&#60;/a&#62;, which consists of over 500 definitions from people who have participated in the annual Day of DH. I've culled together some definitions here as well: &#60;a href=&#34;http://sites.library.northwestern.edu/dh/&#34;&#62;http://sites.library.northwestern.edu/dh/&#60;/a&#62;. I also suspect that &#60;a href=&#34;https://twitter.com/DefiningDH&#34;&#62;https://twitter.com/DefiningDH&#60;/a&#62; will be of some help; although it's not entirely clear to me yet what this project will be, the folks behind it have been collocating many definitional tweets. Good luck on your project!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>DigitalHumanitiesScholar on "What is Digital Humanities?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-is-digital-humanities-1#post-1998</link>
+			<pubDate>Sun, 05 May 2013 10:43:29 +0000</pubDate>
+			<dc:creator>DigitalHumanitiesScholar</dc:creator>
+			<guid isPermaLink="false">1998@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hello Digital Humanists,&#60;/p&#62;
+&#60;p&#62;I am creating a video from crowdsourced answers to the question &#34;What is Digital Humanities?&#34;. I would appreciate any short response you could provide re same and permission to publish your answer in the video. The aim of this project is to provide a brief introduction to DH for novice digital humanists or those who are not familiar with the field.&#60;/p&#62;
+&#60;p&#62;Looking forward to hearing your suggestions. Please also provide your Twitter username re acknowledging your contribution.&#60;/p&#62;
+&#60;p&#62;Many thanks,&#60;/p&#62;
+&#60;p&#62;Róisín O'Brien&#60;br /&#62;
+&#60;a href=&#34;http://www.roisinobrien.com&#34; rel=&#34;nofollow&#34;&#62;http://www.roisinobrien.com&#60;/a&#62;&#60;br /&#62;
+&#60;a href=&#34;http://www.twitter.com/roisinanneob&#34; rel=&#34;nofollow&#34;&#62;http://www.twitter.com/roisinanneob&#60;/a&#62;
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>jlmcdonald@gmail.com on "Have you used MongoDB for DH project?"</title>
+						<link>http://digitalhumanities.org/answers/topic/have-you-used-mongodb-for-dh-project#post-1851</link>
+			<pubDate>Sat, 05 Jan 2013 18:49:03 +0000</pubDate>
+			<dc:creator>jlmcdonald@gmail.com</dc:creator>
+			<guid isPermaLink="false">1851@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I think MongoDB has a lot to offer DH projects -- it basically incorporates some of the best features of a document-oriented database and a relational database all in one. For so much of the data often worked with in DH projects, that are sometimes squished and squeezed so much to fit a relational model that never quite works, a schemaless approach to indexing and storing data like Mongo has works very well. I especially see value for those projects that don't need a full-blown structured repository like FEDORA, but that need more than flat files or relational DBs can do.&#60;/p&#62;
+&#60;p&#62;Having said that, the biggest thing to consider is that you say using MySQL works very well already for you. If you can't tell that there is something missing, not-quite-right, or not efficient enough with your current setup, the transition to Mongo may not be worth the effort in the long run. Mongo is pretty straightforward to set up, but it does approach data differently and doesn't use SQL at all, so when you say you'd be rewriting the backend, you'd really be rewriting it! You have to evaluate your data itself to know if the effort is worth it. Is your data tabular, or document-based? Are you mostly dealing with numbers and simple structured data (with some relationships), or heavily semantic data with complex metadata?&#60;/p&#62;
+&#60;p&#62;Perhaps another path to consider, if you decide to rewrite your back end, is to completely decouple it from your front end. Create a thin layer that is nothing but a RESTful API -- the api talks to the DB and only spits out structured JSON on the other end. This would also likely require some tweaking of your front end, but it will A) make it so you can then very easily write multiple other front ends (mobile, TV, etc) without a hitch, and B) 3 years from now, if you decide to change out the DB layer again, it's much easier to then create a new API generator that will offer the same data structures than it is to create an all new backend interface. There are lots of starting point solutions for quickly generating RESTful APIs whether your DB is MySQL, Mongo, or something else.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>boybot16@gmail.com on "Have you used MongoDB for DH project?"</title>
+						<link>http://digitalhumanities.org/answers/topic/have-you-used-mongodb-for-dh-project#post-1850</link>
+			<pubDate>Sat, 05 Jan 2013 15:19:42 +0000</pubDate>
+			<dc:creator>boybot16@gmail.com</dc:creator>
+			<guid isPermaLink="false">1850@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;We have a DH project that's currently uses MySQL for the database, and it works very well.&#60;/p&#62;
+&#60;p&#62;There has been much recent talk about NoSQL databases, particularly MongoDB, promising flexibility and scalability. We're considering re-writing the backend. Is anyone in the DH community seriously using MongoDB?&#60;/p&#62;
+&#60;p&#62;If you have used MongoDB for a DH project, what has been your experience with it? Biggest joy? Gotchas to look out for? Is conversion worth it for libraries and archives open source projects?
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

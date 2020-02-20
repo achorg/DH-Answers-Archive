@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Topic: Has anyone seen book Tables of Contents represented well in RDF?</title>
+		<link>http://digitalhumanities.org/answers/topic/has-anyone-seen-book-tables-of-contents-represented-well-in-rdf</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Topic: Has anyone seen book Tables of Contents represented well in RDF?</description>
+		<language>en-US</language>
+		<pubDate>Fri, 04 Oct 2013 22:15:09 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/topic/has-anyone-seen-book-tables-of-contents-represented-well-in-rdf" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>Patrick Murray-John on "Has anyone seen book Tables of Contents represented well in RDF?"</title>
+						<link>http://digitalhumanities.org/answers/topic/has-anyone-seen-book-tables-of-contents-represented-well-in-rdf#post-378</link>
+			<pubDate>Thu, 07 Oct 2010 18:11:18 +0000</pubDate>
+			<dc:creator>Patrick Murray-John</dc:creator>
+			<guid isPermaLink="false">378@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;It might be that the question comes around to vocabularies that are good for representing a TOC. And, as Bob mentions, that might involve new metadata, possibly metadata that gets at the part-to-whole relationships of the contents to the book as a whole.&#60;/p&#62;
+&#60;p&#62;If you have metadata about each of the parts/chapters, that could conceivably be done with dct:hasPart between the book itself and the chapters. That wouldn't automatically represent the order, however, which would clearly be a good feature in a TOC.&#60;/p&#62;
+&#60;p&#62;I see you are using the &#60;a href=&#34;http://bibliontology.com/&#34;&#62;Bibliographic Ontology&#60;/a&#62; for author data. You might be able to use its chapter classes and properties for the TOC. It gives classes for bibo:Book and bibo:chapter. I think it reuses dct:hasPart to related them, and if I remember right bibo:chapter can be used to show the chapter number. So you might have&#60;/p&#62;
+&#60;pre&#62;
+&#38;lt;http://openlibrary.org/books/OL7173600M&#38;gt; a bibo:Book ;
+      dcterms:hasPart ex:OL7173600M_1 . 
+
+ex:OL7173600M_1 a bibo:Chapter ;
+      bibo:chapter &#34;1&#34;;
+      bibo:pageStart &#34;1&#34;;
+      dcterms:title &#34;Up the Trail&#34; .
+&#60;/pre&#62;
+&#60;p&#62;At least that's my first guess about how to model it. Page numbers might be a complication, since there you might be dealing with how it gets represented in the output formats.&#60;/p&#62;
+&#60;p&#62;An alternative is to go &#60;a href=&#34;http://vocab.org/frbr/core.html&#34;&#62;FRBR&#60;/a&#62; with it. I'm not sure that that'd quite be right for your examples, though.&#60;/p&#62;
+&#60;p&#62;Hope that helps!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>gluejar on "Has anyone seen book Tables of Contents represented well in RDF?"</title>
+						<link>http://digitalhumanities.org/answers/topic/has-anyone-seen-book-tables-of-contents-represented-well-in-rdf#post-358</link>
+			<pubDate>Wed, 06 Oct 2010 15:59:11 +0000</pubDate>
+			<dc:creator>gluejar</dc:creator>
+			<guid isPermaLink="false">358@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I plead guilty to gratuity. I also agree with the rest of Bob's answer.&#60;/p&#62;
+&#60;p&#62;But, to digress slightly, In SKOS, the violence of doing hierarchy with RDF is premeditated, not gratuitous, and there's a strong argument that it is also justified.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Bob DuCharme on "Has anyone seen book Tables of Contents represented well in RDF?"</title>
+						<link>http://digitalhumanities.org/answers/topic/has-anyone-seen-book-tables-of-contents-represented-well-in-rdf#post-355</link>
+			<pubDate>Wed, 06 Oct 2010 13:13:05 +0000</pubDate>
+			<dc:creator>Bob DuCharme</dc:creator>
+			<guid isPermaLink="false">355@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @Bethany Nowviskie's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/has-anyone-seen-book-tables-of-contents-represented-well-in-rdf#post-348&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;&#34;Gratuitous violence&#34; is itself a bit gratuitous. I'm sure Eric is aware of SKOS, which uses RDF to represent hierarchies to great advantage. &#60;/p&#62;
+&#60;p&#62;Since the RDF you have now links to information that lets people access the TOC, I'm not sure what value it would add to represent the TOC in the RDF, unless you want to store metadata about each individual TOC entry in the RDF. I didn't see an XML representation of the book at &#60;a href=&#34;http://openlibrary.org/books/OL7173600M/The_log_of_a_cowboy&#34; rel=&#34;nofollow&#34;&#62;http://openlibrary.org/books/OL7173600M/The_log_of_a_cowboy&#60;/a&#62; outside of delivery format XML in the DAISY and the ePub, but if you made something like a TEI version available and you had extra metadata about each chapter heading, you could store it right in there using RDFa, which isn't strictly for HTML (see &#60;a href=&#34;http://www.devx.com/semantic/Article/42543)&#34; rel=&#34;nofollow&#34;&#62;http://www.devx.com/semantic/Article/42543)&#60;/a&#62;.&#60;/p&#62;
+&#60;p&#62;I think the bottom line is that you currently offer a machine-readable way for people or systems to access all the information you want to make available, including the TOC entries, so unless you have new (meta)data you want to also provide, in which case RDFa or more data in your OL7173600M.rdf file would be something to consider, you're fine right now.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Bethany Nowviskie on "Has anyone seen book Tables of Contents represented well in RDF?"</title>
+						<link>http://digitalhumanities.org/answers/topic/has-anyone-seen-book-tables-of-contents-represented-well-in-rdf#post-348</link>
+			<pubDate>Tue, 05 Oct 2010 23:50:56 +0000</pubDate>
+			<dc:creator>Bethany Nowviskie</dc:creator>
+			<guid isPermaLink="false">348@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Yeah, I'm giving that a &#34;best answer&#34; on his behalf! But let's leave the thread open in case you get any more responses.  I'm chiefly wondering what you're trying to accomplish.  Is it just a desire to get the text content of the TOC into your metadata? Or are you trying to do something more structural/relational?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>george08 on "Has anyone seen book Tables of Contents represented well in RDF?"</title>
+						<link>http://digitalhumanities.org/answers/topic/has-anyone-seen-book-tables-of-contents-represented-well-in-rdf#post-347</link>
+			<pubDate>Tue, 05 Oct 2010 23:45:45 +0000</pubDate>
+			<dc:creator>george08</dc:creator>
+			<guid isPermaLink="false">347@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Love Eric's tweet:&#60;/p&#62;
+&#60;p&#62;&#34;TOC's are hierarchical objects, ideally represented in xml. RDF would be gratuitous violence.&#34;&#60;/p&#62;
+&#60;p&#62;&#60;a href=&#34;http://twitter.com/gluejar/status/26500960920&#34; rel=&#34;nofollow&#34;&#62;http://twitter.com/gluejar/status/26500960920&#60;/a&#62;
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>george08 on "Has anyone seen book Tables of Contents represented well in RDF?"</title>
+						<link>http://digitalhumanities.org/answers/topic/has-anyone-seen-book-tables-of-contents-represented-well-in-rdf#post-333</link>
+			<pubDate>Mon, 04 Oct 2010 23:02:34 +0000</pubDate>
+			<dc:creator>george08</dc:creator>
+			<guid isPermaLink="false">333@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hello! I work on the Open Library project (&#60;a href=&#34;http://openlibrary.org&#34; rel=&#34;nofollow&#34;&#62;http://openlibrary.org&#60;/a&#62;) where we've been doing some magic to extract Tables of Contents automagically from OCR/ABBY data as we digitize books. It's getting to the stage where we're almost ready to write ToC data to a ton of our edition records, and we want to make sure this new information is available in our RDF/JSON output.&#60;/p&#62;
+&#60;p&#62;Here's an example of an edition record:&#60;br /&#62;
+&#60;a href=&#34;http://openlibrary.org/books/OL7173600M/The_log_of_a_cowboy&#34; rel=&#34;nofollow&#34;&#62;http://openlibrary.org/books/OL7173600M/The_log_of_a_cowboy&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;And its corresponding RDF (missing ToC info):&#60;br /&#62;
+&#60;a href=&#34;http://openlibrary.org/books/OL7173600M.rdf&#34; rel=&#34;nofollow&#34;&#62;http://openlibrary.org/books/OL7173600M.rdf&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;You can see the ToC being popped into the JSON here:&#60;br /&#62;
+&#60;a href=&#34;http://openlibrary.org/books/OL7173600M.json&#34; rel=&#34;nofollow&#34;&#62;http://openlibrary.org/books/OL7173600M.json&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;Do you know of any other bookish systems showing ToC in their RDF?
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

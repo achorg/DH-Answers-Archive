@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Topic: How do I use a script to append a grading rubric PDF to papers to be graded?</title>
+		<link>http://digitalhumanities.org/answers/topic/how-do-i-use-a-script-to-append-a-grading-rubric-pdf-to-papers-to-be-graded</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Topic: How do I use a script to append a grading rubric PDF to papers to be graded?</description>
+		<language>en-US</language>
+		<pubDate>Sat, 27 Aug 2016 15:38:33 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/topic/how-do-i-use-a-script-to-append-a-grading-rubric-pdf-to-papers-to-be-graded" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>Wayne Graham on "How do I use a script to append a grading rubric PDF to papers to be graded?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-do-i-use-a-script-to-append-a-grading-rubric-pdf-to-papers-to-be-graded#post-1082</link>
+			<pubDate>Fri, 25 Mar 2011 16:09:20 +0000</pubDate>
+			<dc:creator>Wayne Graham</dc:creator>
+			<guid isPermaLink="false">1082@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;So file names are a little weird. Essentially you'll need to change the line with fname = File.basename(f). There are additional parameters that will let you easily drop the file extension.&#60;/p&#62;
+
+
+&#60;div class=&#34;bb_syntax&#34;&#62;&#60;div class=&#34;code&#34;&#62;&#60;pre class=&#34;ruby&#34; style=&#34;font-family:monospace;&#34;&#62;fname = &#60;span style=&#34;color:#CC00FF; font-weight:bold;&#34;&#62;File&#60;/span&#62;.&#60;span style=&#34;color:#9900CC;&#34;&#62;basename&#60;/span&#62;&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#38;#40;&#60;/span&#62;f, &#60;span style=&#34;color:#996600;&#34;&#62;'.pdf'&#60;/span&#62;&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#38;#41;&#60;/span&#62;&#60;/pre&#62;&#60;/div&#62;&#60;/div&#62;
+
+
+
+&#60;p&#62;This will create a string of just the file name (without the pdf extension on it). All you need to do then is append the code to that string with the file extension:&#60;/p&#62;
+
+
+&#60;div class=&#34;bb_syntax&#34;&#62;&#60;div class=&#34;code&#34;&#62;&#60;pre class=&#34;ruby&#34; style=&#34;font-family:monospace;&#34;&#62;fname = fname &#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;+&#60;/span&#62; &#60;span style=&#34;color:#996600;&#34;&#62;&#38;quot;-R.pdf&#38;quot;&#60;/span&#62;&#60;/pre&#62;&#60;/div&#62;&#60;/div&#62;
+
+
+
+&#60;p&#62;Essentially you're amending one line and adding the second to the script. Bonus points if you add this in as a configurable option :)
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>wcaleb on "How do I use a script to append a grading rubric PDF to papers to be graded?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-do-i-use-a-script-to-append-a-grading-rubric-pdf-to-papers-to-be-graded#post-1081</link>
+			<pubDate>Fri, 25 Mar 2011 13:59:03 +0000</pubDate>
+			<dc:creator>wcaleb</dc:creator>
+			<guid isPermaLink="false">1081@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Thanks! That works! If I wanted to add a text string to the filenames of the newly created files (for example, &#34;R&#34; to let me know the rubric is attached, or &#34;PP2&#34; to let me know the name of the assignment), where would I modify the script? I'm assuming line 52 or 55, but I don't know the code to add.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Wayne Graham on "How do I use a script to append a grading rubric PDF to papers to be graded?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-do-i-use-a-script-to-append-a-grading-rubric-pdf-to-papers-to-be-graded#post-1079</link>
+			<pubDate>Fri, 25 Mar 2011 09:29:30 +0000</pubDate>
+			<dc:creator>Wayne Graham</dc:creator>
+			<guid isPermaLink="false">1079@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;If I read this correctly, you're wanting to attach a PDF to the end of an arbitrary number of PDFs (in the same directory?). &#60;/p&#62;
+&#60;p&#62;Essentially the script from macworld takes a couple of arguments, the file to prepend, and an arbitrary number of files to attach that file to. It then passes it off to the Automater join script with a few options (creates a new file with '-joined' in the name). &#60;/p&#62;
+&#60;p&#62;I created a quick gist that essentially does the same thing in Ruby with the option parser that you can get at &#60;a href=&#34;https://gist.github.com/886814&#34; rel=&#34;nofollow&#34;&#62;https://gist.github.com/886814&#60;/a&#62;. Essentially you can copy the contents in to a file named 'append.rb' somewhere on your computer. In my test, the directory layout is like this:&#60;/p&#62;
+&#60;p&#62;course_name/append.rb&#60;br /&#62;
+course_name/pdf_files/&#60;br /&#62;
+course_name/rubric.pdf&#60;/p&#62;
+&#60;p&#62;Inside of course_name, you would run a command like this:&#60;/p&#62;
+&#60;p&#62;ruby append.rb -a rubric.pdf pdf_files/*.pdf&#60;/p&#62;
+&#60;p&#62;This will create a new directory (output by default) and place all the combined files in there (it also opens the directory when the script finishes).&#60;/p&#62;
+&#60;p&#62;If you want to see more stuff going on, you can run this with a -v flag&#60;/p&#62;
+&#60;p&#62;ruby append.rb -v -a rubric.pdf pdf_files/*.pdf&#60;/p&#62;
+&#60;p&#62;This is a little more verbose than the shell version, and can hopefully get you going in the right direction to tailor this to do what you're needing.&#60;/p&#62;
+&#60;p&#62;HTH,&#60;/p&#62;
+&#60;p&#62;Wayne&#60;/p&#62;
+&#60;p&#62;PS. This will only work on a Mac
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>wcaleb on "How do I use a script to append a grading rubric PDF to papers to be graded?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-do-i-use-a-script-to-append-a-grading-rubric-pdf-to-papers-to-be-graded#post-1078</link>
+			<pubDate>Fri, 25 Mar 2011 00:37:58 +0000</pubDate>
+			<dc:creator>wcaleb</dc:creator>
+			<guid isPermaLink="false">1078@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;In a recent &#60;a href=&#34;http://mcdaniel.blogs.rice.edu/?p=113&#34;&#62;blog post&#60;/a&#62;, I described how I use my iPad to grade history papers, but expressed frustration with my workflow for adding a grading rubric to each paper as I graded it. In response, &#60;a href=&#34;http://twitter.com/cliotropic/status/47305440324894720&#34;&#62;@&#60;a href='http://digitalhumanities.org/answers/profile/cliotropic'&#62;cliotropic&#60;/a&#62;&#60;/a&#62; suggested that I write a workflow using Automator on my Mac to append the rubric to the files before I pass them to the iPad. I was able to write an Automator workflow that adds the rubric to an individual PDF file, but it gives the new file a random name and requires me to run each file through the workflow individually--not ideal. What I need is something like what's described in &#60;a href=&#34;http://hintsforums.macworld.com/archive/index.php/t-93055.html&#34;&#62;this MacWorld forum post&#60;/a&#62;, but since I know next to nothing about python or scripting, that process is Greek to me. Can someone help translate that MacWorld post, or help me find a workaround? I suspect many humanities graders could benefit. (I realize that one workaround is to have students append the rubric themselves--but I'm trying to minimize the tech on their hand, which is creating more tech on my end than I can handle by myself!)
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

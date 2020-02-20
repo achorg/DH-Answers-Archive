@@ -1,0 +1,317 @@
+<?
+/*
+Plugin Name: bb Topic Icons
+Plugin URI: http://devt.caffeinatedbliss.com/bbpress/topic-icons
+Description: Adds configurable icons next to topics based on their status
+Author: Paul Hawke
+Author URI: http://paul.caffeinatedbliss.com/
+Version: 0.6
+*/
+
+/****************************************************************************
+ *
+ * Configure the following constants to fine-tune the CSS classes that are
+ * generated, the icon filenames that are used, and the text used in the
+ * legend (if you have one displayed).  Note: filenames are likely to be
+ * taken away in a future version and replaced with the concept of "icon sets"
+ * whose filenames are fixed, so dont get used to editing the filenames,
+ * as this will break in future versions.
+ *
+ ****************************************************************************/
+
+// css class for the unsorted list used in the legend display
+define( LEGEND_CLASS, 'topic_icon_legend' );
+
+// busy threshold - a topic with more posts than this is counted as "busy"
+// for purposes of picking an icon.
+define( BUSY_THRESHOLD, 15 );
+
+// width of the images, in pixels
+define( ICON_WIDTH, '20' );
+
+// height of the images, in pixels
+define( ICON_HEIGHT, '20' );
+
+// the URL base for where to find the default icon set.
+define( ICON_SET_URL_BASE, BB_PLUGIN_URL.'bb-topic-icons/icon-sets/' );
+
+/****************************************************************************
+ *
+ * Shouldnt be much need to edit anything beyond this point - configuration
+ * is all done via the constants (above) and through and admin area page in
+ * bbPress at runtime.
+ *
+ ****************************************************************************/
+
+require( 'bb-topic-icons-api.php' );
+require( 'bb-topic-icons-admin.php' );
+require( 'interface.status-interpreter.php' );
+require( 'interface.status-renderer.php' );
+require( 'class.default-status-interpreter.php' );
+require( 'class.default-status-renderer.php' );
+
+function topic_icons_legend() {
+	$icon_set_name = topic_icons_get_active_icon_set();
+	$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+	$statuses = get_active_status_interpreter()->getAllStatuses();
+	$renderer = get_active_status_renderer();
+	
+	echo '<ul id="'.LEGEND_CLASS.'">';
+	for ($i=0; $i < count($statuses); $i++) {
+		$image = $renderer->renderStatus($statuses[$i]);
+		$tooltip = $renderer->renderStatusTooltip($statuses[$i]);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (isset($image) && strlen($image) > 0 &&
+			isset($tooltip) && strlen($tooltip) > 0 && $exists) {
+			echo '<li><img src="'.$icon_set_url.'/'.$image.
+				'" width="'.ICON_WIDTH.'" height="'.ICON_HEIGHT.
+				'" align="absmiddle">&nbsp;'.$tooltip.'</li>';
+		}
+	}
+	echo '</ul>';
+}
+
+function topic_icons_css() {
+	echo "\n<style type=\"text/css\"><!--\n";
+	require( 'bb-topic-icons.css' );
+	echo "\n--></style>";
+}
+
+function topic_icons_label( $label ) {
+	global $topic;
+	
+	if (bb_is_front() || bb_is_forum() || bb_is_view() || bb_is_tag()) {		
+		$icon_set_name = topic_icons_get_active_icon_set();
+		$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+
+		$status = get_active_status_interpreter()->getStatus(bb_get_location(), $topic);
+		$renderer = get_active_status_renderer();
+		$image = $renderer->renderStatus($status);
+		$tooltip = $renderer->renderStatusTooltip($status);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (!$exists) {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), ICON_SET_URL_BASE.'/empty.png', ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		} else if (strlen($tooltip) > 0) {		
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"><span>%s</span></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $tooltip, $label);
+		} else {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		}
+	}
+	
+	return $label;
+}
+
+function topic_icons_init( ) {
+	remove_filter('bb_topic_labels', 'bb_closed_label', 10);
+	remove_filter('bb_topic_labels', 'bb_sticky_label', 20);
+
+	add_filter('bb_topic_labels', 'topic_icons_label', 11);
+
+	add_action('bb_head', 'topic_icons_css');
+
+	add_action('bb_admin_menu_generator', 'topic_icons_admin_page_add');
+	add_action('bb_admin-header.php', 'topic_icons_admin_page_process');
+	
+	topic_icons_register_status_interpreter('default', new DefaultStatusInterpreter(BUSY_THRESHOLD));
+	topic_icons_register_status_renderer('default', new DefaultStatusRenderer());
+}
+
+topic_icons_init();
+
+?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Tag: XSLT - Recent Topics</title>
+		<link>http://digitalhumanities.org/answers/tags/xslt</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Tag: XSLT - Recent Topics</description>
+		<language>en-US</language>
+		<pubDate>Sun, 24 Mar 2019 17:09:14 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/tags/xslt/topics" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>Arno Bosse on "How do I best convert hundreds of TEI P5 documents to plaintext?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-do-i-best-convert-hundreds-of-tei-p5-documents-to-plaintext#post-2227</link>
+			<pubDate>Thu, 28 Aug 2014 14:47:32 +0000</pubDate>
+			<dc:creator>Arno Bosse</dc:creator>
+			<guid isPermaLink="false">2227@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I'd like to use the available corpora in the German Text Archive (&#60;a href=&#34;http://www.deutschestextarchiv.de/download&#34; rel=&#34;nofollow&#34;&#62;http://www.deutschestextarchiv.de/download&#60;/a&#62;) to train OCR software. For this I need these texts as plaintext. All the German Text Archive texts however are all TEI P5 tagged. How do I best convert these (hundreds..) of documents into plaintext? &#60;/p&#62;
+&#60;p&#62;I'm comfortable on the command line and with small shell scripts but I wouldn't be able to write an app to make use of a public API to such a service. Ideally I'd like to find some tei2text-ish command line tool but the ones I've found in googling around and looking on GitHub don't appear (to me, leastways) to be suitable for TEI texts.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Welblaud on "TEI in Oxygen Author (problem with tables’ labels in XSL-FO)"</title>
+						<link>http://digitalhumanities.org/answers/topic/tei-in-oxygen-author-problem-with-tables%e2%80%99-labels-in-xsl-fo-1#post-2359</link>
+			<pubDate>Thu, 26 Nov 2015 08:30:49 +0000</pubDate>
+			<dc:creator>Welblaud</dc:creator>
+			<guid isPermaLink="false">2359@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Dear community,&#60;/p&#62;
+&#60;p&#62;I am intensively testing exports to PDF from TEI documents and can’t figure where could be the problem. The document is always fully valid, CSS rendition (default) work properly. However, in the result there is always missing the label, which is always coded as table’s head.&#60;/p&#62;
+&#60;p&#62;&#60;code&#62;&#60;br /&#62;
+  &#38;lt;table rendition=&#34;simple:frame&#34;&#38;gt;&#60;br /&#62;
+    &#38;lt;head&#38;gt;The head!&#38;lt;/head&#38;gt;&#60;br /&#62;
+&#60;/code&#62;&#60;/p&#62;
+&#60;p&#62;I have noticed it is really important to test several types of notation when testing outputs via XSLT (e.g. footnotes’ rendition is rather an adventure!) but here I tried almost everything and nothing helps. It seems the &#60;code&#62;tei:head&#60;/code&#62; part from XSL templates is not passed into the final output. In XeLaTeX it worked well.&#60;/p&#62;
+&#60;p&#62;Is there something I am omitting in the code and what Oxygen needs for proper rendition? (like rend=&#34;header&#34; or so?)&#60;/p&#62;
+&#60;p&#62;Any help more than welcome!&#60;/p&#62;
+&#60;p&#62;Honza Hejzl
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>aliciapeaker@gmail.com on "How to extract tagged data and text from TEI file?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-to-extract-tagged-data-and-text-from-tei-file#post-2286</link>
+			<pubDate>Thu, 26 Feb 2015 16:56:54 +0000</pubDate>
+			<dc:creator>aliciapeaker@gmail.com</dc:creator>
+			<guid isPermaLink="false">2286@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I’ve been using CATMA (&#60;a href=&#34;http://www.catma.de/&#34; rel=&#34;nofollow&#34;&#62;http://www.catma.de/&#60;/a&#62;) to markup a text with some analytical tags I’ve created. I then exported the file in TEI, and I’m now trying to extract the data I’ve marked up in order to measure tag frequencies, but am finding it quite difficult. &#60;/p&#62;
+&#60;p&#62;Rather than tagging text with the labels I’ve created, CATMA has established a somewhat complicated (though likely necessary) system of identifiers. So, for example, I’ve tagged the word “clouds” in my text with the tag “weather,” which is a child of the tagset “non-living.” &#60;/p&#62;
+&#60;p&#62;CATMA represents the tag in the text like this:&#60;br /&#62;
+&#38;lt;text&#38;gt;&#60;br /&#62;
+     &#38;lt;body&#38;gt;&#60;br /&#62;
+          &#38;lt;ab type=“catma”&#38;gt;&#60;br /&#62;
+Small feckless &#38;lt;seg ana=&#34;#CATMA_0036983F-4D37-48C2-8BC7-5846A8364D26&#34;&#38;gt;clouds&#38;lt;/seg&#38;gt; were hurried across the vast untroubled sky...&#60;br /&#62;
+          &#38;lt;/ab&#38;gt;&#60;br /&#62;
+     &#38;lt;/body&#38;gt;&#60;br /&#62;
+&#38;lt;/text&#38;gt;&#60;/p&#62;
+&#60;p&#62;The identifier then points to this feature statement after the body of the text:&#60;/p&#62;
+&#60;p&#62;&#38;lt;text&#38;gt;&#60;br /&#62;
+     &#38;lt;body&#38;gt;&#60;br /&#62;
+     &#38;lt;/body&#38;gt;&#60;br /&#62;
+          &#38;lt;fs xml:id=&#34;CATMA_0036983F-4D37-48C2-8BC7-5846A8364D26&#34; type=&#34;CATMA_3CDE1FE4-CA5D-4460-9BFF-739537D753DE&#34;&#38;gt;&#60;br /&#62;
+            &#38;lt;f name=&#34;catma_displaycolor&#34;&#38;gt;&#60;br /&#62;
+                &#38;lt;string&#38;gt;-16710765&#38;lt;/string&#38;gt;&#60;br /&#62;
+            &#38;lt;/f&#38;gt;&#60;br /&#62;
+            &#38;lt;f name=&#34;catma_markupauthor&#34;&#38;gt;&#60;br /&#62;
+                &#38;lt;string&#38;gt;name@email&#38;lt;/string&#38;gt;&#60;br /&#62;
+            &#38;lt;/f&#38;gt;&#60;br /&#62;
+        &#38;lt;/fs&#38;gt;&#60;br /&#62;
+&#38;lt;/text&#38;gt;&#60;/p&#62;
+&#60;p&#62;The id for the type of the fs then points back up to the feature statement declaration in the header:&#60;/p&#62;
+&#60;p&#62;&#38;lt;teiHeader&#38;gt;&#60;br /&#62;
+     &#38;lt;encodingDesc&#38;gt;&#60;br /&#62;
+          &#38;lt;fsDecl xml:id=&#34;CATMA_3CDE1FE4-CA5D-4460-9BFF-739537D753DE&#34; n=&#34;2014-12-16T13:30:36.000+0000&#34; type=&#34;CATMA_3CDE1FE4-CA5D-4460-9BFF-739537D753DE&#34;&#38;gt;&#60;br /&#62;
+                    &#38;lt;fsDescr&#38;gt;Weather&#38;lt;/fsDescr&#38;gt;&#60;br /&#62;
+                    &#38;lt;fDecl xml:id=&#34;CATMA_699BAC76-8D15-408E-A30A-984849115A71&#34; name=&#34;catma_displaycolor&#34;&#38;gt;&#60;br /&#62;
+                        &#38;lt;vRange&#38;gt;&#60;br /&#62;
+                            &#38;lt;vColl&#38;gt;&#60;br /&#62;
+                                &#38;lt;string&#38;gt;-16710765&#38;lt;/string&#38;gt;&#60;br /&#62;
+                            &#38;lt;/vColl&#38;gt;&#60;br /&#62;
+                        &#38;lt;/vRange&#38;gt;&#60;br /&#62;
+                    &#38;lt;/fDecl&#38;gt;&#60;br /&#62;
+                    &#38;lt;fDecl xml:id=&#34;CATMA_8653855B-B611-48E8-AE9D-00E0160A37DB&#34; name=&#34;catma_markupauthor&#34;&#38;gt;&#60;br /&#62;
+                        &#38;lt;vRange&#38;gt;&#60;br /&#62;
+                            &#38;lt;vColl&#38;gt;&#60;br /&#62;
+                                  &#38;lt;string&#38;gt;name@email&#38;lt;/string&#38;gt;&#60;br /&#62;
+                            &#38;lt;/vColl&#38;gt;&#60;br /&#62;
+                        &#38;lt;/vRange&#38;gt;&#60;br /&#62;
+                    &#38;lt;/fDecl&#38;gt;&#60;br /&#62;
+                &#38;lt;/fsDecl&#38;gt;&#60;br /&#62;
+     &#38;lt;/encodingDesc&#38;gt;&#60;br /&#62;
+&#38;lt;/teiHeader&#38;gt; &#60;/p&#62;
+&#60;p&#62;I need to extract the text and data, perhaps in a csv file (or other output format, if it’s easier), into something that lists the tagged text (e.g. “clouds”) in one column, the first tag applied to it in the next column (e.g. &#34;weather&#34;), and the tagset or category to which that tag belongs in the next (e.g. &#34;non-living). &#60;/p&#62;
+&#60;p&#62;Or perhaps there’s a better way—really, what I’d like to be able to do is get the frequencies of each tag &#38;amp; tagset for each chapter. If there’s an easier way to mark up the text in TEI that would better allow for what I need, I’m open to re-encoding manually.&#60;/p&#62;
+&#60;p&#62;I’ve also tried playing around a bit with some XSLT and a Python script (&#60;a href=&#34;http://www.rdegges.com/quickly-extract-xml-data-with-python/&#34; rel=&#34;nofollow&#34;&#62;http://www.rdegges.com/quickly-extract-xml-data-with-python/&#60;/a&#62;) but with very little experience with either, I find myself quickly out of my depths. Open to suggestions—and thanks in advance for your help!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Karin Dalziel on "Best way to create COinS or other metadata from TEI using XSLT?"</title>
+						<link>http://digitalhumanities.org/answers/topic/best-way-to-create-coins-or-other-metadata-from-tei-using-xslt#post-134</link>
+			<pubDate>Thu, 23 Sep 2010 16:31:50 +0000</pubDate>
+			<dc:creator>Karin Dalziel</dc:creator>
+			<guid isPermaLink="false">134@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I feel way behind in this area. I have successfully used XSLT to insert in Dublin Core metadata into the header of an HTML page, but I would like to support multiple resources, etc. From looking around, it seems the best format to use is COinS, but the format is a bit more, er, obtuse than dublin core. &#60;/p&#62;
+&#60;p&#62;Has anyone done this? care to share some sample XSLT? Am I going about this all wrong?&#60;/p&#62;
+&#60;p&#62;(Also, I debated whether this should go in metadata or programming. Feel free to chime in on that as well)
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Hayim on "Getting started with XSLT document() ?"</title>
+						<link>http://digitalhumanities.org/answers/topic/getting-started-with-document#post-1019</link>
+			<pubDate>Wed, 02 Mar 2011 19:20:57 +0000</pubDate>
+			<dc:creator>Hayim</dc:creator>
+			<guid isPermaLink="false">1019@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I am hoping someone can send me to a good tutorial or working model.&#60;br /&#62;
+I am a &#60;strong&#62;rank neophyte&#60;/strong&#62; trying working on a project that will present multiple witnesses to strongly aligned texts, each in a separate xml (TEI) file and each &#38;lt;ab&#38;gt; has a unique xml:id. The alignment is to a central xml file, which links out to the unique IDs.&#60;br /&#62;
+For demo purposes, I'd like to be able to use XSLT to pull the corresponding texts from the several files into a single html file. Any advice on how best to get started?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Raskolnikov on "HELP! I need advice on which approach to take with a text encoding project..."</title>
+						<link>http://digitalhumanities.org/answers/topic/help-i-need-advice-on-which-approach-to-take-with-a-text-encoding-project#post-1011</link>
+			<pubDate>Sat, 26 Feb 2011 16:49:53 +0000</pubDate>
+			<dc:creator>Raskolnikov</dc:creator>
+			<guid isPermaLink="false">1011@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hi there,&#60;/p&#62;
+&#60;p&#62;I desperately need advice at the moment, and really hope some people here can provide some suggestions.&#60;/p&#62;
+&#60;p&#62;I have a fairly extensive data set in the forms of letters (from the 16th century) which have been encoded in XML.&#60;/p&#62;
+&#60;p&#62;My job is to create something which aids content analysis of the letters.&#60;/p&#62;
+&#60;p&#62;- This could be a GUI written in Java, which (via SAX or DOM) allows the user to extract certain features from the letters, compare them side by side rather than have to laboriously flick between letters on a computer system.&#60;/p&#62;
+&#60;p&#62;- Or it could be an elaborate XML project, where XSLT, HTML hyperlinks, and possibly some type of query language such as XQuery or more likely XPath would be used.&#60;/p&#62;
+&#60;p&#62;- Or it could be XML documents displayed in IE and using a JavaScript window/console to select, extract, manipulate, compare different letters.&#60;/p&#62;
+&#60;p&#62;Does anyone have an opinion or a suggestion on which of the three would be the best option to take?&#60;/p&#62;
+&#60;p&#62;Thank you very much in advance
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Vika Zafrin on "XSL: sorting based on user input"</title>
+						<link>http://digitalhumanities.org/answers/topic/xsl-sorting-based-on-user-input#post-942</link>
+			<pubDate>Mon, 31 Jan 2011 23:56:58 +0000</pubDate>
+			<dc:creator>Vika Zafrin</dc:creator>
+			<guid isPermaLink="false">942@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;You know how sometimes you offer to build someone a proof of concept that should take about half an hour, and then it takes days?  I did that.&#60;/p&#62;
+&#60;p&#62;I have a fairly simple bibliography. I'd like to present it as a web page, and give the user three choices: this list should be sortable by author, year of publication, and title. This choice can be presented as the page is loading (so, to re-sort, one must reload) or as buttons or hyperlinks.&#60;/p&#62;
+&#60;p&#62;The stylesheet itself took no time; it's the choice I'm stumped on.  I suspect this can be done fairly trivially with a combination of XSL and JavaScript, but find JavaScript impenetrable.  Been trying off and on for a few days to extrapolate from what I'm finding online, to no avail.  Perhaps you can help, with or without JavaScript?  &#60;/p&#62;
+&#60;p&#62;&#60;a href=&#34;https://gist.github.com/805081&#34;&#62;Here's the XSL I've got so far&#60;/a&#62;, with some assistance from StackOverflow folk.  Suggestions on how to modify it for choice?&#60;/p&#62;
+&#60;p&#62;To summarize: I'd like to use the &#60;code&#62;xsl:sort&#60;/code&#62; with the first three parameters (&#60;code&#62;pSortNameAuth&#60;/code&#62;, &#60;code&#62;pSortNameYear&#60;/code&#62;, &#60;code&#62;pSortNameTitle&#60;/code&#62;) interchangeably, based on user input.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Andrew Jewell on "XSL-FO advice needed"</title>
+						<link>http://digitalhumanities.org/answers/topic/xsl-fo-advice-needed#post-216</link>
+			<pubDate>Wed, 29 Sep 2010 15:06:57 +0000</pubDate>
+			<dc:creator>Andrew Jewell</dc:creator>
+			<guid isPermaLink="false">216@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I am experimenting with generating well-designed PDF documents from my TEI P5 files, and I could use a little advice if others have worked with XSL-FO in a DH context:&#60;/p&#62;
+&#60;p&#62;1.  I have been using Oxygen and the FOP processor that is packaged with it, but apparently FOP doesn't support certain XSL-FO elements (like &#38;lt;fo:float&#38;gt;).  Have other used alternative processors?  Do they cost?&#60;/p&#62;
+&#60;p&#62;2.  Though I have found Dave Pawson's book on XSL-FO useful, and I have consulted with the W3C site on the topic, I have struggled to find other resources to help me when these resources fail (particularly online ones).  Any advice?&#60;/p&#62;
+&#60;p&#62;Thanks for your help.&#60;/p&#62;
+&#60;p&#62;Andy Jewell
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Karin Dalziel on "Alternatives to Cocoon?"</title>
+						<link>http://digitalhumanities.org/answers/topic/alternatives-to-cocoon#post-97</link>
+			<pubDate>Tue, 21 Sep 2010 18:53:14 +0000</pubDate>
+			<dc:creator>Karin Dalziel</dc:creator>
+			<guid isPermaLink="false">97@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I have used Cocoon to publish  TEI encoded XML files processed with XSLT (using Saxon), but I have never tried any other method of processing/publishing files. What alternatives are there? For many sites we generally use only a very small subsets of the features in cocoon - some basic redirecting and post processing.
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

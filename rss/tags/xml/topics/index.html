@@ -1,0 +1,509 @@
+<?
+/*
+Plugin Name: bb Topic Icons
+Plugin URI: http://devt.caffeinatedbliss.com/bbpress/topic-icons
+Description: Adds configurable icons next to topics based on their status
+Author: Paul Hawke
+Author URI: http://paul.caffeinatedbliss.com/
+Version: 0.6
+*/
+
+/****************************************************************************
+ *
+ * Configure the following constants to fine-tune the CSS classes that are
+ * generated, the icon filenames that are used, and the text used in the
+ * legend (if you have one displayed).  Note: filenames are likely to be
+ * taken away in a future version and replaced with the concept of "icon sets"
+ * whose filenames are fixed, so dont get used to editing the filenames,
+ * as this will break in future versions.
+ *
+ ****************************************************************************/
+
+// css class for the unsorted list used in the legend display
+define( LEGEND_CLASS, 'topic_icon_legend' );
+
+// busy threshold - a topic with more posts than this is counted as "busy"
+// for purposes of picking an icon.
+define( BUSY_THRESHOLD, 15 );
+
+// width of the images, in pixels
+define( ICON_WIDTH, '20' );
+
+// height of the images, in pixels
+define( ICON_HEIGHT, '20' );
+
+// the URL base for where to find the default icon set.
+define( ICON_SET_URL_BASE, BB_PLUGIN_URL.'bb-topic-icons/icon-sets/' );
+
+/****************************************************************************
+ *
+ * Shouldnt be much need to edit anything beyond this point - configuration
+ * is all done via the constants (above) and through and admin area page in
+ * bbPress at runtime.
+ *
+ ****************************************************************************/
+
+require( 'bb-topic-icons-api.php' );
+require( 'bb-topic-icons-admin.php' );
+require( 'interface.status-interpreter.php' );
+require( 'interface.status-renderer.php' );
+require( 'class.default-status-interpreter.php' );
+require( 'class.default-status-renderer.php' );
+
+function topic_icons_legend() {
+	$icon_set_name = topic_icons_get_active_icon_set();
+	$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+	$statuses = get_active_status_interpreter()->getAllStatuses();
+	$renderer = get_active_status_renderer();
+	
+	echo '<ul id="'.LEGEND_CLASS.'">';
+	for ($i=0; $i < count($statuses); $i++) {
+		$image = $renderer->renderStatus($statuses[$i]);
+		$tooltip = $renderer->renderStatusTooltip($statuses[$i]);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (isset($image) && strlen($image) > 0 &&
+			isset($tooltip) && strlen($tooltip) > 0 && $exists) {
+			echo '<li><img src="'.$icon_set_url.'/'.$image.
+				'" width="'.ICON_WIDTH.'" height="'.ICON_HEIGHT.
+				'" align="absmiddle">&nbsp;'.$tooltip.'</li>';
+		}
+	}
+	echo '</ul>';
+}
+
+function topic_icons_css() {
+	echo "\n<style type=\"text/css\"><!--\n";
+	require( 'bb-topic-icons.css' );
+	echo "\n--></style>";
+}
+
+function topic_icons_label( $label ) {
+	global $topic;
+	
+	if (bb_is_front() || bb_is_forum() || bb_is_view() || bb_is_tag()) {		
+		$icon_set_name = topic_icons_get_active_icon_set();
+		$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+
+		$status = get_active_status_interpreter()->getStatus(bb_get_location(), $topic);
+		$renderer = get_active_status_renderer();
+		$image = $renderer->renderStatus($status);
+		$tooltip = $renderer->renderStatusTooltip($status);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (!$exists) {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), ICON_SET_URL_BASE.'/empty.png', ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		} else if (strlen($tooltip) > 0) {		
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"><span>%s</span></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $tooltip, $label);
+		} else {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		}
+	}
+	
+	return $label;
+}
+
+function topic_icons_init( ) {
+	remove_filter('bb_topic_labels', 'bb_closed_label', 10);
+	remove_filter('bb_topic_labels', 'bb_sticky_label', 20);
+
+	add_filter('bb_topic_labels', 'topic_icons_label', 11);
+
+	add_action('bb_head', 'topic_icons_css');
+
+	add_action('bb_admin_menu_generator', 'topic_icons_admin_page_add');
+	add_action('bb_admin-header.php', 'topic_icons_admin_page_process');
+	
+	topic_icons_register_status_interpreter('default', new DefaultStatusInterpreter(BUSY_THRESHOLD));
+	topic_icons_register_status_renderer('default', new DefaultStatusRenderer());
+}
+
+topic_icons_init();
+
+?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Tag: XML - Recent Topics</title>
+		<link>http://digitalhumanities.org/answers/tags/xml</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Tag: XML - Recent Topics</description>
+		<language>en-US</language>
+		<pubDate>Sun, 24 Mar 2019 17:08:45 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/tags/xml/topics" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>mebrett on "Advice for teaching myself XML?"</title>
+						<link>http://digitalhumanities.org/answers/topic/advice-for-teaching-myself-xml#post-919</link>
+			<pubDate>Wed, 26 Jan 2011 01:15:02 +0000</pubDate>
+			<dc:creator>mebrett</dc:creator>
+			<guid isPermaLink="false">919@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I am interested in teaching myself XML and was wondering what books and/or websites people would recommend? Particularly anything which has examples or hands-on learning; I do better with reading, seeing and doing than hearing or only reading. Thanks!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>aliciapeaker@gmail.com on "How to extract tagged data and text from TEI file?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-to-extract-tagged-data-and-text-from-tei-file#post-2286</link>
+			<pubDate>Thu, 26 Feb 2015 16:56:54 +0000</pubDate>
+			<dc:creator>aliciapeaker@gmail.com</dc:creator>
+			<guid isPermaLink="false">2286@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I’ve been using CATMA (&#60;a href=&#34;http://www.catma.de/&#34; rel=&#34;nofollow&#34;&#62;http://www.catma.de/&#60;/a&#62;) to markup a text with some analytical tags I’ve created. I then exported the file in TEI, and I’m now trying to extract the data I’ve marked up in order to measure tag frequencies, but am finding it quite difficult. &#60;/p&#62;
+&#60;p&#62;Rather than tagging text with the labels I’ve created, CATMA has established a somewhat complicated (though likely necessary) system of identifiers. So, for example, I’ve tagged the word “clouds” in my text with the tag “weather,” which is a child of the tagset “non-living.” &#60;/p&#62;
+&#60;p&#62;CATMA represents the tag in the text like this:&#60;br /&#62;
+&#38;lt;text&#38;gt;&#60;br /&#62;
+     &#38;lt;body&#38;gt;&#60;br /&#62;
+          &#38;lt;ab type=“catma”&#38;gt;&#60;br /&#62;
+Small feckless &#38;lt;seg ana=&#34;#CATMA_0036983F-4D37-48C2-8BC7-5846A8364D26&#34;&#38;gt;clouds&#38;lt;/seg&#38;gt; were hurried across the vast untroubled sky...&#60;br /&#62;
+          &#38;lt;/ab&#38;gt;&#60;br /&#62;
+     &#38;lt;/body&#38;gt;&#60;br /&#62;
+&#38;lt;/text&#38;gt;&#60;/p&#62;
+&#60;p&#62;The identifier then points to this feature statement after the body of the text:&#60;/p&#62;
+&#60;p&#62;&#38;lt;text&#38;gt;&#60;br /&#62;
+     &#38;lt;body&#38;gt;&#60;br /&#62;
+     &#38;lt;/body&#38;gt;&#60;br /&#62;
+          &#38;lt;fs xml:id=&#34;CATMA_0036983F-4D37-48C2-8BC7-5846A8364D26&#34; type=&#34;CATMA_3CDE1FE4-CA5D-4460-9BFF-739537D753DE&#34;&#38;gt;&#60;br /&#62;
+            &#38;lt;f name=&#34;catma_displaycolor&#34;&#38;gt;&#60;br /&#62;
+                &#38;lt;string&#38;gt;-16710765&#38;lt;/string&#38;gt;&#60;br /&#62;
+            &#38;lt;/f&#38;gt;&#60;br /&#62;
+            &#38;lt;f name=&#34;catma_markupauthor&#34;&#38;gt;&#60;br /&#62;
+                &#38;lt;string&#38;gt;name@email&#38;lt;/string&#38;gt;&#60;br /&#62;
+            &#38;lt;/f&#38;gt;&#60;br /&#62;
+        &#38;lt;/fs&#38;gt;&#60;br /&#62;
+&#38;lt;/text&#38;gt;&#60;/p&#62;
+&#60;p&#62;The id for the type of the fs then points back up to the feature statement declaration in the header:&#60;/p&#62;
+&#60;p&#62;&#38;lt;teiHeader&#38;gt;&#60;br /&#62;
+     &#38;lt;encodingDesc&#38;gt;&#60;br /&#62;
+          &#38;lt;fsDecl xml:id=&#34;CATMA_3CDE1FE4-CA5D-4460-9BFF-739537D753DE&#34; n=&#34;2014-12-16T13:30:36.000+0000&#34; type=&#34;CATMA_3CDE1FE4-CA5D-4460-9BFF-739537D753DE&#34;&#38;gt;&#60;br /&#62;
+                    &#38;lt;fsDescr&#38;gt;Weather&#38;lt;/fsDescr&#38;gt;&#60;br /&#62;
+                    &#38;lt;fDecl xml:id=&#34;CATMA_699BAC76-8D15-408E-A30A-984849115A71&#34; name=&#34;catma_displaycolor&#34;&#38;gt;&#60;br /&#62;
+                        &#38;lt;vRange&#38;gt;&#60;br /&#62;
+                            &#38;lt;vColl&#38;gt;&#60;br /&#62;
+                                &#38;lt;string&#38;gt;-16710765&#38;lt;/string&#38;gt;&#60;br /&#62;
+                            &#38;lt;/vColl&#38;gt;&#60;br /&#62;
+                        &#38;lt;/vRange&#38;gt;&#60;br /&#62;
+                    &#38;lt;/fDecl&#38;gt;&#60;br /&#62;
+                    &#38;lt;fDecl xml:id=&#34;CATMA_8653855B-B611-48E8-AE9D-00E0160A37DB&#34; name=&#34;catma_markupauthor&#34;&#38;gt;&#60;br /&#62;
+                        &#38;lt;vRange&#38;gt;&#60;br /&#62;
+                            &#38;lt;vColl&#38;gt;&#60;br /&#62;
+                                  &#38;lt;string&#38;gt;name@email&#38;lt;/string&#38;gt;&#60;br /&#62;
+                            &#38;lt;/vColl&#38;gt;&#60;br /&#62;
+                        &#38;lt;/vRange&#38;gt;&#60;br /&#62;
+                    &#38;lt;/fDecl&#38;gt;&#60;br /&#62;
+                &#38;lt;/fsDecl&#38;gt;&#60;br /&#62;
+     &#38;lt;/encodingDesc&#38;gt;&#60;br /&#62;
+&#38;lt;/teiHeader&#38;gt; &#60;/p&#62;
+&#60;p&#62;I need to extract the text and data, perhaps in a csv file (or other output format, if it’s easier), into something that lists the tagged text (e.g. “clouds”) in one column, the first tag applied to it in the next column (e.g. &#34;weather&#34;), and the tagset or category to which that tag belongs in the next (e.g. &#34;non-living). &#60;/p&#62;
+&#60;p&#62;Or perhaps there’s a better way—really, what I’d like to be able to do is get the frequencies of each tag &#38;amp; tagset for each chapter. If there’s an easier way to mark up the text in TEI that would better allow for what I need, I’m open to re-encoding manually.&#60;/p&#62;
+&#60;p&#62;I’ve also tried playing around a bit with some XSLT and a Python script (&#60;a href=&#34;http://www.rdegges.com/quickly-extract-xml-data-with-python/&#34; rel=&#34;nofollow&#34;&#62;http://www.rdegges.com/quickly-extract-xml-data-with-python/&#60;/a&#62;) but with very little experience with either, I find myself quickly out of my depths. Open to suggestions—and thanks in advance for your help!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>DigitalHumanitiesScholar on "TEI question"</title>
+						<link>http://digitalhumanities.org/answers/topic/tei-question#post-2051</link>
+			<pubDate>Mon, 29 Jul 2013 06:51:21 +0000</pubDate>
+			<dc:creator>DigitalHumanitiesScholar</dc:creator>
+			<guid isPermaLink="false">2051@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hi,&#60;/p&#62;
+&#60;p&#62;I have a beginners question re TEI 5 and would be grateful for any suggestions re same.&#60;/p&#62;
+&#60;p&#62;How does one begin to encode metdata? ie: I have a transcription and am doing a very light encoding thereof - just &#38;lt;head&#38;gt;&#38;lt;/head&#38;gt;, &#38;lt;person&#38;gt;&#38;lt;/person&#38;gt;, &#38;lt;place&#38;gt;&#38;lt;/place&#38;gt; (which hopefully are correct!). If I have footnotes re certain parts of the main body of text, how to encode it and where to I place it in the TEI that I am writing in Oxygen Editor (ie: How do I show what the info refers to? Do I keep the footnote system?)&#60;/p&#62;
+&#60;p&#62;Thanks.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>dot.porter on "Seeking a generalizable metadata mapping tool"</title>
+						<link>http://digitalhumanities.org/answers/topic/seeking-a-generalizable-metadata-mapping-tool#post-1916</link>
+			<pubDate>Fri, 08 Mar 2013 16:32:12 +0000</pubDate>
+			<dc:creator>dot.porter</dc:creator>
+			<guid isPermaLink="false">1916@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I'm looking for what is probably the holy grail of metadata: a generalizable mapping tool. I could specify the final output (in XML), perhaps based on a schema or I could just indicate somehow the output tags and attributes. This tool would enable a user to put in their metadata in whatever format it's in (any XML, csv, excel), map fields/tags/attributes from their metadata document into the tags and attributes I've specified, and would spit out a document that follows my format.&#60;/p&#62;
+&#60;p&#62;An example of how this would function is the Sheet Music Consortium Metadata Mapping Tool, which is unfortunately not generalizable and doesn't accept XML (&#60;a href=&#34;http://www.dlib.indiana.edu/smcmigrator/upload.php&#34; rel=&#34;nofollow&#34;&#62;http://www.dlib.indiana.edu/smcmigrator/upload.php&#60;/a&#62;)&#60;/p&#62;
+&#60;p&#62;Does such a thing exist?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>lit_cht on "Verifying the Accuracy of Double Keying - any studies?"</title>
+						<link>http://digitalhumanities.org/answers/topic/verifying-the-accuracy-of-double-keying-any-studies#post-1322</link>
+			<pubDate>Wed, 10 Aug 2011 12:19:58 +0000</pubDate>
+			<dc:creator>lit_cht</dc:creator>
+			<guid isPermaLink="false">1322@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Dear colleagues,&#60;/p&#62;
+&#60;p&#62;as staff member of the Deutsches Textarchiv (www.deutschestextarchiv.de), I would be interested in studies on the accuracy of double keying, esp. in large full text, tei/xml annotated corpora. Service providers advertise accuracy rates of 99.+%, has anyone ever questioned this on an empirical basis? I have found various musings on OCR accuracy and on how to improve results here, but nothing similar on double keying. I would be grateful for any hints.&#60;/p&#62;
+&#60;p&#62;Thanks in advance,&#60;br /&#62;
+all the best&#60;br /&#62;
+Christian Thomas &#60;/p&#62;
+&#60;p&#62;(I also mailed this to Humanist, as here and there will not be exactly the same people reading, I hope. If so, please apologize cross-posting...)
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>IanRobertson on "TEI Basic Tags"</title>
+						<link>http://digitalhumanities.org/answers/topic/tei-basic-tags#post-667</link>
+			<pubDate>Thu, 11 Nov 2010 17:12:49 +0000</pubDate>
+			<dc:creator>IanRobertson</dc:creator>
+			<guid isPermaLink="false">667@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hello,&#60;br /&#62;
+I'm working on an ongoing research project at my school where I will be encoding in TEI.  I was just curious if anyone had a list of standard TEI tags, and specifically tags for SmallCaps, Hyphens, and M-lines.&#60;/p&#62;
+&#60;p&#62;Thanks!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>lmullen on "Using YAML to model historical lives or events"</title>
+						<link>http://digitalhumanities.org/answers/topic/using-yaml-to-model-historical-lives-or-events#post-1627</link>
+			<pubDate>Wed, 02 May 2012 17:32:41 +0000</pubDate>
+			<dc:creator>lmullen</dc:creator>
+			<guid isPermaLink="false">1627@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;For my dissertation, I'm keeping track of nineteenth-century converts. I'd like to keep the data about the converts in both a human- and computer readable format. The data model needs to grow organically, because I only have a reasonable guess right now what information might be interesting about converts. The amount of data on each convert will be vastly different, from the bare information that a person converted (I might not even know a name) to having volumes of the person's papers. Also, each person might convert multiple times. Some information I want to keep track of as data (e.g., converted from, converted to, converted date), and other information can be tossed into a notes field. Finally, I have to be able to read the data myself as notes for writing, and to access it programmatically from some unknown tool (probably Ruby). While these needs are specific to my purposes, I think they could be easily generalized. For example, someone might want to keep track of strikes for a labor history.&#60;/p&#62;
+&#60;p&#62;I'm thinking about using &#60;a href=&#34;http://www.yaml.org/spec/1.2/spec.html&#34;&#62;YAML&#60;/a&#62; as the format for the data. YAML's two top priorities are &#34;YAML is easily readable by humans&#34; and &#34;YAML data is portable between programming languages,&#34; which match my own. It also seems to be dead-simple to markup data. I've created a sample file for modeling the life of Orestes Brownson, which is below.&#60;/p&#62;
+&#60;p&#62;My questions are these:&#60;/p&#62;
+&#60;ol&#62;
+&#60;li&#62;Is anyone using YAML for a digital humanities project? How are you using it, and what experience have you gained?&#60;/li&#62;
+&#60;li&#62;Can anyone offer specific comments on the data modeled below?&#60;/li&#62;
+&#60;/ol&#62;
+&#60;p&#62; &#60;/p&#62;
+
+
+&#60;div class=&#34;bb_syntax&#34;&#62;&#60;table&#62;&#60;tr&#62;&#60;td class=&#34;line_numbers&#34;&#62;&#60;pre&#62;1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+&#60;/pre&#62;&#60;/td&#62;&#60;td class=&#34;code&#34;&#62;&#60;pre class=&#34;yaml&#34; style=&#34;font-family:monospace;&#34;&#62;# A model of a convert's life
+---
+name-last       : Brownson
+name-first      : Orestes Augustus
+born            : 1803-09-16
+died            : 1876-04-17
+birth-religion  : Congregationalism
+&#38;nbsp;
+conversions     :
+&#38;nbsp;
+-   origin-religion         : Congregationalism
+    destination-religion    : Presbyterianism
+    date                    : 1822
+    ritual                  : church membership
+    citation                : ANB
+    notes                   : &#38;gt;
+      Brownson's change to congregationalism was more denominational
+      switching than a change in conscience.
+&#38;nbsp;
+-   origin-religion         : Presbyterianism
+    destination-religion    : Universalism
+    date                    : 1826
+    ritual                  : ordination
+    location                : &#38;quot;Jaffrey, New Hampshire&#38;quot;
+    citation                : ANB
+    notes                   : &#38;gt;
+      &#38;quot;He would later refer to his years in this fold as 'the most
+      anti-Christian period of my life'&#38;quot; (ANB).
+&#38;nbsp;
+      Brownson was editor of _The Gospel Advocate and Impartial
+      Investigator_, a Universalist publication.
+&#38;nbsp;
+-   origin-religion         : Universalism
+    destination-religion    : Unitarianism
+    ritual                  : further research
+    location                : &#38;quot;Walpole, New Hampshire&#38;quot;
+    citation:               : ANB
+    notes                   : &#38;gt;
+      Brownson spent some time at Brook Farm, which prepared him for
+      Transcendentalism
+&#38;nbsp;
+-   origin-religion         : Unitarianism and Transcendentalism
+    destination-religion    : Catholicism
+    date                    : 1844-10-19
+    ritual                  : baptism
+    citation                : ANB
+    notes                   : &#38;gt;
+      Brownson studied after his conversion with a Sulpician priest.
+&#38;nbsp;
+source          :
+-   Carey, Orestes Brownson
+-   American National Biography
+&#38;nbsp;
+comments        : &#38;gt;
+  This is a minimal example of what a model of a convert might look
+  like. The historical data is hastily gathered, so only the model is
+  of interest here.
+&#38;nbsp;
+  N.B. I would like to replace the citations with BibTeX keys.
+...&#60;/pre&#62;&#60;/td&#62;&#60;/tr&#62;&#60;/table&#62;&#60;/div&#62;
+
+
+</description>
+		</item>
+		<item>
+			 
+				<title>Scott on "xml standards for encoding geographic information from a historical text?"</title>
+						<link>http://digitalhumanities.org/answers/topic/xml-standards-for-encoding-geographic-information-from-a-historical-text#post-1156</link>
+			<pubDate>Tue, 03 May 2011 18:05:59 +0000</pubDate>
+			<dc:creator>Scott</dc:creator>
+			<guid isPermaLink="false">1156@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I want to create a set of maps to accompany an ancient Chinese historical text (ca. 100 BC). I want to be able to encode location (with some ambiguity), associated people and their movements, administration, and time. I know xml, so I'd much prefer to use an xml language. So I want to ask, what xml standards are available? And what are their advantages and disadvantages? I would also like to know about other historical mapping projects that use xml languages.&#60;br /&#62;
+Thanks!&#60;br /&#62;
+Scott
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>laurannebp@gmail.com on "How deal with marginal notes (XSL-FO) ?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-deal-with-marginal-notes-xsl-fo#post-1046</link>
+			<pubDate>Tue, 15 Mar 2011 10:29:55 +0000</pubDate>
+			<dc:creator>laurannebp@gmail.com</dc:creator>
+			<guid isPermaLink="false">1046@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Dear all,&#60;/p&#62;
+&#60;p&#62;I am currently working on transforming a text in XML-TEI to FO. This is a text of the fifteenth century and it contains marginal notes. I have no idea how to manage these notes in my stylesheet.&#60;br /&#62;
+I use oXygen for my transformation (and FOP, indeed).&#60;/p&#62;
+&#60;p&#62;Does anyone know how to solve the problem ?&#60;/p&#62;
+&#60;p&#62;Thank you very much.&#60;/p&#62;
+&#60;p&#62;Best regards,&#60;/p&#62;
+&#60;p&#62;--&#60;br /&#62;
+Lauranne Bertrand&#60;br /&#62;
+IE Informatique pour les Bibliothèques Virtuelles Humanistes&#60;br /&#62;
+Centre d'Études Supérieures de la Renaissance (CESR)&#60;br /&#62;
+59 rue Néricault-Destouches&#60;br /&#62;
+BP 11328&#60;br /&#62;
+37013 Tours Cedex France&#60;br /&#62;
+&#60;a href=&#34;http://www.bvh.univ-tours.fr/&#34; rel=&#34;nofollow&#34;&#62;http://www.bvh.univ-tours.fr/&#60;/a&#62;
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Raskolnikov on "HELP! I need advice on which approach to take with a text encoding project..."</title>
+						<link>http://digitalhumanities.org/answers/topic/help-i-need-advice-on-which-approach-to-take-with-a-text-encoding-project#post-1011</link>
+			<pubDate>Sat, 26 Feb 2011 16:49:53 +0000</pubDate>
+			<dc:creator>Raskolnikov</dc:creator>
+			<guid isPermaLink="false">1011@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hi there,&#60;/p&#62;
+&#60;p&#62;I desperately need advice at the moment, and really hope some people here can provide some suggestions.&#60;/p&#62;
+&#60;p&#62;I have a fairly extensive data set in the forms of letters (from the 16th century) which have been encoded in XML.&#60;/p&#62;
+&#60;p&#62;My job is to create something which aids content analysis of the letters.&#60;/p&#62;
+&#60;p&#62;- This could be a GUI written in Java, which (via SAX or DOM) allows the user to extract certain features from the letters, compare them side by side rather than have to laboriously flick between letters on a computer system.&#60;/p&#62;
+&#60;p&#62;- Or it could be an elaborate XML project, where XSLT, HTML hyperlinks, and possibly some type of query language such as XQuery or more likely XPath would be used.&#60;/p&#62;
+&#60;p&#62;- Or it could be XML documents displayed in IE and using a JavaScript window/console to select, extract, manipulate, compare different letters.&#60;/p&#62;
+&#60;p&#62;Does anyone have an opinion or a suggestion on which of the three would be the best option to take?&#60;/p&#62;
+&#60;p&#62;Thank you very much in advance
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Dorothea Salo on "History of markup and markup languages?"</title>
+						<link>http://digitalhumanities.org/answers/topic/history-of-markup-and-markup-languages#post-930</link>
+			<pubDate>Fri, 28 Jan 2011 01:42:17 +0000</pubDate>
+			<dc:creator>Dorothea Salo</dc:creator>
+			<guid isPermaLink="false">930@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I've been asked to help someone find sources on the history of markup and the proliferation of markup languages. I can think of a few seminal texts to throw at them (&#34;What Is Text, Really?&#34; or Maler and el Andaloussi), but I don't know of any, er, metatexts of this nature.&#60;/p&#62;
+&#60;p&#62;Does anyone else?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Stéfan Sinclair on "Command-line tool to generate report on large number of XML files"</title>
+						<link>http://digitalhumanities.org/answers/topic/command-line-tool-to-generate-report-on-large-number-of-xml-files#post-528</link>
+			<pubDate>Tue, 19 Oct 2010 20:49:53 +0000</pubDate>
+			<dc:creator>Stéfan Sinclair</dc:creator>
+			<guid isPermaLink="false">528@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;We have a large number of TEI-encoded XML files, some of which aren't valid (usually because of character encoding problems). We'd like to generate a report that lists each file and the error(s) encountered, with line and character index, etc. I can imagine writing a quick and dirty script that essentially does what we need, but I'm wondering (lazily) if anyone has seen anything that would do the trick.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Karin Dalziel on "Alternatives to Cocoon?"</title>
+						<link>http://digitalhumanities.org/answers/topic/alternatives-to-cocoon#post-97</link>
+			<pubDate>Tue, 21 Sep 2010 18:53:14 +0000</pubDate>
+			<dc:creator>Karin Dalziel</dc:creator>
+			<guid isPermaLink="false">97@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I have used Cocoon to publish  TEI encoded XML files processed with XSLT (using Saxon), but I have never tried any other method of processing/publishing files. What alternatives are there? For many sites we generally use only a very small subsets of the features in cocoon - some basic redirecting and post processing.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>TimC on "How can I plot multiple sea journeys onto a digital map?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-can-i-plot-multiple-sea-journeys-onto-a-digital-map#post-601</link>
+			<pubDate>Wed, 27 Oct 2010 09:07:33 +0000</pubDate>
+			<dc:creator>TimC</dc:creator>
+			<guid isPermaLink="false">601@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hello there,&#60;/p&#62;
+&#60;p&#62;As part of a proposed project I have in mind to create a digital map, showing multiple sea journeys - i.e. information upon the individuals involved in that journey, the dates it began and ended, the name of the ship, and to plot it route on the map. Most journeys begin in eastern Australia, but the destinations are global.&#60;/p&#62;
+&#60;p&#62;I've had a brief play around with Google Maps which might suit the purpose, but doesn't seem ideal for working with sea journeys or the amount of data I plan to input for each voyage. &#60;/p&#62;
+&#60;p&#62;Is anyone aware of any software which might be a better fit?&#60;/p&#62;
+&#60;p&#62;Thanks for your help, and apologies for my ignorance.&#60;/p&#62;
+&#60;p&#62;Tim
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

@@ -1,0 +1,508 @@
+<?
+/*
+Plugin Name: bb Topic Icons
+Plugin URI: http://devt.caffeinatedbliss.com/bbpress/topic-icons
+Description: Adds configurable icons next to topics based on their status
+Author: Paul Hawke
+Author URI: http://paul.caffeinatedbliss.com/
+Version: 0.6
+*/
+
+/****************************************************************************
+ *
+ * Configure the following constants to fine-tune the CSS classes that are
+ * generated, the icon filenames that are used, and the text used in the
+ * legend (if you have one displayed).  Note: filenames are likely to be
+ * taken away in a future version and replaced with the concept of "icon sets"
+ * whose filenames are fixed, so dont get used to editing the filenames,
+ * as this will break in future versions.
+ *
+ ****************************************************************************/
+
+// css class for the unsorted list used in the legend display
+define( LEGEND_CLASS, 'topic_icon_legend' );
+
+// busy threshold - a topic with more posts than this is counted as "busy"
+// for purposes of picking an icon.
+define( BUSY_THRESHOLD, 15 );
+
+// width of the images, in pixels
+define( ICON_WIDTH, '20' );
+
+// height of the images, in pixels
+define( ICON_HEIGHT, '20' );
+
+// the URL base for where to find the default icon set.
+define( ICON_SET_URL_BASE, BB_PLUGIN_URL.'bb-topic-icons/icon-sets/' );
+
+/****************************************************************************
+ *
+ * Shouldnt be much need to edit anything beyond this point - configuration
+ * is all done via the constants (above) and through and admin area page in
+ * bbPress at runtime.
+ *
+ ****************************************************************************/
+
+require( 'bb-topic-icons-api.php' );
+require( 'bb-topic-icons-admin.php' );
+require( 'interface.status-interpreter.php' );
+require( 'interface.status-renderer.php' );
+require( 'class.default-status-interpreter.php' );
+require( 'class.default-status-renderer.php' );
+
+function topic_icons_legend() {
+	$icon_set_name = topic_icons_get_active_icon_set();
+	$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+	$statuses = get_active_status_interpreter()->getAllStatuses();
+	$renderer = get_active_status_renderer();
+	
+	echo '<ul id="'.LEGEND_CLASS.'">';
+	for ($i=0; $i < count($statuses); $i++) {
+		$image = $renderer->renderStatus($statuses[$i]);
+		$tooltip = $renderer->renderStatusTooltip($statuses[$i]);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (isset($image) && strlen($image) > 0 &&
+			isset($tooltip) && strlen($tooltip) > 0 && $exists) {
+			echo '<li><img src="'.$icon_set_url.'/'.$image.
+				'" width="'.ICON_WIDTH.'" height="'.ICON_HEIGHT.
+				'" align="absmiddle">&nbsp;'.$tooltip.'</li>';
+		}
+	}
+	echo '</ul>';
+}
+
+function topic_icons_css() {
+	echo "\n<style type=\"text/css\"><!--\n";
+	require( 'bb-topic-icons.css' );
+	echo "\n--></style>";
+}
+
+function topic_icons_label( $label ) {
+	global $topic;
+	
+	if (bb_is_front() || bb_is_forum() || bb_is_view() || bb_is_tag()) {		
+		$icon_set_name = topic_icons_get_active_icon_set();
+		$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+
+		$status = get_active_status_interpreter()->getStatus(bb_get_location(), $topic);
+		$renderer = get_active_status_renderer();
+		$image = $renderer->renderStatus($status);
+		$tooltip = $renderer->renderStatusTooltip($status);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (!$exists) {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), ICON_SET_URL_BASE.'/empty.png', ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		} else if (strlen($tooltip) > 0) {		
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"><span>%s</span></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $tooltip, $label);
+		} else {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		}
+	}
+	
+	return $label;
+}
+
+function topic_icons_init( ) {
+	remove_filter('bb_topic_labels', 'bb_closed_label', 10);
+	remove_filter('bb_topic_labels', 'bb_sticky_label', 20);
+
+	add_filter('bb_topic_labels', 'topic_icons_label', 11);
+
+	add_action('bb_head', 'topic_icons_css');
+
+	add_action('bb_admin_menu_generator', 'topic_icons_admin_page_add');
+	add_action('bb_admin-header.php', 'topic_icons_admin_page_process');
+	
+	topic_icons_register_status_interpreter('default', new DefaultStatusInterpreter(BUSY_THRESHOLD));
+	topic_icons_register_status_renderer('default', new DefaultStatusRenderer());
+}
+
+topic_icons_init();
+
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=8" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+	<title>How do you display TEI documents online? &laquo; Digital Humanities Questions &amp; Answers</title>
+	<link rel="stylesheet" href="http://digitalhumanities.org/answers/bb-templates/dhqa/style.css" type="text/css" />
+	<link rel="stylesheet" href="http://digitalhumanities.org/answers/bb-templates/dhqa/blueprint/screen.css" type="text/css" media="screen" title="blueprint-print" charset="utf-8"/>
+	<link rel="stylesheet" href="http://digitalhumanities.org/answers/bb-templates/dhqa/blueprint/print.css" type="text/css" media="print" title="blueprint-print" charset="utf-8"/>
+	<!--[if lt IE 8]>
+	  <link rel="stylesheet" href="http://digitalhumanities.org/answers/bb-templates/dhqa/blueprint/ie.css" type="text/css" media="screen, projection">
+	<![endif]-->
+	<!--[if IE]>
+		<style type="text/css" media="screen">
+			.header-button, form.login input, input[type="submit"], #header div.search, form.login input {
+				border-radius:4px;
+				behavior: url(border-radius.htc);
+			}
+		</style>
+	<![endif]-->
+	<!--[if IE 7]>
+		<style type="text/css" media="screen">
+			#header .search .search-form input.submit {
+				padding: 0;
+				margin: 0;
+				height: 29px;
+				width: 70px;
+			}
+		</style>
+	<![endif]-->
+
+<link rel="alternate" type="application/rss+xml" title="Digital Humanities Questions &amp; Answers &raquo; Topic: How do you display TEI documents online?" href="http://digitalhumanities.org/answers/rss/topic/how-do-you-display-tei-documents-online" />
+<meta name="generator" content="bbPress 1.0.2" />
+
+<link rel="stylesheet" href="http://digitalhumanities.org/answers/my-plugins/bb-syntax/bb-syntax.css" type="text/css" media="screen" />
+<style type="text/css">
+	.best_answer {text-decoration:none; border:0; white-space:nowrap; display:block; margin:1em 0;		
+		border:0; text-decoration:none; width:20px; height:16px;
+		background: url(http://digitalhumanities.org/answers/my-plugins/best-answer/best-answer.png) no-repeat scroll 0px 1px transparent;} 
+	span.best_answer {margin: 0px; float: left;}
+	#thread .threadauthor .best_answer {padding-left: 20px;}
+	a.best_answer, a.best_answer:link {color:#999;}
+	a.best_answer:hover {color:green;}	
+	a.best_answer_selected {color: green;}
+	a.best_answer_selected:hover {color:red;}		
+	#thread li.best_answer_background { background-color: transparent; }
+	#thread li.best_answer_background .threadpost { background-color: #afa; }
+	#thread li.alt.best_answer_background .threadpost { background-color: #afa; }
+	.best_answer_meta { background: url(http://digitalhumanities.org/answers/my-plugins/best-answer/best-answer.png) no-repeat scroll 5px 40% transparent; padding-left: 26px; }
+</style>
+
+<!-- Start Of Code Generated By Social It Plugin By www.gaut.am -->
+<link rel='stylesheet' id='social-it-css'  href='http://digitalhumanities.org/answers/my-plugins/social-it/css/style.css?ver=1.5' type='text/css' media='all' />
+<script type='text/javascript' src='http://digitalhumanities.org/answers/bb-includes/js/jquery/jquery.js?ver=1.2.6'></script>
+<script type='text/javascript' src='http://digitalhumanities.org/answers/my-plugins/social-it/js/social-it-public.js?ver=1.5'></script>
+<!-- End Of Code Generated By Social It Plugin By www.gaut.am -->
+
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-18811436-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+</head>
+<body id="topic-page">
+	<div class="container prepend-top append-bottom">
+		<div id="util-login">
+		<a href="http://digitalhumanities.org/answers/bb-login.php">Log in</a> | <a href="http://digitalhumanities.org/answers/register.php">Register</a>		</div>
+		<div id="header" class="prepend-6 span-18">
+			<a id="ach-logo" href="http://www.ach.org">ACH</a>
+			<h1><a href="http://digitalhumanities.org/answers/">Digital Humanities Questions &amp; Answers</a></h1>
+						<div class="login-container span-12">
+				<form class="login" method="post" action="http://digitalhumanities.org/answers/bb-login.php">
+		<div class="header-button ask-link"><a href="http://digitalhumanities.org/answers/bb-login.php">Ask a Question</a></div></form>			</div>
+
+			<div class="search span-6 last">
+<form class="search-form" role="search" action="http://digitalhumanities.org/answers/search.php" method="get">
+	<p>
+		<label class="hidden" for="q">Search:</label>
+		<input type="text" size="10" maxlength="100" name="q" id="q" />
+		<input class="submit" type="submit" value="Search &raquo;" />
+	</p>
+</form>
+			</div>
+		</div>
+		<div id="main" class="span-24">
+
+<div class="bbcrumb"><a href="http://digitalhumanities.org/answers/">Digital Humanities Questions &amp; Answers</a> &raquo; <a href="http://digitalhumanities.org/answers/forum/applications-tools-formats">Applications, Tools, Formats</a></div>
+<div class="infobox" role="main">
+
+<div id="topic-info">
+<span id="topic_labels"></span>
+<h2 class="topictitle">How do you display TEI documents online?</h2>
+<span id="topic_posts">(9 posts)</span>
+<span id="topic_voices">(7 voices)</span>
+
+<ul class="topicmeta">
+	<li>Asked 7 years ago by cyavorcik</li>
+	<li><a href="http://digitalhumanities.org/answers/topic/how-do-you-display-tei-documents-online#post-1719">Latest answer</a> from Ingarao Maud</li>
+</ul>
+</div>
+
+<div id="topic-tags">
+<p>Tags:</p>
+
+
+<ul id="tags-list" class="tags-list list:tag">
+	<li id="tag-434_1013"><a href="http://digitalhumanities.org/answers/tags/omeka" rel="tag">Omeka</a> </li>
+	<li id="tag-89_1013" class="alt"><a href="http://digitalhumanities.org/answers/tags/tei" rel="tag">TEI</a> </li>
+	<li id="tag-37_1013"><a href="http://digitalhumanities.org/answers/tags/tools" rel="tag">tools</a> </li>
+</ul>
+
+
+</div>
+
+<div style="clear:both;"></div>
+</div>
+<div id="ajax-response"></div>
+<ol id="thread" class="list:post">
+
+	<li id="post-1525">
+		<div id="position-1">
+			<div class="threadauthor">
+				<img alt="" src="http://www.gravatar.com/avatar/6a49a0ca218982562309bcbe57419218?s=48&amp;d=identicon&amp;r=pg" class="photo avatar avatar-48" style="height:48px; width:48px;" />				<p>
+					<strong>cyavorcik</strong><br />
+					<small><a href="http://digitalhumanities.org/answers/profile/cyavorcik">Member</a></small>
+				</p>
+				<div class="author-badges"><span class='badge 2'><!-- fewer than 5 posts --></span><span class='badge 0'><!-- fewer than 3 answers --></span></div>
+			</div>
+			<div class="threadpost">
+				<div class="post"><p>I'm working with a partner on an update to the TEIDisplay plugin for Omeka and looking for user input. Do you use TEIDisplay or another tool for displaying TEI Documents? Why did you choose that tool and how does it meet/not meet your needs? </p>
+<p>Additionally, what type of documents would you expect to display (e.g., poetry, correspondence, etc.) in a generalizable interface? For a general audience, what should a template for displaying these texts in an Omeka exhibit include? For instance, which teiHeader elements are most important (e.g., file description, revision history)? Would you want to display bibliographic codes and numbers such as page breaks and numbers or paragraph numbers? We assume folks would want to see additions and deletions and notes, but what other aspects of your texts should be displayed for a general audience? What would you add to this list for a general audience?</p>
+<p>(More context for this project is available here: <a href="http://www.scholarslab.org/announcements/collaborative-mentoring-at-ut-and-uva-co-developing-an-updated-teidisplay-for-omeka/" rel="nofollow">http://www.scholarslab.org/announcements/collaborative-mentoring-at-ut-and-uva-co-developing-an-updated-teidisplay-for-omeka/</a> and here: <a href="http://www.scholarslab.org/digital-humanities/an-update-to-teidisplay-for-omeka/" rel="nofollow">http://www.scholarslab.org/digital-humanities/an-update-to-teidisplay-for-omeka/</a>. More info on TEIDisplay itself is available here: <a href="http://omeka.org/codex/Plugins/TeiDisplay" rel="nofollow">http://omeka.org/codex/Plugins/TeiDisplay</a> ).
+</p>
+
+<!-- Start Of Code Generated By Social It Plugin By www.gaut.am -->
+<div class="social-it" style=""><ul class="socials"><li class="socialit-twitter"><a href="http://twitter.com/home?status=How+do+you+display+TEI+documents+online%3F+-+http://bit.ly/zvyzGA+(via+@DHAnswers)" rel="nofollow" class="external" title="Tweet this question">Tweet this question</a></li></ul><div style="clear:both;"></div></div><!-- End Of Code Generated By Social It Plugin By www.gaut.am -->
+
+</div>
+				<div class="poststuff">Posted 7 years ago <a class="post-perma-link" href="#post-1525">Permalink</a> </div>
+			</div>
+		</div>
+	</li>
+	<li id="post-1535" class="alt">
+		<div id="position-2">
+			<div class="threadauthor">
+				<a href="http://michelledalmau.com"><img alt="" src="http://www.gravatar.com/avatar/b9369d08cbba8aaa643341a09e997b48?s=48&amp;d=identicon&amp;r=pg" class="photo avatar avatar-48" style="height:48px; width:48px;" /></a>				<p>
+					<strong><a href="http://michelledalmau.com">mdalmau</a></strong><br />
+					<small><a href="http://digitalhumanities.org/answers/profile/mdalmau">Member</a></small>
+				</p>
+				<div class="author-badges"><span title='5+ Posts' class='badge bronze-poster 8'><!-- 10-19 posts --></span><span class='badge 0'><!-- fewer than 3 answers --></span></div>
+			</div>
+			<div class="threadpost">
+				<div class="post"><p>I can't speak to the TEIDisplay plug-in, but I know others in my group looked at it more closely when we paused to survey the landscape of open source e-text delivery solutions.  In the end, delivering our TEI content via Omeka didn't make the cut mostly because the XML itself seemed to be buried and was only accessed at the point of rendering transformation.  It was unclear how we could leverage the rich-levels of encoding to provide not just display but also discovery modes that would exploit the markup.  If we had a project that had mixed-content types that included a few TEI files, say of correspondence, that simply needed to be displayed in a very general-sence, I think the plug-in would serve us well, but not really for a project that is entirely TEI-based.  </p>
+<p>We have been using for many years California Digital LIbrary's (CDL) XTF (eXtensible Text Framework) software to deliver TEI-encoded texts of all types -- from manuscripts to board of trustees minutues (administrative), from legislative proceedings to literary texts ... and tons more.  We mostly deal with level 3-5 projects (as defined by the Best Practices for TEI in Libraries).  We are moving away from "boutique" TEI web sites to a more streamlined web development process to achieve what I think it is your implying ... a general framework ( which for us includes what we call "core" XSL) that would work for all types of contents and that would import sytle sheets for particular customizations.  </p>
+<p>More recently we have been involved in parallel web development with three TEI projects, ranging from levels 3-5, that have taken more of an XTF out-of-box approach but with little sacrifice to the rich encoding [1].  My team mates and I recently gave a talk about our new approaches of web development if you are curious about more of the technical details: <a href="http://breeze.iu.edu/p46anbeanm6/" rel="nofollow">http://breeze.iu.edu/p46anbeanm6/</a>.  The audio is muted for the first 8 minutes but it's mostly setting the stage for the audience ("why we encode") so it's not anything you don't already know.  During that time, I showcase several TEI projects that were developed under the more "boutique" model as a contrast to those that are leveraging "building blocks" for display and functionality.  </p>
+<p>So, it's hard to answer your question in terms of what needs to be displayed or acted upon against the XML since in some ways a depends on what types of baseline functionality you'd like to support (e.g., linking to page images if present, document-centric navigation, etc.).  </p>
+<p>With that said, the bits from the Header we typically expose or index for searching: sourceDesc bibliographic information and parts of the profileDesc like classification schemes and terms (textClass), language usage or participant descriptions.  As for the text body, what we display will depend of the form and genre of the text, but in the core XSL we have and will continue to develop generic display outputs (i.e., all floating texts that are letters will display blockquoted with a light gray background) unless the particular project is governed by a more faithful representation of the text.  In that case, we will display letters as the encoding rendition makes explicit and overwrite the "core" generic display of letters with the project-specific one.  </p>
+<p>Ack.  I feel like I am rambling.  It's challenging to define the "general" for a text.  Our approach has been rather than predefine the general for the various forms and genres we encounter, we are defining more general treatment of the texts in an organic fashion, and treating customizations as a separate thing that are truly unique to the content.  Of course, this has happened by taking stock of the years of publishing TEI projects using XTF and learning from/adapting accordingly.  </p>
+<p>Another approach taken by John Walsh and his Swinburne Project is to rather than streamline the XTF native XSLs, he has streamlined a way to import his own stylesheets atop of the XTF.  It's almost a reverse of our workflow where essentially he's customized the rendering almost entirely but it works beautifully in XTF.  </p>
+<p>As you work to define a general display for the TEIDisplay plugin, you might consider ways in which you can provide mechanisms for Omeka implementors to incorporate rendering that is unique to the project.  </p>
+<p>---------</p>
+<p>[1] The three more streamlined projects:<br />
+Brevier Legislative Reports (<a href="http://www.dlib.indiana.edu/collections/law/brevier/" rel="nofollow">http://www.dlib.indiana.edu/collections/law/brevier/</a>)<br />
+Indiana Authors in Their Books (<a href="http://www.dlib.indiana.edu/collections/inauthors/" rel="nofollow">http://www.dlib.indiana.edu/collections/inauthors/</a>)<br />
+Victorian Women Writers Project (<a href="http://www.dlib.indiana.edu/collections/vwwp/" rel="nofollow">http://www.dlib.indiana.edu/collections/vwwp/</a>)</p>
+<p>Each of those web sites contain project information about encoding approaches and technical implementation.
+</p></div>
+				<div class="poststuff">Posted 7 years ago <a class="post-perma-link" href="#post-1535">Permalink</a> </div>
+			</div>
+		</div>
+	</li>
+	<li id="post-1537">
+		<div id="position-3">
+			<div class="threadauthor">
+				<img alt="" src="http://www.gravatar.com/avatar/a6221860df1fa0bf484e41c0fcaab756?s=48&amp;d=identicon&amp;r=pg" class="photo avatar avatar-48" style="height:48px; width:48px;" />				<p>
+					<strong>c.seeger7@gmail.com</strong><br />
+					<small><a href="http://digitalhumanities.org/answers/profile/cseeger7gmailcom">Blocked</a></small>
+				</p>
+				<div class="author-badges"><span class='badge 1'><!-- fewer than 5 posts --></span><span class='badge 0'><!-- fewer than 3 answers --></span></div>
+			</div>
+			<div class="threadpost">
+				<div class="post"><p>In direct relation to the above post by mdalmau: Maybe the functions of TEIDisplay could be extended by supporting cross-references/ implementations with other plugins? I'm specifically thinking of things such as Timeline and SolrSearch here. if it could be achieved somehow that TEIDisplay was able to deal with the full range of the markup (and possibly custom libraries?) it could make use of other plugin functions, so not everything would have to be provided by the plugin itself (which would probably require a vast amount of coding). Thinking of options such as a checkbox next to which it says "display &lt;date&gt; information using the Timeline plugin" or something like that.</p>
+<p>Anyway, now to be a bit specific about my own TEI needs:<br />
+What I would currently need the most in such a plugin would be support for the facsimile tag (including the facs IDs and everything), that is, I would be glad if there was a transformation that enabled me to display an image in the collection in a way that it would show the corresponding text next to it on mouseover or click. This would be a huge timesaver and a very nice and easy way to present old documents.<br />
+If the file is part of a series, it would also be nice to have some sort of integrated navigation between different volumes, possibly also between different collections and including an index.<br />
+Furthermore, the functionality of the keywords could be extended to tie in the scheme. Currently, as far as I understood, it extracts the information for specific keyword terms and uses them as tags in omeka. maybe the TEIDisplay- plugin could be "taught" to recognize schemes and controlled vocabulary somehow (I am aware of how vague that sounds, but I have to admit I don't have a precise idea about how this would look like).<br />
+An issue which would probably be easy to fix (or maybe it's part of the plugin already, and I didn't see it): A documentation on which TEI-tags correspond to which DublinCore- fields in omeka. When uploading a file, it extracts the info automatically, but for me some of the fields will still remain blank, and I can't tell "where" exactly in the TEI-header the plugin is looking for information which it apparently can't find. So I have to add in the blank fields manually. I could probably change the TEI-header to include the tags the plugin is looking for, if I knew which ones!</p>
+<p>Also relating to the above post, since I already mentioned SolrSearch: Extending the plugin by a large amount of features may be a bit much considering the fact that it's still being developed, but maybe it could include support for basic tags such as persName, dates and places and offer a hyperlinking of some sort (search function). </p>
+<p>This is everything I could come up with so far. I'm currently trying to use the plugin with the latest omeka version, but I was told that it was developed for an earlier version and is currently broken. I could still use some support for it- not to get too much into detail, but I noticed it will not extract any information from my TEI header when using TEI P5. All of the metadata fields in omeka will remain blank. Was it not supported in the old version, or am I maybe doing something wrong? Also, the xslt transformation doesn't seem to be working at all, it doesn't recognize the stylesheets, not even the default one, continuously saying that "there does not seem to be any style information associated with the file".<br />
+(Sorry that I'm pestering you with these questions, I realize this is not a bugfixing thread. But I already submitted a ticket on it here <a href="http://www.lib.virginia.edu/scholarslab/help/ttx.cgi?cmd=ticket&amp;key=2034Z70472238075762619782" rel="nofollow">http://www.lib.virginia.edu/scholarslab/help/ttx.cgi?cmd=ticket&amp;key=2034Z70472238075762619782</a> and was directed to this topic)<br />
+Any help on this is greatly appreciated. Good luck with the development of the plugin, I'm looking forward to the release of the first stable version for Omeka 1.5!
+</p></div>
+				<div class="poststuff">Posted 7 years ago <a class="post-perma-link" href="#post-1537">Permalink</a> </div>
+			</div>
+		</div>
+	</li>
+	<li id="post-1538" class="alt">
+		<div id="position-4">
+			<div class="threadauthor">
+				<img alt="" src="http://www.gravatar.com/avatar/06e5ca265c4808d078c83bdb2ebd0a53?s=48&amp;d=identicon&amp;r=pg" class="photo avatar avatar-48" style="height:48px; width:48px;" />				<p>
+					<strong>lou.burnard@gmail.com</strong><br />
+					<small><a href="http://digitalhumanities.org/answers/profile/louburnardgmailcom">Member</a></small>
+				</p>
+				<div class="author-badges"><span class='badge 1'><!-- fewer than 5 posts --></span><span class='badge 0'><!-- fewer than 3 answers --></span></div>
+			</div>
+			<div class="threadpost">
+				<div class="post"><p>Good to see someone is updating this Omeka plugin. Some of my colleagues did some work with it last year as a part of the ANGD Summer school (<a href="http://angd.tge-adonis.fr/formations/1/angd-2011)" rel="nofollow">http://angd.tge-adonis.fr/formations/1/angd-2011)</a>, and were a bit disappointed to find it was apparently still designed for TEI P4. If at the very least you get it using TEI P5 by default, the project is definitely worthwhile! </p>
+<p>I tend to share Michelle's reservations about the idea of a one-size-fits-all rendering for TEI documents: which is not to say that a plugin that displays a well-defined (and documented) TEI subset beautifully would not be an excellent thing. Good luck with that! I hope you'll consider documenting the TEI subset it supports using ODD, so that people can automagically convert to it from their own TEI "boutique schemas" (as Michelle calls them). Happy to advise further if need be.</p>
+<p>You might also be interested (if you dont already know about it) in the comparable exercise carried out by Christof Schoch for the Drupal CMS: see <a href="http://www.teichi.org/" rel="nofollow">http://www.teichi.org/</a></p>
+<p>Good hunting!</p>
+<p>Lou
+</p></div>
+				<div class="poststuff">Posted 7 years ago <a class="post-perma-link" href="#post-1538">Permalink</a> </div>
+			</div>
+		</div>
+	</li>
+	<li id="post-1539">
+		<div id="position-5">
+			<div class="threadauthor">
+				<a href="http://michelledalmau.com"><img alt="" src="http://www.gravatar.com/avatar/b9369d08cbba8aaa643341a09e997b48?s=48&amp;d=identicon&amp;r=pg" class="photo avatar avatar-48" style="height:48px; width:48px;" /></a>				<p>
+					<strong><a href="http://michelledalmau.com">mdalmau</a></strong><br />
+					<small><a href="http://digitalhumanities.org/answers/profile/mdalmau">Member</a></small>
+				</p>
+				<div class="author-badges"><span title='5+ Posts' class='badge bronze-poster 8'><!-- 10-19 posts --></span><span class='badge 0'><!-- fewer than 3 answers --></span></div>
+			</div>
+			<div class="threadpost">
+				<div class="post"><p>Reading Lou's response, I realize that I left out a suggestion.  Perhaps working alongside the Best Practices for TEI in Libraries levels 2-4 and corresponding schemas, you might arrive more easily at the general display: <a href="http://purl.org/TEI/teiinlibraries" rel="nofollow">http://purl.org/TEI/teiinlibraries</a>.  We are looking at doing the same -- display and functionality.  Rather than create something self-contained, we should try to leverage as much as possible what's been documented.  The Best Practices especially are well suited for the "general."  </p>
+<p>Disclaimer:  I am a main contributor and co-editor of said Best Practices.
+</p></div>
+				<div class="poststuff">Posted 7 years ago <a class="post-perma-link" href="#post-1539">Permalink</a> </div>
+			</div>
+		</div>
+	</li>
+	<li id="post-1540" class="alt">
+		<div id="position-6">
+			<div class="threadauthor">
+				<img alt="" src="http://www.gravatar.com/avatar/6a49a0ca218982562309bcbe57419218?s=48&amp;d=identicon&amp;r=pg" class="photo avatar avatar-48" style="height:48px; width:48px;" />				<p>
+					<strong>cyavorcik</strong><br />
+					<small><a href="http://digitalhumanities.org/answers/profile/cyavorcik">Member</a></small>
+				</p>
+				<div class="author-badges"><span class='badge 2'><!-- fewer than 5 posts --></span><span class='badge 0'><!-- fewer than 3 answers --></span></div>
+			</div>
+			<div class="threadpost">
+				<div class="post"><p>Thanks so much to everyone for your responses! We're already working on some of the things you've suggested, such as better search/discovery functionality. As a relative newbie to the field I'm looking for all the perspectives I can get, so please feel free to forward this thread on to anyone you think might be interested. I'll be sure to post an update when we complete the project this May, and we're also blogging every week or so about it at <a href="http://www.scholarslab.org/" rel="nofollow">http://www.scholarslab.org/</a>. </p>
+<p>Catarina -- Regarding the problems you described at the end of your post, getting the XSLT transformation working with the new version was one of the first things we started on. My partner was more involved with that aspect of the work than I was, but we did get it to at least display. I can connect you with him if you like to get more info on that.
+</p></div>
+				<div class="poststuff">Posted 7 years ago <a class="post-perma-link" href="#post-1540">Permalink</a> </div>
+			</div>
+		</div>
+	</li>
+	<li id="post-1546">
+		<div id="position-7">
+			<div class="threadauthor">
+				<img alt="" src="http://www.gravatar.com/avatar/92cb245d1d946be3f79bfad6745646c7?s=48&amp;d=identicon&amp;r=pg" class="photo avatar avatar-48" style="height:48px; width:48px;" />				<p>
+					<strong>cseeger1</strong><br />
+					<small><a href="http://digitalhumanities.org/answers/profile/cseeger1">Member</a></small>
+				</p>
+				<div class="author-badges"><span class='badge 1'><!-- fewer than 5 posts --></span><span class='badge 0'><!-- fewer than 3 answers --></span></div>
+			</div>
+			<div class="threadpost">
+				<div class="post"><p>I would very much like to get in contact with him, if possible.(Sorry for my late reply, I had a few problems with the registration). Thank you for your help!
+</p></div>
+				<div class="poststuff">Posted 7 years ago <a class="post-perma-link" href="#post-1546">Permalink</a> </div>
+			</div>
+		</div>
+	</li>
+	<li id="post-1547" class="alt">
+		<div id="position-8">
+			<div class="threadauthor">
+				<a href="http://hackingthehumanities.org"><img alt="" src="http://www.gravatar.com/avatar/5eae155257da1e1fea52ff200be56161?s=48&amp;d=identicon&amp;r=pg" class="photo avatar avatar-48" style="height:48px; width:48px;" /></a>				<p>
+					<strong><a href="http://hackingthehumanities.org">Patrick Murray-John</a></strong><br />
+					<small><a href="http://digitalhumanities.org/answers/profile/patrickmj"></a></small>
+				</p>
+				<div class="author-badges"><span title='50+ Posts' class='badge gold-poster 124'><!-- 50+ posts! --></span><span title='3+ Best Answers' class='badge bronze-answerer 3'><!-- 3-9 answers --></span></div>
+			</div>
+			<div class="threadpost">
+				<div class="post"><p>I'm very happy to see all the good ideas finally emerge in this thread. I feared that it wouldn't get off the ground at first when it went an unusually long time without a response!</p>
+<p>The one-size-fits all problem is one that I often encounter when working with TEI texts. As was mentioned, a really versatile plugin that could handle the myriad possibilities within TEI would call for a huge amount of code. So breaking things apart could lead to some interesting growable hacks. Here's a couple thoughts. . . </p>
+<p>One thing that I'm seeing in the thread is that a lot of what's desired isn't really a TEI Display plugin. It sounds more like a TEI Processing plugin. Breaking it apart this way could help rethink what needs to be done, and avoid the trap I see so often of TEI on the web being just about pushing it through XSLT to display the HTML.</p>
+<p>And so, TEIProcessing might handle the uploading of a TEI doc, and be built up around doing some of the processing of elements. This might work similarly to the <a href="http://omeka.org/add-ons/plugins/csv-import/">CSVImport plugin</a>, which lets you map columns of CSV into Dublin Core or other elements. Here, instead of mapping columns, you'd be mapping the TEI elements. Starting with CSVImport as a model might get that code off the ground very quickly. I don't know if it would be better to scan all the available elements the way CSVImport scan columns, or have a more complex configuration specific to each text. I see the possibility that the combination of elements and attributes available in a TEI text could lead to some complex logic to the mappings. The nice thing about that approach is that it would at least get some of the data into the fields that are indexed and searchable in Omeka.</p>
+<p>A TEIDisplay plugin, on the other hand, might handle things like uploading different XSLT, and assigning which XSLT to use on which TEI documents already in Omeka. For that matter, it might even want to work with other ways to produce the display, kinda like how Anthologize starts with a (mostly kinda-sorta) TEI document to produce different output formats through various techniques, not just XSLT.</p>
+<p>Things like that, that handle the very basic interactions with Omeka, would then make it easier for other plugins to be built up that take advantage of that in ways more unique to a particular project or set of TEI texts.</p>
+<p>Just some thoughts --- good luck! This sounds exciting!
+</p></div>
+				<div class="poststuff">Posted 7 years ago <a class="post-perma-link" href="#post-1547">Permalink</a> </div>
+			</div>
+		</div>
+	</li>
+	<li id="post-1719">
+		<div id="position-9">
+			<div class="threadauthor">
+				<img alt="" src="http://www.gravatar.com/avatar/f641c7e053c2c92dbe11733b64e71df5?s=48&amp;d=identicon&amp;r=pg" class="photo avatar avatar-48" style="height:48px; width:48px;" />				<p>
+					<strong>Ingarao Maud</strong><br />
+					<small><a href="http://digitalhumanities.org/answers/profile/ingarao-maud">Member</a></small>
+				</p>
+				<div class="author-badges"><span class='badge 1'><!-- fewer than 5 posts --></span><span class='badge 0'><!-- fewer than 3 answers --></span></div>
+			</div>
+			<div class="threadpost">
+				<div class="post"><p>Hello Carin,</p>
+<p>At the ENS de Lyon (<a href="http://ens-lyon.fr/" rel="nofollow">http://ens-lyon.fr/</a>) we are using Omeka to display a few corpora. We fixed some issues in the current TeiDisplay plugin :<br />
+- fixed bugs in populating and depopulating the TeiConfig table (when deleting a file, re-installing the plugin...)<br />
+- removed TEI.2 handling and added teiCorpus handling instead<br />
+- the plugin now checks whether a XML file is a TEI or teiCorpus file</p>
+<p>If you and your colleague are interested we will be pleased to send it to you and discuss it with you.<br />
+Best regards,<br />
+Nathalie Arlin &amp; Maud Ingarao</p>
+<p>--<br />
+Maud Ingarao<br />
+IHPC (UMR 5037)<br />
+Institut d’histoire de la pensée classique, de l’Humanisme aux Lumières<br />
+Ecole Normale Supérieure de Lyon - Site Descartes - Bureau R322<br />
+15 Parvis René Descartes - BP7000 - 69342 Lyon CEDEX 07<br />
++33 4 37 37 65 79 - <a href="mailto:maud.ingarao@ens-lyon.fr">maud.ingarao@ens-lyon.fr</a></p>
+<p>cerphi.ens-lyon.fr - pensee-classique.ens-lyon.fr<br />
+institutdesanti.ens-lyon.fr - hyperdonat.ens-lyon.fr<br />
+mutec-shs.fr - projet-plume.org - ahn.ens-lyon.fr<br />
+<a href="http://www.cahier.paris-sorbonne.fr/" rel="nofollow">http://www.cahier.paris-sorbonne.fr/</a></p>
+<p>- je suis absente le vendredi - out of office on Fridays -
+</p></div>
+				<div class="poststuff">Posted 6 years ago <a class="post-perma-link" href="#post-1719">Permalink</a> </div>
+			</div>
+		</div>
+	</li>
+
+</ol>
+<div class="clearit"><br style=" clear: both;" /></div>
+<p class="rss-link"><a href="http://digitalhumanities.org/answers/rss/topic/how-do-you-display-tei-documents-online" class="rss-link"><abbr title="Really Simple Syndication">RSS</abbr> feed for this topic</a></p>
+<h2 class="post-form">Reply</h2>
+<p>You must <a href="http://digitalhumanities.org/answers/bb-login.php">log in</a> to post.</p>		</div>
+			<div id="footer" role="contentinfo" class="span-24">
+				<div id="lang-switch">
+					<span class="lang-label">Language</span>
+					<form id="bb_language_switcher" style="display:inline-block;"><select  style="width:150px;" name="bb_language_switcher" onchange="location.href='/answers/topic/how-do-you-display-tei-documents-online?bblang=' + this.options[this.selectedIndex].value;">
+<option value=''>Select...</option>	<option value="bg_BG">&nbsp;Bulgarian (BG) </option>
+	<option value="continents-cities-sr_RS">&nbsp;Corsican</option>
+	<option value="da_DK">&nbsp;Danish (DK) </option>
+	<option style='background:#ECE9D8;color:#000;font-weight:bold;' value=" ">&nbsp;English</option>
+	<option value="et_EE">&nbsp;Estonian (EE) </option>
+	<option value="fr_FR">&nbsp;French (FR) </option>
+	<option value="de">&nbsp;German</option>
+	<option value="he_IL">&nbsp;Hebrew (IL) </option>
+	<option value="hu_HU">&nbsp;Hungarian (HU) </option>
+	<option value="id_ID">&nbsp;Indonesian (ID) </option>
+	<option value="it_IT">&nbsp;Italian (IT) </option>
+	<option value="ja">&nbsp;Japanese</option>
+	<option value="pl_PL">&nbsp;Polish (PL) </option>
+	<option value="pt_BR">&nbsp;Portuguese (BR) </option>
+	<option value="pt_PT">&nbsp;Portuguese (PT) </option>
+	<option value="ro_RO">&nbsp;Romanian (RO) </option>
+	<option value="ru_RU">&nbsp;Russian (RU) </option>
+	<option value="sr_RS">&nbsp;Serbian (RS) </option>
+	<option value="sk">&nbsp;Slovak</option>
+	<option value="sk_SK">&nbsp;Slovak (SK) </option>
+	<option value="es_ES">&nbsp;Spanish (ES) </option>
+	<option value="sv_SE">&nbsp;Swedish (SE) </option>
+	<option value="th">&nbsp;Thai</option>
+	<option value="ug_CN">&nbsp;Uyghur (CN) </option>
+	<option value="uz_UZ">&nbsp;Uzbek (UZ) </option>
+	<option value="vi">&nbsp;Vietnamese</option>
+</select></form>
+				</div>			
+				<p>A project of the <a href="http://www.ach.org">Association for Computers and the Humanities</a> and the Chronicle of Higher Education's <a href="http://profhacker.com">ProfHacker</a></p>
+				<p>Icons by <a href="http://www.famfamfam.com/lab/icons/silk/">famfamfam</a></p>
+				<p><a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/"><img alt="Creative Commons License" src="http://i.creativecommons.org/l/by-nc-sa/3.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License</a>.</p>
+				<p><a href="http://lib.virginia.edu/scholarslab"><img src="http://digitalhumanities.org/answers/bb-templates/dhqa/images/slab-logo.jpg" alt="Scholars' Lab" title="Scholars' Lab"/></a></p>
+			</div>
+	</div>
+
+
+</body>
+</html>

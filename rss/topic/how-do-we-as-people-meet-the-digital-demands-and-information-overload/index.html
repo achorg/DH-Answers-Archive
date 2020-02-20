@@ -1,0 +1,202 @@
+<?
+/*
+Plugin Name: bb Topic Icons
+Plugin URI: http://devt.caffeinatedbliss.com/bbpress/topic-icons
+Description: Adds configurable icons next to topics based on their status
+Author: Paul Hawke
+Author URI: http://paul.caffeinatedbliss.com/
+Version: 0.6
+*/
+
+/****************************************************************************
+ *
+ * Configure the following constants to fine-tune the CSS classes that are
+ * generated, the icon filenames that are used, and the text used in the
+ * legend (if you have one displayed).  Note: filenames are likely to be
+ * taken away in a future version and replaced with the concept of "icon sets"
+ * whose filenames are fixed, so dont get used to editing the filenames,
+ * as this will break in future versions.
+ *
+ ****************************************************************************/
+
+// css class for the unsorted list used in the legend display
+define( LEGEND_CLASS, 'topic_icon_legend' );
+
+// busy threshold - a topic with more posts than this is counted as "busy"
+// for purposes of picking an icon.
+define( BUSY_THRESHOLD, 15 );
+
+// width of the images, in pixels
+define( ICON_WIDTH, '20' );
+
+// height of the images, in pixels
+define( ICON_HEIGHT, '20' );
+
+// the URL base for where to find the default icon set.
+define( ICON_SET_URL_BASE, BB_PLUGIN_URL.'bb-topic-icons/icon-sets/' );
+
+/****************************************************************************
+ *
+ * Shouldnt be much need to edit anything beyond this point - configuration
+ * is all done via the constants (above) and through and admin area page in
+ * bbPress at runtime.
+ *
+ ****************************************************************************/
+
+require( 'bb-topic-icons-api.php' );
+require( 'bb-topic-icons-admin.php' );
+require( 'interface.status-interpreter.php' );
+require( 'interface.status-renderer.php' );
+require( 'class.default-status-interpreter.php' );
+require( 'class.default-status-renderer.php' );
+
+function topic_icons_legend() {
+	$icon_set_name = topic_icons_get_active_icon_set();
+	$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+	$statuses = get_active_status_interpreter()->getAllStatuses();
+	$renderer = get_active_status_renderer();
+	
+	echo '<ul id="'.LEGEND_CLASS.'">';
+	for ($i=0; $i < count($statuses); $i++) {
+		$image = $renderer->renderStatus($statuses[$i]);
+		$tooltip = $renderer->renderStatusTooltip($statuses[$i]);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (isset($image) && strlen($image) > 0 &&
+			isset($tooltip) && strlen($tooltip) > 0 && $exists) {
+			echo '<li><img src="'.$icon_set_url.'/'.$image.
+				'" width="'.ICON_WIDTH.'" height="'.ICON_HEIGHT.
+				'" align="absmiddle">&nbsp;'.$tooltip.'</li>';
+		}
+	}
+	echo '</ul>';
+}
+
+function topic_icons_css() {
+	echo "\n<style type=\"text/css\"><!--\n";
+	require( 'bb-topic-icons.css' );
+	echo "\n--></style>";
+}
+
+function topic_icons_label( $label ) {
+	global $topic;
+	
+	if (bb_is_front() || bb_is_forum() || bb_is_view() || bb_is_tag()) {		
+		$icon_set_name = topic_icons_get_active_icon_set();
+		$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+
+		$status = get_active_status_interpreter()->getStatus(bb_get_location(), $topic);
+		$renderer = get_active_status_renderer();
+		$image = $renderer->renderStatus($status);
+		$tooltip = $renderer->renderStatusTooltip($status);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (!$exists) {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), ICON_SET_URL_BASE.'/empty.png', ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		} else if (strlen($tooltip) > 0) {		
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"><span>%s</span></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $tooltip, $label);
+		} else {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		}
+	}
+	
+	return $label;
+}
+
+function topic_icons_init( ) {
+	remove_filter('bb_topic_labels', 'bb_closed_label', 10);
+	remove_filter('bb_topic_labels', 'bb_sticky_label', 20);
+
+	add_filter('bb_topic_labels', 'topic_icons_label', 11);
+
+	add_action('bb_head', 'topic_icons_css');
+
+	add_action('bb_admin_menu_generator', 'topic_icons_admin_page_add');
+	add_action('bb_admin-header.php', 'topic_icons_admin_page_process');
+	
+	topic_icons_register_status_interpreter('default', new DefaultStatusInterpreter(BUSY_THRESHOLD));
+	topic_icons_register_status_renderer('default', new DefaultStatusRenderer());
+}
+
+topic_icons_init();
+
+?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Topic: How do we as people meet the digital demands and information overload?</title>
+		<link>http://digitalhumanities.org/answers/topic/how-do-we-as-people-meet-the-digital-demands-and-information-overload</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Topic: How do we as people meet the digital demands and information overload?</description>
+		<language>en-US</language>
+		<pubDate>Sun, 24 Mar 2019 17:08:50 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/topic/how-do-we-as-people-meet-the-digital-demands-and-information-overload" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>Ramkumar on "How do we as people meet the digital demands and information overload?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-do-we-as-people-meet-the-digital-demands-and-information-overload#post-2424</link>
+			<pubDate>Wed, 10 Jan 2018 04:09:04 +0000</pubDate>
+			<dc:creator>Ramkumar</dc:creator>
+			<guid isPermaLink="false">2424@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hi, I agree with you in many ways. There is unarguably a huge generation gap. Clearly there was no internet when I finished college in the early 90's.&#60;/p&#62;
+&#60;p&#62;My 9 year old daughter hardly keeps the smart phone down. She keeps fiddling with it after school, playing one those online kid games. As a father, I am unable to say no. I allow her to play a couple of hours nevertheless fearing that she would be left behind in a world where everyone is so information savvy and so ingrained in the digital culture. &#60;/p&#62;
+&#60;p&#62;I do not know if I am doing the right thing.  &#60;/p&#62;
+&#60;p&#62;Your prescriptions for managing distraction are good but may not work for everybody. As you rightly said it depends on one's profession and livelihood. Working in a corporate world and some times on virtual mode it becomes utmost necessity to be on top of things. It's a race, lest you are not in the good books of your boss. &#60;/p&#62;
+&#60;p&#62;Meditative or not I think it works when you take it (Information) as it comes and not voluntarily be too hungry to seek it unless there is a dire need. Just keep the intention alive and look around. It works. For me honestly, only in spurts!&#60;/p&#62;
+&#60;p&#62;I listen to NPR, fresh air once in a while.Your words at the very end were good. &#60;/p&#62;
+&#60;p&#62;&#34;Snowflakes are falling in abundance outside my window. I paused while drafting this answer to watch them. &#34;&#60;/p&#62;
+&#60;p&#62;Cheers, Ramkumar
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Wesley on "How do we as people meet the digital demands and information overload?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-do-we-as-people-meet-the-digital-demands-and-information-overload#post-2423</link>
+			<pubDate>Mon, 08 Jan 2018 15:34:45 +0000</pubDate>
+			<dc:creator>Wesley</dc:creator>
+			<guid isPermaLink="false">2423@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I in general think that answer to this question differs for scholars and for general public. In order to do scholarship, which for me are activities of writing, reading, transcribing, researching, encoding and formatting texts, it takes hours of uninterrupted time. To be productive, I resort to several practices which in our era of information overload seem almost like monkish or meditative, including the following:&#60;/p&#62;
+&#60;p&#62;1) No smartphone. Never bought one, originally because expensive, later because decided it was a time sink and source of interruptions. Not having one has mostly eliminated the sleep problem.&#60;br /&#62;
+2) Limit social network usage to minimum (no Facebook, never signed up; did use Twitter several years, now mostly in hiatus)&#60;br /&#62;
+3) Anti-distraction software on desktop (Macintosh SelfControl, which blocks access to time-wasting web sites)&#60;br /&#62;
+4) No 24-hour TV news (no cable)&#60;br /&#62;
+5) Over time cultivated and developed preference for austere and regimented software interaction, plain text with RegEx manipulation, LaTeX, well-formedness and validity in XML, citation keys with Zotero, etc.&#60;/p&#62;
+&#60;p&#62;Sustained scholarly engagement demands immense rigor. And I usually fall short of what I would hope, but the choices and habits above allow me to not feel particularly overwhelmed by digital culture. These obviously cannot be adopted by everyone. I'm past middle-age and long-time partnered, so I have no urgency to keep up with youth culture or to date. A public or activist scholarship would likely be unable to restrict itself to such methods. And I wonder how a scholar of gaming culture can resist the allure of just playing games. But over time I've satisfied myself that being aware of the daily political news or sports or cultural events lacks the urgency that I once felt toward it.&#60;/p&#62;
+&#60;p&#62;I was  influenced by listening to a scholar on NPR several years ago, perhaps on FreshAir. An eminent, productive scholar, she described limiting her access to the news so she could concentrate on her work One day her mother (the scholar's mother) wanted to talk about the fall of the Berlin Wall. And the scholar had to explain to her mother that she did not know that the Berlin Wall had &#34;fallen&#34; several days before--because she had restricted her consumption of the news. Her mother said something like, &#34;I don't want to talk to anyone who does not even know about the fall of the Berlin wall,&#34; and hung up the phone. The scholar, at first in some consternation because her mother had hung up on her, resigned herself to her choice, though she protested to the radio audience that she usually learned about major events within a week or two (i.e., her mother had told her),  and remained sufficiently informed about the present. I wish I could recall the scholar's name, but her attitude seemed immensely sane to me. And I cut back on news consumption after hearing that interview. &#60;/p&#62;
+&#60;p&#62;I don't think it's easy to draw line, but I do think it's possible and necessary to cultivate habits of information interaction that reduce the feeling of being overwhelmed, for scholars and the general public.  In my case, to concentrate on scholarship, it feels like I have to draw the lines with a degree of rigor that to the general public and my students seems excessive. &#60;/p&#62;
+&#60;p&#62;Snowflakes are falling in abundance outside my window. I paused while drafting this answer to watch them. &#60;/p&#62;
+&#60;p&#62;Best, Wesley
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Ramkumar on "How do we as people meet the digital demands and information overload?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-do-we-as-people-meet-the-digital-demands-and-information-overload#post-2421</link>
+			<pubDate>Mon, 08 Jan 2018 10:30:25 +0000</pubDate>
+			<dc:creator>Ramkumar</dc:creator>
+			<guid isPermaLink="false">2421@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hi,&#60;br /&#62;
+We are frequently overwhelmed with digital information. We do not switch off our smart phones and devices till late in the night this disturbs our sleep and on top of it, there is enough distraction at work during the day. How do we deal with this ?&#60;/p&#62;
+&#60;p&#62;I have personally seen many people on social networks having an emotional breakdown and have gone into depression either due the over-exposure or their ideas and posts not being paid attention to.  They are unable to deal with this exposure and overload of information. As a society, are we going too fast on the information super lane? &#60;/p&#62;
+&#60;p&#62;We are not paying enough attention. Human attention span on any piece of useful information is only about 3-4 minutes and beyond this is distraction. &#60;/p&#62;
+&#60;p&#62;How do we practice being selective and where do we draw the line ? are the other things that come to my mind right now.  &#60;/p&#62;
+&#60;p&#62;If you have thoughts or comments please do share. Would greatly appreciate. Cheers, Ramkumar
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

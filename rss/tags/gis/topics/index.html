@@ -1,0 +1,349 @@
+<?
+/*
+Plugin Name: bb Topic Icons
+Plugin URI: http://devt.caffeinatedbliss.com/bbpress/topic-icons
+Description: Adds configurable icons next to topics based on their status
+Author: Paul Hawke
+Author URI: http://paul.caffeinatedbliss.com/
+Version: 0.6
+*/
+
+/****************************************************************************
+ *
+ * Configure the following constants to fine-tune the CSS classes that are
+ * generated, the icon filenames that are used, and the text used in the
+ * legend (if you have one displayed).  Note: filenames are likely to be
+ * taken away in a future version and replaced with the concept of "icon sets"
+ * whose filenames are fixed, so dont get used to editing the filenames,
+ * as this will break in future versions.
+ *
+ ****************************************************************************/
+
+// css class for the unsorted list used in the legend display
+define( LEGEND_CLASS, 'topic_icon_legend' );
+
+// busy threshold - a topic with more posts than this is counted as "busy"
+// for purposes of picking an icon.
+define( BUSY_THRESHOLD, 15 );
+
+// width of the images, in pixels
+define( ICON_WIDTH, '20' );
+
+// height of the images, in pixels
+define( ICON_HEIGHT, '20' );
+
+// the URL base for where to find the default icon set.
+define( ICON_SET_URL_BASE, BB_PLUGIN_URL.'bb-topic-icons/icon-sets/' );
+
+/****************************************************************************
+ *
+ * Shouldnt be much need to edit anything beyond this point - configuration
+ * is all done via the constants (above) and through and admin area page in
+ * bbPress at runtime.
+ *
+ ****************************************************************************/
+
+require( 'bb-topic-icons-api.php' );
+require( 'bb-topic-icons-admin.php' );
+require( 'interface.status-interpreter.php' );
+require( 'interface.status-renderer.php' );
+require( 'class.default-status-interpreter.php' );
+require( 'class.default-status-renderer.php' );
+
+function topic_icons_legend() {
+	$icon_set_name = topic_icons_get_active_icon_set();
+	$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+	$statuses = get_active_status_interpreter()->getAllStatuses();
+	$renderer = get_active_status_renderer();
+	
+	echo '<ul id="'.LEGEND_CLASS.'">';
+	for ($i=0; $i < count($statuses); $i++) {
+		$image = $renderer->renderStatus($statuses[$i]);
+		$tooltip = $renderer->renderStatusTooltip($statuses[$i]);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (isset($image) && strlen($image) > 0 &&
+			isset($tooltip) && strlen($tooltip) > 0 && $exists) {
+			echo '<li><img src="'.$icon_set_url.'/'.$image.
+				'" width="'.ICON_WIDTH.'" height="'.ICON_HEIGHT.
+				'" align="absmiddle">&nbsp;'.$tooltip.'</li>';
+		}
+	}
+	echo '</ul>';
+}
+
+function topic_icons_css() {
+	echo "\n<style type=\"text/css\"><!--\n";
+	require( 'bb-topic-icons.css' );
+	echo "\n--></style>";
+}
+
+function topic_icons_label( $label ) {
+	global $topic;
+	
+	if (bb_is_front() || bb_is_forum() || bb_is_view() || bb_is_tag()) {		
+		$icon_set_name = topic_icons_get_active_icon_set();
+		$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+
+		$status = get_active_status_interpreter()->getStatus(bb_get_location(), $topic);
+		$renderer = get_active_status_renderer();
+		$image = $renderer->renderStatus($status);
+		$tooltip = $renderer->renderStatusTooltip($status);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (!$exists) {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), ICON_SET_URL_BASE.'/empty.png', ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		} else if (strlen($tooltip) > 0) {		
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"><span>%s</span></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $tooltip, $label);
+		} else {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		}
+	}
+	
+	return $label;
+}
+
+function topic_icons_init( ) {
+	remove_filter('bb_topic_labels', 'bb_closed_label', 10);
+	remove_filter('bb_topic_labels', 'bb_sticky_label', 20);
+
+	add_filter('bb_topic_labels', 'topic_icons_label', 11);
+
+	add_action('bb_head', 'topic_icons_css');
+
+	add_action('bb_admin_menu_generator', 'topic_icons_admin_page_add');
+	add_action('bb_admin-header.php', 'topic_icons_admin_page_process');
+	
+	topic_icons_register_status_interpreter('default', new DefaultStatusInterpreter(BUSY_THRESHOLD));
+	topic_icons_register_status_renderer('default', new DefaultStatusRenderer());
+}
+
+topic_icons_init();
+
+?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Tag: GIS - Recent Topics</title>
+		<link>http://digitalhumanities.org/answers/tags/gis</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Tag: GIS - Recent Topics</description>
+		<language>en-US</language>
+		<pubDate>Sun, 24 Mar 2019 17:08:22 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/tags/gis/topics" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>quinnanya on "What software are people using for GIS?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-software-are-people-using-for-gis#post-2250</link>
+			<pubDate>Thu, 06 Nov 2014 16:55:44 +0000</pubDate>
+			<dc:creator>quinnanya</dc:creator>
+			<guid isPermaLink="false">2250@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;We're looking at developing a set of workshops, resources, etc. for folks who are interested in using GIS as part of their humanities / social science research, but we're debating what software to use for it (ArcGIS or QGIS, though other suggestions are welcome). &#60;/p&#62;
+&#60;p&#62;ArcGIS is the industry standard, but it doesn't work on Macs, which means that probably a majority of the students would have to go through the hassle of setting up a virtual Windows desktop to even access it. That's making us take a close look at QGIS, but we don't want to train students in software that most people aren't using.&#60;/p&#62;
+&#60;p&#62;I know DHSI's GIS course is mostly based on ArcGIS -- what is everyone else using?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Miriam Posner on "Tools for making flow maps"</title>
+						<link>http://digitalhumanities.org/answers/topic/tools-for-making-flow-maps#post-2189</link>
+			<pubDate>Tue, 17 Jun 2014 21:31:56 +0000</pubDate>
+			<dc:creator>Miriam Posner</dc:creator>
+			<guid isPermaLink="false">2189@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I'm compiling a list of tools that can be used to build maps depicting movement — for example, migration, or the movement of objects from one point to another.&#60;/p&#62;
+&#60;p&#62;I have:&#60;br /&#62;
+&#60;a href=&#34;http://datamaps.github.io/&#34;&#62;D3 (specifically DataMaps)&#60;/a&#62;&#60;br /&#62;
+&#60;a href=&#34;http://ggplot2.org/&#34;&#62;ggplot2&#60;/a&#62;&#60;br /&#62;
+&#60;a href=&#34;https://developers.google.com/kml/documentation/time&#34;&#62;KML with time data&#60;/a&#62;&#60;br /&#62;
+&#60;a href=&#34;https://code.google.com/p/jflowmap/&#34;&#62;jFlowMap&#60;/a&#62;&#60;br /&#62;
+&#60;a href=&#34;http://www.viseyes.org/&#34;&#62;Visual Eyes&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;What am I missing? I'm particularly interested in tools with GUIs and tools that allow you to animate movement.&#60;/p&#62;
+&#60;p&#62;Thanks!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Shawn on "Getting Neatline Up and Running: Geoserver?"</title>
+						<link>http://digitalhumanities.org/answers/topic/getting-neatline-up-and-running-geoserver#post-1804</link>
+			<pubDate>Thu, 29 Nov 2012 19:08:11 +0000</pubDate>
+			<dc:creator>Shawn</dc:creator>
+			<guid isPermaLink="false">1804@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hi Folks,&#60;/p&#62;
+&#60;p&#62;I want to have neatline (neatline.org) up and running, using a variety of historical maps. Y'know, for kids.&#60;/p&#62;
+&#60;p&#62;So omeka is installed, check.&#60;br /&#62;
+Neatline is installed, check.&#60;br /&#62;
+Neatline maps is installed, check.&#60;br /&#62;
+Per this page: &#60;a href=&#34;http://neatline.org/plugins/neatline-maps/&#34; rel=&#34;nofollow&#34;&#62;http://neatline.org/plugins/neatline-maps/&#60;/a&#62; I need to have an instance of Geoserver running. I download it, and successfully get it running on my machine.&#60;/p&#62;
+&#60;p&#62;But surely that's a problem, right? Because when I add my server on localhost to the neatline maps server page, my server is always offline. So:&#60;/p&#62;
+&#60;p&#62;Do I need to have Geoserver on the same server as my omeka/neatline?&#60;/p&#62;
+&#60;p&#62;And if so, could somebody direct me to a for-idiots guide? My space is with Dreamhost (if that matters).&#60;/p&#62;
+&#60;p&#62;Thanks!&#60;br /&#62;
+Shawn
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>cutuchiqueno on "Resources/Contacts for Digital Humanity Projects or Digital Humanists in Africa?"</title>
+						<link>http://digitalhumanities.org/answers/topic/resourcescontacts-for-digital-humanity-projects-or-digital-humanists-in-africa#post-730</link>
+			<pubDate>Mon, 22 Nov 2010 10:15:42 +0000</pubDate>
+			<dc:creator>cutuchiqueno</dc:creator>
+			<guid isPermaLink="false">730@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;We plan a conference about Digital Humanities and differeant perspectives of the field. The aim is to show how broad the contexts of work and problems in the Digital Humanities are. Contexts are not only defined in a thematic way but also from a social approach. Because of this we want to prepare a slot for Digital Humanities or Digital Humanities like work in Africa. It would be fantastic if the one of you having some contacts maybe or knowing some online resources to prepare the topic could post it here. Thank you.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Rosvita TEXTWinder on "Best way to map &#38; track debates through several little 1920s magazines?"</title>
+						<link>http://digitalhumanities.org/answers/topic/best-way-to-map-track-debates-through-several-little-1920s-magazines#post-1610</link>
+			<pubDate>Wed, 18 Apr 2012 15:28:25 +0000</pubDate>
+			<dc:creator>Rosvita TEXTWinder</dc:creator>
+			<guid isPermaLink="false">1610@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I'd like to map and track ideas that were debated in several little magazines of the 1920s to present a visualisation of where those &#34;conversations&#34; took place and how they changed with each contribution. It would be great to learn how others would approach this. Thanks!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>hwlong on "Best practice for representing imprecise historical geospatial data on a map?"</title>
+						<link>http://digitalhumanities.org/answers/topic/best-practice-for-representing-imprecise-historical-geospatial-data-on-a-map#post-1588</link>
+			<pubDate>Mon, 09 Apr 2012 17:20:07 +0000</pubDate>
+			<dc:creator>hwlong</dc:creator>
+			<guid isPermaLink="false">1588@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Our library is undertaking a project to map historical data regarding 18th and 19th century British and American printers and publishers. One of the problems that we have encountered is the different granularity of location data. For example, one publisher may list a street number, street name, and city whereas another publisher may only mention a street name or even only the city. In such cases, we are wondering the best way to georeference the location and present this vague data. Does the spatial humanities community have rules or conventions for dealing with these cases?  Also, what are the most effective ways for visualizing “vague” vs “precise” geospatial data on the same map? Any suggestions or resources that you can offer would be greatly appreciated!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Stéfan Sinclair on "Bibliographies with Geolocation Metadata"</title>
+						<link>http://digitalhumanities.org/answers/topic/bibliographies-with-geolocation-metadata#post-1410</link>
+			<pubDate>Wed, 12 Oct 2011 13:41:08 +0000</pubDate>
+			<dc:creator>Stéfan Sinclair</dc:creator>
+			<guid isPermaLink="false">1410@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Can anyone suggest good sources for &#60;strong&#62;bulk&#60;/strong&#62; bibliographic records with geolocation metadata? I'm mostly interested in literary and historical texts, though other collections might serve as good examples. Typical publication location as words would be a fine start, but ideally there would be location of writing (where possible) and latitude/longitude values.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>mwiniski on "Crowdsourcing Katrina Commemorations"</title>
+						<link>http://digitalhumanities.org/answers/topic/crowdsourcing-katrina-commemorations#post-1345</link>
+			<pubDate>Fri, 19 Aug 2011 16:45:55 +0000</pubDate>
+			<dc:creator>mwiniski</dc:creator>
+			<guid isPermaLink="false">1345@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hi,&#60;/p&#62;
+&#60;p&#62;I wanted to make everyone with a gulf coast connection aware of a project we're working on to map hurricane Katrina commemorations.  Commemorations can range from the official (the Katrina Memorial at the Charity Hospital Cemetery) to the personal (a tattoo or symbol in the home).  We hope to explore together, rather than limit, the concept of commemoration. We have put a great deal of time and energy into finding and verifying the location of many commemorative sites, but the record is truly incomplete without additional community contribution. If you'd like to contribute to the archive (or know anyone who might be interested), please visit the website or share the links below. You can also contribute through Twitter (#katrinamem), or email (katrinamemorials@gmail.com).  Thanks!&#60;/p&#62;
+&#60;p&#62;&#60;a href=&#34;http://katrinamem.org/&#34; rel=&#34;nofollow&#34;&#62;http://katrinamem.org/&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;&#60;a href=&#34;http://katrinamem.org/page/index/1&#34; rel=&#34;nofollow&#34;&#62;http://katrinamem.org/page/index/1&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;Mike Winiski&#60;br /&#62;
+Furman University
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Scott on "xml standards for encoding geographic information from a historical text?"</title>
+						<link>http://digitalhumanities.org/answers/topic/xml-standards-for-encoding-geographic-information-from-a-historical-text#post-1156</link>
+			<pubDate>Tue, 03 May 2011 18:05:59 +0000</pubDate>
+			<dc:creator>Scott</dc:creator>
+			<guid isPermaLink="false">1156@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I want to create a set of maps to accompany an ancient Chinese historical text (ca. 100 BC). I want to be able to encode location (with some ambiguity), associated people and their movements, administration, and time. I know xml, so I'd much prefer to use an xml language. So I want to ask, what xml standards are available? And what are their advantages and disadvantages? I would also like to know about other historical mapping projects that use xml languages.&#60;br /&#62;
+Thanks!&#60;br /&#62;
+Scott
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>cnast on "What&#039;s the fastest way to map a list of addresses?"</title>
+						<link>http://digitalhumanities.org/answers/topic/whats-the-fastest-way-to-map-a-list-of-addresses#post-998</link>
+			<pubDate>Sat, 19 Feb 2011 17:42:44 +0000</pubDate>
+			<dc:creator>cnast</dc:creator>
+			<guid isPermaLink="false">998@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Via @&#60;a href='http://digitalhumanities.org/answers/profile/janaremy'&#62;janaremy&#60;/a&#62; I saw this post about closing Borders bookstores that lists alternative independent bookstores by state and includes street addresses and website links. What would be the quickest/easiest way to turn the list into a google map? Is this an appropriate use of Google Fusion Tables maybe? &#60;/p&#62;
+&#60;p&#62;&#60;a href=&#34;http://www.edrants.com/list-of-independent-alternatives-to-closed-borders-bookstores/&#34; rel=&#34;nofollow&#34;&#62;http://www.edrants.com/list-of-independent-alternatives-to-closed-borders-bookstores/&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;A snippet from the post:&#60;/p&#62;
+&#60;p&#62;Alaska&#60;/p&#62;
+&#60;p&#62;Borders Bookstore #88&#60;br /&#62;
+1100 E. Diamond Blvd., Anchorage, AK 99515&#60;br /&#62;
+Alternatives:&#60;br /&#62;
+University of Alaska Bookstore, 2905 Providence Drive, Anchorage, AK 99508 (5.7 miles)&#60;br /&#62;
+Title Wave Books, 1360 West Northern Lights, Anchorage, AK 99503 (5.8 miles)&#60;/p&#62;
+&#60;p&#62;Arizona&#60;/p&#62;
+&#60;p&#62;Borders Bookstore #596&#60;br /&#62;
+10100 W. McDowell Road, Avondale, AZ 85323&#60;br /&#62;
+Alternatives:&#60;br /&#62;
+Thrifty Joe’s, 6020 W Bell Road, #E104, Glendale, AZ 85308 (12.0 miles)&#60;br /&#62;
+Bookmans Phoenix, 8034 N. 19th Ave., Phoenix, AZ 85021 (12.1 miles)&#60;br /&#62;
+Bent Cover Books, 12428 N. 28th Drive, Phoenix, AZ 85029 (12.6 miles)&#60;/p&#62;
+&#60;p&#62;Borders Bookstore #282&#60;br /&#62;
+870 N. 54th Street, Chandler, AZ 85226&#60;br /&#62;
+Alternatives:&#60;br /&#62;
+Changing Hands Bookstore, 6428 South McClintock Drive, Tempe, AZ 85283 (6.3 miles)&#60;br /&#62;
+Ecobooks, 227 E Baseline Road, Suite #J-5, Tempe, AZ 85283 (7.2 miles)&#60;/p&#62;
+&#60;p&#62;Borders Bookstore #69&#60;br /&#62;
+1361 S. Alma School Road, Mesa, AZ 85210&#60;br /&#62;
+Alternatives:&#60;br /&#62;
+Bookmans Mesa, 1056 S. County Club Dr., Mesa, AZ 85210 (0.0 miles)&#60;br /&#62;
+Those Were the Days, 628 N. Center Street, Mesa, AZ 85201 (2.9 miles)
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Eric Johnson on "Reading recommendations for a GIS newbie?"</title>
+						<link>http://digitalhumanities.org/answers/topic/reading-recommendations-for-a-gis-newbie#post-851</link>
+			<pubDate>Wed, 22 Dec 2010 18:53:12 +0000</pubDate>
+			<dc:creator>Eric Johnson</dc:creator>
+			<guid isPermaLink="false">851@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I had a fantastic introduction to GIS at Friday's BootCamp at &#60;a href=&#34;http://virginia2010.thatcamp.org/&#34;&#62;THATCamp Virginia&#60;/a&#62;.  Are there any books you would recommend to help orient someone very enthusiastic about but new to GIS?&#60;/p&#62;
+&#60;p&#62;I just snagged Anne Knowles' &#60;em&#62;Placing History : How Maps, Spatial Data, and GIS are Changing Historical Scholarship&#60;/em&#62; out of the library here, but that's focused of course on a specific kind of application of GIS.  &#60;/p&#62;
+&#60;p&#62;Any and all advice is definitely very welcome!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>dot.porter on "Open-source historical GIS tools"</title>
+						<link>http://digitalhumanities.org/answers/topic/open-source-historical-gis-tools#post-162</link>
+			<pubDate>Fri, 24 Sep 2010 15:20:47 +0000</pubDate>
+			<dc:creator>dot.porter</dc:creator>
+			<guid isPermaLink="false">162@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Do you know of any existing open-source tools that can handle the layered visualization of historic data on maps and the visualization of that data over time? Like, extract data out of a relational database and layered to create different visualizations. Or something like this?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>TimC on "How can I plot multiple sea journeys onto a digital map?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-can-i-plot-multiple-sea-journeys-onto-a-digital-map#post-601</link>
+			<pubDate>Wed, 27 Oct 2010 09:07:33 +0000</pubDate>
+			<dc:creator>TimC</dc:creator>
+			<guid isPermaLink="false">601@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hello there,&#60;/p&#62;
+&#60;p&#62;As part of a proposed project I have in mind to create a digital map, showing multiple sea journeys - i.e. information upon the individuals involved in that journey, the dates it began and ended, the name of the ship, and to plot it route on the map. Most journeys begin in eastern Australia, but the destinations are global.&#60;/p&#62;
+&#60;p&#62;I've had a brief play around with Google Maps which might suit the purpose, but doesn't seem ideal for working with sea journeys or the amount of data I plan to input for each voyage. &#60;/p&#62;
+&#60;p&#62;Is anyone aware of any software which might be a better fit?&#60;/p&#62;
+&#60;p&#62;Thanks for your help, and apologies for my ignorance.&#60;/p&#62;
+&#60;p&#62;Tim
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Jeremy Boggs on "Recommentations for open-source GIS software?"</title>
+						<link>http://digitalhumanities.org/answers/topic/recommentations-for-open-source-gis-software#post-75</link>
+			<pubDate>Fri, 17 Sep 2010 19:48:57 +0000</pubDate>
+			<dc:creator>Jeremy Boggs</dc:creator>
+			<guid isPermaLink="false">75@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I've been using ArcGIS for a project, but am interesting in running some open-source alternative. I use a Mac, but am interested in recommendations for open-source GIS software for any platform? Anyone have suggestions?
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

@@ -1,0 +1,409 @@
+<?
+/*
+Plugin Name: bb Topic Icons
+Plugin URI: http://devt.caffeinatedbliss.com/bbpress/topic-icons
+Description: Adds configurable icons next to topics based on their status
+Author: Paul Hawke
+Author URI: http://paul.caffeinatedbliss.com/
+Version: 0.6
+*/
+
+/****************************************************************************
+ *
+ * Configure the following constants to fine-tune the CSS classes that are
+ * generated, the icon filenames that are used, and the text used in the
+ * legend (if you have one displayed).  Note: filenames are likely to be
+ * taken away in a future version and replaced with the concept of "icon sets"
+ * whose filenames are fixed, so dont get used to editing the filenames,
+ * as this will break in future versions.
+ *
+ ****************************************************************************/
+
+// css class for the unsorted list used in the legend display
+define( LEGEND_CLASS, 'topic_icon_legend' );
+
+// busy threshold - a topic with more posts than this is counted as "busy"
+// for purposes of picking an icon.
+define( BUSY_THRESHOLD, 15 );
+
+// width of the images, in pixels
+define( ICON_WIDTH, '20' );
+
+// height of the images, in pixels
+define( ICON_HEIGHT, '20' );
+
+// the URL base for where to find the default icon set.
+define( ICON_SET_URL_BASE, BB_PLUGIN_URL.'bb-topic-icons/icon-sets/' );
+
+/****************************************************************************
+ *
+ * Shouldnt be much need to edit anything beyond this point - configuration
+ * is all done via the constants (above) and through and admin area page in
+ * bbPress at runtime.
+ *
+ ****************************************************************************/
+
+require( 'bb-topic-icons-api.php' );
+require( 'bb-topic-icons-admin.php' );
+require( 'interface.status-interpreter.php' );
+require( 'interface.status-renderer.php' );
+require( 'class.default-status-interpreter.php' );
+require( 'class.default-status-renderer.php' );
+
+function topic_icons_legend() {
+	$icon_set_name = topic_icons_get_active_icon_set();
+	$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+	$statuses = get_active_status_interpreter()->getAllStatuses();
+	$renderer = get_active_status_renderer();
+	
+	echo '<ul id="'.LEGEND_CLASS.'">';
+	for ($i=0; $i < count($statuses); $i++) {
+		$image = $renderer->renderStatus($statuses[$i]);
+		$tooltip = $renderer->renderStatusTooltip($statuses[$i]);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (isset($image) && strlen($image) > 0 &&
+			isset($tooltip) && strlen($tooltip) > 0 && $exists) {
+			echo '<li><img src="'.$icon_set_url.'/'.$image.
+				'" width="'.ICON_WIDTH.'" height="'.ICON_HEIGHT.
+				'" align="absmiddle">&nbsp;'.$tooltip.'</li>';
+		}
+	}
+	echo '</ul>';
+}
+
+function topic_icons_css() {
+	echo "\n<style type=\"text/css\"><!--\n";
+	require( 'bb-topic-icons.css' );
+	echo "\n--></style>";
+}
+
+function topic_icons_label( $label ) {
+	global $topic;
+	
+	if (bb_is_front() || bb_is_forum() || bb_is_view() || bb_is_tag()) {		
+		$icon_set_name = topic_icons_get_active_icon_set();
+		$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+
+		$status = get_active_status_interpreter()->getStatus(bb_get_location(), $topic);
+		$renderer = get_active_status_renderer();
+		$image = $renderer->renderStatus($status);
+		$tooltip = $renderer->renderStatusTooltip($status);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (!$exists) {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), ICON_SET_URL_BASE.'/empty.png', ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		} else if (strlen($tooltip) > 0) {		
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"><span>%s</span></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $tooltip, $label);
+		} else {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		}
+	}
+	
+	return $label;
+}
+
+function topic_icons_init( ) {
+	remove_filter('bb_topic_labels', 'bb_closed_label', 10);
+	remove_filter('bb_topic_labels', 'bb_sticky_label', 20);
+
+	add_filter('bb_topic_labels', 'topic_icons_label', 11);
+
+	add_action('bb_head', 'topic_icons_css');
+
+	add_action('bb_admin_menu_generator', 'topic_icons_admin_page_add');
+	add_action('bb_admin-header.php', 'topic_icons_admin_page_process');
+	
+	topic_icons_register_status_interpreter('default', new DefaultStatusInterpreter(BUSY_THRESHOLD));
+	topic_icons_register_status_renderer('default', new DefaultStatusRenderer());
+}
+
+topic_icons_init();
+
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=8" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+	<title>How do we introduce undergraduates to the digital humanities? &laquo; Digital Humanities Questions &amp; Answers</title>
+	<link rel="stylesheet" href="http://digitalhumanities.org/answers/bb-templates/dhqa/style.css" type="text/css" />
+	<link rel="stylesheet" href="http://digitalhumanities.org/answers/bb-templates/dhqa/blueprint/screen.css" type="text/css" media="screen" title="blueprint-print" charset="utf-8"/>
+	<link rel="stylesheet" href="http://digitalhumanities.org/answers/bb-templates/dhqa/blueprint/print.css" type="text/css" media="print" title="blueprint-print" charset="utf-8"/>
+	<!--[if lt IE 8]>
+	  <link rel="stylesheet" href="http://digitalhumanities.org/answers/bb-templates/dhqa/blueprint/ie.css" type="text/css" media="screen, projection">
+	<![endif]-->
+	<!--[if IE]>
+		<style type="text/css" media="screen">
+			.header-button, form.login input, input[type="submit"], #header div.search, form.login input {
+				border-radius:4px;
+				behavior: url(border-radius.htc);
+			}
+		</style>
+	<![endif]-->
+	<!--[if IE 7]>
+		<style type="text/css" media="screen">
+			#header .search .search-form input.submit {
+				padding: 0;
+				margin: 0;
+				height: 29px;
+				width: 70px;
+			}
+		</style>
+	<![endif]-->
+
+<link rel="alternate" type="application/rss+xml" title="Digital Humanities Questions &amp; Answers &raquo; Topic: How do we introduce undergraduates to the digital humanities?" href="http://digitalhumanities.org/answers/rss/topic/how-do-we-introduce-undergraduates-to-the-digital-humanities" />
+<meta name="generator" content="bbPress 1.0.2" />
+
+<link rel="stylesheet" href="http://digitalhumanities.org/answers/my-plugins/bb-syntax/bb-syntax.css" type="text/css" media="screen" />
+<style type="text/css">
+	.best_answer {text-decoration:none; border:0; white-space:nowrap; display:block; margin:1em 0;		
+		border:0; text-decoration:none; width:20px; height:16px;
+		background: url(http://digitalhumanities.org/answers/my-plugins/best-answer/best-answer.png) no-repeat scroll 0px 1px transparent;} 
+	span.best_answer {margin: 0px; float: left;}
+	#thread .threadauthor .best_answer {padding-left: 20px;}
+	a.best_answer, a.best_answer:link {color:#999;}
+	a.best_answer:hover {color:green;}	
+	a.best_answer_selected {color: green;}
+	a.best_answer_selected:hover {color:red;}		
+	#thread li.best_answer_background { background-color: transparent; }
+	#thread li.best_answer_background .threadpost { background-color: #afa; }
+	#thread li.alt.best_answer_background .threadpost { background-color: #afa; }
+	.best_answer_meta { background: url(http://digitalhumanities.org/answers/my-plugins/best-answer/best-answer.png) no-repeat scroll 5px 40% transparent; padding-left: 26px; }
+</style>
+
+<!-- Start Of Code Generated By Social It Plugin By www.gaut.am -->
+<link rel='stylesheet' id='social-it-css'  href='http://digitalhumanities.org/answers/my-plugins/social-it/css/style.css?ver=1.5' type='text/css' media='all' />
+<script type='text/javascript' src='http://digitalhumanities.org/answers/bb-includes/js/jquery/jquery.js?ver=1.2.6'></script>
+<script type='text/javascript' src='http://digitalhumanities.org/answers/my-plugins/social-it/js/social-it-public.js?ver=1.5'></script>
+<!-- End Of Code Generated By Social It Plugin By www.gaut.am -->
+
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-18811436-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+</head>
+<body id="topic-page">
+	<div class="container prepend-top append-bottom">
+		<div id="util-login">
+		<a href="http://digitalhumanities.org/answers/bb-login.php">Log in</a> | <a href="http://digitalhumanities.org/answers/register.php">Register</a>		</div>
+		<div id="header" class="prepend-6 span-18">
+			<a id="ach-logo" href="http://www.ach.org">ACH</a>
+			<h1><a href="http://digitalhumanities.org/answers/">Digital Humanities Questions &amp; Answers</a></h1>
+						<div class="login-container span-12">
+				<form class="login" method="post" action="http://digitalhumanities.org/answers/bb-login.php">
+		<div class="header-button ask-link"><a href="http://digitalhumanities.org/answers/bb-login.php">Ask a Question</a></div></form>			</div>
+
+			<div class="search span-6 last">
+<form class="search-form" role="search" action="http://digitalhumanities.org/answers/search.php" method="get">
+	<p>
+		<label class="hidden" for="q">Search:</label>
+		<input type="text" size="10" maxlength="100" name="q" id="q" />
+		<input class="submit" type="submit" value="Search &raquo;" />
+	</p>
+</form>
+			</div>
+		</div>
+		<div id="main" class="span-24">
+
+<div class="bbcrumb"><a href="http://digitalhumanities.org/answers/">Digital Humanities Questions &amp; Answers</a> &raquo; <a href="http://digitalhumanities.org/answers/forum/pedagogy">DH in the Classroom</a></div>
+<div class="infobox" role="main">
+
+<div id="topic-info">
+<span id="topic_labels"></span>
+<h2 class="topictitle">How do we introduce undergraduates to the digital humanities?</h2>
+<span id="topic_posts">(20 posts)</span>
+<span id="topic_voices">(18 voices)</span>
+
+<ul class="topicmeta">
+	<li>Asked 8 years ago by Jentery Sayers</li>
+	<li><a href="http://digitalhumanities.org/answers/topic/how-do-we-introduce-undergraduates-to-the-digital-humanities/page/2#post-1594">Latest answer</a> from Paige Morgan</li>
+</ul>
+</div>
+
+<div id="topic-tags">
+<p>Tags:</p>
+
+
+<ul id="tags-list" class="tags-list list:tag">
+	<li id="tag-169_83"><a href="http://digitalhumanities.org/answers/tags/assignments" rel="tag">assignments</a> </li>
+	<li id="tag-40_32" class="alt"><a href="http://digitalhumanities.org/answers/tags/classroom" rel="tag">classroom</a> </li>
+	<li id="tag-751_1032"><a href="http://digitalhumanities.org/answers/tags/coding" rel="tag">coding</a> </li>
+	<li id="tag-24_29" class="alt"><a href="http://digitalhumanities.org/answers/tags/courses" rel="tag">courses</a> </li>
+	<li id="tag-393_1032"><a href="http://digitalhumanities.org/answers/tags/curriculum" rel="tag">curriculum</a> </li>
+	<li id="tag-1044_4" class="alt"><a href="http://digitalhumanities.org/answers/tags/intro" rel="tag">intro</a> </li>
+	<li id="tag-1045_4"><a href="http://digitalhumanities.org/answers/tags/newbies" rel="tag">newbies</a> </li>
+	<li id="tag-23_29" class="alt"><a href="http://digitalhumanities.org/answers/tags/pedagogy" rel="tag">pedagogy</a> </li>
+	<li id="tag-133_93"><a href="http://digitalhumanities.org/answers/tags/research" rel="tag">research</a> </li>
+	<li id="tag-53_78" class="alt"><a href="http://digitalhumanities.org/answers/tags/survey" rel="tag">survey</a> </li>
+	<li id="tag-171_83"><a href="http://digitalhumanities.org/answers/tags/syllabus" rel="tag">syllabus</a> </li>
+	<li id="tag-41_32" class="alt"><a href="http://digitalhumanities.org/answers/tags/tango" rel="tag">tango</a> </li>
+	<li id="tag-129_78"><a href="http://digitalhumanities.org/answers/tags/theory" rel="tag">theory</a> </li>
+	<li id="tag-165_83" class="alt"><a href="http://digitalhumanities.org/answers/tags/timelines" rel="tag">timelines</a> </li>
+	<li id="tag-132_93"><a href="http://digitalhumanities.org/answers/tags/undergraduate" rel="tag">undergraduate</a> </li>
+	<li id="tag-122_83" class="alt"><a href="http://digitalhumanities.org/answers/tags/zotero" rel="tag">zotero</a> </li>
+</ul>
+
+
+</div>
+
+<div style="clear:both;"></div>
+</div>
+<div class="nav"><a class="prev page-numbers" href="/answers/topic/how-do-we-introduce-undergraduates-to-the-digital-humanities" title="Previous page">&laquo; Previous</a><a class="page-numbers" href="/answers/topic/how-do-we-introduce-undergraduates-to-the-digital-humanities" title="Page 1">1</a><span class="page-numbers current" title="Page 2">2</span></div><div id="ajax-response"></div>
+<ol id="thread" class="list:post">
+
+	<li id="post-1563">
+		<div id="position-16">
+			<div class="threadauthor">
+				<a href="http://www.nitle.org/help/digital_humanities.php"><img alt="" src="http://www.gravatar.com/avatar/74e9b45c9eb5ab356b75cd9869a44d24?s=48&amp;d=identicon&amp;r=pg" class="photo avatar avatar-48" style="height:48px; width:48px;" /></a>				<p>
+					<strong><a href="http://www.nitle.org/help/digital_humanities.php">frostdavis</a></strong><br />
+					<small><a href="http://digitalhumanities.org/answers/profile/frostdavis">Member</a></small>
+				</p>
+				<div class="author-badges"><span class='badge 3'><!-- fewer than 5 posts --></span><span class='badge 0'><!-- fewer than 3 answers --></span></div>
+			</div>
+			<div class="threadpost">
+				<div class="post"><p>Thanks for all the great answers!</p>
+<p>To update this forum, two of the respondents (Brian Croxall and Jeff McClurken) along with Ryan Cordell spoke about "Teaching DH 101: Introduction to the Digital Humanities" for NITLE's Digital Scholarship Seminars in December.  You can access the recording from the event website:<br />
+<a href="http://www.nitle.org/live/events/129-teaching-dh-101-introduction-to-the-digital" rel="nofollow">http://www.nitle.org/live/events/129-teaching-dh-101-introduction-to-the-digital</a></p>
+<p>This seminar prompted a couple of posts on the NITLE blog because the presenters didn't really address coding for undergrads.  Here are a couple of posts that adress that issue:<br />
+Can Humanities Undergrads Learn to Code? by undergrads who learned to code in a humanities course at Pitt <a href="http://blogs.nitle.org/2012/01/31/can-humanities-undergrads-learn-to-code/" rel="nofollow">http://blogs.nitle.org/2012/01/31/can-humanities-undergrads-learn-to-code/</a> (The answer is yes!!)<br />
+More Coding for Humanities Undergrads by Kathryn Tomasek, Wheaton College (again yes!!) <a href="http://blogs.nitle.org/2012/02/02/more-coding-for-humanities-undergrads/" rel="nofollow">http://blogs.nitle.org/2012/02/02/more-coding-for-humanities-undergrads/</a>
+</p></div>
+				<div class="poststuff">Posted 6 years ago <a class="post-perma-link" href="#post-1563">Permalink</a> </div>
+			</div>
+		</div>
+	</li>
+	<li id="post-1583" class="alt">
+		<div id="position-17">
+			<div class="threadauthor">
+				<img alt="" src="http://www.gravatar.com/avatar/46326e8221268359e97717a598608d39?s=48&amp;d=identicon&amp;r=pg" class="photo avatar avatar-48" style="height:48px; width:48px;" />				<p>
+					<strong>Ethan Gruber</strong><br />
+					<small><a href="http://digitalhumanities.org/answers/profile/ewg4x">Member</a></small>
+				</p>
+				<div class="author-badges"><span title='20+ Posts' class='badge silver-poster 38'><!-- 20-49 posts --></span><span class='badge 2'><!-- fewer than 3 answers --></span></div>
+			</div>
+			<div class="threadpost">
+				<div class="post"><p>Is learning to code even important in Digital Humanities?  I argue that it's not.  There are particular technologies that are relevant to various disciplines in the humanities, and web development isn't necessarily one of them (since coding always refers to web development in DH contexts).  Digital Humanities, capital D capital H, is far too focused on the textual disciplines and hardly inclusive of the humanities as a whole.  Digital Humanists ought to reconsider their notion of the Digital Humanities.  If you wonder why computer scientists are reluctant to get involved in Capital D Capital H, it's for this reason.  There are actually a great many computer scientists involved elsewhere in the humanities.
+</p></div>
+				<div class="poststuff">Posted 6 years ago <a class="post-perma-link" href="#post-1583">Permalink</a> </div>
+			</div>
+		</div>
+	</li>
+	<li id="post-1584">
+		<div id="position-18">
+			<div class="threadauthor">
+				<a href="http://hackingthehumanities.org"><img alt="" src="http://www.gravatar.com/avatar/5eae155257da1e1fea52ff200be56161?s=48&amp;d=identicon&amp;r=pg" class="photo avatar avatar-48" style="height:48px; width:48px;" /></a>				<p>
+					<strong><a href="http://hackingthehumanities.org">Patrick Murray-John</a></strong><br />
+					<small><a href="http://digitalhumanities.org/answers/profile/patrickmj"></a></small>
+				</p>
+				<div class="author-badges"><span title='50+ Posts' class='badge gold-poster 124'><!-- 50+ posts! --></span><span title='3+ Best Answers' class='badge bronze-answerer 3'><!-- 3-9 answers --></span></div>
+			</div>
+			<div class="threadpost">
+				<div class="post"><p><em>Replying to @Ethan Gruber's <a href="http://digitalhumanities.org/answers/topic/how-do-we-introduce-undergraduates-to-the-digital-humanities/page/2#post-1583">post</a>:</em></p>
+<p>I have to say, I disagree with most, if not all, of this. There is plenty of coding work in DH that is not web-related. Text-mining and distant reading are examples, as is work encoding texts in TEI. I think I remember some very awesome visualizations of ancient architecture, too, that I would call non-web DH coding? :)</p>
+<p>The thing that I disagree with most is the idea that we (counting myself as a digital humanist) need to rethink our notion of the Digital Humanities. Like the #transformDH hashtag, it is predicated on a set idea of DH that I do not think exists. It seems like less than a year ago that there was still very active discussion about the role of code in DH, what skills could/should be part of it, and how it all fits together. No one, I think, ever came up with a notion of DH that had widespread consensus as being a good definition. Now, it seems, we are chasing after responses to a non-existent notion. </p>
+<p>That said, I do see the existence of two branches of DH, with different histories. In broad strokes, one is the "Humanities Computing" branch, on is indeed the more web-oriented branch (which shares more in common with ed tech). This has been recounted many times before, sometimes in this very site.</p>
+<p>I'd ask that we all recognize the youth of DH, and this it is -- whatever it is! -- still developing through informal channels like THATCamps and blogs and twitter conversation, and through the institutional decisions made by administrators and through cluster hires. In short, I think it is far too early to say that DH is far too focused on textual disciplines. It might be at present, but the ultimate constitution of DH is still very much to be determined. Awesome visualization and interpretation of data -- textual, architectual, visual, geographical, temporal, archaeological, and more -- through digital/code-based means can and should be part of DH. I consider it to be implicit that it _is_, but maybe hasn't had as much attention as other aspects. Seems parallel to the Theory and DH questions that way?
+</p></div>
+				<div class="poststuff">Posted 6 years ago <a class="post-perma-link" href="#post-1584">Permalink</a> </div>
+			</div>
+		</div>
+	</li>
+	<li id="post-1593" class="alt">
+		<div id="position-19">
+			<div class="threadauthor">
+				<img alt="" src="http://www.gravatar.com/avatar/46326e8221268359e97717a598608d39?s=48&amp;d=identicon&amp;r=pg" class="photo avatar avatar-48" style="height:48px; width:48px;" />				<p>
+					<strong>Ethan Gruber</strong><br />
+					<small><a href="http://digitalhumanities.org/answers/profile/ewg4x">Member</a></small>
+				</p>
+				<div class="author-badges"><span title='20+ Posts' class='badge silver-poster 38'><!-- 20-49 posts --></span><span class='badge 2'><!-- fewer than 3 answers --></span></div>
+			</div>
+			<div class="threadpost">
+				<div class="post"><p>I agree with you that interpretations of textual, visual, geographical, archaeological, etc. data within the humanities are digital humanities.  Almost everything I have done professionally or academically over the last six years has been DH, from GIS to 3D visualization to cultural heritage informatics.  I'm not going split hairs as to whether TEI and data mining are web-based or not, but I find myself increasingly frustrated by conversations about "How do we teach/introduce students to DH," and all of the answers relate to some form of web development: designing a database schema, learning HTML/CSS.  These are things that are of limited usefulness in many humanities disciplines.  I understand that people will suggest skills based on their own experience, but DH is losing out a lot of experienced technologists and scholars from non-textual fields, and as I have observed DH becoming more and more narrowly focused, voices in the textual humanities fields have greater and greater influence (control, even) over what is or is not "Digital Humanities."  That is why I suggest that people who call themselves digital humanists ought to reconsider their notion of DH.  I think the field is much bigger than they realize, and thus needs to be more inclusive.
+</p></div>
+				<div class="poststuff">Posted 6 years ago <a class="post-perma-link" href="#post-1593">Permalink</a> </div>
+			</div>
+		</div>
+	</li>
+	<li id="post-1594">
+		<div id="position-20">
+			<div class="threadauthor">
+				<a href="http://www.paigemorgan.net"><img alt="" src="http://www.gravatar.com/avatar/450cb1223ca84b5e339e54da66f39449?s=48&amp;d=identicon&amp;r=pg" class="photo avatar avatar-48" style="height:48px; width:48px;" /></a>				<p>
+					<strong><a href="http://www.paigemorgan.net">Paige Morgan</a></strong><br />
+					<small><a href="http://digitalhumanities.org/answers/profile/paigecmuwedu">Member</a></small>
+				</p>
+				<div class="author-badges"><span title='5+ Posts' class='badge bronze-poster 5'><!-- 10-19 posts --></span><span class='badge 0'><!-- fewer than 3 answers --></span></div>
+			</div>
+			<div class="threadpost">
+				<div class="post"><p><em>Replying to @Ethan Gruber's <a href="http://digitalhumanities.org/answers/topic/how-do-we-introduce-undergraduates-to-the-digital-humanities/page/2#post-1593">post</a>:</em></p>
+<p>I hear you on this; and I don't think it has to be. It's as much teaching undergraduates* how to use the already effective tools that are out there -- how 18th century English Lit studies are changed by the accessibility of ECCO, EEBO, and the Burney Collection,** for example.</p>
+<p>*And even graduate students, staff, faculty, in some cases.<br />
+**Not that I'm blithely assuming that all colleges and unis have access to these tools.
+</p></div>
+				<div class="poststuff">Posted 6 years ago <a class="post-perma-link" href="#post-1594">Permalink</a> </div>
+			</div>
+		</div>
+	</li>
+
+</ol>
+<div class="clearit"><br style=" clear: both;" /></div>
+<p class="rss-link"><a href="http://digitalhumanities.org/answers/rss/topic/how-do-we-introduce-undergraduates-to-the-digital-humanities" class="rss-link"><abbr title="Really Simple Syndication">RSS</abbr> feed for this topic</a></p>
+<div class="nav"><a class="prev page-numbers" href="/answers/topic/how-do-we-introduce-undergraduates-to-the-digital-humanities" title="Previous page">&laquo; Previous</a><a class="page-numbers" href="/answers/topic/how-do-we-introduce-undergraduates-to-the-digital-humanities" title="Page 1">1</a><span class="page-numbers current" title="Page 2">2</span></div><h2 class="post-form">Reply</h2>
+<p>You must <a href="http://digitalhumanities.org/answers/bb-login.php">log in</a> to post.</p>		</div>
+			<div id="footer" role="contentinfo" class="span-24">
+				<div id="lang-switch">
+					<span class="lang-label">Language</span>
+					<form id="bb_language_switcher" style="display:inline-block;"><select  style="width:150px;" name="bb_language_switcher" onchange="location.href='/answers/topic/how-do-we-introduce-undergraduates-to-the-digital-humanities/page/2?bblang=' + this.options[this.selectedIndex].value;">
+<option value=''>Select...</option>	<option value="bg_BG">&nbsp;Bulgarian (BG) </option>
+	<option value="continents-cities-sr_RS">&nbsp;Corsican</option>
+	<option value="da_DK">&nbsp;Danish (DK) </option>
+	<option style='background:#ECE9D8;color:#000;font-weight:bold;' value=" ">&nbsp;English</option>
+	<option value="et_EE">&nbsp;Estonian (EE) </option>
+	<option value="fr_FR">&nbsp;French (FR) </option>
+	<option value="de">&nbsp;German</option>
+	<option value="he_IL">&nbsp;Hebrew (IL) </option>
+	<option value="hu_HU">&nbsp;Hungarian (HU) </option>
+	<option value="id_ID">&nbsp;Indonesian (ID) </option>
+	<option value="it_IT">&nbsp;Italian (IT) </option>
+	<option value="ja">&nbsp;Japanese</option>
+	<option value="pl_PL">&nbsp;Polish (PL) </option>
+	<option value="pt_BR">&nbsp;Portuguese (BR) </option>
+	<option value="pt_PT">&nbsp;Portuguese (PT) </option>
+	<option value="ro_RO">&nbsp;Romanian (RO) </option>
+	<option value="ru_RU">&nbsp;Russian (RU) </option>
+	<option value="sr_RS">&nbsp;Serbian (RS) </option>
+	<option value="sk">&nbsp;Slovak</option>
+	<option value="sk_SK">&nbsp;Slovak (SK) </option>
+	<option value="es_ES">&nbsp;Spanish (ES) </option>
+	<option value="sv_SE">&nbsp;Swedish (SE) </option>
+	<option value="th">&nbsp;Thai</option>
+	<option value="ug_CN">&nbsp;Uyghur (CN) </option>
+	<option value="uz_UZ">&nbsp;Uzbek (UZ) </option>
+	<option value="vi">&nbsp;Vietnamese</option>
+</select></form>
+				</div>			
+				<p>A project of the <a href="http://www.ach.org">Association for Computers and the Humanities</a> and the Chronicle of Higher Education's <a href="http://profhacker.com">ProfHacker</a></p>
+				<p>Icons by <a href="http://www.famfamfam.com/lab/icons/silk/">famfamfam</a></p>
+				<p><a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/"><img alt="Creative Commons License" src="http://i.creativecommons.org/l/by-nc-sa/3.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License</a>.</p>
+				<p><a href="http://lib.virginia.edu/scholarslab"><img src="http://digitalhumanities.org/answers/bb-templates/dhqa/images/slab-logo.jpg" alt="Scholars' Lab" title="Scholars' Lab"/></a></p>
+			</div>
+	</div>
+
+
+</body>
+</html>

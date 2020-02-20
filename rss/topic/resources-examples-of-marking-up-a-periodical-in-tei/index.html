@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Topic: Resources / Examples of Marking up a Periodical in TEI?</title>
+		<link>http://digitalhumanities.org/answers/topic/resources-examples-of-marking-up-a-periodical-in-tei</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Topic: Resources / Examples of Marking up a Periodical in TEI?</description>
+		<language>en-US</language>
+		<pubDate>Wed, 14 Sep 2016 17:08:39 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/topic/resources-examples-of-marking-up-a-periodical-in-tei" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>Laura Weakly on "Resources / Examples of Marking up a Periodical in TEI?"</title>
+						<link>http://digitalhumanities.org/answers/topic/resources-examples-of-marking-up-a-periodical-in-tei#post-1472</link>
+			<pubDate>Tue, 06 Dec 2011 15:44:15 +0000</pubDate>
+			<dc:creator>Laura Weakly</dc:creator>
+			<guid isPermaLink="false">1472@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='http://digitalhumanities.org/answers/profile/cforster'&#62;cforster&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/resources-examples-of-marking-up-a-periodical-in-tei#post-1374&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;FYI: Every Week went live today at its permanent URL &#60;a href=&#34;http://everyweek.unl.edu&#34; rel=&#34;nofollow&#34;&#62;http://everyweek.unl.edu&#60;/a&#62;
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>cforster on "Resources / Examples of Marking up a Periodical in TEI?"</title>
+						<link>http://digitalhumanities.org/answers/topic/resources-examples-of-marking-up-a-periodical-in-tei#post-1374</link>
+			<pubDate>Sun, 04 Sep 2011 20:47:33 +0000</pubDate>
+			<dc:creator>cforster</dc:creator>
+			<guid isPermaLink="false">1374@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Thanks very much all for your help.&#60;/p&#62;
+&#60;p&#62;@&#60;a href='http://digitalhumanities.org/answers/profile/mdalmau'&#62;mdalmau&#60;/a&#62;: Appreciate the references. I'll definitely check them out.&#60;/p&#62;
+&#60;p&#62;@kevin: It had occurred to me that each article could be encoded separately; my sense is, for my purposes, this might introduce more work in trying to stitch everything together. Such stitching (across issues or even across different periodical titles) is, at some level, unavoidable. I'm not sure I sufficiently understand the costs/benefits though to know what's preferable. I imagine exactly how one is performing that &#34;stitching&#34; would be a key component.&#60;/p&#62;
+&#60;p&#62;@laura: Thanks for the link; the site looks great. If you wouldn't mind sharing an example of your raw XML (and maybe Schema) I'd love to have a look. &#60;/p&#62;
+&#60;p&#62;@&#60;a href='http://digitalhumanities.org/answers/profile/clkcrompton'&#62;CLKCrompton&#60;/a&#62;: Thanks for the link; this is a great model (and thanks for the heads up about Vol. 1); and it is really great that you make the raw XML available (seems rare). Both 1890s online and Laura's &#34;Every Week&#34; are excellent models for what I'm interested in.&#60;/p&#62;
+&#60;p&#62;Many thanks folks!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Kevin Hawkins on "Resources / Examples of Marking up a Periodical in TEI?"</title>
+						<link>http://digitalhumanities.org/answers/topic/resources-examples-of-marking-up-a-periodical-in-tei#post-1363</link>
+			<pubDate>Sat, 27 Aug 2011 13:55:39 +0000</pubDate>
+			<dc:creator>Kevin Hawkins</dc:creator>
+			<guid isPermaLink="false">1363@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='http://digitalhumanities.org/answers/profile/cforster'&#62;cforster&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/resources-examples-of-marking-up-a-periodical-in-tei#post-1356&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;One approach is to create a TEI document for each article.  You can then easily attach metadata to each article using the teiHeader.  You would need to come up with a way to tie together the articles in an issue.  There are various approaches here, some using TEI and some using an outside method like METS.&#60;/p&#62;
+&#60;p&#62;As for encoding a table of contents, see &#60;a href=&#34;http://www.tei-c.org/release/doc/tei-p5-doc/en/html/DS.html#DSFRONT&#34; rel=&#34;nofollow&#34;&#62;http://www.tei-c.org/release/doc/tei-p5-doc/en/html/DS.html#DSFRONT&#60;/a&#62; , which discusses use of type=&#34;contents&#34; on a div.  As explained here, this div would contain a &#38;lt;list&#38;gt; (which would contain an &#38;lt;item&#38;gt; for each entry in the TOC).
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>CLKCrompton on "Resources / Examples of Marking up a Periodical in TEI?"</title>
+						<link>http://digitalhumanities.org/answers/topic/resources-examples-of-marking-up-a-periodical-in-tei#post-1361</link>
+			<pubDate>Fri, 26 Aug 2011 11:01:55 +0000</pubDate>
+			<dc:creator>CLKCrompton</dc:creator>
+			<guid isPermaLink="false">1361@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I'm the former project manager for a site devoted to fin-de-siècle periodicals, The Yellow Nineties Online (&#60;a href=&#34;http://www.1890s.ca)&#34; rel=&#34;nofollow&#34;&#62;http://www.1890s.ca)&#60;/a&#62;.  The TEI for our reviews, poetry, essays, and indeed all content, is up on the site (although I will warn you away from volume one of The Yellow Book - it was our tester volume, and is marked up with some tags that we don't use anymore).  There are a few essays on our process in the About section of the site. We're still working our how to leverage our TEI for search purposes - the Yellow Nineties team will have an essay up about it in the coming year, I imagine.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Laura Weakly on "Resources / Examples of Marking up a Periodical in TEI?"</title>
+						<link>http://digitalhumanities.org/answers/topic/resources-examples-of-marking-up-a-periodical-in-tei#post-1358</link>
+			<pubDate>Thu, 25 Aug 2011 11:23:58 +0000</pubDate>
+			<dc:creator>Laura Weakly</dc:creator>
+			<guid isPermaLink="false">1358@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;We are working on an online project at the CDRH for Every Week Magazine and are very interested in the questions you are asking. Currently we have about 74 issues that we have encoded and will be ready for a launch in the near future. Please note that we are still in the process of making changes, but you may look at the prototype here:&#60;/p&#62;
+&#60;p&#62;&#60;a href=&#34;http://libxml1a.unl.edu:8080/everyweek/search?browse-all=yes&#34; rel=&#34;nofollow&#34;&#62;http://libxml1a.unl.edu:8080/everyweek/search?browse-all=yes&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;I would be happy to share our encoding if you are interested and discuss the problems we have encountered. In the future, we plan on exposing our TEI but haven't done so yet.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>mdalmau on "Resources / Examples of Marking up a Periodical in TEI?"</title>
+						<link>http://digitalhumanities.org/answers/topic/resources-examples-of-marking-up-a-periodical-in-tei#post-1357</link>
+			<pubDate>Thu, 25 Aug 2011 09:07:42 +0000</pubDate>
+			<dc:creator>mdalmau</dc:creator>
+			<guid isPermaLink="false">1357@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;At Indiana University, we encoded following the TEI P4 Guidelines, our first scholarly journal, The Indiana Magazine of History (IMH, &#60;a href=&#34;http://www.dlib.indiana.edu/collections/imh/)&#34; rel=&#34;nofollow&#34;&#62;http://www.dlib.indiana.edu/collections/imh/)&#60;/a&#62; back in 2008.  The journal is encoded at the issue-level with article-level bibliographic metadata stored in independent headers, which we use for querying author, title, etc.  Since we encode at the issue level, article types are designated in the divs (e.g., reviews) and are used as search filters.  The site makes available an &#34;on-the-fly&#34; TEI file at the article level.  If you'd like to see what our issue-level encoding looks like, email me (mdalmau@indiana.edu) and I'll send you a file.&#60;/p&#62;
+&#60;p&#62;You can find some basic information about our encoding approaches on the web site (&#60;a href=&#34;http://webapp1.dlib.indiana.edu/imh/projectInfo/encoding.do)&#34; rel=&#34;nofollow&#34;&#62;http://webapp1.dlib.indiana.edu/imh/projectInfo/encoding.do)&#60;/a&#62;, but because my colleagues and I, like you, found very little guidance for how to best model the markup for serials for which we wanted both browseable issue-level access and searchable article-level access, two of us published an article that includes greater detail of our encoding practice and discovery mechanisms: &#60;/p&#62;
+&#60;p&#62;Dalmau, Michelle and Melanie Schlosser. &#34;Challenges of Serials Text Encoding in the Spirit of Scholarly Communication.&#34; Library Hi Tech 28. 3 (2010): 345-359. &#60;/p&#62;
+&#60;p&#62;I could also share with you our internal IMH encoding guidelines, but they are not for the faint-hearted.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>cforster on "Resources / Examples of Marking up a Periodical in TEI?"</title>
+						<link>http://digitalhumanities.org/answers/topic/resources-examples-of-marking-up-a-periodical-in-tei#post-1356</link>
+			<pubDate>Wed, 24 Aug 2011 19:09:56 +0000</pubDate>
+			<dc:creator>cforster</dc:creator>
+			<guid isPermaLink="false">1356@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I am interested in projects that have used (relatively light) structural TEI to markup issues of a periodical. There isn't an example of such a case in the excellent TEI by Example site nor could I find nice documentation elsewhere.&#60;/p&#62;
+&#60;p&#62;Chiefly I'd like to be able to markup individual items within each issue so that a query could return all material by one author, or a list of all items which are &#34;reviews&#34; or &#34;prose&#34; or &#34;poetry&#34; and so on. When I tried to figure out the best way to markup a table of contents for a single issue of a periodical, for example, I wasn't able to find too many resources (largely, I think, b/c my google-fu failed; the query &#34;TEI 'table of contents'&#34; returns, predictably, lots of TEI documentation which &#60;em&#62;itself&#60;/em&#62; has a table of contents).&#60;/p&#62;
+&#60;p&#62;Any suggestions or guidance for readings would be very welcome.
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

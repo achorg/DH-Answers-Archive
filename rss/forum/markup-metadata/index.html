@@ -1,0 +1,338 @@
+<?
+/*
+Plugin Name: bb Topic Icons
+Plugin URI: http://devt.caffeinatedbliss.com/bbpress/topic-icons
+Description: Adds configurable icons next to topics based on their status
+Author: Paul Hawke
+Author URI: http://paul.caffeinatedbliss.com/
+Version: 0.6
+*/
+
+/****************************************************************************
+ *
+ * Configure the following constants to fine-tune the CSS classes that are
+ * generated, the icon filenames that are used, and the text used in the
+ * legend (if you have one displayed).  Note: filenames are likely to be
+ * taken away in a future version and replaced with the concept of "icon sets"
+ * whose filenames are fixed, so dont get used to editing the filenames,
+ * as this will break in future versions.
+ *
+ ****************************************************************************/
+
+// css class for the unsorted list used in the legend display
+define( LEGEND_CLASS, 'topic_icon_legend' );
+
+// busy threshold - a topic with more posts than this is counted as "busy"
+// for purposes of picking an icon.
+define( BUSY_THRESHOLD, 15 );
+
+// width of the images, in pixels
+define( ICON_WIDTH, '20' );
+
+// height of the images, in pixels
+define( ICON_HEIGHT, '20' );
+
+// the URL base for where to find the default icon set.
+define( ICON_SET_URL_BASE, BB_PLUGIN_URL.'bb-topic-icons/icon-sets/' );
+
+/****************************************************************************
+ *
+ * Shouldnt be much need to edit anything beyond this point - configuration
+ * is all done via the constants (above) and through and admin area page in
+ * bbPress at runtime.
+ *
+ ****************************************************************************/
+
+require( 'bb-topic-icons-api.php' );
+require( 'bb-topic-icons-admin.php' );
+require( 'interface.status-interpreter.php' );
+require( 'interface.status-renderer.php' );
+require( 'class.default-status-interpreter.php' );
+require( 'class.default-status-renderer.php' );
+
+function topic_icons_legend() {
+	$icon_set_name = topic_icons_get_active_icon_set();
+	$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+	$statuses = get_active_status_interpreter()->getAllStatuses();
+	$renderer = get_active_status_renderer();
+	
+	echo '<ul id="'.LEGEND_CLASS.'">';
+	for ($i=0; $i < count($statuses); $i++) {
+		$image = $renderer->renderStatus($statuses[$i]);
+		$tooltip = $renderer->renderStatusTooltip($statuses[$i]);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (isset($image) && strlen($image) > 0 &&
+			isset($tooltip) && strlen($tooltip) > 0 && $exists) {
+			echo '<li><img src="'.$icon_set_url.'/'.$image.
+				'" width="'.ICON_WIDTH.'" height="'.ICON_HEIGHT.
+				'" align="absmiddle">&nbsp;'.$tooltip.'</li>';
+		}
+	}
+	echo '</ul>';
+}
+
+function topic_icons_css() {
+	echo "\n<style type=\"text/css\"><!--\n";
+	require( 'bb-topic-icons.css' );
+	echo "\n--></style>";
+}
+
+function topic_icons_label( $label ) {
+	global $topic;
+	
+	if (bb_is_front() || bb_is_forum() || bb_is_view() || bb_is_tag()) {		
+		$icon_set_name = topic_icons_get_active_icon_set();
+		$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+
+		$status = get_active_status_interpreter()->getStatus(bb_get_location(), $topic);
+		$renderer = get_active_status_renderer();
+		$image = $renderer->renderStatus($status);
+		$tooltip = $renderer->renderStatusTooltip($status);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (!$exists) {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), ICON_SET_URL_BASE.'/empty.png', ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		} else if (strlen($tooltip) > 0) {		
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"><span>%s</span></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $tooltip, $label);
+		} else {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		}
+	}
+	
+	return $label;
+}
+
+function topic_icons_init( ) {
+	remove_filter('bb_topic_labels', 'bb_closed_label', 10);
+	remove_filter('bb_topic_labels', 'bb_sticky_label', 20);
+
+	add_filter('bb_topic_labels', 'topic_icons_label', 11);
+
+	add_action('bb_head', 'topic_icons_css');
+
+	add_action('bb_admin_menu_generator', 'topic_icons_admin_page_add');
+	add_action('bb_admin-header.php', 'topic_icons_admin_page_process');
+	
+	topic_icons_register_status_interpreter('default', new DefaultStatusInterpreter(BUSY_THRESHOLD));
+	topic_icons_register_status_renderer('default', new DefaultStatusRenderer());
+}
+
+topic_icons_init();
+
+?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Forum: Markup &#38; Metadata - Recent Posts</title>
+		<link>http://digitalhumanities.org/answers/forum/markup-metadata</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Forum: Markup &amp; Metadata - Recent Posts</description>
+		<language>en-US</language>
+		<pubDate>Sun, 24 Mar 2019 17:08:19 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/forum/markup-metadata" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>anglebracket@gmail.com on "Advice for teaching myself XML?"</title>
+						<link>http://digitalhumanities.org/answers/topic/advice-for-teaching-myself-xml#post-2299</link>
+			<pubDate>Mon, 16 Mar 2015 22:11:04 +0000</pubDate>
+			<dc:creator>anglebracket@gmail.com</dc:creator>
+			<guid isPermaLink="false">2299@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Although the question is a few years old, the answers still hold, but the best way is to learn by doing it. Pick a text, pick an editor, and try to mark it up. There are lots of gotchas in XML, but a decent editor will shield you from the worst of them. Unfortunately there are very few free XML editors (Emacs is one, but not recommended for beginners). If trial and error, or a book, is too much, there's always something like the Intro sessions at the XML Summer School and similar events -- &#60;a href=&#34;http://xml.silmaril.ie/moreinfo.html#events&#34; rel=&#34;nofollow&#34;&#62;http://xml.silmaril.ie/moreinfo.html#events&#60;/a&#62; (I edit this, so let me know any errors).
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Ben Marwick on "Planning for link rot in article bibliography"</title>
+						<link>http://digitalhumanities.org/answers/topic/planning-for-link-rot-in-article-bibliography#post-2143</link>
+			<pubDate>Thu, 30 Jan 2014 23:52:57 +0000</pubDate>
+			<dc:creator>Ben Marwick</dc:creator>
+			<guid isPermaLink="false">2143@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Another free web archiving service is &#60;a href=&#34;http://www.webcitation.org/&#34; rel=&#34;nofollow&#34;&#62;http://www.webcitation.org/&#60;/a&#62; This is required for citing webpages by journals published by Wiley.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Ethan Gruber on "Extending TEI for image annotation"</title>
+						<link>http://digitalhumanities.org/answers/topic/extending-tei-for-image-annotation#post-2140</link>
+			<pubDate>Wed, 08 Jan 2014 15:26:38 +0000</pubDate>
+			<dc:creator>Ethan Gruber</dc:creator>
+			<guid isPermaLink="false">2140@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I'm using the schema at &#60;a href=&#34;http://www.tei-c.org/release/xml/tei/custom/schema/xsd/tei_all.xsd&#34; rel=&#34;nofollow&#34;&#62;http://www.tei-c.org/release/xml/tei/custom/schema/xsd/tei_all.xsd&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;Oddly enough, I am no longer getting validation errors on these attributes, but the modification date of the schema is dated July 2013.  This doesn't make any sense to me.  Thanks for your help, though.  It appears I can proceed with relative coordinates.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Conal Tuohy on "Extending TEI for image annotation"</title>
+						<link>http://digitalhumanities.org/answers/topic/extending-tei-for-image-annotation#post-2139</link>
+			<pubDate>Fri, 20 Dec 2013 23:30:16 +0000</pubDate>
+			<dc:creator>Conal Tuohy</dc:creator>
+			<guid isPermaLink="false">2139@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hi Ethan&#60;/p&#62;
+&#60;p&#62;You should check the TEI schema you are using if you find real numbers are invalid. You may have a schema that's been customised to only accept integers. The base data type does include real numbers: &#60;/p&#62;
+&#60;p&#62;&#60;a href=&#34;http://www.tei-c.org/release/doc/tei-p5-doc/en/html/ref-data.numeric.html&#34; rel=&#34;nofollow&#34;&#62;http://www.tei-c.org/release/doc/tei-p5-doc/en/html/ref-data.numeric.html&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;These are not (necessarily) pixel coordinates; they can often be physical units such as mm. The unit doesn't really matter so long as a common coordinate system is used within the surface.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Conal Tuohy on "Extending TEI for image annotation"</title>
+						<link>http://digitalhumanities.org/answers/topic/extending-tei-for-image-annotation#post-2138</link>
+			<pubDate>Fri, 20 Dec 2013 23:28:49 +0000</pubDate>
+			<dc:creator>Conal Tuohy</dc:creator>
+			<guid isPermaLink="false">2138@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hi Ethan&#60;/p&#62;
+&#60;p&#62;You should check the TEI schema you are using if you find real numbers are invalid. You may have a schema that's been customised to only accept integers. The base data type does include real numbers: &#60;/p&#62;
+&#60;p&#62;&#60;a href=&#34;http://www.tei-c.org/release/doc/tei-p5-doc/en/html/ref-data.numeric.html&#34; rel=&#34;nofollow&#34;&#62;http://www.tei-c.org/release/doc/tei-p5-doc/en/html/ref-data.numeric.html&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;These are not (necessarily) pixel coordinates; they can often be physical units such as mm. The unit doesn't really matter so long as a common coordinate system is used within the surface.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Kevin Hawkins on "Extending TEI for image annotation"</title>
+						<link>http://digitalhumanities.org/answers/topic/extending-tei-for-image-annotation#post-2137</link>
+			<pubDate>Fri, 20 Dec 2013 16:37:13 +0000</pubDate>
+			<dc:creator>Kevin Hawkins</dc:creator>
+			<guid isPermaLink="false">2137@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hello Ethan,&#60;/p&#62;
+&#60;p&#62;Please do send an email to TEI-L raising your concerns.  People do exactly this sort of thing all the time, and such discussions tend to lead to a consensus that what the person is trying to accomplish can, in fact, be done in TEI another way, or it leads to a bug report or feature request for the TEI Guidelines and associated schemas.&#60;/p&#62;
+&#60;p&#62;If the such a report is not accepted by the TEI's Technical Council (because, for example, they feel that your use of these attributes violates the semantics of those attributes and that those attributes are defined as intended), you would still be free to customize the TEI in order to allow for your desired use.  See &#60;a href=&#34;http://www.tei-c.org/release/doc/tei-p5-doc/en/html/USE.html#MD&#34; rel=&#34;nofollow&#34;&#62;http://www.tei-c.org/release/doc/tei-p5-doc/en/html/USE.html#MD&#60;/a&#62; for a discussion of how to do this.  Basically, the TEI's preferred mechanism is that you use the ODD language to document your change and then generate your new schema from this, rather than taking a TEI schema provided by the TEI Consortium and hacking it directly.&#60;/p&#62;
+&#60;p&#62;—Kevin
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Ethan Gruber on "Extending TEI for image annotation"</title>
+						<link>http://digitalhumanities.org/answers/topic/extending-tei-for-image-annotation#post-2136</link>
+			<pubDate>Fri, 20 Dec 2013 14:35:04 +0000</pubDate>
+			<dc:creator>Ethan Gruber</dc:creator>
+			<guid isPermaLink="false">2136@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I am beginning to work on a project digitizing a series of notebooks, and each page in the notebook will contain annotations created by the project archivist.  I am going to be using Annotorious (&#60;a href=&#34;http://annotorious.github.io/&#34; rel=&#34;nofollow&#34;&#62;http://annotorious.github.io/&#60;/a&#62;) for the annotation engine, following the model of using OpenLayers to annotate zoomable images.&#60;/p&#62;
+&#60;p&#62;Much to my surprise, TEI can handle the storage of annotations natively within the schema with facsimile and surface elements.  Some use cases are well-documented at &#60;a href=&#34;http://tei.oucs.ox.ac.uk/Talks/2009-07-dublin/talk7_facsimile.xml&#34; rel=&#34;nofollow&#34;&#62;http://tei.oucs.ox.ac.uk/Talks/2009-07-dublin/talk7_facsimile.xml&#60;/a&#62;.  However, the attributes designated for storing x and y coordinates of the annotations only accept literal pixel coordinates, i. e., they must be positive integers.  For annotations made in OpenLayers, for example, the x and y coordinates are represented relatively within the bounds of the image, which are dynamically calculated based on the height and width of the source image file.  Therefore, the surface element may appear as follows:&#60;/p&#62;
+
+
+&#60;div class=&#34;bb_syntax&#34;&#62;&#60;table&#62;&#60;tr&#62;&#60;td class=&#34;line_numbers&#34;&#62;&#60;pre&#62;1
+&#60;/pre&#62;&#60;/td&#62;&#60;td class=&#34;code&#34;&#62;&#60;pre class=&#34;xml&#34; style=&#34;font-family:monospace;&#34;&#62;&#60;span style=&#34;color: #009900;&#34;&#62;&#60;span style=&#34;color: #000000; font-weight: bold;&#34;&#62;&#38;lt;surface&#60;/span&#62; &#60;span style=&#34;color: #000066;&#34;&#62;ulx&#60;/span&#62;=&#60;span style=&#34;color: #ff0000;&#34;&#62;&#38;quot;-0.86269991934014&#38;quot;&#60;/span&#62; &#60;span style=&#34;color: #000066;&#34;&#62;uly&#60;/span&#62;=&#60;span style=&#34;color: #ff0000;&#34;&#62;&#38;quot;0.34903242955874003&#38;quot;&#60;/span&#62; &#60;span style=&#34;color: #000066;&#34;&#62;lrx&#60;/span&#62;=&#60;span style=&#34;color: #ff0000;&#34;&#62;&#38;quot;-0.053827751&#38;quot;&#60;/span&#62; &#60;span style=&#34;color: #000066;&#34;&#62;lry&#60;/span&#62;=&#60;span style=&#34;color: #ff0000;&#34;&#62;&#38;quot;-0.216358041&#38;quot;&#60;/span&#62;&#60;span style=&#34;color: #000000; font-weight: bold;&#34;&#62;/&#38;gt;&#60;/span&#62;&#60;/span&#62;&#60;/pre&#62;&#60;/td&#62;&#60;/tr&#62;&#60;/table&#62;&#60;/div&#62;
+
+
+
+&#60;p&#62;The values of these attributes are invalid according to the schema.  Ideally, I would like to use an official schema.  Are there other semantically acceptable ways to encode these coordinates?  Or should I edit the schema and validate on a local, modified copy?  Furthermore, should I send an email out to a TEI list with this use case?  It seems plausible that other projects may want to annotate images in this way, and perhaps the attributes should be relaxed to accept decimal numbers rather than integers.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>royalyoucef@gmail.com on "What&#039;s the difference between Digital Humanities and New Media?"</title>
+						<link>http://digitalhumanities.org/answers/topic/whats-the-difference-between-digital-humanities-and-new-media#post-2130</link>
+			<pubDate>Sun, 17 Nov 2013 20:07:26 +0000</pubDate>
+			<dc:creator>royalyoucef@gmail.com</dc:creator>
+			<guid isPermaLink="false">2130@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hope that you will continue doing nice&#60;br /&#62;
+&#60;a href=&#34;http://hidemybody.com/&#34; title=&#34;proxy sites&#34;&#62;proxy sites&#60;/a&#62;&#60;br /&#62;
+&#60;a href=&#34;http://hidemybody.com/&#34; title=&#34;proxy&#34;&#62;proxy&#60;/a&#62;&#60;br /&#62;
+&#60;a href=&#34;http://hidemybody.com/&#34; title=&#34;Surf The Web Anonymously&#34;&#62;Surf The Web Anonymously&#60;/a&#62;&#60;br /&#62;
+&#60;a href=&#34;http://hidemybody.com/&#34; title=&#34;school proxy&#34;&#62;school proxy&#60;/a&#62;
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>quinnanya on "Planning for link rot in article bibliography"</title>
+						<link>http://digitalhumanities.org/answers/topic/planning-for-link-rot-in-article-bibliography#post-2126</link>
+			<pubDate>Mon, 28 Oct 2013 15:46:08 +0000</pubDate>
+			<dc:creator>quinnanya</dc:creator>
+			<guid isPermaLink="false">2126@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @kevin.s.hawkins's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/planning-for-link-rot-in-article-bibliography#post-2119&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;Thanks, Kevin! perma.cc looks perfect for this. When I went to the webpage and saw it a &#34;request beta access&#34; sign-up form, I wasn't optimistic that it'd be ready in time for me to submit the paper. To my surprise and delight, though, I got a beta account notification yesterday, so now I'm set.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>quinnanya on "Planning for link rot in article bibliography"</title>
+						<link>http://digitalhumanities.org/answers/topic/planning-for-link-rot-in-article-bibliography#post-2122</link>
+			<pubDate>Tue, 22 Oct 2013 15:23:06 +0000</pubDate>
+			<dc:creator>quinnanya</dc:creator>
+			<guid isPermaLink="false">2122@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='http://digitalhumanities.org/answers/profile/acrymble'&#62;acrymble&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/planning-for-link-rot-in-article-bibliography#post-2120&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;Neat, I didn't realize you could do that. I think it runs into the same basic problem, though, as my scenario #2: all in all, there's probably 100 relevant pages (including child and grandchild pages), and I'd rather avoid saving them all individually if possible.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>acrymble on "Planning for link rot in article bibliography"</title>
+						<link>http://digitalhumanities.org/answers/topic/planning-for-link-rot-in-article-bibliography#post-2120</link>
+			<pubDate>Tue, 22 Oct 2013 13:22:51 +0000</pubDate>
+			<dc:creator>acrymble</dc:creator>
+			<guid isPermaLink="false">2120@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='http://digitalhumanities.org/answers/profile/quinnanya'&#62;quinnanya&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/planning-for-link-rot-in-article-bibliography#post-2117&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;You could ask the Internet Archive to archive the pages in question (&#60;a href=&#34;http://faq.web.archive.org/can-i-get-just-one-page-archived/&#34; rel=&#34;nofollow&#34;&#62;http://faq.web.archive.org/can-i-get-just-one-page-archived/&#60;/a&#62;) and then use the links in the archive.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Kevin Hawkins on "Planning for link rot in article bibliography"</title>
+						<link>http://digitalhumanities.org/answers/topic/planning-for-link-rot-in-article-bibliography#post-2119</link>
+			<pubDate>Tue, 22 Oct 2013 13:11:07 +0000</pubDate>
+			<dc:creator>Kevin Hawkins</dc:creator>
+			<guid isPermaLink="false">2119@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Maybe use &#60;a href=&#34;http://perma.cc/&#34; rel=&#34;nofollow&#34;&#62;http://perma.cc/&#60;/a&#62; .  This is a brand new service that's been getting a fair amount of publicity.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Dorothea Salo on "Planning for link rot in article bibliography"</title>
+						<link>http://digitalhumanities.org/answers/topic/planning-for-link-rot-in-article-bibliography#post-2118</link>
+			<pubDate>Tue, 22 Oct 2013 13:06:41 +0000</pubDate>
+			<dc:creator>Dorothea Salo</dc:creator>
+			<guid isPermaLink="false">2118@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;You could link to an Internet Archive version of the page, should that exist. That would have the added benefit of dating your access (up to a point; it won't be perfectly precise).
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>quinnanya on "Planning for link rot in article bibliography"</title>
+						<link>http://digitalhumanities.org/answers/topic/planning-for-link-rot-in-article-bibliography#post-2117</link>
+			<pubDate>Tue, 22 Oct 2013 12:58:26 +0000</pubDate>
+			<dc:creator>quinnanya</dc:creator>
+			<guid isPermaLink="false">2117@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I'm working on an article where most of my bibliography entries involve links to university wiki pages, or documents hosted by that same wiki service. I don't have a ton of confidence that the service will necessarily exist in five years, or at least, that it will exist in a way that won't break all the links. I'm personally committed to ensuring that the content remains available; in the past, when I've just needed a reliable link to an isolated wiki page, I've re-posted wiki content on my own website and used that link. It'd be harder to do that here, though, because in many cases I'm referencing entire sections of the wiki, consisting of multiple pages. When/if the day comes for me to &#34;rescue&#34; the whole thing, I'd probably take a different approach than re-posting content. I'd also expect that when/if the wiki service shuts down or changes, it probably won't be possible to set up (even temporarily) a redirect to wherever I'm hosting the content instead.&#60;/p&#62;
+&#60;p&#62;Any suggestions for what I should do about these links in the paper? The three options that've come to mind, in increasing order of appeal, are:&#60;/p&#62;
+&#60;p&#62;1) Just use the current links, and get over it.&#60;br /&#62;
+2) Include a link to a page on my own site somewhere in the paper, where I'll maintain a current list of reference URLs.&#60;br /&#62;
+3) Look into creating an &#60;a href=&#34;http://www.cdlib.org/services/uc3/ezid/&#34;&#62;EZID&#60;/a&#62; for each of the links, and use that to update the URL (I'm not 100% sure if I'll be able to get access to the EZID service).&#60;/p&#62;
+&#60;p&#62;Has anyone come up with an elegant solution for this?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Kevin Hawkins on "TEI question"</title>
+						<link>http://digitalhumanities.org/answers/topic/tei-question#post-2053</link>
+			<pubDate>Fri, 02 Aug 2013 02:33:56 +0000</pubDate>
+			<dc:creator>Kevin Hawkins</dc:creator>
+			<guid isPermaLink="false">2053@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;DigitalHumanitiesScholar, let me make sure I understand the situation.  You have a transcription of a source document in plain text and you want to add just enough markup to identify section headings, people, places, and footnotes.  Is that right?&#60;/p&#62;
+&#60;p&#62;An XML schema only allows certain elements to nest within certain others, and the TEI schemas that come with &#38;lt;oXygen/&#38;gt; XML Editor similarly allow only certain elements in certain places.  So you can't take a plain text document and add only &#38;lt;head&#38;gt;, &#38;lt;person&#38;gt;, &#38;lt;place&#38;gt;, and &#38;lt;note&#38;gt;.  Now, perhaps you are already planning to have &#38;lt;TEI&#38;gt; containing a &#38;lt;teiHeader&#38;gt; and a &#38;lt;text&#38;gt;, and the &#38;lt;text&#38;gt; will contain a &#38;lt;body&#38;gt;, and then you wanted to put your whole transcription inside &#38;lt;body&#38;gt;.  While such a document would validate according to the schemas in &#38;lt;oXygen/&#38;gt; XML Editor, as soon as you begin adding &#38;lt;head&#38;gt;s, you will need to break the document into &#38;lt;div&#38;gt; or &#38;lt;div1&#38;gt; elements, each of which starts with a &#38;lt;head&#38;gt;.&#60;/p&#62;
+&#60;p&#62;For a personal or place name mentioned in passing in the text, you should use &#38;lt;name type=&#34;person&#34;&#38;gt; or &#38;lt;persName&#38;gt; and &#38;lt;name type=&#34;place&#34;&#38;gt; or &#38;lt;placeName&#38;gt;.  The &#38;lt;person&#38;gt; and &#38;lt;place&#38;gt; elements are meant only for providing biographical and prosopographical data that occurs in certain types of documents, or which is added when creating a scholarly edition in TEI.  See chapter 13 of the TEI Guidelines.&#60;/p&#62;
+&#60;p&#62;As for encoding footnotes, see section 3.8.1, which discusses whether to insert the &#38;lt;note&#38;gt; at the point of attachment (as in the examples in this section) or whether to use &#38;lt;ptr&#38;gt; or &#38;lt;ref&#38;gt; at that location instead.  For an example that uses &#38;lt;ref&#38;gt;, see the cross-reference to section 3.6, which gives this example:&#60;/p&#62;
+&#60;pre&#62;
+annotated text &#38;lt;ref target=&#34;#a51&#34; type=&#34;noteAnchor&#34;&#38;gt;⁵¹&#38;lt;/ref&#38;gt;
+&#38;lt;!-- ... --&#38;gt;
+&#38;lt;note xml:id=&#34;a51&#34; type=&#34;footnote&#34;&#38;gt;text of annotation&#38;lt;/note&#38;gt;
+&#60;/pre&#62;</description>
+		</item>
+
+	</channel>
+</rss>

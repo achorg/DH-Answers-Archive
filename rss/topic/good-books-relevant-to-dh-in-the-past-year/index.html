@@ -1,0 +1,207 @@
+<?
+/*
+Plugin Name: bb Topic Icons
+Plugin URI: http://devt.caffeinatedbliss.com/bbpress/topic-icons
+Description: Adds configurable icons next to topics based on their status
+Author: Paul Hawke
+Author URI: http://paul.caffeinatedbliss.com/
+Version: 0.6
+*/
+
+/****************************************************************************
+ *
+ * Configure the following constants to fine-tune the CSS classes that are
+ * generated, the icon filenames that are used, and the text used in the
+ * legend (if you have one displayed).  Note: filenames are likely to be
+ * taken away in a future version and replaced with the concept of "icon sets"
+ * whose filenames are fixed, so dont get used to editing the filenames,
+ * as this will break in future versions.
+ *
+ ****************************************************************************/
+
+// css class for the unsorted list used in the legend display
+define( LEGEND_CLASS, 'topic_icon_legend' );
+
+// busy threshold - a topic with more posts than this is counted as "busy"
+// for purposes of picking an icon.
+define( BUSY_THRESHOLD, 15 );
+
+// width of the images, in pixels
+define( ICON_WIDTH, '20' );
+
+// height of the images, in pixels
+define( ICON_HEIGHT, '20' );
+
+// the URL base for where to find the default icon set.
+define( ICON_SET_URL_BASE, BB_PLUGIN_URL.'bb-topic-icons/icon-sets/' );
+
+/****************************************************************************
+ *
+ * Shouldnt be much need to edit anything beyond this point - configuration
+ * is all done via the constants (above) and through and admin area page in
+ * bbPress at runtime.
+ *
+ ****************************************************************************/
+
+require( 'bb-topic-icons-api.php' );
+require( 'bb-topic-icons-admin.php' );
+require( 'interface.status-interpreter.php' );
+require( 'interface.status-renderer.php' );
+require( 'class.default-status-interpreter.php' );
+require( 'class.default-status-renderer.php' );
+
+function topic_icons_legend() {
+	$icon_set_name = topic_icons_get_active_icon_set();
+	$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+	$statuses = get_active_status_interpreter()->getAllStatuses();
+	$renderer = get_active_status_renderer();
+	
+	echo '<ul id="'.LEGEND_CLASS.'">';
+	for ($i=0; $i < count($statuses); $i++) {
+		$image = $renderer->renderStatus($statuses[$i]);
+		$tooltip = $renderer->renderStatusTooltip($statuses[$i]);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (isset($image) && strlen($image) > 0 &&
+			isset($tooltip) && strlen($tooltip) > 0 && $exists) {
+			echo '<li><img src="'.$icon_set_url.'/'.$image.
+				'" width="'.ICON_WIDTH.'" height="'.ICON_HEIGHT.
+				'" align="absmiddle">&nbsp;'.$tooltip.'</li>';
+		}
+	}
+	echo '</ul>';
+}
+
+function topic_icons_css() {
+	echo "\n<style type=\"text/css\"><!--\n";
+	require( 'bb-topic-icons.css' );
+	echo "\n--></style>";
+}
+
+function topic_icons_label( $label ) {
+	global $topic;
+	
+	if (bb_is_front() || bb_is_forum() || bb_is_view() || bb_is_tag()) {		
+		$icon_set_name = topic_icons_get_active_icon_set();
+		$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+
+		$status = get_active_status_interpreter()->getStatus(bb_get_location(), $topic);
+		$renderer = get_active_status_renderer();
+		$image = $renderer->renderStatus($status);
+		$tooltip = $renderer->renderStatusTooltip($status);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (!$exists) {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), ICON_SET_URL_BASE.'/empty.png', ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		} else if (strlen($tooltip) > 0) {		
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"><span>%s</span></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $tooltip, $label);
+		} else {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		}
+	}
+	
+	return $label;
+}
+
+function topic_icons_init( ) {
+	remove_filter('bb_topic_labels', 'bb_closed_label', 10);
+	remove_filter('bb_topic_labels', 'bb_sticky_label', 20);
+
+	add_filter('bb_topic_labels', 'topic_icons_label', 11);
+
+	add_action('bb_head', 'topic_icons_css');
+
+	add_action('bb_admin_menu_generator', 'topic_icons_admin_page_add');
+	add_action('bb_admin-header.php', 'topic_icons_admin_page_process');
+	
+	topic_icons_register_status_interpreter('default', new DefaultStatusInterpreter(BUSY_THRESHOLD));
+	topic_icons_register_status_renderer('default', new DefaultStatusRenderer());
+}
+
+topic_icons_init();
+
+?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Topic: Good books relevant to DH in the past year?</title>
+		<link>http://digitalhumanities.org/answers/topic/good-books-relevant-to-dh-in-the-past-year</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Topic: Good books relevant to DH in the past year?</description>
+		<language>en-US</language>
+		<pubDate>Fri, 08 Mar 2019 19:16:23 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/topic/good-books-relevant-to-dh-in-the-past-year" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>MelissaTerras on "Good books relevant to DH in the past year?"</title>
+						<link>http://digitalhumanities.org/answers/topic/good-books-relevant-to-dh-in-the-past-year#post-1371</link>
+			<pubDate>Wed, 31 Aug 2011 13:57:41 +0000</pubDate>
+			<dc:creator>MelissaTerras</dc:creator>
+			<guid isPermaLink="false">1371@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Thanks! *all* very relevant, and no harm in touting your wares, methinks :)
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>ethan.watrall on "Good books relevant to DH in the past year?"</title>
+						<link>http://digitalhumanities.org/answers/topic/good-books-relevant-to-dh-in-the-past-year#post-1370</link>
+			<pubDate>Tue, 30 Aug 2011 17:01:43 +0000</pubDate>
+			<dc:creator>ethan.watrall</dc:creator>
+			<guid isPermaLink="false">1370@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @Stéfan Sinclair's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/good-books-relevant-to-dh-in-the-past-year#post-1369&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;I know, I'm awful....but it *is* relevant ;-)
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Stéfan Sinclair on "Good books relevant to DH in the past year?"</title>
+						<link>http://digitalhumanities.org/answers/topic/good-books-relevant-to-dh-in-the-past-year#post-1369</link>
+			<pubDate>Tue, 30 Aug 2011 14:08:33 +0000</pubDate>
+			<dc:creator>Stéfan Sinclair</dc:creator>
+			<guid isPermaLink="false">1369@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Welcome back Melissa, though I'm only giving you a C+ for your efforts in staying away :).&#60;/p&#62;
+&#60;p&#62;I'll resist the deplorable example of Ethan and not &#60;a href=&#34;http://www.amazon.ca/Visual-Interface-Digital-Cultural-Heritage/dp/1409404226&#34;&#62;toot my own horn&#60;/a&#62;, but I will say that &#60;a href=&#34;http://press.uchicago.edu/ucp/books/book/chicago/S/bo6027946.html&#34;&#62;Switching Codes&#60;/a&#62; was one of my favourite recent reads. And of course anyone in text analysis will have already pre-ordered Ramsay's &#60;a href=&#34;http://www.press.uillinois.edu/books/catalog/75tms2pw9780252036415.html&#34;&#62;Reading Machines&#60;/a&#62;.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>ethan.watrall on "Good books relevant to DH in the past year?"</title>
+						<link>http://digitalhumanities.org/answers/topic/good-books-relevant-to-dh-in-the-past-year#post-1367</link>
+			<pubDate>Tue, 30 Aug 2011 12:25:20 +0000</pubDate>
+			<dc:creator>ethan.watrall</dc:creator>
+			<guid isPermaLink="false">1367@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I'm totally going to pimp my own book here - because it is relevant.  &#60;/p&#62;
+&#60;p&#62;&#34;Archaeology 2.0: New Models for Communication and Collaboration.&#34;  Published by UCLA Cotsen Institute of Archaeology Press.  Digital version is open access (available through eScholarship) and released under a CC BY SA license.&#60;/p&#62;
+&#60;p&#62;Here is the link to the OA version: &#60;a href=&#34;http://escholarship.org/uc/item/1r6137tb&#34; rel=&#34;nofollow&#34;&#62;http://escholarship.org/uc/item/1r6137tb&#60;/a&#62;
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>MelissaTerras on "Good books relevant to DH in the past year?"</title>
+						<link>http://digitalhumanities.org/answers/topic/good-books-relevant-to-dh-in-the-past-year#post-1366</link>
+			<pubDate>Tue, 30 Aug 2011 07:39:09 +0000</pubDate>
+			<dc:creator>MelissaTerras</dc:creator>
+			<guid isPermaLink="false">1366@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hi Folks,&#60;/p&#62;
+&#60;p&#62;I'm back to work after a year-long career break next month. Although I've kept up to date with online blogs, twitter, etc, I havent read any books related to DH in the past year, and wondered if you had any recommendations. What books have you read that really grabbed you and would be worth exploring?&#60;/p&#62;
+&#60;p&#62;I'm interested in anything related to DH, Internet Technologies, Cultural Heritage, and online communities. What is worth investigating? What's the best thing you've read in the past year? I'd appreciate any of your heads-up. Thanks.&#60;/p&#62;
+&#60;p&#62;Melissa
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

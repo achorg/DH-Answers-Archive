@@ -1,0 +1,453 @@
+<?
+/*
+Plugin Name: bb Topic Icons
+Plugin URI: http://devt.caffeinatedbliss.com/bbpress/topic-icons
+Description: Adds configurable icons next to topics based on their status
+Author: Paul Hawke
+Author URI: http://paul.caffeinatedbliss.com/
+Version: 0.6
+*/
+
+/****************************************************************************
+ *
+ * Configure the following constants to fine-tune the CSS classes that are
+ * generated, the icon filenames that are used, and the text used in the
+ * legend (if you have one displayed).  Note: filenames are likely to be
+ * taken away in a future version and replaced with the concept of "icon sets"
+ * whose filenames are fixed, so dont get used to editing the filenames,
+ * as this will break in future versions.
+ *
+ ****************************************************************************/
+
+// css class for the unsorted list used in the legend display
+define( LEGEND_CLASS, 'topic_icon_legend' );
+
+// busy threshold - a topic with more posts than this is counted as "busy"
+// for purposes of picking an icon.
+define( BUSY_THRESHOLD, 15 );
+
+// width of the images, in pixels
+define( ICON_WIDTH, '20' );
+
+// height of the images, in pixels
+define( ICON_HEIGHT, '20' );
+
+// the URL base for where to find the default icon set.
+define( ICON_SET_URL_BASE, BB_PLUGIN_URL.'bb-topic-icons/icon-sets/' );
+
+/****************************************************************************
+ *
+ * Shouldnt be much need to edit anything beyond this point - configuration
+ * is all done via the constants (above) and through and admin area page in
+ * bbPress at runtime.
+ *
+ ****************************************************************************/
+
+require( 'bb-topic-icons-api.php' );
+require( 'bb-topic-icons-admin.php' );
+require( 'interface.status-interpreter.php' );
+require( 'interface.status-renderer.php' );
+require( 'class.default-status-interpreter.php' );
+require( 'class.default-status-renderer.php' );
+
+function topic_icons_legend() {
+	$icon_set_name = topic_icons_get_active_icon_set();
+	$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+	$statuses = get_active_status_interpreter()->getAllStatuses();
+	$renderer = get_active_status_renderer();
+	
+	echo '<ul id="'.LEGEND_CLASS.'">';
+	for ($i=0; $i < count($statuses); $i++) {
+		$image = $renderer->renderStatus($statuses[$i]);
+		$tooltip = $renderer->renderStatusTooltip($statuses[$i]);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (isset($image) && strlen($image) > 0 &&
+			isset($tooltip) && strlen($tooltip) > 0 && $exists) {
+			echo '<li><img src="'.$icon_set_url.'/'.$image.
+				'" width="'.ICON_WIDTH.'" height="'.ICON_HEIGHT.
+				'" align="absmiddle">&nbsp;'.$tooltip.'</li>';
+		}
+	}
+	echo '</ul>';
+}
+
+function topic_icons_css() {
+	echo "\n<style type=\"text/css\"><!--\n";
+	require( 'bb-topic-icons.css' );
+	echo "\n--></style>";
+}
+
+function topic_icons_label( $label ) {
+	global $topic;
+	
+	if (bb_is_front() || bb_is_forum() || bb_is_view() || bb_is_tag()) {		
+		$icon_set_name = topic_icons_get_active_icon_set();
+		$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+
+		$status = get_active_status_interpreter()->getStatus(bb_get_location(), $topic);
+		$renderer = get_active_status_renderer();
+		$image = $renderer->renderStatus($status);
+		$tooltip = $renderer->renderStatusTooltip($status);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (!$exists) {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), ICON_SET_URL_BASE.'/empty.png', ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		} else if (strlen($tooltip) > 0) {		
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"><span>%s</span></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $tooltip, $label);
+		} else {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		}
+	}
+	
+	return $label;
+}
+
+function topic_icons_init( ) {
+	remove_filter('bb_topic_labels', 'bb_closed_label', 10);
+	remove_filter('bb_topic_labels', 'bb_sticky_label', 20);
+
+	add_filter('bb_topic_labels', 'topic_icons_label', 11);
+
+	add_action('bb_head', 'topic_icons_css');
+
+	add_action('bb_admin_menu_generator', 'topic_icons_admin_page_add');
+	add_action('bb_admin-header.php', 'topic_icons_admin_page_process');
+	
+	topic_icons_register_status_interpreter('default', new DefaultStatusInterpreter(BUSY_THRESHOLD));
+	topic_icons_register_status_renderer('default', new DefaultStatusRenderer());
+}
+
+topic_icons_init();
+
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=8" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+	<title>Lectures de base (en français) pour les &quot;digital humanities&quot; &laquo; Digital Humanities Questions &amp; Answers</title>
+	<link rel="stylesheet" href="http://digitalhumanities.org/answers/bb-templates/dhqa/style.css" type="text/css" />
+	<link rel="stylesheet" href="http://digitalhumanities.org/answers/bb-templates/dhqa/blueprint/screen.css" type="text/css" media="screen" title="blueprint-print" charset="utf-8"/>
+	<link rel="stylesheet" href="http://digitalhumanities.org/answers/bb-templates/dhqa/blueprint/print.css" type="text/css" media="print" title="blueprint-print" charset="utf-8"/>
+	<!--[if lt IE 8]>
+	  <link rel="stylesheet" href="http://digitalhumanities.org/answers/bb-templates/dhqa/blueprint/ie.css" type="text/css" media="screen, projection">
+	<![endif]-->
+	<!--[if IE]>
+		<style type="text/css" media="screen">
+			.header-button, form.login input, input[type="submit"], #header div.search, form.login input {
+				border-radius:4px;
+				behavior: url(border-radius.htc);
+			}
+		</style>
+	<![endif]-->
+	<!--[if IE 7]>
+		<style type="text/css" media="screen">
+			#header .search .search-form input.submit {
+				padding: 0;
+				margin: 0;
+				height: 29px;
+				width: 70px;
+			}
+		</style>
+	<![endif]-->
+
+<link rel="alternate" type="application/rss+xml" title="Digital Humanities Questions &amp; Answers &raquo; Topic: Lectures de base (en français) pour les &quot;digital humanities&quot;" href="http://digitalhumanities.org/answers/rss/topic/lectures-de-base-en-francais-pour-les-digital-humanities" />
+<meta name="generator" content="bbPress 1.0.2" />
+
+<link rel="stylesheet" href="http://digitalhumanities.org/answers/my-plugins/bb-syntax/bb-syntax.css" type="text/css" media="screen" />
+<style type="text/css">
+	.best_answer {text-decoration:none; border:0; white-space:nowrap; display:block; margin:1em 0;		
+		border:0; text-decoration:none; width:20px; height:16px;
+		background: url(http://digitalhumanities.org/answers/my-plugins/best-answer/best-answer.png) no-repeat scroll 0px 1px transparent;} 
+	span.best_answer {margin: 0px; float: left;}
+	#thread .threadauthor .best_answer {padding-left: 20px;}
+	a.best_answer, a.best_answer:link {color:#999;}
+	a.best_answer:hover {color:green;}	
+	a.best_answer_selected {color: green;}
+	a.best_answer_selected:hover {color:red;}		
+	#thread li.best_answer_background { background-color: transparent; }
+	#thread li.best_answer_background .threadpost { background-color: #afa; }
+	#thread li.alt.best_answer_background .threadpost { background-color: #afa; }
+	.best_answer_meta { background: url(http://digitalhumanities.org/answers/my-plugins/best-answer/best-answer.png) no-repeat scroll 5px 40% transparent; padding-left: 26px; }
+</style>
+
+<!-- Start Of Code Generated By Social It Plugin By www.gaut.am -->
+<link rel='stylesheet' id='social-it-css'  href='http://digitalhumanities.org/answers/my-plugins/social-it/css/style.css?ver=1.5' type='text/css' media='all' />
+<script type='text/javascript' src='http://digitalhumanities.org/answers/bb-includes/js/jquery/jquery.js?ver=1.2.6'></script>
+<script type='text/javascript' src='http://digitalhumanities.org/answers/my-plugins/social-it/js/social-it-public.js?ver=1.5'></script>
+<!-- End Of Code Generated By Social It Plugin By www.gaut.am -->
+
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-18811436-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+</head>
+<body id="topic-page">
+	<div class="container prepend-top append-bottom">
+		<div id="util-login">
+		<a href="http://digitalhumanities.org/answers/bb-login.php">Log in</a> | <a href="http://digitalhumanities.org/answers/register.php">Register</a>		</div>
+		<div id="header" class="prepend-6 span-18">
+			<a id="ach-logo" href="http://www.ach.org">ACH</a>
+			<h1><a href="http://digitalhumanities.org/answers/">Digital Humanities Questions &amp; Answers</a></h1>
+						<div class="login-container span-12">
+				<form class="login" method="post" action="http://digitalhumanities.org/answers/bb-login.php">
+		<div class="header-button ask-link"><a href="http://digitalhumanities.org/answers/bb-login.php">Ask a Question</a></div></form>			</div>
+
+			<div class="search span-6 last">
+<form class="search-form" role="search" action="http://digitalhumanities.org/answers/search.php" method="get">
+	<p>
+		<label class="hidden" for="q">Search:</label>
+		<input type="text" size="10" maxlength="100" name="q" id="q" />
+		<input class="submit" type="submit" value="Search &raquo;" />
+	</p>
+</form>
+			</div>
+		</div>
+		<div id="main" class="span-24">
+
+<div class="bbcrumb"><a href="http://digitalhumanities.org/answers/">Digital Humanities Questions &amp; Answers</a> &raquo; <a href="http://digitalhumanities.org/answers/forum/pedagogy">DH in the Classroom</a></div>
+<div class="infobox" role="main">
+
+<div id="topic-info">
+<span id="topic_labels"></span>
+<h2 class="topictitle">Lectures de base (en français) pour les &quot;digital humanities&quot;</h2>
+<span id="topic_posts">(6 posts)</span>
+<span id="topic_voices">(4 voices)</span>
+
+<ul class="topicmeta">
+	<li>Asked 8 years ago by Stéfan Sinclair</li>
+	<li><a href="http://digitalhumanities.org/answers/topic/lectures-de-base-en-francais-pour-les-digital-humanities#post-1887">Latest answer</a> from Aurelien Berra</li>
+<li class='best_answer_meta'>This question has a <a href='http://digitalhumanities.org/answers/topic/lectures-de-base-en-francais-pour-les-digital-humanities#post-1044'>best answer</a>.</li></ul>
+</div>
+
+<div id="topic-tags">
+<p>Tags:</p>
+
+
+<ul id="tags-list" class="tags-list list:tag">
+	<li id="tag-895_241"><a href="http://digitalhumanities.org/answers/tags/bibliographie" rel="tag">bibliographie</a> </li>
+	<li id="tag-292_241" class="alt"><a href="http://digitalhumanities.org/answers/tags/bibliography" rel="tag">bibliography</a> </li>
+	<li id="tag-38_241"><a href="http://digitalhumanities.org/answers/tags/digital-humanities" rel="tag">digital humanities</a> </li>
+	<li id="tag-359_4" class="alt"><a href="http://digitalhumanities.org/answers/tags/francais" rel="tag">français</a> </li>
+	<li id="tag-358_4"><a href="http://digitalhumanities.org/answers/tags/french" rel="tag">french</a> </li>
+	<li id="tag-894_241" class="alt"><a href="http://digitalhumanities.org/answers/tags/humanites-numeriques" rel="tag">humanités numériques</a> </li>
+</ul>
+
+
+</div>
+
+<div style="clear:both;"></div>
+</div>
+<div id="ajax-response"></div>
+<ol id="thread" class="list:post">
+
+	<li id="post-749">
+		<div id="position-1">
+			<div class="threadauthor">
+				<a href="http://stefansinclair.name/"><img alt="" src="http://www.gravatar.com/avatar/cba4d537795cd02764c6a5c778c21566?s=48&amp;d=identicon&amp;r=pg" class="photo avatar avatar-48" style="height:48px; width:48px;" /></a>				<p>
+					<strong><a href="http://stefansinclair.name/">Stéfan Sinclair</a></strong><br />
+					<small><a href="http://digitalhumanities.org/answers/profile/stefansinclair">Admin</a></small>
+				</p>
+				<div class="author-badges"><span title='50+ Posts' class='badge gold-poster 103'><!-- 50+ posts! --></span><span title='3+ Best Answers' class='badge bronze-answerer 6'><!-- 3-9 answers --></span></div>
+			</div>
+			<div class="threadpost">
+				<div class="post"><p>D'autres fils de discussion ont abordé la question de lectures de base pour les <em>digital humanities</em> (ou informatique en sciences humaines), comme celui sur <a href="http://digitalhumanities.org/answers/topic/digital-humanities-reading-list-for-phd-prelim-exams">les examens généraux pour les doctorants</a>, mais ils se limitent surtout à l'anglais. Quelles seraient les lectures de base en français pour les "digital humanities"?
+</p>
+
+<!-- Start Of Code Generated By Social It Plugin By www.gaut.am -->
+<div class="social-it" style=""><ul class="socials"><li class="socialit-twitter"><a href="http://twitter.com/home?status=Lectures+de+base+%28en+fran%C3%A7ais%29+pour+les+%26quot%3Bdigital+humanities%26quot%3B+-+http://bit.ly/gvh8oB+(via+@DHAnswers)" rel="nofollow" class="external" title="Tweet this question">Tweet this question</a></li></ul><div style="clear:both;"></div></div><!-- End Of Code Generated By Social It Plugin By www.gaut.am -->
+
+</div>
+				<div class="poststuff">Posted 8 years ago <a class="post-perma-link" href="#post-749">Permalink</a> </div>
+			</div>
+		</div>
+	</li>
+	<li id="post-761" class="alt">
+		<div id="position-2">
+			<div class="threadauthor">
+				<a href="http://www.elotroalex.com"><img alt="" src="http://www.gravatar.com/avatar/823601b9c204a763f59fe7fb81a491c4?s=48&amp;d=identicon&amp;r=pg" class="photo avatar avatar-48" style="height:48px; width:48px;" /></a>				<p>
+					<strong><a href="http://www.elotroalex.com">elotroalex</a></strong><br />
+					<small><a href="http://digitalhumanities.org/answers/profile/elotroalex">Key Master</a></small>
+				</p>
+				<div class="author-badges"><span title='20+ Posts' class='badge silver-poster 48'><!-- 20-49 posts --></span><span title='3+ Best Answers' class='badge bronze-answerer 3'><!-- 3-9 answers --></span></div>
+			</div>
+			<div class="threadpost">
+				<div class="post"><p>Voici un séminaire a Paris sur les DH: <a href="http://www.ehess.fr/fr/enseignement/enseignements/2010/ue/894/" rel="nofollow">http://www.ehess.fr/fr/enseignement/enseignements/2010/ue/894/</a>.<br />
+Les responsables du séminaire sont <a href="http://twitter.com/#!/marind">Marin Dacos</a> et <a href="http://blog.homo-numericus.net/">Pierre Mounier</a>. Peut être on peut attirer leur attention a DH-Answers. J'imagine qu'ils ont une réponse plus directe.
+</p></div>
+				<div class="poststuff">Posted 8 years ago <a class="post-perma-link" href="#post-761">Permalink</a> </div>
+			</div>
+		</div>
+	</li>
+	<li id="post-764">
+		<div id="position-3">
+			<div class="threadauthor">
+				<img alt="" src="http://www.gravatar.com/avatar/863cf6309f6c1bb9ebe221f934144dad?s=48&amp;d=identicon&amp;r=pg" class="photo avatar avatar-48" style="height:48px; width:48px;" />				<p>
+					<strong>leodumont</strong><br />
+					<small><a href="http://digitalhumanities.org/answers/profile/leodumont">Member</a></small>
+				</p>
+				<div class="author-badges"><span class='badge 1'><!-- fewer than 5 posts --></span><span class='badge 0'><!-- fewer than 3 answers --></span></div>
+			</div>
+			<div class="threadpost">
+				<div class="post"><p>Bonjour,</p>
+<p>Je me permets de renvoyer à la bibliographie que j'ai mise en ligne sur zotero.org, elle est avant tout orientée vers l'histoire et contient des ouvrages dont les auteurs ont eu recours aux <em>digital humanities</em>, ainsi que des publications portant plus directement sur les outils et les méthodes. La grande majorité est en français.</p>
+<p>C'est bien sûr une liste partielle qui est loin d'être exhaustive.</p>
+<p><a href="https://www.zotero.org/leodumont/items" rel="nofollow">https://www.zotero.org/leodumont/items</a>
+</p></div>
+				<div class="poststuff">Posted 8 years ago <a class="post-perma-link" href="#post-764">Permalink</a> </div>
+			</div>
+		</div>
+	</li>
+	<li id="post-767" class="alt">
+		<div id="position-4">
+			<div class="threadauthor">
+				<a href="http://stefansinclair.name/"><img alt="" src="http://www.gravatar.com/avatar/cba4d537795cd02764c6a5c778c21566?s=48&amp;d=identicon&amp;r=pg" class="photo avatar avatar-48" style="height:48px; width:48px;" /></a>				<p>
+					<strong><a href="http://stefansinclair.name/">Stéfan Sinclair</a></strong><br />
+					<small><a href="http://digitalhumanities.org/answers/profile/stefansinclair">Admin</a></small>
+				</p>
+				<div class="author-badges"><span title='50+ Posts' class='badge gold-poster 103'><!-- 50+ posts! --></span><span title='3+ Best Answers' class='badge bronze-answerer 6'><!-- 3-9 answers --></span></div>
+			</div>
+			<div class="threadpost">
+				<div class="post"><p>Merci à vous deux!
+</p></div>
+				<div class="poststuff">Posted 8 years ago <a class="post-perma-link" href="#post-767">Permalink</a> </div>
+			</div>
+		</div>
+	</li>
+	<li id="post-1044" class="best_answer_background">
+		<div id="position-5">
+			<div class="threadauthor">
+				<a href="http://philologia.hypotheses.org"><img alt="" src="http://www.gravatar.com/avatar/e48fe1de2f00bb12bc09b9305114dc46?s=48&amp;d=identicon&amp;r=pg" class="photo avatar avatar-48" style="height:48px; width:48px;" /></a>				<p>
+					<strong><a href="http://philologia.hypotheses.org">Aurelien Berra</a></strong><br />
+					<small><a href="http://digitalhumanities.org/answers/profile/aurelien-berra">Member</a><div class='best_answer'>Best Answer</div></small>
+				</p>
+				<div class="author-badges"><span class='badge 4'><!-- fewer than 5 posts --></span><span class='badge 1'><!-- fewer than 3 answers --></span></div>
+			</div>
+			<div class="threadpost">
+				<div class="post"><p>Bonjour,</p>
+<p>Les humanités numériques se développent bien sûr en France (et dans les autres pays francophones, comme vous le savez mieux que moi).</p>
+<p>Je confirme l'intérêt du séminaire mentionné par Alex, que Marin Dacos et Pierre Mounier animent depuis deux ans à Paris. Les annonces détaillées (<a href="http://www.ehess.fr/fr/enseignement/enseignements/2009/ue/928/">2009-2010</a> et <a href="http://www.ehess.fr/fr/enseignement/enseignements/2010/ue/894/">2010-2011</a>), ainsi que les comptes rendus et documents publiés à la suite des séances sur <a href="http://blog.homo-numericus.net/articlecategory/dh/sdh">Blogo-numericus</a> peuvent en effet vous intéresser, tout comme les archives de la liste de discussion <a href="https://listes.cru.fr/sympa/arc/dh">Digital Humanities</a>.</p>
+<p>Pour ma part, à l’EHESS également, je propose cette année un séminaire intitulé “Textes anciens et humanités numériques“. La constitution d’une bibliographie raisonnée fait partie de mes objectifs. Pour l’instant, je mets en ligne les références des séances passées sur le carnet de recherche <a href="http://philologia.hypotheses.org/">Philologie à venir</a>, qui accompagne le séminaire. Ces premières références ne concernent pas seulement la philologie numérique, mais le domaine des <em>digital humanities</em> d’une manière plus générale.</p>
+<p>Vous constaterez que les références en français sont assez peu nombreuses. Les “lectures de base” que je recommanderais ne sont pas des ouvrages écrits en français. Voici cependant une brève liste de références très diverses mais utiles :<br />
+Christian Vandendorpe, <em>Du papyrus à l’hypertexte. Essai sur les mutations du texte et de la lecture</em>, Paris, La Découverte, 1999. Il faut lire maintenant la version anglaise, largement révisée : <em>From Papyrus to Hypertext. Toward the Universal Digital Library</em>, trad. par Phyllis Aronoff et Howard Scott, Urbana, Illinois University Press, 2009.<br />
+François Rastier, « Philologie numérique », dans <em>Arts et Sciences du texte</em>, Paris, Presses universitaires de France, 2001, p. 73-97.<br />
+Claire Brossaud et Bernard Reber (éd.), <em>Humanités numériques. 1. Nouvelles technologies cognitives et épistémologie. 2. Socio-informatique et démocratie cognitive</em>, Paris, Lavoisier, 2007.<br />
+Bernard Stiegler, Alain Giffard et Christian Fauré, <em>Pour en finir avec la mécroissance. Quelques réflexions d’Ars Industrialis</em>, Paris, Flammarion, 2009.<br />
+Marin Dacos et Pierre Mounier, <em>L’Édition électronique</em>, Paris, La Découverte, 2010.<br />
+Milad Doueihi, <em>Pour un humanisme numérique</em>, Paris, Seuil, à paraître en avril 2011.</p>
+<p>Merci à Léo Dumont d’avoir signalé sa bibliographie, que je vais parcourir avec intérêt.</p>
+<p>J’espère que cette réponse tardive parviendra à des lecteurs intéressés !
+</p></div>
+				<div class="poststuff">Posted 7 years ago <a class="post-perma-link" href="#post-1044">Permalink</a> </div>
+			</div>
+		</div>
+	</li>
+	<li id="post-1882" class="alt">
+		<div id="position-5">
+			<div class="threadauthor">
+				<a href="http://philologia.hypotheses.org"><img alt="" src="http://www.gravatar.com/avatar/e48fe1de2f00bb12bc09b9305114dc46?s=48&amp;d=identicon&amp;r=pg" class="photo avatar avatar-48" style="height:48px; width:48px;" /></a>				<p>
+					<strong><a href="http://philologia.hypotheses.org">Aurelien Berra</a></strong><br />
+					<small><a href="http://digitalhumanities.org/answers/profile/aurelien-berra">Member</a></small>
+				</p>
+				<div class="author-badges"><span class='badge 4'><!-- fewer than 5 posts --></span><span class='badge 1'><!-- fewer than 3 answers --></span></div>
+			</div>
+			<div class="threadpost">
+				<div class="post"><p><em>Replying to @Stéfan Sinclair's <a href="http://digitalhumanities.org/answers/topic/lectures-de-base-en-francais-pour-les-digital-humanities#post-749">post</a>:</em></p>
+<p>La curiosité exprimée aujourd'hui même par Paul Spence, actuellement professeur invité à Paris, me suggère de mettre à jour cette page en y ajoutant quelques références récentes.</p>
+<p>Marin Dacos (dir.), <em>Read/Write Book. Le Livre inscriptible</em>, Marseille, OpenEdition Press, 2010, <a href="http://press.openedition.org/128">http://press.openedition.org/128</a>.<br />
+Jean-Philippe Genet et Andrea Zorzi (éd.), <em>Les Historiens et l'informatique. Un métier à réinventer</em>, Rome, École française de Rome, 2011.<br />
+Pierre Mounier (dir.), <em>Read/Write Book 2. Une introduction aux humanités numériques</em>, Marseille, OpenEdition Press, 2012, <a href="http://press.openedition.org/226">http://press.openedition.org/226</a>.</p>
+<p>J'espère que ces références seront utiles à quelques-uns ici, en attendant de transformer en une véritable bibliographie les références et les liens du carnet de recherche <a href="http://philologia.hypotheses.org/">Philologie à venir</a> (voir la page <a href="http://philologia.hypotheses.org/references">Références</a>) et que divers projets personnels et collectifs aillent plus loin dans cette direction !</p>
+<p>Pour information, le séminaire <a href="http://www.ehess.fr/fr/enseignement/enseignements/2012/ue/324/"><em>Digital Humanities</em>. Les transformations numériques du rapport aux savoirs</a>, mentionné ci-dessus et que j'anime depuis cette année avec Marin Dacos et Pierre Mounier, comporte un cycle de "Lectures", dans lequel nous nous intéressons notamment à l'Italie et à la France.</p>
+<p>Par ailleurs, une source d'informations prometteuse est la collection "L'Encyclopédie numérique", à paraître très bientôt dans le cadre d'OpenEdition Books (voir l'annonce en <a href="http://www.openedition.org/11058?lang=fr">français</a> or in <a href="http://oep.hypotheses.org/959">English</a>).
+</p></div>
+				<div class="poststuff">Posted 6 years ago <a class="post-perma-link" href="#post-1882">Permalink</a> </div>
+			</div>
+		</div>
+	</li>
+	<li id="post-1887">
+		<div id="position-6">
+			<div class="threadauthor">
+				<a href="http://philologia.hypotheses.org"><img alt="" src="http://www.gravatar.com/avatar/e48fe1de2f00bb12bc09b9305114dc46?s=48&amp;d=identicon&amp;r=pg" class="photo avatar avatar-48" style="height:48px; width:48px;" /></a>				<p>
+					<strong><a href="http://philologia.hypotheses.org">Aurelien Berra</a></strong><br />
+					<small><a href="http://digitalhumanities.org/answers/profile/aurelien-berra">Member</a></small>
+				</p>
+				<div class="author-badges"><span class='badge 4'><!-- fewer than 5 posts --></span><span class='badge 1'><!-- fewer than 3 answers --></span></div>
+			</div>
+			<div class="threadpost">
+				<div class="post"><p>La curiosité exprimée il y a deux jours par Paul Spence, actuellement professeur invité à Paris, me suggère de mettre à jour cette page en y ajoutant quelques références récentes.</p>
+<p>Marin Dacos (dir.), <em>Read/Write Book. Le Livre inscriptible</em>, Marseille, OpenEdition Press, 2010, <a href="http://press.openedition.org/128">http://press.openedition.org/128</a>.<br />
+Jean-Philippe Genet et Andrea Zorzi (éd.), <em>Les Historiens et l'informatique. Un métier à réinventer</em>, Rome, École française de Rome, 2011.<br />
+Pierre Mounier (dir.), <em>Read/Write Book 2. Une introduction aux humanités numériques</em>, Marseille, OpenEdition Press, 2012, <a href="http://press.openedition.org/226">http://press.openedition.org/226</a>.</p>
+<p>J'espère que ces références seront utiles à quelques-uns ici, en attendant de transformer en une véritable bibliographie les références et les liens du carnet de recherche <a href="http://philologia.hypotheses.org">Philologie à venir</a> (voir la page <a href="http://philologia.hypotheses.org/references">Références</a>) et que divers projets personnels et collectifs aillent plus loin dans cette direction !</p>
+<p>Pour information, le séminaire <a href="http://www.ehess.fr/fr/enseignement/enseignements/2012/ue/324/">Digital Humanities. Les transformations numériques du rapport aux savoirs</a>, mentionné ci-dessus et que j'anime depuis cette année avec Marin Dacos et Pierre Mounier, comporte un cycle de "Lectures", dans lequel nous nous intéressons notamment à l'Italie et à la France.</p>
+<p>Par ailleurs, une source d'informations prometteuse est la collection "L'Encyclopédie numérique", à paraître très bientôt dans le cadre d'OpenEdition Books (voir l'annonce <a href="http://www.openedition.org/11058?lang=fr">en français</a> or <a href="http://oep.hypotheses.org/959">in English</a>).
+</p></div>
+				<div class="poststuff">Posted 6 years ago <a class="post-perma-link" href="#post-1887">Permalink</a> </div>
+			</div>
+		</div>
+	</li>
+
+</ol>
+<div class="clearit"><br style=" clear: both;" /></div>
+<p class="rss-link"><a href="http://digitalhumanities.org/answers/rss/topic/lectures-de-base-en-francais-pour-les-digital-humanities" class="rss-link"><abbr title="Really Simple Syndication">RSS</abbr> feed for this topic</a></p>
+<h2 class="post-form">Reply</h2>
+<p>You must <a href="http://digitalhumanities.org/answers/bb-login.php">log in</a> to post.</p>		</div>
+			<div id="footer" role="contentinfo" class="span-24">
+				<div id="lang-switch">
+					<span class="lang-label">Language</span>
+					<form id="bb_language_switcher" style="display:inline-block;"><select  style="width:150px;" name="bb_language_switcher" onchange="location.href='/answers/topic/lectures-de-base-en-francais-pour-les-digital-humanities?bblang=' + this.options[this.selectedIndex].value;">
+<option value=''>Select...</option>	<option value="bg_BG">&nbsp;Bulgarian (BG) </option>
+	<option value="continents-cities-sr_RS">&nbsp;Corsican</option>
+	<option value="da_DK">&nbsp;Danish (DK) </option>
+	<option style='background:#ECE9D8;color:#000;font-weight:bold;' value=" ">&nbsp;English</option>
+	<option value="et_EE">&nbsp;Estonian (EE) </option>
+	<option value="fr_FR">&nbsp;French (FR) </option>
+	<option value="de">&nbsp;German</option>
+	<option value="he_IL">&nbsp;Hebrew (IL) </option>
+	<option value="hu_HU">&nbsp;Hungarian (HU) </option>
+	<option value="id_ID">&nbsp;Indonesian (ID) </option>
+	<option value="it_IT">&nbsp;Italian (IT) </option>
+	<option value="ja">&nbsp;Japanese</option>
+	<option value="pl_PL">&nbsp;Polish (PL) </option>
+	<option value="pt_BR">&nbsp;Portuguese (BR) </option>
+	<option value="pt_PT">&nbsp;Portuguese (PT) </option>
+	<option value="ro_RO">&nbsp;Romanian (RO) </option>
+	<option value="ru_RU">&nbsp;Russian (RU) </option>
+	<option value="sr_RS">&nbsp;Serbian (RS) </option>
+	<option value="sk">&nbsp;Slovak</option>
+	<option value="sk_SK">&nbsp;Slovak (SK) </option>
+	<option value="es_ES">&nbsp;Spanish (ES) </option>
+	<option value="sv_SE">&nbsp;Swedish (SE) </option>
+	<option value="th">&nbsp;Thai</option>
+	<option value="ug_CN">&nbsp;Uyghur (CN) </option>
+	<option value="uz_UZ">&nbsp;Uzbek (UZ) </option>
+	<option value="vi">&nbsp;Vietnamese</option>
+</select></form>
+				</div>			
+				<p>A project of the <a href="http://www.ach.org">Association for Computers and the Humanities</a> and the Chronicle of Higher Education's <a href="http://profhacker.com">ProfHacker</a></p>
+				<p>Icons by <a href="http://www.famfamfam.com/lab/icons/silk/">famfamfam</a></p>
+				<p><a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/"><img alt="Creative Commons License" src="http://i.creativecommons.org/l/by-nc-sa/3.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License</a>.</p>
+				<p><a href="http://lib.virginia.edu/scholarslab"><img src="http://digitalhumanities.org/answers/bb-templates/dhqa/images/slab-logo.jpg" alt="Scholars' Lab" title="Scholars' Lab"/></a></p>
+			</div>
+	</div>
+
+
+</body>
+</html>

@@ -1,0 +1,359 @@
+<?
+/*
+Plugin Name: bb Topic Icons
+Plugin URI: http://devt.caffeinatedbliss.com/bbpress/topic-icons
+Description: Adds configurable icons next to topics based on their status
+Author: Paul Hawke
+Author URI: http://paul.caffeinatedbliss.com/
+Version: 0.6
+*/
+
+/****************************************************************************
+ *
+ * Configure the following constants to fine-tune the CSS classes that are
+ * generated, the icon filenames that are used, and the text used in the
+ * legend (if you have one displayed).  Note: filenames are likely to be
+ * taken away in a future version and replaced with the concept of "icon sets"
+ * whose filenames are fixed, so dont get used to editing the filenames,
+ * as this will break in future versions.
+ *
+ ****************************************************************************/
+
+// css class for the unsorted list used in the legend display
+define( LEGEND_CLASS, 'topic_icon_legend' );
+
+// busy threshold - a topic with more posts than this is counted as "busy"
+// for purposes of picking an icon.
+define( BUSY_THRESHOLD, 15 );
+
+// width of the images, in pixels
+define( ICON_WIDTH, '20' );
+
+// height of the images, in pixels
+define( ICON_HEIGHT, '20' );
+
+// the URL base for where to find the default icon set.
+define( ICON_SET_URL_BASE, BB_PLUGIN_URL.'bb-topic-icons/icon-sets/' );
+
+/****************************************************************************
+ *
+ * Shouldnt be much need to edit anything beyond this point - configuration
+ * is all done via the constants (above) and through and admin area page in
+ * bbPress at runtime.
+ *
+ ****************************************************************************/
+
+require( 'bb-topic-icons-api.php' );
+require( 'bb-topic-icons-admin.php' );
+require( 'interface.status-interpreter.php' );
+require( 'interface.status-renderer.php' );
+require( 'class.default-status-interpreter.php' );
+require( 'class.default-status-renderer.php' );
+
+function topic_icons_legend() {
+	$icon_set_name = topic_icons_get_active_icon_set();
+	$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+	$statuses = get_active_status_interpreter()->getAllStatuses();
+	$renderer = get_active_status_renderer();
+	
+	echo '<ul id="'.LEGEND_CLASS.'">';
+	for ($i=0; $i < count($statuses); $i++) {
+		$image = $renderer->renderStatus($statuses[$i]);
+		$tooltip = $renderer->renderStatusTooltip($statuses[$i]);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (isset($image) && strlen($image) > 0 &&
+			isset($tooltip) && strlen($tooltip) > 0 && $exists) {
+			echo '<li><img src="'.$icon_set_url.'/'.$image.
+				'" width="'.ICON_WIDTH.'" height="'.ICON_HEIGHT.
+				'" align="absmiddle">&nbsp;'.$tooltip.'</li>';
+		}
+	}
+	echo '</ul>';
+}
+
+function topic_icons_css() {
+	echo "\n<style type=\"text/css\"><!--\n";
+	require( 'bb-topic-icons.css' );
+	echo "\n--></style>";
+}
+
+function topic_icons_label( $label ) {
+	global $topic;
+	
+	if (bb_is_front() || bb_is_forum() || bb_is_view() || bb_is_tag()) {		
+		$icon_set_name = topic_icons_get_active_icon_set();
+		$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+
+		$status = get_active_status_interpreter()->getStatus(bb_get_location(), $topic);
+		$renderer = get_active_status_renderer();
+		$image = $renderer->renderStatus($status);
+		$tooltip = $renderer->renderStatusTooltip($status);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (!$exists) {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), ICON_SET_URL_BASE.'/empty.png', ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		} else if (strlen($tooltip) > 0) {		
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"><span>%s</span></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $tooltip, $label);
+		} else {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		}
+	}
+	
+	return $label;
+}
+
+function topic_icons_init( ) {
+	remove_filter('bb_topic_labels', 'bb_closed_label', 10);
+	remove_filter('bb_topic_labels', 'bb_sticky_label', 20);
+
+	add_filter('bb_topic_labels', 'topic_icons_label', 11);
+
+	add_action('bb_head', 'topic_icons_css');
+
+	add_action('bb_admin_menu_generator', 'topic_icons_admin_page_add');
+	add_action('bb_admin-header.php', 'topic_icons_admin_page_process');
+	
+	topic_icons_register_status_interpreter('default', new DefaultStatusInterpreter(BUSY_THRESHOLD));
+	topic_icons_register_status_renderer('default', new DefaultStatusRenderer());
+}
+
+topic_icons_init();
+
+?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Tag: zotero - Recent Posts</title>
+		<link>http://digitalhumanities.org/answers/tags/zotero</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Tag: zotero - Recent Posts</description>
+		<language>en-US</language>
+		<pubDate>Sun, 24 Mar 2019 17:08:57 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/tags/zotero" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>shmerritt on "Most effective software for building searchable digital bibliographic database?"</title>
+						<link>http://digitalhumanities.org/answers/topic/most-effective-software-for-building-searchable-digital-bibliographic-database#post-2392</link>
+			<pubDate>Sun, 01 May 2016 15:46:56 +0000</pubDate>
+			<dc:creator>shmerritt</dc:creator>
+			<guid isPermaLink="false">2392@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Thank you very much. That post's question seems very similar to mine indeed! I'm just now looking into the replies you've directed me to via CODE4LIB in LISTSERV.  (I had to register first.)&#60;/p&#62;
+&#60;p&#62;One reply mentions Zotero, which some of the above posts suggest. The other replies seem related to library cataloguing purposes and are pretty technical in nature. But I am keeping an open mind.&#60;/p&#62;
+&#60;p&#62;So far I've been doing some practice conversion of my printed entries into Zotero in Firefox. I will be reading up on Drupal, exploring Drupal's Biblio Zotero plug in, etc., as suggested above.&#60;/p&#62;
+&#60;p&#62;Still open to further suggestions, however.&#60;/p&#62;
+&#60;p&#62;I've just applied for funding this project. Outcome will not be until December. So I expect to be researching possibilities further and, as I say, still welcome further suggestions. &#60;/p&#62;
+&#60;p&#62;[Update: the link to my website in my first post is no longer active; the archived link is &#60;a href=&#34;https://web.archive.org/web/20131209052925/http://susanhollismerritt.org/index.html&#34;&#62;susanhollismerritt.org&#60;/a&#62;.]
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Kevin Hawkins on "Most effective software for building searchable digital bibliographic database?"</title>
+						<link>http://digitalhumanities.org/answers/topic/most-effective-software-for-building-searchable-digital-bibliographic-database#post-2391</link>
+			<pubDate>Sun, 01 May 2016 02:09:11 +0000</pubDate>
+			<dc:creator>Kevin Hawkins</dc:creator>
+			<guid isPermaLink="false">2391@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;You might be interested in a recent discussion on CODE4LIB on a similar question: &#60;a href=&#34;https://listserv.nd.edu/cgi-bin/wa?A2=CODE4LIB;44fd042d.1604&#34; rel=&#34;nofollow&#34;&#62;https://listserv.nd.edu/cgi-bin/wa?A2=CODE4LIB;44fd042d.1604&#60;/a&#62;
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>shmerritt on "Most effective software for building searchable digital bibliographic database?"</title>
+						<link>http://digitalhumanities.org/answers/topic/most-effective-software-for-building-searchable-digital-bibliographic-database#post-2390</link>
+			<pubDate>Sat, 30 Apr 2016 15:07:01 +0000</pubDate>
+			<dc:creator>shmerritt</dc:creator>
+			<guid isPermaLink="false">2390@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Further update:&#60;br /&#62;
+I have posted some more recent information pertaining to the proposed project to which this thread relates in the Day of DH 2016 (April 8) site.  Please see my Day of DH 2016 blog &#60;a href=&#34;http://dayofdh2016.linhd.es/merritt/&#34;&#62; The Harold Pinter Bibliography (Searchable Digital Database) project&#60;/a&#62;, especially my first post &#60;a href=&#34;http://dayofdh2016.linhd.es/merritt/2016/03/18/hello-world/&#34;&#62; Hello world!&#60;/a&#62;, created on March 18, 2016.&#60;/p&#62;
+&#60;p&#62;If you have additional suggestions to add to the earlier ones, please post them here, at DH Q&#38;amp;A.  I will greatly appreciate them. Thank you.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Sheila Brennan on "Who&#039;s using the Zotero-plugin for displaying bibliographic collections in Omeka?"</title>
+						<link>http://digitalhumanities.org/answers/topic/whos-using-the-zotero-plugin-for-displaying-bibliographic-collections-in-omeka#post-1891</link>
+			<pubDate>Sat, 16 Feb 2013 23:45:29 +0000</pubDate>
+			<dc:creator>Sheila Brennan</dc:creator>
+			<guid isPermaLink="false">1891@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;This question was also asked on the Omeka forums and answered: &#60;a href=&#34;http://omeka.org/forums/topic/example-zotero-collections-in-omeka&#34; rel=&#34;nofollow&#34;&#62;http://omeka.org/forums/topic/example-zotero-collections-in-omeka&#60;/a&#62;
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>shmerritt on "Most effective software for building searchable digital bibliographic database?"</title>
+						<link>http://digitalhumanities.org/answers/topic/most-effective-software-for-building-searchable-digital-bibliographic-database#post-1875</link>
+			<pubDate>Wed, 06 Feb 2013 19:16:39 +0000</pubDate>
+			<dc:creator>shmerritt</dc:creator>
+			<guid isPermaLink="false">1875@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @Michael Widner's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/most-effective-software-for-building-searchable-digital-bibliographic-database#post-1871&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;br /&#62;
+Thanks very much.  Will be looking into what you (and the others) suggest.&#60;/p&#62;
+&#60;p&#62;Update: Just a point of information:&#60;br /&#62;
+I noticed recently in doing a search via the online edition of ABELL that repeatedly it gives an incorrect publication year for many of the volumes of &#60;em&#62;The Pinter Review&#60;/em&#62;.  (Apparently, its software took as a publication year dates from subtitles of volumes, not from actual publication information provided in printed title pages/copyright pages.  E.g., in the entry for the most current volume, whose subtitle gives the years it &#60;em&#62;covers&#60;/em&#62; as &#34;2009-2011,&#34; the first of those years, 2009, is listed as the date of publication, which is incorrect, since its copyright date is actually 2011 (though it was distributed in 2012).   In the past, I have found other errors in other online databases frequently used by academic researchers (when checked against actual print sources), and I would not want to perpetuate such errors by importing such erroneous data from those databases.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Michael Widner on "Most effective software for building searchable digital bibliographic database?"</title>
+						<link>http://digitalhumanities.org/answers/topic/most-effective-software-for-building-searchable-digital-bibliographic-database#post-1871</link>
+			<pubDate>Fri, 01 Feb 2013 19:08:39 +0000</pubDate>
+			<dc:creator>Michael Widner</dc:creator>
+			<guid isPermaLink="false">1871@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I would look at Drupal, too. The Biblio module would allow data entry of each bibliographic record. The Feeds module would allow you to automate the process if you had all the records in a spreadsheet, csv, or some other format. Plus, since you want to control user access to edit the records, Drupal already has that ability built in with user roles. There is a bit of a learning curve, but it seems like the best tool for what you want. I'd also recommend picking up a book on Drupal if the online documentation (which is very uneven) isn't helpful. The Definitive Guide to Drupal 7 is a good reference work. With Views (another powerful Drupal module) you could create custom queries and displays of the records beyond what the Biblio module already allows.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>mdalmau on "Who&#039;s using the Zotero-plugin for displaying bibliographic collections in Omeka?"</title>
+						<link>http://digitalhumanities.org/answers/topic/whos-using-the-zotero-plugin-for-displaying-bibliographic-collections-in-omeka#post-1868</link>
+			<pubDate>Tue, 29 Jan 2013 15:06:01 +0000</pubDate>
+			<dc:creator>mdalmau</dc:creator>
+			<guid isPermaLink="false">1868@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Using Omeka for discovery of bibliographic collections was discussed in a related post by Susan Hollis Merritt (&#60;a href=&#34;http://digitalhumanities.org/answers/topic/most-effective-software-for-building-searchable-digital-bibliographic-database#post-1856)&#34; rel=&#34;nofollow&#34;&#62;http://digitalhumanities.org/answers/topic/most-effective-software-for-building-searchable-digital-bibliographic-database#post-1856)&#60;/a&#62;.  I'd like to focus on the public display aspect touched upon therein.&#60;/p&#62;
+&#60;p&#62;A few of us here at Indiana University are exploring options for fostering image-based bibliographic collections.  Most of these to date are driven by scholars so they serve very specific research questions, but our Rare Books library could very well benefit from such a platform for documents with broader appeal.  Poking around the Omeka forums and the interwebs, I noticed a lot of interest in the Zotero plugin for Omeka, but I am curious to see some examples of Zotero-based collections using Omeka as an end-user delivery system.  &#60;/p&#62;
+&#60;p&#62;Please share links and any other pertinent info!   I am especially curious how well importing file attachments work. Thanks!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>shmerritt on "Most effective software for building searchable digital bibliographic database?"</title>
+						<link>http://digitalhumanities.org/answers/topic/most-effective-software-for-building-searchable-digital-bibliographic-database#post-1860</link>
+			<pubDate>Thu, 17 Jan 2013 05:06:25 +0000</pubDate>
+			<dc:creator>shmerritt</dc:creator>
+			<guid isPermaLink="false">1860@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;To Dorothea, Patrick, and Quinnanya (if I may),&#60;/p&#62;
+&#60;p&#62;Thanks for all these suggestions, and I will be looking into all of them.&#60;/p&#62;
+&#60;blockquote&#62;&#60;p&#62;One way would be to export all your digital files to plain text, then regular-expression the living daylights out of them to turn them into RIS or other text- or markup-based format.&#60;/p&#62;
+&#60;/blockquote&#62;
+&#60;p&#62;Noticing the Export Manager possibilities in EBSCO Host, e.g., I have seen this as a possibility, though with 14 editions of this bibliography published over 25 years the task involves many thousands of entries.&#60;/p&#62;
+&#60;p&#62;Related is the point:&#60;/p&#62;
+&#60;blockquote&#62;&#60;p&#62;A substantial percentage of your bibliographies is probably already indexed in searchable, fielded form via one or another bibliographic database/index.&#60;/p&#62;
+&#60;/blockquote&#62;
+&#60;p&#62;Many of my entries came from my own searches that precede the existence of online databases like EBSCO, which now includes the online version of the MLA International Bibliography (previously I used printed versions of the latter), and precede the time when library patrons could do online searches themselves (1986-early 90s). [Prior to that I would pay for librarians with access to RLIN, e.g., at Cornell University and other research universities, to do the searches on the institution's fee basis.]&#60;/p&#62;
+&#60;p&#62;My entries are not only publications but also productions and that information I compiled from theater programs of those I attended and reading reviews and other articles and advertisements.  The &#34;Harold Pinter Bibliography&#34; includes performances and performance reviews and productions and interviews and other programs broadcast on various media (radio, television, film, [later] podcasts, etc.) From mid 90s on, it does also include web-based or online publications.&#60;/p&#62;
+&#60;p&#62;Many of the entries that are published in international newspapers and other popular periodicals do originate in somewhat different formats in online databases like LexisNexis; I probably would not have access to their fields.  To work back to my original sources would probably be more time-consuming in some cases than creating the fields needed for my purposes.&#60;/p&#62;
+&#60;p&#62;In the cases when the original entries (as noted on my notecards and printouts prior to word-processing the entries into a list format) did come from other online databases (post 1980s-early 90s) via ProQuest, EBSCO, InfoTrac, etc. [or have been included in them retroactively], the mark up is probably accessible.  But, again, thousands of entries are involved and working back to where each one of them came from would probably involve conflicting formats of each of the bibliographic databases used over the period of, say, mid 1990s to the present.&#60;/p&#62;
+&#60;blockquote&#62;&#60;p&#62;A further question might be what needs to happen with the database once it exists? That is, is it publicly accessible on the web? Available to others for research upon request? Public on the web, but behind some access restrictions?&#60;/p&#62;
+&#60;/blockquote&#62;
+&#60;p&#62;At this stage, I am uncertain of the answer to these questions. Initially, the idea is to make the full database of over 25 years both publicly accessible (free to users) on the web and also possibly open to editing by password-protected collaborator-compilers for future expansion of the database (bibliography), following whatever format is used for it.  Depending on the costs of the project (if it is feasible), the costs of maintaining it on a server (if not a donated server by a university or library, e.g.) might need reimbursement through voluntary donations and/or subscription.&#60;/p&#62;
+&#60;p&#62;The 14 previously published editions of this bibliography (as published in separate lists in &#60;em&#62;The Pinter Review&#60;/em&#62;) are not accessible via commercial vendors (like EBSCO, etc.).*  I would prefer to make it publicly accessible (free to users) on the web universally (not limited only to university libraries and other subscribers to the commercial databases).  How it is to be made accessible is something I can deal with once I figure out how to build the database.  It seems that it would be quicker to give the material to a commercial vendor to mark up in ways to make it searchable, but that would not enable me to correct whatever errors occurred in the printing process (post proofs-correction) prior to a mark up that I and my academic collaborators had more control over.&#60;/p&#62;
+&#60;blockquote&#62;&#60;p&#62;To make it more accessible on the web, the next step would probably be to import the data into something like Drupal or Omeka. (I know Omeka has a plugin to import from Zotero. Not sure about Drupal).&#60;br /&#62;
+The upshot is that depending on how you intend for the data to be used, there might be additional steps after the initial compiling of data.&#60;/p&#62;
+&#60;/blockquote&#62;
+&#60;blockquote&#62;&#60;p&#62;Yup, there's a Biblio Zotero module for Drupal that can do an import, then use the display powers of the Biblio module, and its various add-ons.&#60;/p&#62;
+&#60;/blockquote&#62;
+&#60;p&#62;It is very helpful to have these points, and I will look into what you suggest and keep them in mind in doing so. I am in the process still of exploring the Drupal links given (much of the language used there is over my head at this stage), and I will need some help with understanding them (e.g., consultant[s]).&#60;/p&#62;
+&#60;p&#62;Thank you all very much again, and I look forward to other comments that may appear here or sources of information that you think I should research.&#60;/p&#62;
+&#60;p&#62;*&#60;em&#62;The Pinter Review&#60;/em&#62; is not available online.  Its individual contents (articles and the bibliography: as a publication: author-title-subject[s]) are indexed (mostly) by the MLA International Bibliography.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>quinnanya on "Most effective software for building searchable digital bibliographic database?"</title>
+						<link>http://digitalhumanities.org/answers/topic/most-effective-software-for-building-searchable-digital-bibliographic-database#post-1859</link>
+			<pubDate>Wed, 16 Jan 2013 18:07:37 +0000</pubDate>
+			<dc:creator>quinnanya</dc:creator>
+			<guid isPermaLink="false">1859@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @Patrick Murray-John's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/most-effective-software-for-building-searchable-digital-bibliographic-database#post-1858&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;Yup, there's a &#60;a href=&#34;http://drupal.org/project/biblio_zotero&#34;&#62;Biblio Zotero&#60;/a&#62; module for Drupal that can do an import, then use the display powers of the &#60;a href=&#34;http://drupal.org/project/biblio/&#34;&#62;Biblio&#60;/a&#62; module, and its various add-ons.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Patrick Murray-John on "Most effective software for building searchable digital bibliographic database?"</title>
+						<link>http://digitalhumanities.org/answers/topic/most-effective-software-for-building-searchable-digital-bibliographic-database#post-1858</link>
+			<pubDate>Wed, 16 Jan 2013 16:35:43 +0000</pubDate>
+			<dc:creator>Patrick Murray-John</dc:creator>
+			<guid isPermaLink="false">1858@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;+1 on Dorothea's idea of looking up the data in another database then putting it into Zotero or Mendeley.&#60;/p&#62;
+&#60;p&#62;A further question might be what needs to happen with the database once it exists? That is, is it publicly accessible on the web? Available to others for research upon request? Public on the web, but behind some access restrictions?&#60;/p&#62;
+&#60;p&#62;So, imagine it is happily in Zotero. That _could_ make it public on the web with a Zotero group, but the search and display is a bit limited there. To make it more accessible on the web, the next step would probably be to import the data into something like Drupal or Omeka. (I know Omeka has a plugin to import from Zotero. Not sure about Drupal). &#60;/p&#62;
+&#60;p&#62;The upshot is that depending on how you intend for the data to be used, there might be additional steps after the initial compiling of data.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Dorothea Salo on "Most effective software for building searchable digital bibliographic database?"</title>
+						<link>http://digitalhumanities.org/answers/topic/most-effective-software-for-building-searchable-digital-bibliographic-database#post-1857</link>
+			<pubDate>Wed, 16 Jan 2013 14:30:05 +0000</pubDate>
+			<dc:creator>Dorothea Salo</dc:creator>
+			<guid isPermaLink="false">1857@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Well, I can think of a few ways of going about this. :)&#60;/p&#62;
+&#60;p&#62;One way would be to export all your digital files to plain text, then regular-expression the living daylights out of them to turn them into RIS or other text- or markup-based format. This is fiddly, but probably not hugely difficult given the consistency in the bibliographic style; you could find a consultant to do it. The one unknown is what happens to those special characters, a point on which I can't reassure (much depends on how they were handled in the original files).&#60;/p&#62;
+&#60;p&#62;From there, you could slurp them into Zotero or Mendeley, and get the whole out onto the web through those services. (Both Zotero and Mendeley have perfectly functional export tools, so your exit strategy is clear and unworrisome.) If you'd rather run your own, VIVO or BibApp might suit.&#60;/p&#62;
+&#60;p&#62;I would be inclined to go about this a slightly different way, though. A substantial percentage of your bibliographies is probably already indexed in searchable, fielded form via one or another bibliographic database/index. Why not search all that up (I daresay some simple title and subject searches would turn up most of it!), slurp it into Zotero or Mendeley, and go from there?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>shmerritt on "Most effective software for building searchable digital bibliographic database?"</title>
+						<link>http://digitalhumanities.org/answers/topic/most-effective-software-for-building-searchable-digital-bibliographic-database#post-1856</link>
+			<pubDate>Wed, 16 Jan 2013 02:07:48 +0000</pubDate>
+			<dc:creator>shmerritt</dc:creator>
+			<guid isPermaLink="false">1856@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;[Stéfan Sinclair (via DH Commons mentorship program) suggested that I post here.  I have described this project in my &#34;collaborator&#34; or user profile on DH Commons at &#60;a href=&#34;http://dhcommons.org&#34; rel=&#34;nofollow&#34;&#62;http://dhcommons.org&#60;/a&#62; ; direct link from the &#34;Collaborators&#34; section at &#60;a href=&#34;http://dhcommons.org/users/susan-hollis-merritt&#34; rel=&#34;nofollow&#34;&#62;http://dhcommons.org/users/susan-hollis-merritt&#60;/a&#62; and in my member profile on MLA Commons at &#60;a href=&#34;http://commons.mla.org&#34; rel=&#34;nofollow&#34;&#62;http://commons.mla.org&#60;/a&#62; ; direct member link at &#60;a href=&#34;http://commons.mla.org/members/shmerritt/&#34; rel=&#34;nofollow&#34;&#62;http://commons.mla.org/members/shmerritt/&#60;/a&#62;; direct links are also provided in the Pinter Bibliography and CV sections on my website at &#60;a href=&#34;http://www.susanhollismerritt.org&#34; rel=&#34;nofollow&#34;&#62;http://www.susanhollismerritt.org&#60;/a&#62; , where there are related details.]&#60;/p&#62;
+&#60;p&#62;I am requesting advice and guidance as I explore the possibility of building a searchable digital database for my &#34;Harold Pinter Bibliography&#34; published in print in volumes of &#60;em&#62;The Pinter Review&#60;/em&#62; (Tampa: The University of Tampa Press, 1987-2011).  Each annual/biennial/special edition of this bibliography is published in MLA format (whatever the most current MLA format has been at the time).  I would plan to continue with MLA format for consistency of documentation style throughout.  (I understand that users of such a bibliography could convert easily to whatever format is desired on their end later.)&#60;/p&#62;
+&#60;p&#62;I have word-processed files (WordPerfect) for all of the 14 editions of this bibliography.  The same typist working for The University of Tampa Press prepared my word-processed files into a format to be used by the printer.  For several years, she converted my &#34;Harold Pinter Bibliography&#34; files initially to MS Word document files or various versions of PDF files for the printer.  More recently, I gave her my own PDF file versions of my WordPerfect files, which I believe she also converted to Word or to another format for the printer.  The typist's and printer's digital files may be accessible if I need to have them for easier digital conversion.&#60;/p&#62;
+&#60;p&#62;A problem with the typist's conversions from one word-processing software program to another has been the loss of accents, punctuation, and other typesetting features, which at times have had to be corrected in printer's proofs.  I have maintained hard copies (original books and parts of books, offprints, photocopies, or print outs) and handwritten index cards (for every entry) to check as back ups of the bibliographic entries in the printed bibliographies for purposes of such error-correction of occasional printer's errors that were missed even in corrected proof.&#60;/p&#62;
+&#60;p&#62;From looking into this matter over a decade ago (when ProCite was initially popular), I believe that the printed information (even though digitized) would need to be converted into records featuring bibliographic fields (including annotations, sometimes lengthy, most often very brief) for each printed entry, and each entry would need to have key words and/or phrases (e.g., to accommodate multiple authors, editors, titles, subjects, etc.) so that it could be capable of classification by key words for searching by users.  Also, there are categories and subsections of categories in each published edition of this bibliography that may need some kind of &#34;field&#34;/key word/phrase identification for sorting electronically.&#60;/p&#62;
+&#60;p&#62;I am not familiar with mark up language beyond HTML, but it is possible that I might be able to learn about additional mark up languages if needed (e.g., RIS Format, SML format, etc.).  When I asked this question of a presenter after a DH session at the MLA Convention in Boston, she advised me to look at Drupal (which I have done somewhat), but I am not trained in using it for anything.  It appears to me to be involved in the stage of actually putting an already developed database online.  Another piece of advice I have received is possibly to create an EXCEL type spreadsheet which could be searched.  But before I would begin doing any of this work, I would like to have a plan to use one mode of conversion (one kind of software, so as to avoid duplication of effort).&#60;/p&#62;
+&#60;p&#62;Thus, a main question that I am asking is: What would be the most effective current software package or packages to use for this entire process?&#60;/p&#62;
+&#60;p&#62;Prior to deciding this project's feasibility and how and where this database would be hosted (institutional partners/support), I need to explore such matters as: (1) the technical requirements for such conversion from printed material to searchable digital format; (2) the estimated cost of such conversion (including the costs of any commercial software packages involved (if any) and of assistance with the physical input of the records); (3) whether or not applying for grant support is warranted; and so on.&#60;/p&#62;
+&#60;p&#62;I welcome suggestions, advice, and guidance.  Thank you very much.&#60;/p&#62;
+&#60;p&#62;[(updated on January 17, 2013)Since first posting this, I have been exploring some earlier DH Q&#38;amp;A threads and found Bethany Nowviskie's suggesting that updates are in progress for &#60;a href=&#34;http://arts-humanities.net/&#34; rel=&#34;nofollow&#34;&#62;http://arts-humanities.net/&#60;/a&#62;, and I will be exploring the &#34;tools&#34; forum there; the &#34;bibliography&#34; section returned an error message when I tried it, so I'll try it again later.]&#60;/p&#62;
+&#60;p&#62;Susan Hollis Merritt, PhD&#60;br /&#62;
+Founding Bibliographical Editor&#60;br /&#62;
+&#60;em&#62;The Pinter Review&#60;/em&#62;&#60;br /&#62;
+&#60;a href=&#34;http://www.susanhollismerritt.org&#34; rel=&#34;nofollow&#34;&#62;http://www.susanhollismerritt.org&#60;/a&#62;
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>inactinique on "How do you get a zotero library to feed into a webpage?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-do-you-get-a-zotero-library-to-feed-into-a-webpage#post-1665</link>
+			<pubDate>Fri, 25 May 2012 19:07:54 +0000</pubDate>
+			<dc:creator>inactinique</dc:creator>
+			<guid isPermaLink="false">1665@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Dear Rebecca,&#60;/p&#62;
+&#60;p&#62;Zotpress can display a collection with the following syntax: [zotpress collection=''   '']. You can see more in the help tab of your zotpress installation.&#60;/p&#62;
+&#60;p&#62;BUT Zotpress' performances are rather bad and can slow down your whole website (mine is slow because of zotpress, but nobody reads it, so it does not really matter). So, maybe Mark Sample's instructions are still the best way to do what you want to do.&#60;/p&#62;
+&#60;p&#62;Best,&#60;br /&#62;
+Frédéric
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>amandafrench on "How do you get a zotero library to feed into a webpage?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-do-you-get-a-zotero-library-to-feed-into-a-webpage#post-1664</link>
+			<pubDate>Fri, 25 May 2012 15:53:22 +0000</pubDate>
+			<dc:creator>amandafrench</dc:creator>
+			<guid isPermaLink="false">1664@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Some of making this kind of thing work would probably involve installing new WordPress plugins and/or altering the PHP on the page. Searching in the WordPress forums might help - here's something that might be relevant: &#60;a href=&#34;http://wordpress.org/support/topic/import-and-display-rss-feeds-on-front-page&#34; rel=&#34;nofollow&#34;&#62;http://wordpress.org/support/topic/import-and-display-rss-feeds-on-front-page&#60;/a&#62;
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Patrick Murray-John on "How do you get a zotero library to feed into a webpage?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-do-you-get-a-zotero-library-to-feed-into-a-webpage#post-1663</link>
+			<pubDate>Fri, 25 May 2012 14:08:36 +0000</pubDate>
+			<dc:creator>Patrick Murray-John</dc:creator>
+			<guid isPermaLink="false">1663@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Alas, I don't know of any newer solutions that have been built. But, I do know that relatively recently there has been a lot of work on the &#60;a href=&#34;http://www.zotero.org/support/dev/server_api/read_api&#34;&#62;Zotero API&#60;/a&#62;, and Faolan Cheslack-Postava built a &#60;a href=&#34;http://www.zotero.org/support/dev/server_api#api_implementations&#34;&#62;PHP library&#60;/a&#62;, so if any developers or hackers want to tackle this, you'll have much better tools at your disposal.
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

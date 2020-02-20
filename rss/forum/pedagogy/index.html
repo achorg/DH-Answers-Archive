@@ -1,0 +1,335 @@
+<?
+/*
+Plugin Name: bb Topic Icons
+Plugin URI: http://devt.caffeinatedbliss.com/bbpress/topic-icons
+Description: Adds configurable icons next to topics based on their status
+Author: Paul Hawke
+Author URI: http://paul.caffeinatedbliss.com/
+Version: 0.6
+*/
+
+/****************************************************************************
+ *
+ * Configure the following constants to fine-tune the CSS classes that are
+ * generated, the icon filenames that are used, and the text used in the
+ * legend (if you have one displayed).  Note: filenames are likely to be
+ * taken away in a future version and replaced with the concept of "icon sets"
+ * whose filenames are fixed, so dont get used to editing the filenames,
+ * as this will break in future versions.
+ *
+ ****************************************************************************/
+
+// css class for the unsorted list used in the legend display
+define( LEGEND_CLASS, 'topic_icon_legend' );
+
+// busy threshold - a topic with more posts than this is counted as "busy"
+// for purposes of picking an icon.
+define( BUSY_THRESHOLD, 15 );
+
+// width of the images, in pixels
+define( ICON_WIDTH, '20' );
+
+// height of the images, in pixels
+define( ICON_HEIGHT, '20' );
+
+// the URL base for where to find the default icon set.
+define( ICON_SET_URL_BASE, BB_PLUGIN_URL.'bb-topic-icons/icon-sets/' );
+
+/****************************************************************************
+ *
+ * Shouldnt be much need to edit anything beyond this point - configuration
+ * is all done via the constants (above) and through and admin area page in
+ * bbPress at runtime.
+ *
+ ****************************************************************************/
+
+require( 'bb-topic-icons-api.php' );
+require( 'bb-topic-icons-admin.php' );
+require( 'interface.status-interpreter.php' );
+require( 'interface.status-renderer.php' );
+require( 'class.default-status-interpreter.php' );
+require( 'class.default-status-renderer.php' );
+
+function topic_icons_legend() {
+	$icon_set_name = topic_icons_get_active_icon_set();
+	$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+	$statuses = get_active_status_interpreter()->getAllStatuses();
+	$renderer = get_active_status_renderer();
+	
+	echo '<ul id="'.LEGEND_CLASS.'">';
+	for ($i=0; $i < count($statuses); $i++) {
+		$image = $renderer->renderStatus($statuses[$i]);
+		$tooltip = $renderer->renderStatusTooltip($statuses[$i]);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (isset($image) && strlen($image) > 0 &&
+			isset($tooltip) && strlen($tooltip) > 0 && $exists) {
+			echo '<li><img src="'.$icon_set_url.'/'.$image.
+				'" width="'.ICON_WIDTH.'" height="'.ICON_HEIGHT.
+				'" align="absmiddle">&nbsp;'.$tooltip.'</li>';
+		}
+	}
+	echo '</ul>';
+}
+
+function topic_icons_css() {
+	echo "\n<style type=\"text/css\"><!--\n";
+	require( 'bb-topic-icons.css' );
+	echo "\n--></style>";
+}
+
+function topic_icons_label( $label ) {
+	global $topic;
+	
+	if (bb_is_front() || bb_is_forum() || bb_is_view() || bb_is_tag()) {		
+		$icon_set_name = topic_icons_get_active_icon_set();
+		$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+
+		$status = get_active_status_interpreter()->getStatus(bb_get_location(), $topic);
+		$renderer = get_active_status_renderer();
+		$image = $renderer->renderStatus($status);
+		$tooltip = $renderer->renderStatusTooltip($status);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (!$exists) {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), ICON_SET_URL_BASE.'/empty.png', ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		} else if (strlen($tooltip) > 0) {		
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"><span>%s</span></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $tooltip, $label);
+		} else {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		}
+	}
+	
+	return $label;
+}
+
+function topic_icons_init( ) {
+	remove_filter('bb_topic_labels', 'bb_closed_label', 10);
+	remove_filter('bb_topic_labels', 'bb_sticky_label', 20);
+
+	add_filter('bb_topic_labels', 'topic_icons_label', 11);
+
+	add_action('bb_head', 'topic_icons_css');
+
+	add_action('bb_admin_menu_generator', 'topic_icons_admin_page_add');
+	add_action('bb_admin-header.php', 'topic_icons_admin_page_process');
+	
+	topic_icons_register_status_interpreter('default', new DefaultStatusInterpreter(BUSY_THRESHOLD));
+	topic_icons_register_status_renderer('default', new DefaultStatusRenderer());
+}
+
+topic_icons_init();
+
+?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Forum: DH in the Classroom - Recent Posts</title>
+		<link>http://digitalhumanities.org/answers/forum/pedagogy</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Forum: DH in the Classroom - Recent Posts</description>
+		<language>en-US</language>
+		<pubDate>Sun, 24 Mar 2019 17:08:38 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/forum/pedagogy" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>pfyfe on "Do you have amazing activities for teaching typography?"</title>
+						<link>http://digitalhumanities.org/answers/topic/ideas-for-teaching-typography#post-2417</link>
+			<pubDate>Fri, 03 Nov 2017 15:45:57 +0000</pubDate>
+			<dc:creator>pfyfe</dc:creator>
+			<guid isPermaLink="false">2417@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;That sounds like a great activity! I've always wanted to do more with this. Ryan Cordell describes some of his teaching exercises in hand-setting type in &#34;Programmable Type: &#60;a href=&#34;http://ryancordell.org/research/programmabletype/&#34; rel=&#34;nofollow&#34;&#62;http://ryancordell.org/research/programmabletype/&#60;/a&#62; &#60;/p&#62;
+&#60;p&#62;Personally have had fun with the online &#34;shape type&#34; game &#60;a href=&#34;http://shape.method.ac/&#34; rel=&#34;nofollow&#34;&#62;http://shape.method.ac/&#60;/a&#62; and the kerning game: &#60;a href=&#34;http://type.method.ac/&#34; rel=&#34;nofollow&#34;&#62;http://type.method.ac/&#60;/a&#62;
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>rachaelsullivan on "Do you have amazing activities for teaching typography?"</title>
+						<link>http://digitalhumanities.org/answers/topic/ideas-for-teaching-typography#post-2416</link>
+			<pubDate>Fri, 27 Oct 2017 10:05:29 +0000</pubDate>
+			<dc:creator>rachaelsullivan</dc:creator>
+			<guid isPermaLink="false">2416@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Do you have classroom activities, exercises, and lesson plans about typography (font selection, typesetting, etc.)? I have used one activity for years -- it involves taking a serious or playful text and typesetting it (in InDesign) to look the opposite (for example, making a &#60;em&#62;People Magazine&#60;/em&#62; or &#60;em&#62;Buzzfeed&#60;/em&#62; article look like an article in &#60;em&#62;Harper's Bazaar&#60;/em&#62; or &#60;em&#62;The New York Times&#60;/em&#62;). I think this idea came from Johanna Drucker but I cannot find the source right now! Some takeaways from the activity are that typographic styles are rhetorical and even small changes make a big difference. At any rate, I would love more ideas for how to teach typography in any college setting / course.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>nathandwyer on "Need some English literature essay writing tips"</title>
+						<link>http://digitalhumanities.org/answers/topic/need-some-english-literature-essay-writing-tips#post-2413</link>
+			<pubDate>Thu, 08 Jun 2017 11:25:19 +0000</pubDate>
+			<dc:creator>nathandwyer</dc:creator>
+			<guid isPermaLink="false">2413@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hello friends,I am a graduate student. Please suggest some good English literature essay writing tips. I am looking for helping hands to submit a good quality literature essay. Hope you people have great experience in this field. If you don’t mind please share your writing experience to motivate students like me. I am eagerly waiting for your reply. Please text me as soon as possible. No one is here to suggest good writing ideas for me.And is custom essay writing service (&#60;a href=&#34;https://rospher.com/&#34; rel=&#34;nofollow&#34;&#62;https://rospher.com/&#60;/a&#62;) giving proper structure and tips for essay writing?Please share your opinion.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Kaarina on "Examples of online teaching modules or lesson plans?"</title>
+						<link>http://digitalhumanities.org/answers/topic/examples-of-online-teaching-modules-or-lesson-plans#post-2386</link>
+			<pubDate>Sun, 06 Mar 2016 12:45:30 +0000</pubDate>
+			<dc:creator>Kaarina</dc:creator>
+			<guid isPermaLink="false">2386@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='http://digitalhumanities.org/answers/profile/katherineharris'&#62;katherineharris&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/examples-of-online-teaching-modules-or-lesson-plans#post-2385&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;Thank you! This looks great.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>katherineharris on "Examples of online teaching modules or lesson plans?"</title>
+						<link>http://digitalhumanities.org/answers/topic/examples-of-online-teaching-modules-or-lesson-plans#post-2385</link>
+			<pubDate>Thu, 03 Mar 2016 20:02:23 +0000</pubDate>
+			<dc:creator>katherineharris</dc:creator>
+			<guid isPermaLink="false">2385@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;YES!&#60;/p&#62;
+&#60;p&#62;Check out the in-progress collection: Digital Pedagogy in the Humanities.&#60;/p&#62;
+&#60;p&#62;A few keywords that might have assignments and syllabi that fit your needs:&#60;/p&#62;
+&#60;p&#62;Archive: &#60;a href=&#34;https://github.com/curateteaching/digitalpedagogy/blob/master/keywords/archive.md&#34; rel=&#34;nofollow&#34;&#62;https://github.com/curateteaching/digitalpedagogy/blob/master/keywords/archive.md&#60;/a&#62;&#60;br /&#62;
+Interface: &#60;a href=&#34;https://github.com/curateteaching/digitalpedagogy/blob/master/keywords/interface.md&#34; rel=&#34;nofollow&#34;&#62;https://github.com/curateteaching/digitalpedagogy/blob/master/keywords/interface.md&#60;/a&#62;&#60;br /&#62;
+Poetry: &#60;a href=&#34;https://github.com/curateteaching/digitalpedagogy/blob/master/keywords/poetry.md&#34; rel=&#34;nofollow&#34;&#62;https://github.com/curateteaching/digitalpedagogy/blob/master/keywords/poetry.md&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;And many, many others. Each keyword has a list of 10 pedagogical artifacts. Feel free to use those materials right now. A finalized published version of the entire collection will be stabilized by January 2017. For now, we continue adding keywords and going through open peer review.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Kaarina on "Examples of online teaching modules or lesson plans?"</title>
+						<link>http://digitalhumanities.org/answers/topic/examples-of-online-teaching-modules-or-lesson-plans#post-2384</link>
+			<pubDate>Thu, 03 Mar 2016 19:57:09 +0000</pubDate>
+			<dc:creator>Kaarina</dc:creator>
+			<guid isPermaLink="false">2384@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hello!&#60;/p&#62;
+&#60;p&#62;I am helping to develop teaching modules around a collection of digitized texts and artefacts, so that non-expert instructors and teachers can integrate these texts into their courses. &#60;/p&#62;
+&#60;p&#62;Can anyone think of examples of strong teaching modules/guides/plans that are freely available online?&#60;/p&#62;
+&#60;p&#62;Thanks!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>SharonHoward on "Open Corpora for Digital History Assignment"</title>
+						<link>http://digitalhumanities.org/answers/topic/open-corpora-for-digital-history-assignment#post-2365</link>
+			<pubDate>Tue, 08 Dec 2015 16:51:47 +0000</pubDate>
+			<dc:creator>SharonHoward</dc:creator>
+			<guid isPermaLink="false">2365@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Lists of corpora compiled by historical linguists (some may be restricted access): &#60;a href=&#34;http://www.helsinki.fi/varieng/corpora/index.html&#34; rel=&#34;nofollow&#34;&#62;http://www.helsinki.fi/varieng/corpora/index.html&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;Oxford Texts Archive is full of amazing things (including EEBO-TCP texts), though students might have to register for access: &#60;a href=&#34;http://ota.ox.ac.uk/&#34; rel=&#34;nofollow&#34;&#62;http://ota.ox.ac.uk/&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;This huge list of museums/libraries etc data compiled by Mia Ridge emphasises APIs and linked open data but it's actually very wide-ranging: &#60;a href=&#34;http://museum-api.pbworks.com/w/page/21933420/Museum%C2%A0APIs&#34; rel=&#34;nofollow&#34;&#62;http://museum-api.pbworks.com/w/page/21933420/Museum%C2%A0APIs&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;The British Library is also making a varied assortment of datasets and text collections available through its BL Labs project: &#60;a href=&#34;http://labs.bl.uk/Digital+Collections&#34; rel=&#34;nofollow&#34;&#62;http://labs.bl.uk/Digital+Collections&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;Corpora from Mark Davies, BYU (including Hansard): &#60;a href=&#34;http://corpus.byu.edu/&#34; rel=&#34;nofollow&#34;&#62;http://corpus.byu.edu/&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;Some smaller collections that I like:&#60;/p&#62;
+&#60;p&#62;Thomas Bodley Correspondence (XML) from the Centre for Lives and Letters: &#60;a href=&#34;https://github.com/livesandletters/bodley1&#34; rel=&#34;nofollow&#34;&#62;https://github.com/livesandletters/bodley1&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;Family Life and Work Experience Before 1918, 1870-1973 (transcripts of c. 450 oral history interviews + structured metadata): &#60;a href=&#34;https://discover.ukdataservice.ac.uk/catalogue/?sn=2000&#38;amp;type=Data%20catalogue&#34; rel=&#34;nofollow&#34;&#62;https://discover.ukdataservice.ac.uk/catalogue/?sn=2000&#38;amp;type=Data%20catalogue&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;Repository of Early American Datasets: &#60;a href=&#34;http://repository.upenn.edu/mead/&#34; rel=&#34;nofollow&#34;&#62;http://repository.upenn.edu/mead/&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;A new version of the Old Bailey Online Corpus is due to be released shortly and will be open data (the current version requires registration): &#60;a href=&#34;http://www1.uni-giessen.de/oldbaileycorpus/&#34; rel=&#34;nofollow&#34;&#62;http://www1.uni-giessen.de/oldbaileycorpus/&#60;/a&#62;
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Miriam Posner on "Open Corpora for Digital History Assignment"</title>
+						<link>http://digitalhumanities.org/answers/topic/open-corpora-for-digital-history-assignment#post-2364</link>
+			<pubDate>Tue, 08 Dec 2015 15:29:11 +0000</pubDate>
+			<dc:creator>Miriam Posner</dc:creator>
+			<guid isPermaLink="false">2364@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Oh, check &#60;a href=&#34;http://dhresourcesforprojectbuilding.pbworks.com/w/page/69244469/Data%20Collections%20and%20Datasets#demo-corpora&#34;&#62;this out&#60;/a&#62;, from Alan Liu.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Shawn on "Open Corpora for Digital History Assignment"</title>
+						<link>http://digitalhumanities.org/answers/topic/open-corpora-for-digital-history-assignment#post-2363</link>
+			<pubDate>Tue, 08 Dec 2015 15:13:53 +0000</pubDate>
+			<dc:creator>Shawn</dc:creator>
+			<guid isPermaLink="false">2363@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hi - check out Melodee Beal's 'scissors and paste' &#60;a href=&#34;http://www.scissorsandpaste.net/&#34; rel=&#34;nofollow&#34;&#62;http://www.scissorsandpaste.net/&#60;/a&#62; source &#60;a href=&#34;https://github.com/mhbeals/scissorsandpaste/tree/master/Outputs&#34; rel=&#34;nofollow&#34;&#62;https://github.com/mhbeals/scissorsandpaste/tree/master/Outputs&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;Also MSU libraries: &#60;a href=&#34;https://www.lib.msu.edu/dh/humdata/&#34; rel=&#34;nofollow&#34;&#62;https://www.lib.msu.edu/dh/humdata/&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;and this from Sharon Howard - &#60;a href=&#34;http://sharonhoward.github.io/cdt/&#34; rel=&#34;nofollow&#34;&#62;http://sharonhoward.github.io/cdt/&#60;/a&#62;
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>mattprice on "Open Corpora for Digital History Assignment"</title>
+						<link>http://digitalhumanities.org/answers/topic/open-corpora-for-digital-history-assignment#post-2362</link>
+			<pubDate>Tue, 08 Dec 2015 14:50:25 +0000</pubDate>
+			<dc:creator>mattprice</dc:creator>
+			<guid isPermaLink="false">2362@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hi,&#60;br /&#62;
+I'm putting together assignments for next semester's digital history class, and want to construct a simple distant reading for my students, probably using Voyant Tools (unless there is a very easy-to-use pure HTML/Javascript set of tools that will let my students use some of the basic JS skills they'll have acquired in their previous assignment).  &#60;/p&#62;
+&#60;p&#62;I would like to present them with existing corpora of historical texts: preferably not literature, but newspapers/government documents, letters etc. Most archives I've found use PDF images with mediocre to poor OCR.  Can anyone point me to a good collection of historical corpora that students can experiment with?  &#60;/p&#62;
+&#60;p&#62;Thank you!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>katherineharris on "Open Peer Review now LIVE until 8/3! - Digital Pedagogy in the Humanities"</title>
+						<link>http://digitalhumanities.org/answers/topic/open-peer-review-now-live-until-83-digital-pedagogy-in-the-humanities#post-2343</link>
+			<pubDate>Mon, 06 Jul 2015 16:26:27 +0000</pubDate>
+			<dc:creator>katherineharris</dc:creator>
+			<guid isPermaLink="false">2343@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Digital Pedagogy in the Humanities: Concepts, Models, and Experiments, edited by Rebecca Frost Davis, Matthew K. Gold, Katherine D. Harris, and Jentery Sayers, is a dynamic open-access collection currently in development on MLA Commons. The editors invite your participation in the open peer review of this collection. Each entry in the collection focuses on a keyword in the field of digital pedagogy (ranging from “queer” to “interface” to “professionalization”) and is curated by an experienced practitioner, who briefly contextualizes a concept and then provides ten supporting artifacts, such as syllabi, prompts, exercises, lesson plans, and student work, drawn from courses, classrooms, and projects across the humanities. New keywords will be added in batches throughout 2015, with fifty keywords to be included in the final project.&#60;/p&#62;
+&#60;p&#62;Please visit &#60;a href=&#34;https://digitalpedagogy.commons.mla.org&#34; rel=&#34;nofollow&#34;&#62;https://digitalpedagogy.commons.mla.org&#60;/a&#62; to read through and respond to the first set of keywords, now available for open review. The official review period for the first set of keywords will end on 3 August 2015. &#60;/p&#62;
+&#60;p&#62;We encourage you to pass it along to other colleagues who may be interested. We would appreciate your assistance with this project and look forward to hearing from you. &#60;/p&#62;
+&#60;p&#62;All best,&#60;br /&#62;
+Kathy Harris (with Rebecca Frost Davis, Matthew Gold, and Jentery Sayers)
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>johnlaudun on "Which novels to assign for seminar in algorithmic criticism / distant reading?"</title>
+						<link>http://digitalhumanities.org/answers/topic/which-novels-to-assign-for-seminar-in-algorithmic-criticism-distant-reading#post-2330</link>
+			<pubDate>Wed, 20 May 2015 21:26:12 +0000</pubDate>
+			<dc:creator>johnlaudun</dc:creator>
+			<guid isPermaLink="false">2330@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='http://digitalhumanities.org/answers/profile/ullyot'&#62;ullyot&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/which-novels-to-assign-for-seminar-in-algorithmic-criticism-distant-reading#post-2329&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;Sure. Right now I have no travel plans for July. When you're ready, drop me a note. I'm going to be working on the repo some in June, and I'm making a note to add the PDF. Part of my plan is also to turn chunks of it into an iPython notebook (now Jupyter) which would allow there to be a mix of exposition (written in Markdown) with code that can be executed live. (I have a pretty complete run-down on how to set all this up on a Mac, if anyone is interested.)
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>ullyot on "Which novels to assign for seminar in algorithmic criticism / distant reading?"</title>
+						<link>http://digitalhumanities.org/answers/topic/which-novels-to-assign-for-seminar-in-algorithmic-criticism-distant-reading#post-2329</link>
+			<pubDate>Wed, 20 May 2015 20:14:43 +0000</pubDate>
+			<dc:creator>ullyot</dc:creator>
+			<guid isPermaLink="false">2329@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='http://digitalhumanities.org/answers/profile/johnlaudun'&#62;johnlaudun&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/which-novels-to-assign-for-seminar-in-algorithmic-criticism-distant-reading#post-2328&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;Thanks very much, John! I'd love to review the PDF version, too, and talk to you about exercises. Perhaps in July when I start developing the course? You can reach me at ullyot[@]ucalgary[.]ca or @&#60;a href='http://digitalhumanities.org/answers/profile/ullyot'&#62;ullyot&#60;/a&#62; on Twitter.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>johnlaudun on "Which novels to assign for seminar in algorithmic criticism / distant reading?"</title>
+						<link>http://digitalhumanities.org/answers/topic/which-novels-to-assign-for-seminar-in-algorithmic-criticism-distant-reading#post-2328</link>
+			<pubDate>Fri, 15 May 2015 20:39:41 +0000</pubDate>
+			<dc:creator>johnlaudun</dc:creator>
+			<guid isPermaLink="false">2328@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;If you want something intermediate between Codecademy's Python tutorials and Jockers' R, as well as a small text through which you can work methodically with your students, I've got a small collection of commented Python scripts in a GitHub repository. It comes with a plain text version of &#34;The Most Dangerous Game.&#34; I can also include a PDF version I've long used, which gives you a paginated source for comparison. If you're interested, I can also add notes on the exercises/activities that I use in conjunction with the text. (Essentially, I use it as a way to get students thinking about both the advantages of working through the particularities of texts computationally -- e.g., KWiC -- as well as some of the underlying statistics behind things like topic modeling.&#60;/p&#62;
+&#60;p&#62;Here's the repo: &#60;a href=&#34;https://github.com/johnlaudun/upst&#34; rel=&#34;nofollow&#34;&#62;https://github.com/johnlaudun/upst&#60;/a&#62;
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>ullyot on "Which novels to assign for seminar in algorithmic criticism / distant reading?"</title>
+						<link>http://digitalhumanities.org/answers/topic/which-novels-to-assign-for-seminar-in-algorithmic-criticism-distant-reading#post-2327</link>
+			<pubDate>Fri, 15 May 2015 17:29:58 +0000</pubDate>
+			<dc:creator>ullyot</dc:creator>
+			<guid isPermaLink="false">2327@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I’m designing the graduate seminar I’ll teach in the Department of English this fall (2015) on the subject of ‘Algorithmic Criticism,’ a title I took from the subtitle of Stephen Ramsay’s 2011 book, Reading Machines. It’s an introduction to computational text-analysis for students of literature, from word frequency to topic modelling.&#60;/p&#62;
+&#60;p&#62;By the end of the course, students will be comfortable moving between close reading and distant reading, or what Matthew Jockers calls micro-, meso-, and macro-analysis. (Along with Ramsay’s book, Jockers’ 2013 study Macroanalysis and his 2014 guide to Text Analysis with R for Students of Literature will be required readings.)&#60;/p&#62;
+&#60;p&#62;Students will learn and implement some programming basics using Python and R, so they can see what happens when natural-language processing and other tools parse and rearrange the words in both individual texts and larger corpora. I haven’t developed more detailed course outcomes than that. We’ll use Codecademy’s Python tutorials alongside Jockers’ book on R.&#60;/p&#62;
+&#60;p&#62;So which literary texts do you assign for old-fashioned linear close readings in a course like this? They should be long enough to have a lot of words to work with, and complex enough that they contain a lot of topics. They should provide good contrasts with each other – that is, contain a lot of different words and topics – yet be close enough in time that the comparison makes sense. And they should be in the public domain, so we have texts to manipulate in whatever repository we’re drawing them from.
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

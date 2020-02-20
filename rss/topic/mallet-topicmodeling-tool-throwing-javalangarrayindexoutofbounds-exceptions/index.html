@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Topic: Mallet TopicModeling Tool throwing java.lang.ArrayIndexOutOfBounds exceptions</title>
+		<link>http://digitalhumanities.org/answers/topic/mallet-topicmodeling-tool-throwing-javalangarrayindexoutofbounds-exceptions</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Topic: Mallet TopicModeling Tool throwing java.lang.ArrayIndexOutOfBounds exceptions</description>
+		<language>en-US</language>
+		<pubDate>Thu, 04 Aug 2016 12:07:30 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/topic/mallet-topicmodeling-tool-throwing-javalangarrayindexoutofbounds-exceptions" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>Stéfan Sinclair on "Mallet TopicModeling Tool throwing java.lang.ArrayIndexOutOfBounds exceptions"</title>
+						<link>http://digitalhumanities.org/answers/topic/mallet-topicmodeling-tool-throwing-javalangarrayindexoutofbounds-exceptions#post-1821</link>
+			<pubDate>Tue, 04 Dec 2012 22:15:48 +0000</pubDate>
+			<dc:creator>Stéfan Sinclair</dc:creator>
+			<guid isPermaLink="false">1821@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;See also this thread &#60;a href=&#34;http://digitalhumanities.org/answers/topic/help-with-mallet-topic-generation-going-wrong&#34; rel=&#34;nofollow&#34;&#62;http://digitalhumanities.org/answers/topic/help-with-mallet-topic-generation-going-wrong&#60;/a&#62;
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Shawn on "Mallet TopicModeling Tool throwing java.lang.ArrayIndexOutOfBounds exceptions"</title>
+						<link>http://digitalhumanities.org/answers/topic/mallet-topicmodeling-tool-throwing-javalangarrayindexoutofbounds-exceptions#post-1819</link>
+			<pubDate>Tue, 04 Dec 2012 19:12:29 +0000</pubDate>
+			<dc:creator>Shawn</dc:creator>
+			<guid isPermaLink="false">1819@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hi,&#60;/p&#62;
+&#60;p&#62;If you scroll down to 'Issues with Big Data' in this &#60;a href=&#34;http://programminghistorian.org/lessons/topic-modeling-and-mallet&#34; rel=&#34;nofollow&#34;&#62;http://programminghistorian.org/lessons/topic-modeling-and-mallet&#60;/a&#62; you might find what you're looking for. No guarantee, of course, but I think this might resolve the issue.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>sjturner@gmail.com on "Mallet TopicModeling Tool throwing java.lang.ArrayIndexOutOfBounds exceptions"</title>
+						<link>http://digitalhumanities.org/answers/topic/mallet-topicmodeling-tool-throwing-javalangarrayindexoutofbounds-exceptions#post-1818</link>
+			<pubDate>Tue, 04 Dec 2012 18:55:18 +0000</pubDate>
+			<dc:creator>sjturner@gmail.com</dc:creator>
+			<guid isPermaLink="false">1818@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hi Everyone - I am using the TopicModeling tool / Mallet to process a large data corpus (~ 40000 articles) and I am receiving the following errors on output, with the end result of the CVS and DOC directory files *not* being created, eg, these directories are empty.&#60;/p&#62;
+&#60;p&#62;Has anybody else experienced this issue with large amounts of data and Mallet, or perhaps would be able to give me an idea of what is happening - it would appear that the index array is simply growing too large for memory, causing the exception to be thrown, but I am unsure as I am new to Mallet/TopicModeling tool.&#60;br /&#62;
+--------&#60;br /&#62;
+Total time: 26 minutes 52 seconds&#60;br /&#62;
+java.lang.ArrayIndexOutOfBoundsException: 1&#60;br /&#62;
+	at cc.mallet.topics.gui.CsvBuilder.dtLine2Csv(CsvBuilder.java:159)&#60;br /&#62;
+	at cc.mallet.topics.gui.CsvBuilder.buildCsv2(CsvBuilder.java:199)&#60;br /&#62;
+	at cc.mallet.topics.gui.CsvBuilder.createCsvFiles(CsvBuilder.java:233)&#60;br /&#62;
+	at cc.mallet.topics.gui.TopicModelingTool$TrainButtonListener.outputCsvFiles(TopicModelingTool.java:625)&#60;br /&#62;
+	at cc.mallet.topics.gui.TopicModelingTool$TrainButtonListener.runMallet(TopicModelingTool.java:581)&#60;br /&#62;
+	at cc.mallet.topics.gui.TopicModelingTool$TrainButtonListener$1.run(TopicModelingTool.java:446)&#60;br /&#62;
+java.lang.ArrayIndexOutOfBoundsException: 1&#60;br /&#62;
+	at cc.mallet.topics.gui.HtmlBuilder.buildHtml2(HtmlBuilder.java:178)&#60;br /&#62;
+	at cc.mallet.topics.gui.HtmlBuilder.createHtmlFiles(HtmlBuilder.java:293)&#60;br /&#62;
+	at cc.mallet.topics.gui.TopicModelingTool$TrainButtonListener.outputCsvFiles(TopicModelingTool.java:629)&#60;br /&#62;
+	at cc.mallet.topics.gui.TopicModelingTool$TrainButtonListener.runMallet(TopicModelingTool.java:581)&#60;br /&#62;
+	at cc.mallet.topics.gui.TopicModelingTool$TrainButtonListener$1.run(TopicModelingTool.java:446)&#60;br /&#62;
+Mallet Output files written in C:\Users\sjturner1\Desktop\Cuba Output ---&#38;gt; C:\Users\sjturner1\Desktop\Cuba Output\output_state.gz , C:\Users\sjturner1\Desktop\Cuba Output\output_topic_keys&#60;/p&#62;
+&#60;p&#62;Csv Output files written in C:\Users\sjturner1\Desktop\Cuba Output\output_csv&#60;br /&#62;
+Html Output files written in C:\Users\sjturner1\Desktop\Cuba Output\output_html
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

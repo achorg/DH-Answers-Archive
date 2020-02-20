@@ -1,0 +1,207 @@
+<?
+/*
+Plugin Name: bb Topic Icons
+Plugin URI: http://devt.caffeinatedbliss.com/bbpress/topic-icons
+Description: Adds configurable icons next to topics based on their status
+Author: Paul Hawke
+Author URI: http://paul.caffeinatedbliss.com/
+Version: 0.6
+*/
+
+/****************************************************************************
+ *
+ * Configure the following constants to fine-tune the CSS classes that are
+ * generated, the icon filenames that are used, and the text used in the
+ * legend (if you have one displayed).  Note: filenames are likely to be
+ * taken away in a future version and replaced with the concept of "icon sets"
+ * whose filenames are fixed, so dont get used to editing the filenames,
+ * as this will break in future versions.
+ *
+ ****************************************************************************/
+
+// css class for the unsorted list used in the legend display
+define( LEGEND_CLASS, 'topic_icon_legend' );
+
+// busy threshold - a topic with more posts than this is counted as "busy"
+// for purposes of picking an icon.
+define( BUSY_THRESHOLD, 15 );
+
+// width of the images, in pixels
+define( ICON_WIDTH, '20' );
+
+// height of the images, in pixels
+define( ICON_HEIGHT, '20' );
+
+// the URL base for where to find the default icon set.
+define( ICON_SET_URL_BASE, BB_PLUGIN_URL.'bb-topic-icons/icon-sets/' );
+
+/****************************************************************************
+ *
+ * Shouldnt be much need to edit anything beyond this point - configuration
+ * is all done via the constants (above) and through and admin area page in
+ * bbPress at runtime.
+ *
+ ****************************************************************************/
+
+require( 'bb-topic-icons-api.php' );
+require( 'bb-topic-icons-admin.php' );
+require( 'interface.status-interpreter.php' );
+require( 'interface.status-renderer.php' );
+require( 'class.default-status-interpreter.php' );
+require( 'class.default-status-renderer.php' );
+
+function topic_icons_legend() {
+	$icon_set_name = topic_icons_get_active_icon_set();
+	$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+	$statuses = get_active_status_interpreter()->getAllStatuses();
+	$renderer = get_active_status_renderer();
+	
+	echo '<ul id="'.LEGEND_CLASS.'">';
+	for ($i=0; $i < count($statuses); $i++) {
+		$image = $renderer->renderStatus($statuses[$i]);
+		$tooltip = $renderer->renderStatusTooltip($statuses[$i]);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (isset($image) && strlen($image) > 0 &&
+			isset($tooltip) && strlen($tooltip) > 0 && $exists) {
+			echo '<li><img src="'.$icon_set_url.'/'.$image.
+				'" width="'.ICON_WIDTH.'" height="'.ICON_HEIGHT.
+				'" align="absmiddle">&nbsp;'.$tooltip.'</li>';
+		}
+	}
+	echo '</ul>';
+}
+
+function topic_icons_css() {
+	echo "\n<style type=\"text/css\"><!--\n";
+	require( 'bb-topic-icons.css' );
+	echo "\n--></style>";
+}
+
+function topic_icons_label( $label ) {
+	global $topic;
+	
+	if (bb_is_front() || bb_is_forum() || bb_is_view() || bb_is_tag()) {		
+		$icon_set_name = topic_icons_get_active_icon_set();
+		$icon_set_url = ICON_SET_URL_BASE . $icon_set_name;
+
+		$status = get_active_status_interpreter()->getStatus(bb_get_location(), $topic);
+		$renderer = get_active_status_renderer();
+		$image = $renderer->renderStatus($status);
+		$tooltip = $renderer->renderStatusTooltip($status);
+		$exists = file_exists(dirname(__FILE__).'/icon-sets/'.$icon_set_name.'/'.$image);
+
+		if (!$exists) {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), ICON_SET_URL_BASE.'/empty.png', ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		} else if (strlen($tooltip) > 0) {		
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"><span>%s</span></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $tooltip, $label);
+		} else {
+			return sprintf(__('<div class="topic-icon-image"><a href="%s"><img src="%s" width="%s" height="%s" alt="%s" border="0"></a></div> %s'), 
+				get_topic_link($topic->topic_id), $icon_set_url.'/'.$image, ICON_WIDTH, ICON_HEIGHT, $tooltip, $label);
+		}
+	}
+	
+	return $label;
+}
+
+function topic_icons_init( ) {
+	remove_filter('bb_topic_labels', 'bb_closed_label', 10);
+	remove_filter('bb_topic_labels', 'bb_sticky_label', 20);
+
+	add_filter('bb_topic_labels', 'topic_icons_label', 11);
+
+	add_action('bb_head', 'topic_icons_css');
+
+	add_action('bb_admin_menu_generator', 'topic_icons_admin_page_add');
+	add_action('bb_admin-header.php', 'topic_icons_admin_page_process');
+	
+	topic_icons_register_status_interpreter('default', new DefaultStatusInterpreter(BUSY_THRESHOLD));
+	topic_icons_register_status_renderer('default', new DefaultStatusRenderer());
+}
+
+topic_icons_init();
+
+?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Topic: Why should DH coursework count towards a literature grad program?</title>
+		<link>http://digitalhumanities.org/answers/topic/why-should-dh-coursework-count-towards-a-literature-grad-program</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Topic: Why should DH coursework count towards a literature grad program?</description>
+		<language>en-US</language>
+		<pubDate>Sun, 24 Mar 2019 17:08:15 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/topic/why-should-dh-coursework-count-towards-a-literature-grad-program" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>Patrick Murray-John on "Why should DH coursework count towards a literature grad program?"</title>
+						<link>http://digitalhumanities.org/answers/topic/why-should-dh-coursework-count-towards-a-literature-grad-program#post-2403</link>
+			<pubDate>Fri, 02 Dec 2016 16:15:11 +0000</pubDate>
+			<dc:creator>Patrick Murray-John</dc:creator>
+			<guid isPermaLink="false">2403@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;There's also the MLA's &#60;a href='https://www.mla.org/About-Us/Governance/Committees/Committee-Listings/Professional-Issues/Committee-on-Information-Technology/Guidelines-for-Evaluating-Work-in-Digital-Humanities-and-Digital-Media'&#62;Guide for evaluating DH work&#60;/a&#62;. It's (sadly) less about grad students than tenure and promotion, but seems to still apply. If nothing else, the fact that MLA (and AHA, for that matter) have produced guides for DH evaluation says clearly that the professional organization says that DH does, in fact, correlate with language, literature, and teaching.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Patrick Murray-John on "Why should DH coursework count towards a literature grad program?"</title>
+						<link>http://digitalhumanities.org/answers/topic/why-should-dh-coursework-count-towards-a-literature-grad-program#post-2402</link>
+			<pubDate>Fri, 02 Dec 2016 16:14:58 +0000</pubDate>
+			<dc:creator>Patrick Murray-John</dc:creator>
+			<guid isPermaLink="false">2402@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;There's also the MLA's &#60;a href='https://www.mla.org/About-Us/Governance/Committees/Committee-Listings/Professional-Issues/Committee-on-Information-Technology/Guidelines-for-Evaluating-Work-in-Digital-Humanities-and-Digital-Media'&#62;Guide for evaluating DH work&#60;/a&#62;. It's (sadly) less about grad students than tenure and promotion, but seems to still apply. If nothing else, the fact that MLA (and AHA, for that matter) have produced guides for DH evaluation says clearly that the professional organization says that DH does, in fact, correlate with language, literature, and teaching.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Amanda Visconti on "Why should DH coursework count towards a literature grad program?"</title>
+						<link>http://digitalhumanities.org/answers/topic/why-should-dh-coursework-count-towards-a-literature-grad-program#post-2401</link>
+			<pubDate>Fri, 02 Dec 2016 13:44:59 +0000</pubDate>
+			<dc:creator>Amanda Visconti</dc:creator>
+			<guid isPermaLink="false">2401@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;(We tweeted a bit, but for anyone else happening on this question...)&#60;/p&#62;
+&#60;p&#62;DH dissertations in general&#60;br /&#62;
+-----&#60;br /&#62;
+1. The CUNY Graduate Center fellows and staff do amazing work making more kinds of dissertation possible, and in particular I'd suggest looking for blog posts and video from their #remixthediss event/project (e.g. &#60;a href=&#34;http://mediacommons.futureofthebook.org/alt-ac/pieces/what-dissertation-new-models-methods-media)&#34; rel=&#34;nofollow&#34;&#62;http://mediacommons.futureofthebook.org/alt-ac/pieces/what-dissertation-new-models-methods-media)&#60;/a&#62;. &#60;/p&#62;
+&#60;p&#62;2. They maintain a collaborative GoogleDoc where people doing current or past non-monograph dissertations (humanities and not, digital and not) describe and link to their projects: &#60;a href=&#34;http://bit.ly/remixthediss-models&#34; rel=&#34;nofollow&#34;&#62;http://bit.ly/remixthediss-models&#60;/a&#62;. I don't think these are included there, but two additional completed DH+textual literature dissertations to check out or use as examples are:&#60;br /&#62;
+* Lisa Rhody's literature dissertation using topic modeling and visualization to explore ekphrastic poetry: &#60;a href=&#34;http://www.lisarhody.com/project/revising-ekphrasis/&#34; rel=&#34;nofollow&#34;&#62;http://www.lisarhody.com/project/revising-ekphrasis/&#60;/a&#62;&#60;br /&#62;
+* Tanya Clement's literature dissertation included the creation of an experimental scholarly digital edition: &#60;a href=&#34;http://digital.lib.umd.edu/transition/&#34; rel=&#34;nofollow&#34;&#62;http://digital.lib.umd.edu/transition/&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;3. Here's a Zotero library of articles and guidelines for doing DH dissertations and applying for DH promotion/tenure (the latter often being applicable to arguing for the former): &#60;a href=&#34;https://www.zotero.org/amandavisconti/items/collectionKey/V9DA47T7&#34; rel=&#34;nofollow&#34;&#62;https://www.zotero.org/amandavisconti/items/collectionKey/V9DA47T7&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;My DH+textual studies dissertation&#60;br /&#62;
+-----&#60;br /&#62;
+I defended a DH dissertation about public digital humanities and digital textual scholarship for the University of Maryland's literature Ph.D. To show the department chair what a completed DH+textual studies dissertation can look like, or reuse some of the DH and literature precedents I used in my arguments:&#60;/p&#62;
+&#60;p&#62;The dissertation did not include any chapters; I used design, code, usertesting, blogging, and an analytical report written during last month before defense.&#60;/p&#62;
+&#60;p&#62;The completed dissertation is this website: &#60;a href=&#34;http://dr.amandavisconti.com&#34; rel=&#34;nofollow&#34;&#62;http://dr.amandavisconti.com&#60;/a&#62;. &#60;/p&#62;
+&#60;p&#62;The dissertation produced a participatory digital edition of Ulysses (&#60;a href=&#34;http://www.infiniteulysses.com)&#34; rel=&#34;nofollow&#34;&#62;http://www.infiniteulysses.com)&#60;/a&#62;.&#60;/p&#62;
+&#60;p&#62;My doctoral exams areas were DH and textual scholarship (list and introductory essay explaining choices here: &#60;a href=&#34;http://literaturegeek.com/assets/ExamsSharingCopy.pdf)&#34; rel=&#34;nofollow&#34;&#62;http://literaturegeek.com/assets/ExamsSharingCopy.pdf)&#60;/a&#62;.&#60;/p&#62;
+&#60;p&#62;I blogged about twice a month through exams and the dissertation, both about my research and the larger meta aspects of doing a digital/DH dissertation: &#60;a href=&#34;http://literaturegeek.com/tag/dissertation/&#34; rel=&#34;nofollow&#34;&#62;http://literaturegeek.com/tag/dissertation/&#60;/a&#62;. In particular, this post has some practical advice on getting started (&#60;a href=&#34;http://literaturegeek.com/2012/10/21/startingadhdissertation&#34; rel=&#34;nofollow&#34;&#62;http://literaturegeek.com/2012/10/21/startingadhdissertation&#60;/a&#62;) and this post has info on choosing your dissertation's format (&#60;a href=&#34;http://literaturegeek.com/2014/04/02/digitaldissformat)&#34; rel=&#34;nofollow&#34;&#62;http://literaturegeek.com/2014/04/02/digitaldissformat)&#60;/a&#62;.&#60;/p&#62;
+&#60;p&#62;The slides and text of my successful dissertation defense talk are here: &#60;a href=&#34;http://literaturegeek.com/2016/06/20/digital-humanities-dissertation-defense-talk&#34; rel=&#34;nofollow&#34;&#62;http://literaturegeek.com/2016/06/20/digital-humanities-dissertation-defense-talk&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;I am happy to email with this student (or anyone curious about DH/digital dissertations!) via &#60;a href=&#34;mailto:amandavisconti@gmail.com&#34;&#62;amandavisconti@gmail.com&#60;/a&#62;.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>pfyfe on "Why should DH coursework count towards a literature grad program?"</title>
+						<link>http://digitalhumanities.org/answers/topic/why-should-dh-coursework-count-towards-a-literature-grad-program#post-2400</link>
+			<pubDate>Thu, 01 Dec 2016 15:51:42 +0000</pubDate>
+			<dc:creator>pfyfe</dc:creator>
+			<guid isPermaLink="false">2400@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hi everyone: I have a former grad student who wrote to me in a panic. Apparently, her current department chair has decided that her previous coursework in DH, book history will not count towards her current graduate program, because it does not &#34;correlate&#34; to literature, composition, or teaching. (Wow. I can barely even.) The chair is apparently reacting to an accreditation review and has asked for justification in language accessible to non-specialist peers. Does anyone have go-to resources for helping us make this case? Thank you --
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

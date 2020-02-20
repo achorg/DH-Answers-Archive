@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Topic: How do you display TEI documents online?</title>
+		<link>http://digitalhumanities.org/answers/topic/how-do-you-display-tei-documents-online</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Topic: How do you display TEI documents online?</description>
+		<language>en-US</language>
+		<pubDate>Wed, 22 Aug 2018 19:21:10 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/topic/how-do-you-display-tei-documents-online" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>Ingarao Maud on "How do you display TEI documents online?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-do-you-display-tei-documents-online#post-1719</link>
+			<pubDate>Thu, 28 Jun 2012 12:14:14 +0000</pubDate>
+			<dc:creator>Ingarao Maud</dc:creator>
+			<guid isPermaLink="false">1719@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hello Carin,&#60;/p&#62;
+&#60;p&#62;At the ENS de Lyon (&#60;a href=&#34;http://ens-lyon.fr/&#34; rel=&#34;nofollow&#34;&#62;http://ens-lyon.fr/&#60;/a&#62;) we are using Omeka to display a few corpora. We fixed some issues in the current TeiDisplay plugin :&#60;br /&#62;
+- fixed bugs in populating and depopulating the TeiConfig table (when deleting a file, re-installing the plugin...)&#60;br /&#62;
+- removed TEI.2 handling and added teiCorpus handling instead&#60;br /&#62;
+- the plugin now checks whether a XML file is a TEI or teiCorpus file&#60;/p&#62;
+&#60;p&#62;If you and your colleague are interested we will be pleased to send it to you and discuss it with you.&#60;br /&#62;
+Best regards,&#60;br /&#62;
+Nathalie Arlin &#38;amp; Maud Ingarao&#60;/p&#62;
+&#60;p&#62;--&#60;br /&#62;
+Maud Ingarao&#60;br /&#62;
+IHPC (UMR 5037)&#60;br /&#62;
+Institut d’histoire de la pensée classique, de l’Humanisme aux Lumières&#60;br /&#62;
+Ecole Normale Supérieure de Lyon - Site Descartes - Bureau R322&#60;br /&#62;
+15 Parvis René Descartes - BP7000 - 69342 Lyon CEDEX 07&#60;br /&#62;
++33 4 37 37 65 79 - &#60;a href=&#34;mailto:maud.ingarao@ens-lyon.fr&#34;&#62;maud.ingarao@ens-lyon.fr&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;cerphi.ens-lyon.fr - pensee-classique.ens-lyon.fr&#60;br /&#62;
+institutdesanti.ens-lyon.fr - hyperdonat.ens-lyon.fr&#60;br /&#62;
+mutec-shs.fr - projet-plume.org - ahn.ens-lyon.fr&#60;br /&#62;
+&#60;a href=&#34;http://www.cahier.paris-sorbonne.fr/&#34; rel=&#34;nofollow&#34;&#62;http://www.cahier.paris-sorbonne.fr/&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;- je suis absente le vendredi - out of office on Fridays -
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Patrick Murray-John on "How do you display TEI documents online?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-do-you-display-tei-documents-online#post-1547</link>
+			<pubDate>Tue, 06 Mar 2012 17:40:40 +0000</pubDate>
+			<dc:creator>Patrick Murray-John</dc:creator>
+			<guid isPermaLink="false">1547@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I'm very happy to see all the good ideas finally emerge in this thread. I feared that it wouldn't get off the ground at first when it went an unusually long time without a response!&#60;/p&#62;
+&#60;p&#62;The one-size-fits all problem is one that I often encounter when working with TEI texts. As was mentioned, a really versatile plugin that could handle the myriad possibilities within TEI would call for a huge amount of code. So breaking things apart could lead to some interesting growable hacks. Here's a couple thoughts. . . &#60;/p&#62;
+&#60;p&#62;One thing that I'm seeing in the thread is that a lot of what's desired isn't really a TEI Display plugin. It sounds more like a TEI Processing plugin. Breaking it apart this way could help rethink what needs to be done, and avoid the trap I see so often of TEI on the web being just about pushing it through XSLT to display the HTML.&#60;/p&#62;
+&#60;p&#62;And so, TEIProcessing might handle the uploading of a TEI doc, and be built up around doing some of the processing of elements. This might work similarly to the &#60;a href=&#34;http://omeka.org/add-ons/plugins/csv-import/&#34;&#62;CSVImport plugin&#60;/a&#62;, which lets you map columns of CSV into Dublin Core or other elements. Here, instead of mapping columns, you'd be mapping the TEI elements. Starting with CSVImport as a model might get that code off the ground very quickly. I don't know if it would be better to scan all the available elements the way CSVImport scan columns, or have a more complex configuration specific to each text. I see the possibility that the combination of elements and attributes available in a TEI text could lead to some complex logic to the mappings. The nice thing about that approach is that it would at least get some of the data into the fields that are indexed and searchable in Omeka.&#60;/p&#62;
+&#60;p&#62;A TEIDisplay plugin, on the other hand, might handle things like uploading different XSLT, and assigning which XSLT to use on which TEI documents already in Omeka. For that matter, it might even want to work with other ways to produce the display, kinda like how Anthologize starts with a (mostly kinda-sorta) TEI document to produce different output formats through various techniques, not just XSLT.&#60;/p&#62;
+&#60;p&#62;Things like that, that handle the very basic interactions with Omeka, would then make it easier for other plugins to be built up that take advantage of that in ways more unique to a particular project or set of TEI texts.&#60;/p&#62;
+&#60;p&#62;Just some thoughts --- good luck! This sounds exciting!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>cseeger1 on "How do you display TEI documents online?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-do-you-display-tei-documents-online#post-1546</link>
+			<pubDate>Tue, 06 Mar 2012 16:47:14 +0000</pubDate>
+			<dc:creator>cseeger1</dc:creator>
+			<guid isPermaLink="false">1546@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I would very much like to get in contact with him, if possible.(Sorry for my late reply, I had a few problems with the registration). Thank you for your help!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>cyavorcik on "How do you display TEI documents online?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-do-you-display-tei-documents-online#post-1540</link>
+			<pubDate>Wed, 29 Feb 2012 00:54:09 +0000</pubDate>
+			<dc:creator>cyavorcik</dc:creator>
+			<guid isPermaLink="false">1540@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Thanks so much to everyone for your responses! We're already working on some of the things you've suggested, such as better search/discovery functionality. As a relative newbie to the field I'm looking for all the perspectives I can get, so please feel free to forward this thread on to anyone you think might be interested. I'll be sure to post an update when we complete the project this May, and we're also blogging every week or so about it at &#60;a href=&#34;http://www.scholarslab.org/&#34; rel=&#34;nofollow&#34;&#62;http://www.scholarslab.org/&#60;/a&#62;. &#60;/p&#62;
+&#60;p&#62;Catarina -- Regarding the problems you described at the end of your post, getting the XSLT transformation working with the new version was one of the first things we started on. My partner was more involved with that aspect of the work than I was, but we did get it to at least display. I can connect you with him if you like to get more info on that.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>mdalmau on "How do you display TEI documents online?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-do-you-display-tei-documents-online#post-1539</link>
+			<pubDate>Tue, 28 Feb 2012 16:33:40 +0000</pubDate>
+			<dc:creator>mdalmau</dc:creator>
+			<guid isPermaLink="false">1539@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Reading Lou's response, I realize that I left out a suggestion.  Perhaps working alongside the Best Practices for TEI in Libraries levels 2-4 and corresponding schemas, you might arrive more easily at the general display: &#60;a href=&#34;http://purl.org/TEI/teiinlibraries&#34; rel=&#34;nofollow&#34;&#62;http://purl.org/TEI/teiinlibraries&#60;/a&#62;.  We are looking at doing the same -- display and functionality.  Rather than create something self-contained, we should try to leverage as much as possible what's been documented.  The Best Practices especially are well suited for the &#34;general.&#34;  &#60;/p&#62;
+&#60;p&#62;Disclaimer:  I am a main contributor and co-editor of said Best Practices.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>lou.burnard@gmail.com on "How do you display TEI documents online?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-do-you-display-tei-documents-online#post-1538</link>
+			<pubDate>Tue, 28 Feb 2012 16:17:42 +0000</pubDate>
+			<dc:creator>lou.burnard@gmail.com</dc:creator>
+			<guid isPermaLink="false">1538@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Good to see someone is updating this Omeka plugin. Some of my colleagues did some work with it last year as a part of the ANGD Summer school (&#60;a href=&#34;http://angd.tge-adonis.fr/formations/1/angd-2011)&#34; rel=&#34;nofollow&#34;&#62;http://angd.tge-adonis.fr/formations/1/angd-2011)&#60;/a&#62;, and were a bit disappointed to find it was apparently still designed for TEI P4. If at the very least you get it using TEI P5 by default, the project is definitely worthwhile! &#60;/p&#62;
+&#60;p&#62;I tend to share Michelle's reservations about the idea of a one-size-fits-all rendering for TEI documents: which is not to say that a plugin that displays a well-defined (and documented) TEI subset beautifully would not be an excellent thing. Good luck with that! I hope you'll consider documenting the TEI subset it supports using ODD, so that people can automagically convert to it from their own TEI &#34;boutique schemas&#34; (as Michelle calls them). Happy to advise further if need be.&#60;/p&#62;
+&#60;p&#62;You might also be interested (if you dont already know about it) in the comparable exercise carried out by Christof Schoch for the Drupal CMS: see &#60;a href=&#34;http://www.teichi.org/&#34; rel=&#34;nofollow&#34;&#62;http://www.teichi.org/&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;Good hunting!&#60;/p&#62;
+&#60;p&#62;Lou
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>c.seeger7@gmail.com on "How do you display TEI documents online?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-do-you-display-tei-documents-online#post-1537</link>
+			<pubDate>Tue, 28 Feb 2012 16:06:48 +0000</pubDate>
+			<dc:creator>c.seeger7@gmail.com</dc:creator>
+			<guid isPermaLink="false">1537@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;In direct relation to the above post by mdalmau: Maybe the functions of TEIDisplay could be extended by supporting cross-references/ implementations with other plugins? I'm specifically thinking of things such as Timeline and SolrSearch here. if it could be achieved somehow that TEIDisplay was able to deal with the full range of the markup (and possibly custom libraries?) it could make use of other plugin functions, so not everything would have to be provided by the plugin itself (which would probably require a vast amount of coding). Thinking of options such as a checkbox next to which it says &#34;display &#38;lt;date&#38;gt; information using the Timeline plugin&#34; or something like that.&#60;/p&#62;
+&#60;p&#62;Anyway, now to be a bit specific about my own TEI needs:&#60;br /&#62;
+What I would currently need the most in such a plugin would be support for the facsimile tag (including the facs IDs and everything), that is, I would be glad if there was a transformation that enabled me to display an image in the collection in a way that it would show the corresponding text next to it on mouseover or click. This would be a huge timesaver and a very nice and easy way to present old documents.&#60;br /&#62;
+If the file is part of a series, it would also be nice to have some sort of integrated navigation between different volumes, possibly also between different collections and including an index.&#60;br /&#62;
+Furthermore, the functionality of the keywords could be extended to tie in the scheme. Currently, as far as I understood, it extracts the information for specific keyword terms and uses them as tags in omeka. maybe the TEIDisplay- plugin could be &#34;taught&#34; to recognize schemes and controlled vocabulary somehow (I am aware of how vague that sounds, but I have to admit I don't have a precise idea about how this would look like).&#60;br /&#62;
+An issue which would probably be easy to fix (or maybe it's part of the plugin already, and I didn't see it): A documentation on which TEI-tags correspond to which DublinCore- fields in omeka. When uploading a file, it extracts the info automatically, but for me some of the fields will still remain blank, and I can't tell &#34;where&#34; exactly in the TEI-header the plugin is looking for information which it apparently can't find. So I have to add in the blank fields manually. I could probably change the TEI-header to include the tags the plugin is looking for, if I knew which ones!&#60;/p&#62;
+&#60;p&#62;Also relating to the above post, since I already mentioned SolrSearch: Extending the plugin by a large amount of features may be a bit much considering the fact that it's still being developed, but maybe it could include support for basic tags such as persName, dates and places and offer a hyperlinking of some sort (search function). &#60;/p&#62;
+&#60;p&#62;This is everything I could come up with so far. I'm currently trying to use the plugin with the latest omeka version, but I was told that it was developed for an earlier version and is currently broken. I could still use some support for it- not to get too much into detail, but I noticed it will not extract any information from my TEI header when using TEI P5. All of the metadata fields in omeka will remain blank. Was it not supported in the old version, or am I maybe doing something wrong? Also, the xslt transformation doesn't seem to be working at all, it doesn't recognize the stylesheets, not even the default one, continuously saying that &#34;there does not seem to be any style information associated with the file&#34;.&#60;br /&#62;
+(Sorry that I'm pestering you with these questions, I realize this is not a bugfixing thread. But I already submitted a ticket on it here &#60;a href=&#34;http://www.lib.virginia.edu/scholarslab/help/ttx.cgi?cmd=ticket&#38;amp;key=2034Z70472238075762619782&#34; rel=&#34;nofollow&#34;&#62;http://www.lib.virginia.edu/scholarslab/help/ttx.cgi?cmd=ticket&#38;amp;key=2034Z70472238075762619782&#60;/a&#62; and was directed to this topic)&#60;br /&#62;
+Any help on this is greatly appreciated. Good luck with the development of the plugin, I'm looking forward to the release of the first stable version for Omeka 1.5!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>mdalmau on "How do you display TEI documents online?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-do-you-display-tei-documents-online#post-1535</link>
+			<pubDate>Tue, 28 Feb 2012 15:31:31 +0000</pubDate>
+			<dc:creator>mdalmau</dc:creator>
+			<guid isPermaLink="false">1535@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I can't speak to the TEIDisplay plug-in, but I know others in my group looked at it more closely when we paused to survey the landscape of open source e-text delivery solutions.  In the end, delivering our TEI content via Omeka didn't make the cut mostly because the XML itself seemed to be buried and was only accessed at the point of rendering transformation.  It was unclear how we could leverage the rich-levels of encoding to provide not just display but also discovery modes that would exploit the markup.  If we had a project that had mixed-content types that included a few TEI files, say of correspondence, that simply needed to be displayed in a very general-sence, I think the plug-in would serve us well, but not really for a project that is entirely TEI-based.  &#60;/p&#62;
+&#60;p&#62;We have been using for many years California Digital LIbrary's (CDL) XTF (eXtensible Text Framework) software to deliver TEI-encoded texts of all types -- from manuscripts to board of trustees minutues (administrative), from legislative proceedings to literary texts ... and tons more.  We mostly deal with level 3-5 projects (as defined by the Best Practices for TEI in Libraries).  We are moving away from &#34;boutique&#34; TEI web sites to a more streamlined web development process to achieve what I think it is your implying ... a general framework ( which for us includes what we call &#34;core&#34; XSL) that would work for all types of contents and that would import sytle sheets for particular customizations.  &#60;/p&#62;
+&#60;p&#62;More recently we have been involved in parallel web development with three TEI projects, ranging from levels 3-5, that have taken more of an XTF out-of-box approach but with little sacrifice to the rich encoding [1].  My team mates and I recently gave a talk about our new approaches of web development if you are curious about more of the technical details: &#60;a href=&#34;http://breeze.iu.edu/p46anbeanm6/&#34; rel=&#34;nofollow&#34;&#62;http://breeze.iu.edu/p46anbeanm6/&#60;/a&#62;.  The audio is muted for the first 8 minutes but it's mostly setting the stage for the audience (&#34;why we encode&#34;) so it's not anything you don't already know.  During that time, I showcase several TEI projects that were developed under the more &#34;boutique&#34; model as a contrast to those that are leveraging &#34;building blocks&#34; for display and functionality.  &#60;/p&#62;
+&#60;p&#62;So, it's hard to answer your question in terms of what needs to be displayed or acted upon against the XML since in some ways a depends on what types of baseline functionality you'd like to support (e.g., linking to page images if present, document-centric navigation, etc.).  &#60;/p&#62;
+&#60;p&#62;With that said, the bits from the Header we typically expose or index for searching: sourceDesc bibliographic information and parts of the profileDesc like classification schemes and terms (textClass), language usage or participant descriptions.  As for the text body, what we display will depend of the form and genre of the text, but in the core XSL we have and will continue to develop generic display outputs (i.e., all floating texts that are letters will display blockquoted with a light gray background) unless the particular project is governed by a more faithful representation of the text.  In that case, we will display letters as the encoding rendition makes explicit and overwrite the &#34;core&#34; generic display of letters with the project-specific one.  &#60;/p&#62;
+&#60;p&#62;Ack.  I feel like I am rambling.  It's challenging to define the &#34;general&#34; for a text.  Our approach has been rather than predefine the general for the various forms and genres we encounter, we are defining more general treatment of the texts in an organic fashion, and treating customizations as a separate thing that are truly unique to the content.  Of course, this has happened by taking stock of the years of publishing TEI projects using XTF and learning from/adapting accordingly.  &#60;/p&#62;
+&#60;p&#62;Another approach taken by John Walsh and his Swinburne Project is to rather than streamline the XTF native XSLs, he has streamlined a way to import his own stylesheets atop of the XTF.  It's almost a reverse of our workflow where essentially he's customized the rendering almost entirely but it works beautifully in XTF.  &#60;/p&#62;
+&#60;p&#62;As you work to define a general display for the TEIDisplay plugin, you might consider ways in which you can provide mechanisms for Omeka implementors to incorporate rendering that is unique to the project.  &#60;/p&#62;
+&#60;p&#62;---------&#60;/p&#62;
+&#60;p&#62;[1] The three more streamlined projects:&#60;br /&#62;
+Brevier Legislative Reports (&#60;a href=&#34;http://www.dlib.indiana.edu/collections/law/brevier/&#34; rel=&#34;nofollow&#34;&#62;http://www.dlib.indiana.edu/collections/law/brevier/&#60;/a&#62;)&#60;br /&#62;
+Indiana Authors in Their Books (&#60;a href=&#34;http://www.dlib.indiana.edu/collections/inauthors/&#34; rel=&#34;nofollow&#34;&#62;http://www.dlib.indiana.edu/collections/inauthors/&#60;/a&#62;)&#60;br /&#62;
+Victorian Women Writers Project (&#60;a href=&#34;http://www.dlib.indiana.edu/collections/vwwp/&#34; rel=&#34;nofollow&#34;&#62;http://www.dlib.indiana.edu/collections/vwwp/&#60;/a&#62;)&#60;/p&#62;
+&#60;p&#62;Each of those web sites contain project information about encoding approaches and technical implementation.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>cyavorcik on "How do you display TEI documents online?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-do-you-display-tei-documents-online#post-1525</link>
+			<pubDate>Wed, 22 Feb 2012 18:22:00 +0000</pubDate>
+			<dc:creator>cyavorcik</dc:creator>
+			<guid isPermaLink="false">1525@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I'm working with a partner on an update to the TEIDisplay plugin for Omeka and looking for user input. Do you use TEIDisplay or another tool for displaying TEI Documents? Why did you choose that tool and how does it meet/not meet your needs? &#60;/p&#62;
+&#60;p&#62;Additionally, what type of documents would you expect to display (e.g., poetry, correspondence, etc.) in a generalizable interface? For a general audience, what should a template for displaying these texts in an Omeka exhibit include? For instance, which teiHeader elements are most important (e.g., file description, revision history)? Would you want to display bibliographic codes and numbers such as page breaks and numbers or paragraph numbers? We assume folks would want to see additions and deletions and notes, but what other aspects of your texts should be displayed for a general audience? What would you add to this list for a general audience?&#60;/p&#62;
+&#60;p&#62;(More context for this project is available here: &#60;a href=&#34;http://www.scholarslab.org/announcements/collaborative-mentoring-at-ut-and-uva-co-developing-an-updated-teidisplay-for-omeka/&#34; rel=&#34;nofollow&#34;&#62;http://www.scholarslab.org/announcements/collaborative-mentoring-at-ut-and-uva-co-developing-an-updated-teidisplay-for-omeka/&#60;/a&#62; and here: &#60;a href=&#34;http://www.scholarslab.org/digital-humanities/an-update-to-teidisplay-for-omeka/&#34; rel=&#34;nofollow&#34;&#62;http://www.scholarslab.org/digital-humanities/an-update-to-teidisplay-for-omeka/&#60;/a&#62;. More info on TEIDisplay itself is available here: &#60;a href=&#34;http://omeka.org/codex/Plugins/TeiDisplay&#34; rel=&#34;nofollow&#34;&#62;http://omeka.org/codex/Plugins/TeiDisplay&#60;/a&#62; ).
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

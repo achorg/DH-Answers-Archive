@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Topic: Help with MALLET - topic generation going wrong!</title>
+		<link>http://digitalhumanities.org/answers/topic/help-with-mallet-topic-generation-going-wrong</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Topic: Help with MALLET - topic generation going wrong!</description>
+		<language>en-US</language>
+		<pubDate>Thu, 04 Aug 2016 15:07:37 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/topic/help-with-mallet-topic-generation-going-wrong" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>eesnyder on "Help with MALLET - topic generation going wrong!"</title>
+						<link>http://digitalhumanities.org/answers/topic/help-with-mallet-topic-generation-going-wrong#post-1706</link>
+			<pubDate>Thu, 21 Jun 2012 06:44:38 +0000</pubDate>
+			<dc:creator>eesnyder</dc:creator>
+			<guid isPermaLink="false">1706@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I can send you the data (it's very small) &#38;amp; the commands. I'll DM you on Twitter for your email?&#60;/p&#62;
+&#60;p&#62;If we get this sorted out I'll come back &#38;amp; post the answer here for the record!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Stéfan Sinclair on "Help with MALLET - topic generation going wrong!"</title>
+						<link>http://digitalhumanities.org/answers/topic/help-with-mallet-topic-generation-going-wrong#post-1699</link>
+			<pubDate>Tue, 19 Jun 2012 14:48:16 +0000</pubDate>
+			<dc:creator>Stéfan Sinclair</dc:creator>
+			<guid isPermaLink="false">1699@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I suspect someone with more experience with the parameters could explain why you're encountering a problem, but in the meantime I'm willing to try on my Mac machine if your data set is available and you can provide the exact commands you've tried (importing and modelling phases).
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>eesnyder on "Help with MALLET - topic generation going wrong!"</title>
+						<link>http://digitalhumanities.org/answers/topic/help-with-mallet-topic-generation-going-wrong#post-1697</link>
+			<pubDate>Tue, 19 Jun 2012 11:09:26 +0000</pubDate>
+			<dc:creator>eesnyder</dc:creator>
+			<guid isPermaLink="false">1697@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Okay, so I've narrowed down the problem to a more specific issue with hyperparameterization. &#60;/p&#62;
+&#60;p&#62;When I have the --optimize-interval turned off, I get non-optimized topics (which seem less recognizable as topics -- I get generally better topics with it turned on; this is where the repeating parameter occurs, I recognize now).  When I run 1000 iterations with --optimize-interval 10, it runs for a while, then the parameter numbers climb up over 100, then I get a Java array out of bounds exception at iteration 420 and everything crashes.  I can &#34;cheat&#34; this by setting the interval to 50, but it just postpones the climb &#38;amp; crash to a point beyond 1000 iterations.&#60;/p&#62;
+&#60;p&#62;Specifically, I'm getting a &#60;code&#62;java.lang.ArrayIndexOutofBoundsException at cc.mallet.topics.WorkerRunnable.sampleTopicsforOneDoc(WorkerRunnable.java:489)&#60;/code&#62;&#60;/p&#62;
+&#60;p&#62;Any ideas?  I've installed this on Windows 7 and XP machines to test, and I'm having the same issue on both. Might install it on a Mac soon just to see if it does anything different.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>eesnyder on "Help with MALLET - topic generation going wrong!"</title>
+						<link>http://digitalhumanities.org/answers/topic/help-with-mallet-topic-generation-going-wrong#post-1695</link>
+			<pubDate>Fri, 15 Jun 2012 11:49:35 +0000</pubDate>
+			<dc:creator>eesnyder</dc:creator>
+			<guid isPermaLink="false">1695@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Whoops! That was me re-typing, not in the command I ran. I'll clean it up in the post.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Stéfan Sinclair on "Help with MALLET - topic generation going wrong!"</title>
+						<link>http://digitalhumanities.org/answers/topic/help-with-mallet-topic-generation-going-wrong#post-1694</link>
+			<pubDate>Fri, 15 Jun 2012 11:44:51 +0000</pubDate>
+			<dc:creator>Stéfan Sinclair</dc:creator>
+			<guid isPermaLink="false">1694@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Quick question that probably wouldn't affect the results you're seeing: is the space between &#60;strong&#62;--&#60;/strong&#62; and &#60;strong&#62;output-topic-keys&#60;/strong&#62; an artifact of copy-and-pasting into this forum or is it really in the command you ran?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>eesnyder on "Help with MALLET - topic generation going wrong!"</title>
+						<link>http://digitalhumanities.org/answers/topic/help-with-mallet-topic-generation-going-wrong#post-1693</link>
+			<pubDate>Fri, 15 Jun 2012 09:50:37 +0000</pubDate>
+			<dc:creator>eesnyder</dc:creator>
+			<guid isPermaLink="false">1693@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I've installed MALLET 2.0.7 on my Windows 7 machine, installed Java &#38;amp; ant, and set classpath variables. Built MALLET with ant and saw the build successful message. Then I imported my data into mallet format using &#60;code&#62;bin\mallet import-file --input data/mytext.txt --keep-sequence --stoplist-file stoplists/en.txt --output data/mytext.mallet&#60;/code&#62;&#60;/p&#62;
+&#60;p&#62;The problem is, when I go to train topics, it doesn't appear to be working. So, when I enter &#60;code&#62;bin\mallet train-topics --input data/mytext.mallet --output-topic-keys data/mytext/mytext.keys&#60;/code&#62; I usually get 1000 runs of 10 groups of words. I'd hesitate to call them &#34;topics&#34; because, intuitively, they don't show any actual correlation from my text, and they don't repeat when I re-run it (I get totally new groupings). &#60;/p&#62;
+&#60;p&#62;Also, the second number, what I believe is supposed to be the Dirichlet parameter, doesn't change at all -- each visible iteration of the program, the parameter for each topic is 5.  Except every now and then when I add more initial variables (---num-topics 25, --doc-topics-threshold 0.1, and others) the parameter starts at 5, starts going up into the 80s (varying among the topics! so some in 10s, 20s, etc), and then blows up with a Java exception. Or sometimes it stays stable at 2, and the topics still don't make sense as topics!&#60;/p&#62;
+&#60;p&#62;A colleague of mine has this running on the same data, only he installed on a Mac and got topics that made sense, but he installed a while ago and has no idea what's going wrong with my version.&#60;/p&#62;
+&#60;p&#62;Any idea what I'm doing wrong?&#60;/p&#62;
+&#60;p&#62;Edited to add: uncompressed &#38;amp; installed version 2.0.6, built with ant, and did clean imports of my data, and I'm seeing the same thing.
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

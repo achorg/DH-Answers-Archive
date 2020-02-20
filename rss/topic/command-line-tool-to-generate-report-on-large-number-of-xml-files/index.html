@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Topic: Command-line tool to generate report on large number of XML files</title>
+		<link>http://digitalhumanities.org/answers/topic/command-line-tool-to-generate-report-on-large-number-of-xml-files</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Topic: Command-line tool to generate report on large number of XML files</description>
+		<language>en-US</language>
+		<pubDate>Wed, 19 Dec 2018 00:00:01 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/topic/command-line-tool-to-generate-report-on-large-number-of-xml-files" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>Richard Lehane on "Command-line tool to generate report on large number of XML files"</title>
+						<link>http://digitalhumanities.org/answers/topic/command-line-tool-to-generate-report-on-large-number-of-xml-files#post-828</link>
+			<pubDate>Tue, 14 Dec 2010 02:12:01 +0000</pubDate>
+			<dc:creator>Richard Lehane</dc:creator>
+			<guid isPermaLink="false">828@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @Stéfan Sinclair's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/command-line-tool-to-generate-report-on-large-number-of-xml-files#post-545&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;br /&#62;
+Rather than a custom script, it might be simpler to just use &#60;a href=&#34;http://xmlsoft.org/xmllint.html&#34;&#62;xmllint&#60;/a&#62; (the command line tool bundled with libxml2) for this. It can handle multiple files and if you use the &#34;--valid&#34; switch it will check against included DTDs. You could combine this with libxml's &#60;a href=&#34;http://xmlsoft.org/catalog.html&#34;&#62;catalog support&#60;/a&#62; to cache local copies of the relevant DTDs.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Stéfan Sinclair on "Command-line tool to generate report on large number of XML files"</title>
+						<link>http://digitalhumanities.org/answers/topic/command-line-tool-to-generate-report-on-large-number-of-xml-files#post-545</link>
+			<pubDate>Wed, 20 Oct 2010 16:20:08 +0000</pubDate>
+			<dc:creator>Stéfan Sinclair</dc:creator>
+			<guid isPermaLink="false">545@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I started writing some code that could provide a fairly quick and dirty solution. There are at least two issues: 1) I don't think character encoding is being examined properly so errors aren't being raised as I'd like; 2) I don't see a way to validate with a DTD if one is declared, but skip along merrily if it's not.&#60;/p&#62;
+
+
+&#60;div class=&#34;bb_syntax&#34;&#62;&#60;div class=&#34;code&#34;&#62;&#60;pre class=&#34;ruby&#34; style=&#34;font-family:monospace;&#34;&#62;&#60;span style=&#34;color:#CC0066; font-weight:bold;&#34;&#62;require&#60;/span&#62; &#60;span style=&#34;color:#996600;&#34;&#62;'rubygems'&#60;/span&#62;
+&#60;span style=&#34;color:#CC0066; font-weight:bold;&#34;&#62;require&#60;/span&#62; &#60;span style=&#34;color:#996600;&#34;&#62;'libxml'&#60;/span&#62;
+&#38;nbsp;
+&#60;span style=&#34;color:#9966CC; font-weight:bold;&#34;&#62;include&#60;/span&#62; LibXML
+&#38;nbsp;
+&#60;span style=&#34;color:#008000; font-style:italic;&#34;&#62;# process a directory recursively&#60;/span&#62;
+&#60;span style=&#34;color:#9966CC; font-weight:bold;&#34;&#62;def&#60;/span&#62; process_directory&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#38;#40;&#60;/span&#62;directory&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#38;#41;&#60;/span&#62;
+  &#60;span style=&#34;color:#CC00FF; font-weight:bold;&#34;&#62;Dir&#60;/span&#62;.&#60;span style=&#34;color:#9900CC;&#34;&#62;new&#60;/span&#62;&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#38;#40;&#60;/span&#62;directory&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#38;#41;&#60;/span&#62;.&#60;span style=&#34;color:#9900CC;&#34;&#62;each&#60;/span&#62; &#60;span style=&#34;color:#9966CC; font-weight:bold;&#34;&#62;do&#60;/span&#62; &#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#124;&#60;/span&#62;file&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#124;&#60;/span&#62;
+    full_file = &#60;span style=&#34;color:#CC00FF; font-weight:bold;&#34;&#62;File&#60;/span&#62;.&#60;span style=&#34;color:#9900CC;&#34;&#62;expand_path&#60;/span&#62;&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#38;#40;&#60;/span&#62;file, directory&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#38;#41;&#60;/span&#62;
+    &#60;span style=&#34;color:#9966CC; font-weight:bold;&#34;&#62;if&#60;/span&#62; file&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#38;#91;&#60;/span&#62;&#60;span style=&#34;color:#006666;&#34;&#62;0&#60;/span&#62;,&#60;span style=&#34;color:#006666;&#34;&#62;1&#60;/span&#62;&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#38;#93;&#60;/span&#62; == &#60;span style=&#34;color:#996600;&#34;&#62;'.'&#60;/span&#62; &#60;span style=&#34;color:#008000; font-style:italic;&#34;&#62;# skip dot files&#60;/span&#62;
+      &#60;span style=&#34;color:#9966CC; font-weight:bold;&#34;&#62;next&#60;/span&#62;
+    &#60;span style=&#34;color:#9966CC; font-weight:bold;&#34;&#62;elsif&#60;/span&#62; &#60;span style=&#34;color:#CC00FF; font-weight:bold;&#34;&#62;File&#60;/span&#62;.&#60;span style=&#34;color:#9900CC;&#34;&#62;directory&#60;/span&#62;? full_file
+      process_directory full_file
+    &#60;span style=&#34;color:#9966CC; font-weight:bold;&#34;&#62;elsif&#60;/span&#62; &#60;span style=&#34;color:#CC00FF; font-weight:bold;&#34;&#62;File&#60;/span&#62;.&#60;span style=&#34;color:#9900CC;&#34;&#62;extname&#60;/span&#62;&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#38;#40;&#60;/span&#62;file&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#38;#41;&#60;/span&#62; == &#60;span style=&#34;color:#996600;&#34;&#62;'.xml'&#60;/span&#62;
+      process_file full_file
+    &#60;span style=&#34;color:#9966CC; font-weight:bold;&#34;&#62;end&#60;/span&#62;
+  &#60;span style=&#34;color:#9966CC; font-weight:bold;&#34;&#62;end&#60;/span&#62;
+&#60;span style=&#34;color:#9966CC; font-weight:bold;&#34;&#62;end&#60;/span&#62;
+&#38;nbsp;
+&#60;span style=&#34;color:#008000; font-style:italic;&#34;&#62;# process an XML file&#60;/span&#62;
+&#60;span style=&#34;color:#9966CC; font-weight:bold;&#34;&#62;def&#60;/span&#62; process_file&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#38;#40;&#60;/span&#62;file&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#38;#41;&#60;/span&#62;
+  &#60;span style=&#34;color:#9966CC; font-weight:bold;&#34;&#62;begin&#60;/span&#62;
+&#38;nbsp;
+    &#60;span style=&#34;color:#008000; font-style:italic;&#34;&#62;# this fails when there's no DTD – how to toggle this without manual read of file?&#60;/span&#62;
+    &#60;span style=&#34;color:#008000; font-style:italic;&#34;&#62;#parser = XML::Parser.file(file, :options =&#38;gt; XML::Parser::Options::DTDVALIDD)&#60;/span&#62;
+&#38;nbsp;
+    parser = &#60;span style=&#34;color:#6666ff; font-weight:bold;&#34;&#62;XML::Parser&#60;/span&#62;.&#60;span style=&#34;color:#9900CC;&#34;&#62;file&#60;/span&#62;&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#38;#40;&#60;/span&#62;file&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#38;#41;&#60;/span&#62;
+    parser.&#60;span style=&#34;color:#9900CC;&#34;&#62;parse&#60;/span&#62;
+  &#60;span style=&#34;color:#9966CC; font-weight:bold;&#34;&#62;rescue&#60;/span&#62; &#60;span style=&#34;color:#6666ff; font-weight:bold;&#34;&#62;LibXML::XML::Error&#60;/span&#62; &#60;span style=&#34;color:#008000; font-style:italic;&#34;&#62;# already reported&#60;/span&#62;
+  &#60;span style=&#34;color:#9966CC; font-weight:bold;&#34;&#62;rescue&#60;/span&#62; &#60;span style=&#34;color:#CC00FF; font-weight:bold;&#34;&#62;Exception&#60;/span&#62;
+    &#60;span style=&#34;color:#CC0066; font-weight:bold;&#34;&#62;puts&#60;/span&#62; $!
+  &#60;span style=&#34;color:#9966CC; font-weight:bold;&#34;&#62;end&#60;/span&#62;
+&#60;span style=&#34;color:#9966CC; font-weight:bold;&#34;&#62;end&#60;/span&#62;
+&#38;nbsp;
+process_directory ARGV&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#38;#91;&#60;/span&#62;&#60;span style=&#34;color:#006666;&#34;&#62;0&#60;/span&#62;&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#38;#93;&#60;/span&#62;.&#60;span style=&#34;color:#0000FF; font-weight:bold;&#34;&#62;nil&#60;/span&#62;? ? &#60;span style=&#34;color:#CC00FF; font-weight:bold;&#34;&#62;Dir&#60;/span&#62;.&#60;span style=&#34;color:#9900CC;&#34;&#62;getwd&#60;/span&#62; : ARGV&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#38;#91;&#60;/span&#62;&#60;span style=&#34;color:#006666;&#34;&#62;0&#60;/span&#62;&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#38;#93;&#60;/span&#62;&#60;/pre&#62;&#60;/div&#62;&#60;/div&#62;
+
+
+
+&#60;p&#62;Usage (assuming you've saved the above contents as parseDirectory.rb):&#60;/p&#62;
+&#60;pre&#62;ruby parseDirectory.rb
+ruby parseDirectory /someotherdirectory/&#60;/pre&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Stéfan Sinclair on "Command-line tool to generate report on large number of XML files"</title>
+						<link>http://digitalhumanities.org/answers/topic/command-line-tool-to-generate-report-on-large-number-of-xml-files#post-544</link>
+			<pubDate>Wed, 20 Oct 2010 16:16:14 +0000</pubDate>
+			<dc:creator>Stéfan Sinclair</dc:creator>
+			<guid isPermaLink="false">544@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @Dorothea Salo's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/command-line-tool-to-generate-report-on-large-number-of-xml-files#post-533&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;Thanks for the suggestions.&#60;/p&#62;
+&#60;p&#62;&#60;em&#62;Replying to @Joe Wicentowski's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/command-line-tool-to-generate-report-on-large-number-of-xml-files#post-535&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;Yes, the batch validate command in Oxygen works great.&#60;/p&#62;
+&#60;p&#62;&#60;em&#62;Replying to @Wayne Graham's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/command-line-tool-to-generate-report-on-large-number-of-xml-files#post-543&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;These are files we're inheriting from elsewhere and trying to process.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Wayne Graham on "Command-line tool to generate report on large number of XML files"</title>
+						<link>http://digitalhumanities.org/answers/topic/command-line-tool-to-generate-report-on-large-number-of-xml-files#post-543</link>
+			<pubDate>Wed, 20 Oct 2010 14:20:59 +0000</pubDate>
+			<dc:creator>Wayne Graham</dc:creator>
+			<guid isPermaLink="false">543@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Are these new files that are getting brought in, or an existing collection? If these are new files, and you're using some type of source code control, you can use a pre-commit hook to validate the document before it gets in to the repository. If it's the latter, it may be worth while taking some time to write up a Java (or jruby) app that could generate this type of report. Lord knows there are enough folks with heaps of XML that is of dubious origin/validity...
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Joe Wicentowski on "Command-line tool to generate report on large number of XML files"</title>
+						<link>http://digitalhumanities.org/answers/topic/command-line-tool-to-generate-report-on-large-number-of-xml-files#post-535</link>
+			<pubDate>Wed, 20 Oct 2010 03:17:02 +0000</pubDate>
+			<dc:creator>Joe Wicentowski</dc:creator>
+			<guid isPermaLink="false">535@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;It's not really a command line tool, but it works really well: &#60;a href=&#34;http://www.oxygenxml.com&#34;&#62;oXygen XML Editor&#60;/a&#62; has a number of tools for &#60;a href=&#34;http://www.oxygenxml.com/doc/ug-oxygen/topics/validating-XML-documents-against-schema.html&#34;&#62;Validating XML Documents Against a Schema&#60;/a&#62;.  I frequently use these functions to validate my project files before committing them to subversion or uploading them to my production server (&#60;a href=&#34;http://exist-db.org&#34;&#62;eXist&#60;/a&#62;).
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Dorothea Salo on "Command-line tool to generate report on large number of XML files"</title>
+						<link>http://digitalhumanities.org/answers/topic/command-line-tool-to-generate-report-on-large-number-of-xml-files#post-533</link>
+			<pubDate>Wed, 20 Oct 2010 02:45:58 +0000</pubDate>
+			<dc:creator>Dorothea Salo</dc:creator>
+			<guid isPermaLink="false">533@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Eep. No, I wish I had. Mostly what I see is people writing shell scripts or ant tasks or even little XSLT scripties (dependent on Saxon, usually) to do the job.&#60;/p&#62;
+&#60;p&#62;If you're really gunning to solve the character-encoding problem first, though, &#60;a href=&#34;http://chardet.feedparser.org/&#34;&#62;chardet&#60;/a&#62; (Python) might help, and there's a &#60;a href=&#34;http://fredeaker.blogspot.com/2007/01/character-encoding-detection.html&#34;&#62;bit of a laundry list&#60;/a&#62; of encoding-detection libraries too (looks a bit old, may be obsolete). I happened upon a &#60;a href=&#34;http://stackoverflow.com/questions/774075/character-encoding-detection-algorithm&#34;&#62;slightly more recent Stack Overflow thread&#60;/a&#62; on the subject while I was trying to dig up chardet.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Stéfan Sinclair on "Command-line tool to generate report on large number of XML files"</title>
+						<link>http://digitalhumanities.org/answers/topic/command-line-tool-to-generate-report-on-large-number-of-xml-files#post-528</link>
+			<pubDate>Tue, 19 Oct 2010 20:49:53 +0000</pubDate>
+			<dc:creator>Stéfan Sinclair</dc:creator>
+			<guid isPermaLink="false">528@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;We have a large number of TEI-encoded XML files, some of which aren't valid (usually because of character encoding problems). We'd like to generate a report that lists each file and the error(s) encountered, with line and character index, etc. I can imagine writing a quick and dirty script that essentially does what we need, but I'm wondering (lazily) if anyone has seen anything that would do the trick.
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

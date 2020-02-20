@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Topic: I think I have a workflow, help me figure out what tools...</title>
+		<link>http://digitalhumanities.org/answers/topic/i-think-i-have-a-workflow-help-me-figure-out-what-tools-1</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Topic: I think I have a workflow, help me figure out what tools...</description>
+		<language>en-US</language>
+		<pubDate>Fri, 04 Oct 2013 22:29:51 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/topic/i-think-i-have-a-workflow-help-me-figure-out-what-tools-1" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>kevin.s.hawkins on "I think I have a workflow, help me figure out what tools..."</title>
+						<link>http://digitalhumanities.org/answers/topic/i-think-i-have-a-workflow-help-me-figure-out-what-tools-1#post-1705</link>
+			<pubDate>Thu, 21 Jun 2012 02:19:28 +0000</pubDate>
+			<dc:creator>kevin.s.hawkins</dc:creator>
+			<guid isPermaLink="false">1705@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;While there is something to be said for open-ended exploration of data ngram viewers and such, in this case, I'm not sure that text mining will actually be helpful.  But visualization software might.&#60;/p&#62;
+&#60;p&#62;You say that both of you want to &#34;gauge the relationship of the paper's editorial bias in writing with what was in the papers' editorial or news content.&#34;  This means that, for example, you're curious whether cartoons with a leftish bent appear in newspapers that run editorials with a leftish bent as well.  Right?  Even if that's not it, let's pretend it is for the sake of argument.  It appears that in any case you're looking for correlation of *some dimension* with the source (the particular newspaper) of the document (an article or cartoon).&#60;/p&#62;
+&#60;p&#62;If you wanted the computer to identify the correlation, you would use information retrieval (IR) techniques.  You would manually tag a &#34;training set&#34; as leftish or rightish and then have a computer use IR techniques to classify the rest (assuming there's OCR text of all of them) as one or the other.  But you'd want to verify a sample of the output, and if the results aren't good, you would need to provide a larger training set and re-run the classification.&#60;/p&#62;
+&#60;p&#62;I suspect that a computer won't be very good at this since the left and right tend to talk about the same things and criticize each others, thereby using the same terms.  And I suspect it's nearly impossible for cartoons, where the captions are quite brief.  In that case, you'll need to rely on a human expect.  In fact, in step 1, you already propose &#34;tagging&#34; the documents in various ways by hand, so it seems you were already open to doing this.&#60;/p&#62;
+&#60;p&#62;You could use qualitative analysis software for the manual tagging.  Such software is common in the social sciences for things like tagging transcriptions of interviews.  Once you've tagged lots of documents (and carefully recorded the source newspaper for each), you can view your documents by source and see if they come out more often in the leftish or rightish category.&#60;/p&#62;
+&#60;p&#62;If there are multiple dimensions (not just leftish and rightish), you will need some sort of visualization software that can cluster similar documents in one of those three-dimensional tree diagrams.  (I don't know this area, but others probably do.)  Perhaps that software can use colors to distinguish the sources and different shapes (triangles and squares) for cartoons and articles.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Tad Suiter on "I think I have a workflow, help me figure out what tools..."</title>
+						<link>http://digitalhumanities.org/answers/topic/i-think-i-have-a-workflow-help-me-figure-out-what-tools-1#post-1704</link>
+			<pubDate>Wed, 20 Jun 2012 20:27:09 +0000</pubDate>
+			<dc:creator>Tad Suiter</dc:creator>
+			<guid isPermaLink="false">1704@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;At the end of THATCamp Prime's &#34;Dork Shorts&#34; this year, my fellow GMU History student Sasha Hoffman made a plea for help figuring out how solve a problem that I have with my dissertation research as well.&#60;/p&#62;
+&#60;p&#62;Both of us are working on comics in historic newspapers-- Sasha's dealing with midcentury political cartoons, and I'm dealing with early 20th century daily comic strips. Both of us are looking for ways to gauge the relationship of the paper's editorial bias in writing with what was in the papers' editorial or news content. &#60;/p&#62;
+&#60;p&#62;Because it intersects with my own research, I've been mulling it over for a while. I think I have an idea about a workflow that might get some good data, but I'm not sure about what tools to use, or how workable the idea has. This is where I'm looking for help from y'all.&#60;/p&#62;
+&#60;p&#62;Essentially, here's what I have come up with:&#60;/p&#62;
+&#60;ol&#62;
+&#60;li&#62;After selecting the stuff you want, collect all the comics, and tag them. Tag them as much as physically and intellectually possible, identifying issues addressed, visual elements, people discussed, news items being referenced-- get as much data as possible.  You don't know that certain visual metaphors or something you're not catching might not rise and fall at different times, so create the richest tagging taxonomy you can.&#60;/li&#62;
+&#60;li&#62;Using the databases that have the relevant newspapers-- assuming they've been digitized-- and scrape out all the relevant OCR'd text, along with data about paper, date, etc.&#60;/li&#62;
+&#60;/ol&#62;
+&#60;p&#62;AND THEN, EITHER...&#60;/p&#62;
+&#60;ul&#62;
+&#60;li&#62;Running some sort of ngram-based data-mining software (MALLET?) look for patterns in the  textual elements. &#60;/li&#62;
+&#60;li&#62;Running some sort of data-mining software, look at the information about the cartoons based on the tags, along with information about cartoonist, date, paper, etc.&#60;/li&#62;
+&#60;li&#62;Using some sort of of data-mining software, compare the outputs of the last two pieces of data mining to see where patterns emerge between the two data sets&#60;/li&#62;
+&#60;/ul&#62;
+&#60;p&#62;OR...&#60;/p&#62;
+&#60;ul&#62;
+&#60;li&#62;Find a piece of data mining software that can handle the two above types of data sets as one data set, resolve the data, and see what you get.&#60;/li&#62;
+&#60;/ul&#62;
+&#60;p&#62;I'm (clearly) very new to text mining, but I'm very interesting to learn it, and if I could do so in the course of my dissertation research, it would only be a bonus.&#60;/p&#62;
+&#60;p&#62;That said, I'm really not sure how well the above would work, how realistic a workflow it is, or what tools I might want to try to use for such an approach. This is where I'm helping you all can give me some advice.
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>
