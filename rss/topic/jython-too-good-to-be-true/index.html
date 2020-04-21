@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Topic: Jython too good to be true??</title>
+		<link>http://digitalhumanities.org/answers/topic/jython-too-good-to-be-true</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Topic: Jython too good to be true??</description>
+		<language>en-US</language>
+		<pubDate>Fri, 04 Oct 2013 22:19:09 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/topic/jython-too-good-to-be-true" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>Daniel Allington on "Jython too good to be true??"</title>
+						<link>http://digitalhumanities.org/answers/topic/jython-too-good-to-be-true#post-458</link>
+			<pubDate>Fri, 15 Oct 2010 16:45:03 +0000</pubDate>
+			<dc:creator>Daniel Allington</dc:creator>
+			<guid isPermaLink="false">458@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Thanks everyone. All answers extremely helpful.&#60;/p&#62;
+&#60;p&#62;-D
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Daniel Allington on "Jython too good to be true??"</title>
+						<link>http://digitalhumanities.org/answers/topic/jython-too-good-to-be-true#post-457</link>
+			<pubDate>Fri, 15 Oct 2010 16:43:54 +0000</pubDate>
+			<dc:creator>Daniel Allington</dc:creator>
+			<guid isPermaLink="false">457@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @Gunter Vasold's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/jython-too-good-to-be-true#post-449&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;I'll try that now and see what happens!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Wayne Graham on "Jython too good to be true??"</title>
+						<link>http://digitalhumanities.org/answers/topic/jython-too-good-to-be-true#post-451</link>
+			<pubDate>Fri, 15 Oct 2010 13:50:19 +0000</pubDate>
+			<dc:creator>Wayne Graham</dc:creator>
+			<guid isPermaLink="false">451@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;If you're doing something simple, I would recommend not going down that path until something absolutely requires a change. The biggest reason is that you will have a much larger build process. Essentially you'll need to compile all your python scripts into a jar, version them, then write a wrapper to launch the script (unless you want to explain java -jar awesome_program.jar from the command line). You'll also need to deal with JVM tuning on the client side (is the Heap large enough, garbage collection, etc.). &#60;/p&#62;
+&#60;p&#62;As long as your code is well documented, I don't think you'll have the problem you're thinking with client execution. Now, if you've got some crazy egg dependencies and don't think your users can handle the command line, that could change a packaging/deployment solution (though you can write a simple script to help out there). &#60;/p&#62;
+&#60;p&#62;Questions I would ask myself before proceeding: &#60;/p&#62;
+&#60;p&#62;- Does my code already work in Jython? If it does, use it!&#60;/p&#62;
+&#60;p&#62;If not:&#60;br /&#62;
+- How much time is required to get up to speed on the new language differences?&#60;br /&#62;
+- How much refactoring is involved?&#60;br /&#62;
+- Does it make me more productive?&#60;br /&#62;
+- Do I have time?&#60;br /&#62;
+- Is the trade-off for &#34;easier&#34; desktop execution worth the extra effort in the build process (btw, you can automate most of this)&#60;/p&#62;
+&#60;p&#62;That said, I can say that I have experienced some weirdness in translating our Rails/Sinatra (in Ruby) apps to jRuby (though I was able to work through it pretty quickly). However, one of the coolest things I've been able to do is actually package up a Sinatra-based application as an executable jar file and write a quick batch file to start it up on a Windows desktop. I can't exactly speak to the Jython version of this, but the warbler gem, and the work the jruby folks have done, it's almost trivial to switch back and forth now. I would really hope (and almost assume) the Pythonists would have a similarly elegant solution to accomplish this (as long as Java is in the Windows classpath, which sometimes isn't the case).
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Gunter Vasold on "Jython too good to be true??"</title>
+						<link>http://digitalhumanities.org/answers/topic/jython-too-good-to-be-true#post-449</link>
+			<pubDate>Fri, 15 Oct 2010 13:22:30 +0000</pubDate>
+			<dc:creator>Gunter Vasold</dc:creator>
+			<guid isPermaLink="false">449@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Jython is nice to integrate Java and Python, but if you only want to distribute your Python programs you'd might want to take a look on tools like py2exe (win), py2app (osx) or freeze (linux). These tools generate a binary executable and include all needed libraries. After that your programs will run on computers even if they do not have Python installed.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Daniel Allington on "Jython too good to be true??"</title>
+						<link>http://digitalhumanities.org/answers/topic/jython-too-good-to-be-true#post-448</link>
+			<pubDate>Fri, 15 Oct 2010 13:09:37 +0000</pubDate>
+			<dc:creator>Daniel Allington</dc:creator>
+			<guid isPermaLink="false">448@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @Wayne Graham's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/jython-too-good-to-be-true#post-447&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;Desktop. But this is hypothetical, really: I'm just wondering whether it makes sense for me to be investing time and energy in Python, or whether I really ought to be starting again with Java. &#60;/p&#62;
+&#60;p&#62;My assumption was that there is a huge constituency of people who already have the JVM installed (most of whom don't even know it), but that this doesn't necessarily apply to Python. A lot of people I know are wary of installing almost anything at all; installing a whole language for the sake of one little app would seem a bit much to ask.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Wayne Graham on "Jython too good to be true??"</title>
+						<link>http://digitalhumanities.org/answers/topic/jython-too-good-to-be-true#post-447</link>
+			<pubDate>Fri, 15 Oct 2010 12:14:44 +0000</pubDate>
+			<dc:creator>Wayne Graham</dc:creator>
+			<guid isPermaLink="false">447@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Are you developing a desktop application or something for the web? If you're doing desktop stuff, I quite honestly wouldn't be too worried about a dependency on Python; you're essentially just shifting the dependency from Python to Java (which would also need to be installed too). If this is for web applications, I would just stick with the Python dependency. That said, Jython &#60;em&#62;should&#60;/em&#62; allow you to write your Python code to run it through the JVM (if it is installed), but there are some extra steps you would need to make this easily executed by a client. We use a similar technique with some ruby applications to deploy some software to Tomcat servlets, but that has more to do with how our servers are configured.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Hugh Cayless on "Jython too good to be true??"</title>
+						<link>http://digitalhumanities.org/answers/topic/jython-too-good-to-be-true#post-446</link>
+			<pubDate>Fri, 15 Oct 2010 12:03:58 +0000</pubDate>
+			<dc:creator>Hugh Cayless</dc:creator>
+			<guid isPermaLink="false">446@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;It's true.  I can't really speak directly to Jython, but there are a number of languages that will run happily on the JVM.  We use JRuby on Rails for a web app to edit transcriptions of papyri, for example, and it runs just fine (plus allowing tighter integration of some Java-only components). There are Javascript and PHP implementations for the JVM as well.&#60;/p&#62;
+&#60;p&#62;The JVM-based versions usually lag behind the main version a bit, but unless you want the very latest features of the language, that needn't bother you.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Daniel Allington on "Jython too good to be true??"</title>
+						<link>http://digitalhumanities.org/answers/topic/jython-too-good-to-be-true#post-445</link>
+			<pubDate>Fri, 15 Oct 2010 11:36:48 +0000</pubDate>
+			<dc:creator>Daniel Allington</dc:creator>
+			<guid isPermaLink="false">445@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I am not a programmer. But I do like to do a bit of coding from time to time. Some time ago, I made an effort to get to know Java, though I have now forgotten what little I learnt. More recently, I was introduced to Python, which seems like a much friendlier language. However, I find myself strangely concerned that, in the unlikely event that anyone will want to run something I've coded, he or she will have to install Python first.&#60;/p&#62;
+&#60;p&#62;I understand that, thanks to Jython, I should be able to write a Python program and yet have it run it on the Java Virtual Machine with fairly minimal adjustments (ie. making sure that the thing avoids the set of modules that are available in Python but not in Jython).&#60;/p&#62;
+&#60;p&#62;But that all sounds a bit too good to be true. Is it??
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

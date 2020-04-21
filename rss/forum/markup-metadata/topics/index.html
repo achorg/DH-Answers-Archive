@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Forum: Markup &#38; Metadata - Recent Topics</title>
+		<link>http://digitalhumanities.org/answers/forum/markup-metadata</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Forum: Markup &amp; Metadata - Recent Topics</description>
+		<language>en-US</language>
+		<pubDate>Wed, 20 Apr 2016 22:32:02 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/forum/markup-metadata/topics" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>mebrett on "Advice for teaching myself XML?"</title>
+						<link>http://digitalhumanities.org/answers/topic/advice-for-teaching-myself-xml#post-919</link>
+			<pubDate>Tue, 25 Jan 2011 21:15:02 +0000</pubDate>
+			<dc:creator>mebrett</dc:creator>
+			<guid isPermaLink="false">919@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I am interested in teaching myself XML and was wondering what books and/or websites people would recommend? Particularly anything which has examples or hands-on learning; I do better with reading, seeing and doing than hearing or only reading. Thanks!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>quinnanya on "Planning for link rot in article bibliography"</title>
+						<link>http://digitalhumanities.org/answers/topic/planning-for-link-rot-in-article-bibliography#post-2117</link>
+			<pubDate>Tue, 22 Oct 2013 08:58:26 +0000</pubDate>
+			<dc:creator>quinnanya</dc:creator>
+			<guid isPermaLink="false">2117@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I'm working on an article where most of my bibliography entries involve links to university wiki pages, or documents hosted by that same wiki service. I don't have a ton of confidence that the service will necessarily exist in five years, or at least, that it will exist in a way that won't break all the links. I'm personally committed to ensuring that the content remains available; in the past, when I've just needed a reliable link to an isolated wiki page, I've re-posted wiki content on my own website and used that link. It'd be harder to do that here, though, because in many cases I'm referencing entire sections of the wiki, consisting of multiple pages. When/if the day comes for me to &#34;rescue&#34; the whole thing, I'd probably take a different approach than re-posting content. I'd also expect that when/if the wiki service shuts down or changes, it probably won't be possible to set up (even temporarily) a redirect to wherever I'm hosting the content instead.&#60;/p&#62;
+&#60;p&#62;Any suggestions for what I should do about these links in the paper? The three options that've come to mind, in increasing order of appeal, are:&#60;/p&#62;
+&#60;p&#62;1) Just use the current links, and get over it.&#60;br /&#62;
+2) Include a link to a page on my own site somewhere in the paper, where I'll maintain a current list of reference URLs.&#60;br /&#62;
+3) Look into creating an &#60;a href=&#34;http://www.cdlib.org/services/uc3/ezid/&#34;&#62;EZID&#60;/a&#62; for each of the links, and use that to update the URL (I'm not 100% sure if I'll be able to get access to the EZID service).&#60;/p&#62;
+&#60;p&#62;Has anyone come up with an elegant solution for this?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Ethan Gruber on "Extending TEI for image annotation"</title>
+						<link>http://digitalhumanities.org/answers/topic/extending-tei-for-image-annotation#post-2136</link>
+			<pubDate>Fri, 20 Dec 2013 10:35:04 +0000</pubDate>
+			<dc:creator>Ethan Gruber</dc:creator>
+			<guid isPermaLink="false">2136@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I am beginning to work on a project digitizing a series of notebooks, and each page in the notebook will contain annotations created by the project archivist.  I am going to be using Annotorious (&#60;a href=&#34;http://annotorious.github.io/&#34; rel=&#34;nofollow&#34;&#62;http://annotorious.github.io/&#60;/a&#62;) for the annotation engine, following the model of using OpenLayers to annotate zoomable images.&#60;/p&#62;
+&#60;p&#62;Much to my surprise, TEI can handle the storage of annotations natively within the schema with facsimile and surface elements.  Some use cases are well-documented at &#60;a href=&#34;http://tei.oucs.ox.ac.uk/Talks/2009-07-dublin/talk7_facsimile.xml&#34; rel=&#34;nofollow&#34;&#62;http://tei.oucs.ox.ac.uk/Talks/2009-07-dublin/talk7_facsimile.xml&#60;/a&#62;.  However, the attributes designated for storing x and y coordinates of the annotations only accept literal pixel coordinates, i. e., they must be positive integers.  For annotations made in OpenLayers, for example, the x and y coordinates are represented relatively within the bounds of the image, which are dynamically calculated based on the height and width of the source image file.  Therefore, the surface element may appear as follows:&#60;/p&#62;
+
+
+&#60;div class=&#34;bb_syntax&#34;&#62;&#60;table&#62;&#60;tr&#62;&#60;td class=&#34;line_numbers&#34;&#62;&#60;pre&#62;1
+&#60;/pre&#62;&#60;/td&#62;&#60;td class=&#34;code&#34;&#62;&#60;pre class=&#34;xml&#34; style=&#34;font-family:monospace;&#34;&#62;&#60;span style=&#34;color: #009900;&#34;&#62;&#60;span style=&#34;color: #000000; font-weight: bold;&#34;&#62;&#38;lt;surface&#60;/span&#62; &#60;span style=&#34;color: #000066;&#34;&#62;ulx&#60;/span&#62;=&#60;span style=&#34;color: #ff0000;&#34;&#62;&#38;quot;-0.86269991934014&#38;quot;&#60;/span&#62; &#60;span style=&#34;color: #000066;&#34;&#62;uly&#60;/span&#62;=&#60;span style=&#34;color: #ff0000;&#34;&#62;&#38;quot;0.34903242955874003&#38;quot;&#60;/span&#62; &#60;span style=&#34;color: #000066;&#34;&#62;lrx&#60;/span&#62;=&#60;span style=&#34;color: #ff0000;&#34;&#62;&#38;quot;-0.053827751&#38;quot;&#60;/span&#62; &#60;span style=&#34;color: #000066;&#34;&#62;lry&#60;/span&#62;=&#60;span style=&#34;color: #ff0000;&#34;&#62;&#38;quot;-0.216358041&#38;quot;&#60;/span&#62;&#60;span style=&#34;color: #000000; font-weight: bold;&#34;&#62;/&#38;gt;&#60;/span&#62;&#60;/span&#62;&#60;/pre&#62;&#60;/td&#62;&#60;/tr&#62;&#60;/table&#62;&#60;/div&#62;
+
+
+
+&#60;p&#62;The values of these attributes are invalid according to the schema.  Ideally, I would like to use an official schema.  Are there other semantically acceptable ways to encode these coordinates?  Or should I edit the schema and validate on a local, modified copy?  Furthermore, should I send an email out to a TEI list with this use case?  It seems plausible that other projects may want to annotate images in this way, and perhaps the attributes should be relaxed to accept decimal numbers rather than integers.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>DigitalHumanitiesScholar on "TEI question"</title>
+						<link>http://digitalhumanities.org/answers/topic/tei-question#post-2051</link>
+			<pubDate>Mon, 29 Jul 2013 02:51:21 +0000</pubDate>
+			<dc:creator>DigitalHumanitiesScholar</dc:creator>
+			<guid isPermaLink="false">2051@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hi,&#60;/p&#62;
+&#60;p&#62;I have a beginners question re TEI 5 and would be grateful for any suggestions re same.&#60;/p&#62;
+&#60;p&#62;How does one begin to encode metdata? ie: I have a transcription and am doing a very light encoding thereof - just &#38;lt;head&#38;gt;&#38;lt;/head&#38;gt;, &#38;lt;person&#38;gt;&#38;lt;/person&#38;gt;, &#38;lt;place&#38;gt;&#38;lt;/place&#38;gt; (which hopefully are correct!). If I have footnotes re certain parts of the main body of text, how to encode it and where to I place it in the TEI that I am writing in Oxygen Editor (ie: How do I show what the info refers to? Do I keep the footnote system?)&#60;/p&#62;
+&#60;p&#62;Thanks.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>dot.porter on "Seeking a generalizable metadata mapping tool"</title>
+						<link>http://digitalhumanities.org/answers/topic/seeking-a-generalizable-metadata-mapping-tool#post-1916</link>
+			<pubDate>Fri, 08 Mar 2013 12:32:12 +0000</pubDate>
+			<dc:creator>dot.porter</dc:creator>
+			<guid isPermaLink="false">1916@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I'm looking for what is probably the holy grail of metadata: a generalizable mapping tool. I could specify the final output (in XML), perhaps based on a schema or I could just indicate somehow the output tags and attributes. This tool would enable a user to put in their metadata in whatever format it's in (any XML, csv, excel), map fields/tags/attributes from their metadata document into the tags and attributes I've specified, and would spit out a document that follows my format.&#60;/p&#62;
+&#60;p&#62;An example of how this would function is the Sheet Music Consortium Metadata Mapping Tool, which is unfortunately not generalizable and doesn't accept XML (&#60;a href=&#34;http://www.dlib.indiana.edu/smcmigrator/upload.php&#34; rel=&#34;nofollow&#34;&#62;http://www.dlib.indiana.edu/smcmigrator/upload.php&#60;/a&#62;)&#60;/p&#62;
+&#60;p&#62;Does such a thing exist?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Elli Mylonas on "Best way to handle Arabic OCR - what results have you had? what software to use?"</title>
+						<link>http://digitalhumanities.org/answers/topic/best-way-to-handle-arabic-ocr-what-results-have-you-had-what-software-to-use#post-1897</link>
+			<pubDate>Wed, 27 Feb 2013 13:09:16 +0000</pubDate>
+			<dc:creator>Elli Mylonas</dc:creator>
+			<guid isPermaLink="false">1897@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Does anyone have experience, positive or otherwise, with Arabic OCR? How did you go about it, what did you use and did it require special configuration.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>knechtelruth@gmail.com on "Semantic Tagging in TEI"</title>
+						<link>http://digitalhumanities.org/answers/topic/semantic-tagging-in-tei#post-1886</link>
+			<pubDate>Fri, 15 Feb 2013 18:21:19 +0000</pubDate>
+			<dc:creator>knechtelruth@gmail.com</dc:creator>
+			<guid isPermaLink="false">1886@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hi Friendly DHers:&#60;/p&#62;
+&#60;p&#62;The Dynamic Table of Contexts team is developing a semantic tagset that will be used to encode a collection of scholarly essays.&#60;br /&#62;
+ &#60;br /&#62;
+We are currently trying to incorporate this tagset, which is largely based off of Orlando’s tagset, into a TEI-based schema. We intend to tag sections of the text (whole paragraphs, single words, etc.) that corresponds to index-like concepts, such as ‘history’ or ‘politics’.&#60;br /&#62;
+ &#60;br /&#62;
+To tag these concepts, we have employed TEI’s ‘term’ element. The various semantic categories feature as values of the ‘term’ element, e.g. &#38;lt;term type=”politics”&#38;gt;.&#60;br /&#62;
+ &#60;br /&#62;
+The problem with using the ‘term’ tag in this way is that it is unable to handle nested quote tags or paragraph tags. That is, TEI does not allow &#38;lt;q&#38;gt; tags inside a ‘term’ tag, nor does it allow the ‘term’ tag to wrap around a &#38;lt;p&#38;gt; tag. This restricts the ‘term’ tag’s usage. Ideally, we want to be able to identify concepts across paragraphs.&#60;br /&#62;
+ &#60;br /&#62;
+We have searched for an alternative to the ‘term’ tag in the TEI catalogue but apart from customizing the schema, we have not found an adequate solution. At this point in the project, we are interested in sticking to the TEI’s standards. Is there a term-like tag in TEI that we have overlooked?&#60;br /&#62;
+ &#60;br /&#62;
+We would appreciate some feedback on this issue of semantic tagging in TEI.&#60;br /&#62;
+ &#60;br /&#62;
+ALSO, we are interested in tagging instances of genre in the collection, but again, TEI does not provide a ‘genre’ tag. Is there a clear solution here that we have missed?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Ben Brumfield on "What standards exist for historic calendar/region combinations?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-standards-exist-for-historic-calendarregion-combinations#post-1864</link>
+			<pubDate>Wed, 23 Jan 2013 17:07:59 +0000</pubDate>
+			<dc:creator>Ben Brumfield</dc:creator>
+			<guid isPermaLink="false">1864@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Many of us are familiar with the &#34;locale&#34; concept used for internationalization -- keys like &#60;code&#62;en_GB&#60;/code&#62; or &#60;code&#62;es_US&#60;/code&#62; used to express the language and country combination needed to generate user-facing messages like &#34;Only £4!&#34; or &#34;Solamente $3.99!&#34;.  &#60;/p&#62;
+&#60;p&#62;I'm looking for something similar that would express, for a given historical country/region, what calendar system was in use at a given time.  The goal is to have enough logic that a date parsing library is capable of resolving &#34;22 Jan 1682&#34; in Scotland to 1682-01-22, but also resolving &#34;22 Jan 1682&#34; in England to 1683-01-01, since Scotland changed from Old Style New Year's Days to New Style in 1600, but England only changed in 1752.&#60;/p&#62;
+&#60;p&#62;I've had no luck with ISO-8601, nor the other technical standards that specify converting everything to proleptic Gregorian without explaining when and where that change should be made.  In fact, the closest listing I've been able to find is the table at &#60;a href=&#34;http://en.wikipedia.org/wiki/Julian_Calendar#New_Year.27s_Day&#34;&#62;on this wikipedia article&#60;/a&#62;.  Are there any such &#34;calendar local&#34; standards?&#60;/p&#62;
+&#60;p&#62;Let me emphasize that I'm attempting a modest approach to representing dates here. On one hand, I'm not trying to obliterate the dates actually written on the source documents by replacing them with a standardized version -- we expect to capture dates as written in a separate field, which will always be accessible to researchers, and will likely be the actual value we present when people use the database.  On the other hand, I'm not trying to force all standardized dates into a proleptic Gregorian system that could be used for cross-calendar comparison.  Rather, we're trying to find a nice, standardized format to be used for searching and sorting records, so that a search for &#34;1682&#34; finds records written with &#34;1682&#34;, and that &#34;December 31 1682&#34; precedes &#34;January 1 1682/3&#34;.&#60;/p&#62;
+&#60;p&#62;Any other resources on dealing with European calendar changes would be welcome.&#60;/p&#62;
+&#60;p&#62;More info on the date parser I'm trying to build can be found &#60;a href=&#34;https://github.com/mojombo/chronic/issues/169&#34;&#62;on this Github issue tracking the feature&#60;/a&#62;.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>IanRobertson on "TEI Basic Tags"</title>
+						<link>http://digitalhumanities.org/answers/topic/tei-basic-tags#post-667</link>
+			<pubDate>Thu, 11 Nov 2010 13:12:49 +0000</pubDate>
+			<dc:creator>IanRobertson</dc:creator>
+			<guid isPermaLink="false">667@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hello,&#60;br /&#62;
+I'm working on an ongoing research project at my school where I will be encoding in TEI.  I was just curious if anyone had a list of standard TEI tags, and specifically tags for SmallCaps, Hyphens, and M-lines.&#60;/p&#62;
+&#60;p&#62;Thanks!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>lmullen on "Using YAML to model historical lives or events"</title>
+						<link>http://digitalhumanities.org/answers/topic/using-yaml-to-model-historical-lives-or-events#post-1627</link>
+			<pubDate>Wed, 02 May 2012 13:32:41 +0000</pubDate>
+			<dc:creator>lmullen</dc:creator>
+			<guid isPermaLink="false">1627@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;For my dissertation, I'm keeping track of nineteenth-century converts. I'd like to keep the data about the converts in both a human- and computer readable format. The data model needs to grow organically, because I only have a reasonable guess right now what information might be interesting about converts. The amount of data on each convert will be vastly different, from the bare information that a person converted (I might not even know a name) to having volumes of the person's papers. Also, each person might convert multiple times. Some information I want to keep track of as data (e.g., converted from, converted to, converted date), and other information can be tossed into a notes field. Finally, I have to be able to read the data myself as notes for writing, and to access it programmatically from some unknown tool (probably Ruby). While these needs are specific to my purposes, I think they could be easily generalized. For example, someone might want to keep track of strikes for a labor history.&#60;/p&#62;
+&#60;p&#62;I'm thinking about using &#60;a href=&#34;http://www.yaml.org/spec/1.2/spec.html&#34;&#62;YAML&#60;/a&#62; as the format for the data. YAML's two top priorities are &#34;YAML is easily readable by humans&#34; and &#34;YAML data is portable between programming languages,&#34; which match my own. It also seems to be dead-simple to markup data. I've created a sample file for modeling the life of Orestes Brownson, which is below.&#60;/p&#62;
+&#60;p&#62;My questions are these:&#60;/p&#62;
+&#60;ol&#62;
+&#60;li&#62;Is anyone using YAML for a digital humanities project? How are you using it, and what experience have you gained?&#60;/li&#62;
+&#60;li&#62;Can anyone offer specific comments on the data modeled below?&#60;/li&#62;
+&#60;/ol&#62;
+&#60;p&#62; &#60;/p&#62;
+
+
+&#60;div class=&#34;bb_syntax&#34;&#62;&#60;table&#62;&#60;tr&#62;&#60;td class=&#34;line_numbers&#34;&#62;&#60;pre&#62;1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+&#60;/pre&#62;&#60;/td&#62;&#60;td class=&#34;code&#34;&#62;&#60;pre class=&#34;yaml&#34; style=&#34;font-family:monospace;&#34;&#62;# A model of a convert's life
+---
+name-last       : Brownson
+name-first      : Orestes Augustus
+born            : 1803-09-16
+died            : 1876-04-17
+birth-religion  : Congregationalism
+&#38;nbsp;
+conversions     :
+&#38;nbsp;
+-   origin-religion         : Congregationalism
+    destination-religion    : Presbyterianism
+    date                    : 1822
+    ritual                  : church membership
+    citation                : ANB
+    notes                   : &#38;gt;
+      Brownson's change to congregationalism was more denominational
+      switching than a change in conscience.
+&#38;nbsp;
+-   origin-religion         : Presbyterianism
+    destination-religion    : Universalism
+    date                    : 1826
+    ritual                  : ordination
+    location                : &#38;quot;Jaffrey, New Hampshire&#38;quot;
+    citation                : ANB
+    notes                   : &#38;gt;
+      &#38;quot;He would later refer to his years in this fold as 'the most
+      anti-Christian period of my life'&#38;quot; (ANB).
+&#38;nbsp;
+      Brownson was editor of _The Gospel Advocate and Impartial
+      Investigator_, a Universalist publication.
+&#38;nbsp;
+-   origin-religion         : Universalism
+    destination-religion    : Unitarianism
+    ritual                  : further research
+    location                : &#38;quot;Walpole, New Hampshire&#38;quot;
+    citation:               : ANB
+    notes                   : &#38;gt;
+      Brownson spent some time at Brook Farm, which prepared him for
+      Transcendentalism
+&#38;nbsp;
+-   origin-religion         : Unitarianism and Transcendentalism
+    destination-religion    : Catholicism
+    date                    : 1844-10-19
+    ritual                  : baptism
+    citation                : ANB
+    notes                   : &#38;gt;
+      Brownson studied after his conversion with a Sulpician priest.
+&#38;nbsp;
+source          :
+-   Carey, Orestes Brownson
+-   American National Biography
+&#38;nbsp;
+comments        : &#38;gt;
+  This is a minimal example of what a model of a convert might look
+  like. The historical data is hastily gathered, so only the model is
+  of interest here.
+&#38;nbsp;
+  N.B. I would like to replace the citations with BibTeX keys.
+...&#60;/pre&#62;&#60;/td&#62;&#60;/tr&#62;&#60;/table&#62;&#60;/div&#62;
+
+
+</description>
+		</item>
+		<item>
+			 
+				<title>Hayim on "TEI Markup of Headings and Ornaments"</title>
+						<link>http://digitalhumanities.org/answers/topic/tei-markup-of-headings-and-ornaments#post-1445</link>
+			<pubDate>Tue, 15 Nov 2011 20:59:42 +0000</pubDate>
+			<dc:creator>Hayim</dc:creator>
+			<guid isPermaLink="false">1445@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I am transcribing and marking up medieval Hebrew manuscripts, and have encountered a phenomenon that the general TEI guidelines do not provide for. Can people recommend good examples of marked up texts or sites that exemplify best practices? &#60;/p&#62;
+&#60;p&#62;[The problem in brief: Some of the scribes use larger text for headings or labels and these displace text in the line below. Presumably this is marked with @rend on the elements in question, but I am at a loss for an &#60;em&#62;efficient&#60;/em&#62; way to do this.]
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Stéfan Sinclair on "Favourite ways of converting Word HTML to decent HTML"</title>
+						<link>http://digitalhumanities.org/answers/topic/favourite-ways-of-converting-word-html-to-decent-html#post-878</link>
+			<pubDate>Wed, 19 Jan 2011 11:54:22 +0000</pubDate>
+			<dc:creator>Stéfan Sinclair</dc:creator>
+			<guid isPermaLink="false">878@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I'm curious if anyone is particularly pleased with their method of cleaning Word HTML files. There's any number of services based on HTML Tidy, some of which are integrated into editors like TextWrangler and TextMate, but I still find I need to do some further clean up and correction, especially with lists (any tool would need to know specifics about the peculiar way Word exports lists into HTML). Someone &#60;a href=&#34;http://stackoverflow.com/questions/67964/what-is-the-best-free-way-to-clean-up-word-html&#34;&#62;mentioned&#60;/a&#62; publishing from Word to a blog entry, but I'm not sure if that's possible in Word for Mac.&#60;/p&#62;
+&#60;p&#62;Any further suggestions (aside from avoiding Word)?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>cforster on "What have you discovered using the TEI and what programs did you use/create?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-have-you-discovered-using-the-tei-and-what-programs-did-you-usecreate#post-1169</link>
+			<pubDate>Thu, 05 May 2011 10:49:59 +0000</pubDate>
+			<dc:creator>cforster</dc:creator>
+			<guid isPermaLink="false">1169@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;This question is really fascinating (especially since I suspect I have inkling of &#60;a href=&#34;http://dl.lib.brown.edu/mjp/&#34;&#62;the sort of texts&#60;/a&#62; you're interested in). Let me just dump a handful of links which I think might be helpful from my recent delicious/pinboard (hmm... delicious pinboard).&#60;/p&#62;
+&#60;p&#62;While I can't point to specific results/papers. Aditi Muralidharan (@silverasm)'s WordSeer project is promising interesting results about slave narratives, though it does not rely on TEI. In &#60;a href=&#34;http://www.eecs.berkeley.edu/~aditi/projects/wordseer.html&#34;&#62;this talk&#60;/a&#62;, though, she does a good job of answering Sean's question directly--how can metadata improve on generic full-text search. WordSeer (as I understand it) works mostly by supplementing raw text with part of speech tagging and other grammatical metadata.&#60;/p&#62;
+&#60;p&#62;With respect to TEI specifically one obvious place to start, I think, is &#60;a href=&#34;http://www.monkproject.org/&#34;&#62;MONK&#60;/a&#62;; as Dorothea notes, Martin Mueller is involved with the MONK project. You can find him summarizing MONK &#60;a href=&#34;http://www.cch.kcl.ac.uk/cocoon/tei2008/programme/abstracts/abstract-169.html&#34;&#62;here&#60;/a&#62; and at greater length &#60;a href=&#34;https://apps.lis.illinois.edu/wiki/display/MONK/Notes+towards+a+user+manual+of+Monk&#34;&#62;here&#60;/a&#62;. Unlike WordSeer, the Monk Workbench gives you metadata about author (including gender) and publication date. Matt Kirschenbaum mentions MONK in &#60;a href=&#34;http://www.cs.umbc.edu/~hillol/NGDM07/abstracts/talks/MKirschenbaum.pdf&#34;&#62;this article&#60;/a&#62; [PDF].&#60;/p&#62;
+&#60;p&#62;(How relevant it will be to you, I don't know, but when I heard John Unsworth speak recently, he talked about the work flow and complications of large text collections with different encoding standards--with reference to MONK in particular. You can hear him &#60;a href=&#34;http://www.scholarslab.org/podcasts/unsworth-idiosyncrasy-at-scale/&#34;&#62;here&#60;/a&#62;.)&#60;/p&#62;
+&#60;p&#62;There was a &#60;a href=&#34;http://listserv.brown.edu/archives/cgi-bin/wa?A1=ind1104&#38;amp;L=TEI-L&#38;amp;F=&#38;amp;S=&#38;amp;O=T&#38;amp;H=0&#38;amp;D=0&#38;amp;T=1#34&#34;&#62;recent discussion&#60;/a&#62; on the TEI list about eXist from which I learned a lot--again, about what's possible rather than specific results/reports.&#60;/p&#62;
+&#60;p&#62;Finally--this one is also not TEI specific--if you haven't seen Ben Schmidt's blog, he is doing some pretty impressive stuff. This post, on &#60;a href=&#34;http://sappingattention.blogspot.com/2011/04/age-cohort-and-vocabulary-use.html&#34;&#62;vocabulary use and age cohort&#60;/a&#62; gives some idea.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Ryan Cordell on "Custom tags in TEI"</title>
+						<link>http://digitalhumanities.org/answers/topic/custom-tags-in-tei#post-1185</link>
+			<pubDate>Tue, 24 May 2011 11:31:55 +0000</pubDate>
+			<dc:creator>Ryan Cordell</dc:creator>
+			<guid isPermaLink="false">1185@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hi all,&#60;/p&#62;
+&#60;p&#62;So I'm tinkering with the TEI in my first batch of &#34;Celestial Railroad&#34; editions (&#60;a href=&#34;http://celestialrailroad.org/)&#34; rel=&#34;nofollow&#34;&#62;http://celestialrailroad.org/)&#60;/a&#62;, and I'm looking for the best way to indicate, in the metadata, a few features of each text. I want to be able to indicate the denomination and/or political affiliations of each newspaper/magazine that reprinted the story. I thought I could add some fields in the &#38;lt;sourceDesc&#38;gt;: e.g. &#38;lt;sourceDenomination&#38;gt; or &#38;lt;sourcePolitics&#38;gt;, but that seems to raise red flags when I attempt to post or use the TEI file. Any suggestions for how I can encode this information? The religious and/or political backgrounds of the newspapers are central to the questions I'm asking about these texts.&#60;/p&#62;
+&#60;p&#62;Thanks,&#60;br /&#62;
+Ryan
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Scott on "xml standards for encoding geographic information from a historical text?"</title>
+						<link>http://digitalhumanities.org/answers/topic/xml-standards-for-encoding-geographic-information-from-a-historical-text#post-1156</link>
+			<pubDate>Tue, 03 May 2011 14:05:59 +0000</pubDate>
+			<dc:creator>Scott</dc:creator>
+			<guid isPermaLink="false">1156@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I want to create a set of maps to accompany an ancient Chinese historical text (ca. 100 BC). I want to be able to encode location (with some ambiguity), associated people and their movements, administration, and time. I know xml, so I'd much prefer to use an xml language. So I want to ask, what xml standards are available? And what are their advantages and disadvantages? I would also like to know about other historical mapping projects that use xml languages.&#60;br /&#62;
+Thanks!&#60;br /&#62;
+Scott
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

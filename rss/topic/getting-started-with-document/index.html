@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Topic: Getting started with XSLT document() ?</title>
+		<link>http://digitalhumanities.org/answers/topic/getting-started-with-document</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Topic: Getting started with XSLT document() ?</description>
+		<language>en-US</language>
+		<pubDate>Fri, 04 Oct 2013 22:47:16 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/topic/getting-started-with-document" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>Hayim on "Getting started with XSLT document() ?"</title>
+						<link>http://digitalhumanities.org/answers/topic/getting-started-with-document#post-1025</link>
+			<pubDate>Thu, 03 Mar 2011 01:34:47 +0000</pubDate>
+			<dc:creator>Hayim</dc:creator>
+			<guid isPermaLink="false">1025@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Thank you so much! This is a great step jump forward for me.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Stéfan Sinclair on "Getting started with XSLT document() ?"</title>
+						<link>http://digitalhumanities.org/answers/topic/getting-started-with-document#post-1023</link>
+			<pubDate>Wed, 02 Mar 2011 21:24:36 +0000</pubDate>
+			<dc:creator>Stéfan Sinclair</dc:creator>
+			<guid isPermaLink="false">1023@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I should have mentioned, BTW, that the code above was adapted from &#60;a href=&#34;http://www.biglist.com/lists/xsl-list/archives/200108/msg00545.html&#34; rel=&#34;nofollow&#34;&#62;http://www.biglist.com/lists/xsl-list/archives/200108/msg00545.html&#60;/a&#62;
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Stéfan Sinclair on "Getting started with XSLT document() ?"</title>
+						<link>http://digitalhumanities.org/answers/topic/getting-started-with-document#post-1022</link>
+			<pubDate>Wed, 02 Mar 2011 21:23:46 +0000</pubDate>
+			<dc:creator>Stéfan Sinclair</dc:creator>
+			<guid isPermaLink="false">1022@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;If you're needing to combine multiple documents flexibly, then you probably want to do it in a scripting language rather than in pure XSL. If you know in advance the names of the files you wish to combine, you could do something like this:&#60;/p&#62;
+&#60;p&#62;First, the XML document that lists the child documents to combine. This assumes that the list is static and that you know the filenames in advance (not through user-submitted parameters, for instance).&#60;/p&#62;
+
+
+&#60;div class=&#34;bb_syntax&#34;&#62;&#60;div class=&#34;code&#34;&#62;&#60;pre class=&#34;xml&#34; style=&#34;font-family:monospace;&#34;&#62;&#60;span style=&#34;color: #009900;&#34;&#62;&#60;span style=&#34;color: #000000; font-weight: bold;&#34;&#62;&#38;lt;?xml&#60;/span&#62; &#60;span style=&#34;color: #000066;&#34;&#62;version&#60;/span&#62;=&#60;span style=&#34;color: #ff0000;&#34;&#62;&#38;quot;1.0&#38;quot;&#60;/span&#62;&#60;span style=&#34;color: #000000; font-weight: bold;&#34;&#62;?&#38;gt;&#60;/span&#62;&#60;/span&#62;
+&#60;span style=&#34;color: #009900;&#34;&#62;&#60;span style=&#34;color: #000000; font-weight: bold;&#34;&#62;&#38;lt;?xml-stylesheet&#60;/span&#62; &#60;span style=&#34;color: #000066;&#34;&#62;type&#60;/span&#62;=&#60;span style=&#34;color: #ff0000;&#34;&#62;&#38;quot;text/xsl&#38;quot;&#60;/span&#62; &#60;span style=&#34;color: #000066;&#34;&#62;href&#60;/span&#62;=&#60;span style=&#34;color: #ff0000;&#34;&#62;&#38;quot;combine.xsl&#38;quot;&#60;/span&#62;&#60;span style=&#34;color: #000000; font-weight: bold;&#34;&#62;?&#38;gt;&#60;/span&#62;&#60;/span&#62;
+&#60;span style=&#34;color: #009900;&#34;&#62;&#60;span style=&#34;color: #000000; font-weight: bold;&#34;&#62;&#38;lt;documents&#60;span style=&#34;color: #000000; font-weight: bold;&#34;&#62;&#38;gt;&#60;/span&#62;&#60;/span&#62;&#60;/span&#62;
+    &#60;span style=&#34;color: #009900;&#34;&#62;&#60;span style=&#34;color: #000000; font-weight: bold;&#34;&#62;&#38;lt;document&#60;/span&#62; &#60;span style=&#34;color: #000066;&#34;&#62;href&#60;/span&#62;=&#60;span style=&#34;color: #ff0000;&#34;&#62;&#38;quot;temp1.xml&#38;quot;&#60;/span&#62;&#60;span style=&#34;color: #000000; font-weight: bold;&#34;&#62;/&#38;gt;&#60;/span&#62;&#60;/span&#62;
+    &#60;span style=&#34;color: #009900;&#34;&#62;&#60;span style=&#34;color: #000000; font-weight: bold;&#34;&#62;&#38;lt;document&#60;/span&#62; &#60;span style=&#34;color: #000066;&#34;&#62;href&#60;/span&#62;=&#60;span style=&#34;color: #ff0000;&#34;&#62;&#38;quot;temp2.xml&#38;quot;&#60;/span&#62;&#60;span style=&#34;color: #000000; font-weight: bold;&#34;&#62;/&#38;gt;&#60;/span&#62;&#60;/span&#62;
+&#60;span style=&#34;color: #009900;&#34;&#62;&#60;span style=&#34;color: #000000; font-weight: bold;&#34;&#62;&#38;lt;/documents&#60;span style=&#34;color: #000000; font-weight: bold;&#34;&#62;&#38;gt;&#60;/span&#62;&#60;/span&#62;&#60;/span&#62;&#60;/pre&#62;&#60;/div&#62;&#60;/div&#62;
+
+
+
+&#60;p&#62;Next we have the XSL document that we could name &#60;code&#62;combine.xsl&#60;/code&#62;. When processed from the file above, it should go through each document and pull in the actual contents, wrapped in a new root tag.&#60;/p&#62;
+
+
+&#60;div class=&#34;bb_syntax&#34;&#62;&#60;div class=&#34;code&#34;&#62;&#60;pre class=&#34;xml&#34; style=&#34;font-family:monospace;&#34;&#62;&#60;span style=&#34;color: #009900;&#34;&#62;&#60;span style=&#34;color: #000000; font-weight: bold;&#34;&#62;&#38;lt;?xml&#60;/span&#62; &#60;span style=&#34;color: #000066;&#34;&#62;version&#60;/span&#62;=&#60;span style=&#34;color: #ff0000;&#34;&#62;&#38;quot;1.0&#38;quot;&#60;/span&#62; &#60;span style=&#34;color: #000066;&#34;&#62;encoding&#60;/span&#62;=&#60;span style=&#34;color: #ff0000;&#34;&#62;&#38;quot;UTF-8&#38;quot;&#60;/span&#62;&#60;span style=&#34;color: #000000; font-weight: bold;&#34;&#62;?&#38;gt;&#60;/span&#62;&#60;/span&#62;
+&#60;span style=&#34;color: #009900;&#34;&#62;&#60;span style=&#34;color: #000000; font-weight: bold;&#34;&#62;&#38;lt;xsl:stylesheet&#60;/span&#62; &#60;span style=&#34;color: #000066;&#34;&#62;xmlns:xsl&#60;/span&#62;=&#60;span style=&#34;color: #ff0000;&#34;&#62;&#38;quot;http://www.w3.org/1999/XSL/Transform&#38;quot;&#60;/span&#62;&#60;/span&#62;
+&#60;span style=&#34;color: #009900;&#34;&#62;  &#60;span style=&#34;color: #000066;&#34;&#62;xmlns:xs&#60;/span&#62;=&#60;span style=&#34;color: #ff0000;&#34;&#62;&#38;quot;http://www.w3.org/2001/XMLSchema&#38;quot;&#60;/span&#62; &#60;span style=&#34;color: #000066;&#34;&#62;version&#60;/span&#62;=&#60;span style=&#34;color: #ff0000;&#34;&#62;&#38;quot;2.0&#38;quot;&#60;/span&#62;&#60;span style=&#34;color: #000000; font-weight: bold;&#34;&#62;&#38;gt;&#60;/span&#62;&#60;/span&#62;
+&#38;nbsp;
+  &#60;span style=&#34;color: #808080; font-style: italic;&#34;&#62;&#38;lt;!-- match root documents tag --&#38;gt;&#60;/span&#62;
+  &#60;span style=&#34;color: #009900;&#34;&#62;&#60;span style=&#34;color: #000000; font-weight: bold;&#34;&#62;&#38;lt;xsl:template&#60;/span&#62; &#60;span style=&#34;color: #000066;&#34;&#62;match&#60;/span&#62;=&#60;span style=&#34;color: #ff0000;&#34;&#62;&#38;quot;/&#38;quot;&#60;/span&#62;&#60;span style=&#34;color: #000000; font-weight: bold;&#34;&#62;&#38;gt;&#60;/span&#62;&#60;/span&#62;
+    &#60;span style=&#34;color: #808080; font-style: italic;&#34;&#62;&#38;lt;!-- wrap documents in a new root tag --&#38;gt;&#60;/span&#62;
+    &#60;span style=&#34;color: #009900;&#34;&#62;&#60;span style=&#34;color: #000000; font-weight: bold;&#34;&#62;&#38;lt;combined-documents&#60;span style=&#34;color: #000000; font-weight: bold;&#34;&#62;&#38;gt;&#60;/span&#62;&#60;/span&#62;&#60;/span&#62;
+      &#60;span style=&#34;color: #009900;&#34;&#62;&#60;span style=&#34;color: #000000; font-weight: bold;&#34;&#62;&#38;lt;xsl:apply-templates&#60;/span&#62; &#60;span style=&#34;color: #000066;&#34;&#62;select&#60;/span&#62;=&#60;span style=&#34;color: #ff0000;&#34;&#62;&#38;quot;document(/documents/document/@href)&#38;quot;&#60;/span&#62; &#60;span style=&#34;color: #000066;&#34;&#62;mode&#60;/span&#62;=&#60;span style=&#34;color: #ff0000;&#34;&#62;&#38;quot;document&#38;quot;&#60;/span&#62;&#60;span style=&#34;color: #000000; font-weight: bold;&#34;&#62;/&#38;gt;&#60;/span&#62;&#60;/span&#62;
+    &#60;span style=&#34;color: #009900;&#34;&#62;&#60;span style=&#34;color: #000000; font-weight: bold;&#34;&#62;&#38;lt;/combined-documents&#60;span style=&#34;color: #000000; font-weight: bold;&#34;&#62;&#38;gt;&#60;/span&#62;&#60;/span&#62;&#60;/span&#62;
+  &#60;span style=&#34;color: #009900;&#34;&#62;&#60;span style=&#34;color: #000000; font-weight: bold;&#34;&#62;&#38;lt;/xsl:template&#60;span style=&#34;color: #000000; font-weight: bold;&#34;&#62;&#38;gt;&#60;/span&#62;&#60;/span&#62;&#60;/span&#62;
+&#38;nbsp;
+  &#60;span style=&#34;color: #808080; font-style: italic;&#34;&#62;&#38;lt;!-- this will match the root tag of each document --&#38;gt;&#60;/span&#62;
+  &#60;span style=&#34;color: #009900;&#34;&#62;&#60;span style=&#34;color: #000000; font-weight: bold;&#34;&#62;&#38;lt;xsl:template&#60;/span&#62; &#60;span style=&#34;color: #000066;&#34;&#62;match&#60;/span&#62;=&#60;span style=&#34;color: #ff0000;&#34;&#62;&#38;quot;/&#38;quot;&#60;/span&#62; &#60;span style=&#34;color: #000066;&#34;&#62;mode&#60;/span&#62;=&#60;span style=&#34;color: #ff0000;&#34;&#62;&#38;quot;document&#38;quot;&#60;/span&#62;&#60;span style=&#34;color: #000000; font-weight: bold;&#34;&#62;&#38;gt;&#60;/span&#62;&#60;/span&#62;
+    &#60;span style=&#34;color: #009900;&#34;&#62;&#60;span style=&#34;color: #000000; font-weight: bold;&#34;&#62;&#38;lt;xsl:copy-of&#60;/span&#62; &#60;span style=&#34;color: #000066;&#34;&#62;select&#60;/span&#62;=&#60;span style=&#34;color: #ff0000;&#34;&#62;&#38;quot;.&#38;quot;&#60;/span&#62;&#60;span style=&#34;color: #000000; font-weight: bold;&#34;&#62;/&#38;gt;&#60;/span&#62;&#60;/span&#62;
+  &#60;span style=&#34;color: #009900;&#34;&#62;&#60;span style=&#34;color: #000000; font-weight: bold;&#34;&#62;&#38;lt;/xsl:template&#60;span style=&#34;color: #000000; font-weight: bold;&#34;&#62;&#38;gt;&#60;/span&#62;&#60;/span&#62;&#60;/span&#62;
+&#38;nbsp;
+&#60;span style=&#34;color: #009900;&#34;&#62;&#60;span style=&#34;color: #000000; font-weight: bold;&#34;&#62;&#38;lt;/xsl:stylesheet&#60;span style=&#34;color: #000000; font-weight: bold;&#34;&#62;&#38;gt;&#60;/span&#62;&#60;/span&#62;&#60;/span&#62;&#60;/pre&#62;&#60;/div&#62;&#60;/div&#62;
+
+
+</description>
+		</item>
+		<item>
+			 
+				<title>Hayim on "Getting started with XSLT document() ?"</title>
+						<link>http://digitalhumanities.org/answers/topic/getting-started-with-document#post-1021</link>
+			<pubDate>Wed, 02 Mar 2011 19:42:25 +0000</pubDate>
+			<dc:creator>Hayim</dc:creator>
+			<guid isPermaLink="false">1021@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Thanks for the reply, and sorry to be unclear.&#60;br /&#62;
+I am trying to extract text from a bunch of xml docs, and bundle them into a single html output.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Dorothea Salo on "Getting started with XSLT document() ?"</title>
+						<link>http://digitalhumanities.org/answers/topic/getting-started-with-document#post-1020</link>
+			<pubDate>Wed, 02 Mar 2011 19:29:09 +0000</pubDate>
+			<dc:creator>Dorothea Salo</dc:creator>
+			<guid isPermaLink="false">1020@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;So I'm a little confused here. Are you combining a lot of files into one file with XSLT, or turning one file into a lot of files? Or both?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Hayim on "Getting started with XSLT document() ?"</title>
+						<link>http://digitalhumanities.org/answers/topic/getting-started-with-document#post-1019</link>
+			<pubDate>Wed, 02 Mar 2011 19:20:57 +0000</pubDate>
+			<dc:creator>Hayim</dc:creator>
+			<guid isPermaLink="false">1019@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I am hoping someone can send me to a good tutorial or working model.&#60;br /&#62;
+I am a &#60;strong&#62;rank neophyte&#60;/strong&#62; trying working on a project that will present multiple witnesses to strongly aligned texts, each in a separate xml (TEI) file and each &#38;lt;ab&#38;gt; has a unique xml:id. The alignment is to a central xml file, which links out to the unique IDs.&#60;br /&#62;
+For demo purposes, I'd like to be able to use XSLT to pull the corresponding texts from the several files into a single html file. Any advice on how best to get started?
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

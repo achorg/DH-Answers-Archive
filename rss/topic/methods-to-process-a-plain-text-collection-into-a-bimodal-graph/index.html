@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Topic: Methods to process a plain text collection into a bimodal graph...</title>
+		<link>http://digitalhumanities.org/answers/topic/methods-to-process-a-plain-text-collection-into-a-bimodal-graph</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Topic: Methods to process a plain text collection into a bimodal graph...</description>
+		<language>en-US</language>
+		<pubDate>Fri, 04 Oct 2013 22:07:18 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/topic/methods-to-process-a-plain-text-collection-into-a-bimodal-graph" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>Scott Weingart on "Methods to process a plain text collection into a bimodal graph..."</title>
+						<link>http://digitalhumanities.org/answers/topic/methods-to-process-a-plain-text-collection-into-a-bimodal-graph#post-1993</link>
+			<pubDate>Mon, 29 Apr 2013 03:09:18 +0000</pubDate>
+			<dc:creator>Scott Weingart</dc:creator>
+			<guid isPermaLink="false">1993@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='http://digitalhumanities.org/answers/profile/johnlaudun'&#62;johnlaudun&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/methods-to-process-a-plain-text-collection-into-a-bimodal-graph#post-1992&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;br /&#62;
+Ah, sorry that I neglected to mention the header row! What you're seeing in the first picture is actually what you're looking for (a document-document network based on shared words), but the word nodes were not removed. Preprocessing-&#38;gt;Delete Isolates can do that. Also, if that was the bibliographic coupling, than the other algorithm will have the word-word network based on shared documents. As for getting the graph into gephi, try saving the network out as graphml, renaming the file from .xml to .graphml, and then loading it into gephi. &#60;/p&#62;
+&#60;p&#62;In any case, because there are likely many words per document, you might do well to threshold above a certain value (filtering in gephi or preprocessing-&#38;gt;extract edges above or below value in sci2) to make the network a bit more sparse.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>johnlaudun on "Methods to process a plain text collection into a bimodal graph..."</title>
+						<link>http://digitalhumanities.org/answers/topic/methods-to-process-a-plain-text-collection-into-a-bimodal-graph#post-1992</link>
+			<pubDate>Mon, 29 Apr 2013 02:49:40 +0000</pubDate>
+			<dc:creator>johnlaudun</dc:creator>
+			<guid isPermaLink="false">1992@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Actually you said it quite well the first time:&#60;/p&#62;
+&#60;blockquote&#62;&#60;p&#62;
+once you have a csv with titles in one column and text in the second
+&#60;/p&#62;&#60;/blockquote&#62;
+&#60;p&#62;But apparently my reading comprehension is not up to par!&#60;/p&#62;
+&#60;p&#62;Here's a brief summary of travails:&#60;/p&#62;
+&#60;ul&#62;
+&#60;li&#62; Sci2 expects CSVs to have a header row. This is important. It will not process the first row in a CSV and it will lead to awkwardly named outputs. (This took me a surprisingly long time to puzzle out.) &#60;/li&#62;
+&#60;li&#62; I was glad to figure out the format of the file, because it also means I could potentially do my own stopwording, lemmatizing, etc. The menu item here is a wonderful one-stop shop, but I don't know that I always want everything it brings to the table.&#60;/li&#62;
+&#60;li&#62; I got the directed network, no problem, but a visualization (using GUESS because I couldn't get the Gephi hand-off to work) reveals that the projection isn't really what one would expect:&#60;/li&#62;
+&#60;/ul&#62;
+&#60;p&#62;&#60;a href=&#34;http://www.flickr.com/photos/johnlaudun/8691631906/&#34; title=&#34;Screen Shot 2013-04-28 at 18.04.38 by johnlaudun, on Flickr&#34;&#62;&#38;lt;img src=&#34;http://farm8.staticflickr.com/7054/8691631906_8554b3905e_z.jpg&#34; width=&#34;640&#34; height=&#34;424&#34; alt=&#34;Screen Shot 2013-04-28 at 18.04.38&#34;&#38;gt;&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;As I note on Flickr -- if this image makes it through -- what should have been either a word-to-word projection or a text-to-text projection based on a text-to-word CSV is in face a rather large visualization  in which the sixteen texts sit in a tight ball in the middle of an oort cloud of words.&#60;/p&#62;
+&#60;p&#62;To be sure, I grabbed a screen capture of the Sci2 Data Manager pane, which does a lovely job of capturing at a glance what I had done:&#60;/p&#62;
+&#60;p&#62;&#60;a href=&#34;http://www.flickr.com/photos/johnlaudun/8690511907/&#34; title=&#34;Screen Shot 2013-04-28 at 18.12.46 by johnlaudun, on Flickr&#34;&#62;&#38;lt;img src=&#34;http://farm8.staticflickr.com/7055/8690511907_c97c81dcc9_z.jpg&#34; width=&#34;501&#34; height=&#34;150&#34; alt=&#34;Screen Shot 2013-04-28 at 18.12.46&#34;&#38;gt;&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;The CSV should work:&#60;/p&#62;
+&#60;pre&#62;
+TEXT,WORDS
+ancelet-88,in&#124;charenton&#124;north&#124;o
+ancelet-89,went&#124;meet&#124;old&#124;man&#124;ma
+ancelet-90,mom&#124;said&#124;use&#124;dig&#124;lot
+ancelet-91,know&#124;jess&#124;venabl&#124;fat
+laudun-1,yeah&#124;s&#124;like&#124;talk&#124;shit&#124;
+laudun-2,like&#124;said&#124;famili&#124;weird
+&#60;/pre&#62;
+&#60;p&#62;I'm going to keep playing with the various options to see what else might work. It's been a rough day -- also trying to get an 8 year old to step through a book presentation. That'll drive you nuts, right there.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Scott Weingart on "Methods to process a plain text collection into a bimodal graph..."</title>
+						<link>http://digitalhumanities.org/answers/topic/methods-to-process-a-plain-text-collection-into-a-bimodal-graph#post-1989</link>
+			<pubDate>Fri, 26 Apr 2013 19:23:56 +0000</pubDate>
+			<dc:creator>Scott Weingart</dc:creator>
+			<guid isPermaLink="false">1989@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='http://digitalhumanities.org/answers/profile/johnlaudun'&#62;johnlaudun&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/methods-to-process-a-plain-text-collection-into-a-bimodal-graph#post-1988&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;br /&#62;
+I think maybe I didn't explain what I meant well enough the first time, sorry! If you have a csv that looks like &#60;/p&#62;
+&#60;pre&#62;
+title1, fulltext1
+title2, fulltext2
+title3, fulltext3
+&#60;/pre&#62;
+&#60;p&#62;Doing the steps I described above will get you &#60;/p&#62;
+&#60;pre&#62;
+t1, w1
+t1, w2
+t1, w3
+t2, w1
+t2, w3
+t3, w2
+t3, w3
+t3, w4
+&#60;/pre&#62;
+&#60;p&#62;without any additional scripting. Hope it helps!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>johnlaudun on "Methods to process a plain text collection into a bimodal graph..."</title>
+						<link>http://digitalhumanities.org/answers/topic/methods-to-process-a-plain-text-collection-into-a-bimodal-graph#post-1988</link>
+			<pubDate>Fri, 26 Apr 2013 19:19:09 +0000</pubDate>
+			<dc:creator>johnlaudun</dc:creator>
+			<guid isPermaLink="false">1988@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='http://digitalhumanities.org/answers/profile/johnlaudun'&#62;johnlaudun&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/methods-to-process-a-plain-text-collection-into-a-bimodal-graph#post-1987&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;What I'm working on is a script that goes from scraping out word frequencies to changing the csv to simply be the name-of-the-text, word, like this:&#60;/p&#62;
+&#60;pre&#62;
+    text1, word1
+    text1, word2
+    text1, word3
+&#60;/pre&#62;
+&#60;p&#62;I can then join those CSVs, to produce a CSV that looks like so:&#60;/p&#62;
+&#60;pre&#62;
+    t1, w1
+    t1, w2
+    t1, w3
+    t2, w1
+    t2, w3
+    t3, w2
+    t3, w3
+    t3, w4
+
+    and so on ...
+&#60;/pre&#62;
+&#60;p&#62;I'm going to try that out in Sci2.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>johnlaudun on "Methods to process a plain text collection into a bimodal graph..."</title>
+						<link>http://digitalhumanities.org/answers/topic/methods-to-process-a-plain-text-collection-into-a-bimodal-graph#post-1987</link>
+			<pubDate>Fri, 26 Apr 2013 18:52:15 +0000</pubDate>
+			<dc:creator>johnlaudun</dc:creator>
+			<guid isPermaLink="false">1987@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @Scott Weingart's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/methods-to-process-a-plain-text-collection-into-a-bimodal-graph#post-1986&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;Hey, Scott, thanks for the replies. I will try them out, but first I have to get to the CSV of the bimodal network! Any ideas on how to get there from a collection of plain texts? It's this bit that has stumped me on a couple of occasions.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Scott Weingart on "Methods to process a plain text collection into a bimodal graph..."</title>
+						<link>http://digitalhumanities.org/answers/topic/methods-to-process-a-plain-text-collection-into-a-bimodal-graph#post-1986</link>
+			<pubDate>Fri, 26 Apr 2013 16:42:19 +0000</pubDate>
+			<dc:creator>Scott Weingart</dc:creator>
+			<guid isPermaLink="false">1986@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='http://digitalhumanities.org/answers/profile/johnlaudun'&#62;johnlaudun&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/methods-to-process-a-plain-text-collection-into-a-bimodal-graph#post-1984&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;br /&#62;
+Also, on a side note, if you do the first normalization step and then &#34;Extract Word Co-Occurrence&#34; network, you can also get to words that co-occur frequently, as explained here: &#60;a href=&#34;http://wiki.cns.iu.edu/pages/viewpage.action?pageId=2200066#id-514StudyingFourMajorNetSciResearchersISIData-5145WordCo-OccurrenceNetwork5145WordCo-OccurrenceNetwork&#34; rel=&#34;nofollow&#34;&#62;http://wiki.cns.iu.edu/pages/viewpage.action?pageId=2200066#id-514StudyingFourMajorNetSciResearchersISIData-5145WordCo-OccurrenceNetwork5145WordCo-OccurrenceNetwork&#60;/a&#62;
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Scott Weingart on "Methods to process a plain text collection into a bimodal graph..."</title>
+						<link>http://digitalhumanities.org/answers/topic/methods-to-process-a-plain-text-collection-into-a-bimodal-graph#post-1985</link>
+			<pubDate>Fri, 26 Apr 2013 16:40:13 +0000</pubDate>
+			<dc:creator>Scott Weingart</dc:creator>
+			<guid isPermaLink="false">1985@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='http://digitalhumanities.org/answers/profile/johnlaudun'&#62;johnlaudun&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/methods-to-process-a-plain-text-collection-into-a-bimodal-graph#post-1984&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;br /&#62;
+This can actually be done within Sci2 itself, once you have a csv with titles in one column and text in the second. Once that's loaded into Sci2, go to Preprocessing-&#38;gt;Topical-&#38;gt;Stopword Text (you can select your own stopword list from that dialog). &#60;/p&#62;
+&#60;p&#62;Then go to Data Preparation-&#38;gt;Extract Directed Network, first column title, second column text, hit okay, and voila! You can then make that into texts based on words in common or words based on texts in common using either Data Prep-&#38;gt;Extract Co-Citation Network, or Extract Bibliographic Coupling Network (depending on your need), and you've got what you're looking for.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>johnlaudun on "Methods to process a plain text collection into a bimodal graph..."</title>
+						<link>http://digitalhumanities.org/answers/topic/methods-to-process-a-plain-text-collection-into-a-bimodal-graph#post-1984</link>
+			<pubDate>Fri, 26 Apr 2013 16:24:20 +0000</pubDate>
+			<dc:creator>johnlaudun</dc:creator>
+			<guid isPermaLink="false">1984@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I am starting a new project wherein I want to take a closer look at narratives both in terms of topics as well as in terms of morphologies. For the moment, I have narrowed my initial exploration to two collections of treasure legends, one drawn from oral sources (and transcribed by folklorists) and one drawn from materials found on on-line forums. Both collections are, purposefully as I take baby steps here, small: each is only sixteen texts. The texts range in size from 153 to 1025 words for the oral collection and 155-3081 words for the web collection. &#60;/p&#62;
+&#60;p&#62;I am looking to create a bimodal graph for each of the collections which represents the relationship between the words used in each text, such that I can examine the relationship either between texts, based on words in common, or between words, based on texts in common.&#60;/p&#62;
+&#60;p&#62;What I need, I think, is a Python script or some other kind of code/application which will work through each collection of plain text files and generate a CSV or network file of some kind that will let me then work in Gephi or Sci2. I would especially like it if the script would allow me to feed in a stopword list of my choosing.
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

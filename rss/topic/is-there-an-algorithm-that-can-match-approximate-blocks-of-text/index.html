@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Topic: Is there an algorithm that can match approximate blocks of text?</title>
+		<link>http://digitalhumanities.org/answers/topic/is-there-an-algorithm-that-can-match-approximate-blocks-of-text</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Topic: Is there an algorithm that can match approximate blocks of text?</description>
+		<language>en-US</language>
+		<pubDate>Fri, 04 Oct 2013 22:48:48 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/topic/is-there-an-algorithm-that-can-match-approximate-blocks-of-text" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>Stéfan Sinclair on "Is there an algorithm that can match approximate blocks of text?"</title>
+						<link>http://digitalhumanities.org/answers/topic/is-there-an-algorithm-that-can-match-approximate-blocks-of-text#post-941</link>
+			<pubDate>Mon, 31 Jan 2011 17:13:06 +0000</pubDate>
+			<dc:creator>Stéfan Sinclair</dc:creator>
+			<guid isPermaLink="false">941@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;If you know something about the structure/scope of the repeating sequences – and if they're regular – than I suspect &#60;a href=&#34;http://lmgtfy.com/?q=normalized+compression+distance&#34;&#62;Normalized Compression Distances&#60;/a&#62; could be very effective at finding similar passages. For instance, you could build a matrix of distances between each sentence in one text to each sentence in another text, and align as applicable based on values.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>elotroalex on "Is there an algorithm that can match approximate blocks of text?"</title>
+						<link>http://digitalhumanities.org/answers/topic/is-there-an-algorithm-that-can-match-approximate-blocks-of-text#post-940</link>
+			<pubDate>Mon, 31 Jan 2011 17:04:58 +0000</pubDate>
+			<dc:creator>elotroalex</dc:creator>
+			<guid isPermaLink="false">940@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @Wayne Graham's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/is-there-an-algorithm-that-can-match-approximate-blocks-of-text#post-939&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;Thanks Wayne! This is a strange world indeed, and fascinating! Reminds me a bit of the time I read René Thom's work on morphogensis and saw functions and geometric forms in everything for over a week. Now I'm seeing algorithms in my kid's breastfeeding habits. &#60;/p&#62;
+&#60;p&#62;Let me add a couple of things to your formulation of the problem. Given a query of length m that matches a substring of length n, with k or fewer differences, where k is determined relative to the length of m and n, it looks like a possible solution would be to start with a relatively small size for m, and if there is a match, slowly increase the length of m until the relative value of k is no longer appropriate.&#60;/p&#62;
+&#60;p&#62;In terms of the big question, I'm guessing that the computing can be done before the final product is presented to the public. We're talking scholarly editions here. Back in the days, the &#34;user&#34; time was days of pouring over manuscripts and editions before we could work all this stuff out. I doubt we would have to wait this long with a good solution.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Wayne Graham on "Is there an algorithm that can match approximate blocks of text?"</title>
+						<link>http://digitalhumanities.org/answers/topic/is-there-an-algorithm-that-can-match-approximate-blocks-of-text#post-939</link>
+			<pubDate>Mon, 31 Jan 2011 14:15:07 +0000</pubDate>
+			<dc:creator>Wayne Graham</dc:creator>
+			<guid isPermaLink="false">939@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Alex,&#60;/p&#62;
+&#60;p&#62;I'd classify this as an approximate string matching problem. In more mathematical terms, I believe you want to find the locations of a query of length m that matches a substring of length n, with k or fewer differences. There are a lot of ways to do this, and there is a long line of literature (check out Knuth's work) on this, but the 'big' problem here is more in computational efficiency. Most of the decisions really are going to require some trade offs based on the underlying technology, and the amount of time you are willing to make users wait. &#60;/p&#62;
+&#60;p&#62;For some actual algorithms to get you going, try the Boyer-Moore and Knuth-Morris-Pratt. You may also find some use in Stochastic Optimization and Metaheuristic class of algorithms (variable neighborhood search, adaptive random search, guided local search).
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>elotroalex on "Is there an algorithm that can match approximate blocks of text?"</title>
+						<link>http://digitalhumanities.org/answers/topic/is-there-an-algorithm-that-can-match-approximate-blocks-of-text#post-938</link>
+			<pubDate>Mon, 31 Jan 2011 02:12:38 +0000</pubDate>
+			<dc:creator>elotroalex</dc:creator>
+			<guid isPermaLink="false">938@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @Stéfan Sinclair's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/is-there-an-algorithm-that-can-match-approximate-blocks-of-text#post-937&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;This is very promising! Thanks, Stéfan. I was talking to some biologist friends over dinner and they suggested to look in both genetic sequencing and plagiarism software. Interestingly enough that's where the ARTFL folks say they got their ideas from. I will try to get in touch with them.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Stéfan Sinclair on "Is there an algorithm that can match approximate blocks of text?"</title>
+						<link>http://digitalhumanities.org/answers/topic/is-there-an-algorithm-that-can-match-approximate-blocks-of-text#post-937</link>
+			<pubDate>Mon, 31 Jan 2011 01:41:07 +0000</pubDate>
+			<dc:creator>Stéfan Sinclair</dc:creator>
+			<guid isPermaLink="false">937@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;This isn't a tidy algorithmic answer, but you might want to check out what the folks at ARTFL have done with &#60;a href=&#34;http://artfl-project.uchicago.edu/content/pair&#34;&#62;PAIR: Pairwise Alignment for Intertextual Relations&#60;/a&#62;.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>elotroalex on "Is there an algorithm that can match approximate blocks of text?"</title>
+						<link>http://digitalhumanities.org/answers/topic/is-there-an-algorithm-that-can-match-approximate-blocks-of-text#post-936</link>
+			<pubDate>Sun, 30 Jan 2011 19:16:14 +0000</pubDate>
+			<dc:creator>elotroalex</dc:creator>
+			<guid isPermaLink="false">936@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;This question has been floating on my mind this week during conversations about the future of &#60;a href=&#34;http://www.juxtasoftware.org/&#34;&#62;Juxta&#60;/a&#62;. The traditional &#60;a href=&#34;http://en.wikipedia.org/wiki/Diff&#34;&#62;diff&#60;/a&#62; algorithm would look at strings of text linearly. So if you have two series, A) a b c d f g h j q z, and B) a b c d e f g i j k r x y z, the diff algorithm recognizes that they share C) a b c d f g j z. In a series of versions of a given text, where an author and his collaborators have moved/transposed several blocks of text from one version to the next, the diff algorithm fails to recognize these moves, even though internal to those blocks the diff still applies. So the question is: Given a series X) a b c [d f g h j] q ... n, and a series Y) a [d f i h j] b c q ... n, how can we get the computer to recognize that Z) [d f h j] corresponds to each other and has moved? If I could solve this puzzle, we could teach Juxta to recognize moves automatically, or at least, suggest possible matches to make the scholar's work easier... I think. &#60;/p&#62;
+&#60;p&#62;One of the problems is that I don't know what kind of problem this is in terms of computer science or math: Is it a &#60;a href=&#34;http://en.wikipedia.org/wiki/Matching&#34;&#62;Matching&#60;/a&#62; problem? A &#60;a href=&#34;http://en.wikipedia.org/wiki/String_matching&#34;&#62;String searching algorithm&#60;/a&#62; problem? I'm randomly walking in the Math and Computer Science department next week, but I figure I'd run it by the DH community just in case.
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

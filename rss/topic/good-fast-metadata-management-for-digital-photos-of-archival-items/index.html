@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Topic: Good, fast metadata management for digital photos of archival items?</title>
+		<link>http://digitalhumanities.org/answers/topic/good-fast-metadata-management-for-digital-photos-of-archival-items</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Topic: Good, fast metadata management for digital photos of archival items?</description>
+		<language>en-US</language>
+		<pubDate>Fri, 03 Apr 2015 03:18:01 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/topic/good-fast-metadata-management-for-digital-photos-of-archival-items" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>Ethan Gruber on "Good, fast metadata management for digital photos of archival items?"</title>
+						<link>http://digitalhumanities.org/answers/topic/good-fast-metadata-management-for-digital-photos-of-archival-items#post-237</link>
+			<pubDate>Wed, 29 Sep 2010 18:16:18 +0000</pubDate>
+			<dc:creator>Ethan Gruber</dc:creator>
+			<guid isPermaLink="false">237@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hi,&#60;/p&#62;
+&#60;p&#62;I think you'd benefit from using Microsoft Expression Media, formerly known as iView MediaPro (before Microsoft bought it).  It depends, though if this is for personal reference or if you want to create an online system that provides access to your images and metadata.&#60;/p&#62;
+&#60;p&#62;Expression Media allows you to create a catalog of images on a filesystem and enables you to record metadata for each image in your catalog.  You can export this catalog into XML, which can then be transformed into a standard of your choosing if you wish to import it into a database or other online system.&#60;/p&#62;
+&#60;p&#62;The U.Va. Special Collections library uses this software in their digitization workflow.  Metadata recorded about each manuscript in a collection, for example, receives information about its container and its parent as well as a brief description.  Metadata records from the Expression Media proprietary XML schema are transformed into MODS records or could be made into Encoded Archival Description finding aids.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Shane Landrum on "Good, fast metadata management for digital photos of archival items?"</title>
+						<link>http://digitalhumanities.org/answers/topic/good-fast-metadata-management-for-digital-photos-of-archival-items#post-154</link>
+			<pubDate>Fri, 24 Sep 2010 13:46:24 +0000</pubDate>
+			<dc:creator>Shane Landrum</dc:creator>
+			<guid isPermaLink="false">154@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @Wayne Graham's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/good-fast-metadata-management-for-digital-photos-of-archival-items#post-145&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;Thanks for the tips; I'll look into this when I have time. I'll have to run it on my laptop, since my existing webhost provider (Dreamhost) doesn't like long-running daemons unless you pay for a &#34;private server&#34; account.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Wayne Graham on "Good, fast metadata management for digital photos of archival items?"</title>
+						<link>http://digitalhumanities.org/answers/topic/good-fast-metadata-management-for-digital-photos-of-archival-items#post-145</link>
+			<pubDate>Fri, 24 Sep 2010 13:15:16 +0000</pubDate>
+			<dc:creator>Wayne Graham</dc:creator>
+			<guid isPermaLink="false">145@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I don't know of anything out there that does this specifically. As far as a custom solution, I'm thinking you could come up some a pretty quick app that uses Solr as a backend for your metadata (including pointers to images). If you don't want to make a custom front-end, Omeka and the SolrSearch pluginn (use tags for the categories) will get you pretty far down the road. &#60;/p&#62;
+&#60;p&#62;If you want to go the Ruby route, use the rsolr gem (&#60;a href=&#34;http://rubygems.org/gems/rsolr&#34; rel=&#34;nofollow&#34;&#62;http://rubygems.org/gems/rsolr&#60;/a&#62;) of the many possibilities. Using dynamic fields, you should be able to arbitrarily add repeatable fields. Add a pointer to image files(s), with indexed text fields, you should be able to quickly prototype a system for this. Solr also has a great facility with the ExtractingRequestHandler (&#60;a href=&#34;http://wiki.apache.org/solr/ExtractingRequestHandler&#34; rel=&#34;nofollow&#34;&#62;http://wiki.apache.org/solr/ExtractingRequestHandler&#60;/a&#62;) to pull full-text out of PDFs, XML, HTML, Word documents, etc.&#60;/p&#62;
+&#60;p&#62;With PHP, I prefer the Solr PHP Client (&#60;a href=&#34;http://code.google.com/p/solr-php-client/&#34; rel=&#34;nofollow&#34;&#62;http://code.google.com/p/solr-php-client/&#60;/a&#62;) to some of the other approaches. &#60;/p&#62;
+&#60;p&#62;With some proper citations, I think you could build this system pretty quickly...
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Shane Landrum on "Good, fast metadata management for digital photos of archival items?"</title>
+						<link>http://digitalhumanities.org/answers/topic/good-fast-metadata-management-for-digital-photos-of-archival-items#post-138</link>
+			<pubDate>Fri, 24 Sep 2010 05:01:32 +0000</pubDate>
+			<dc:creator>Shane Landrum</dc:creator>
+			<guid isPermaLink="false">138@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;As a historian working on a dissertation, I'm looking for a good, open-source, Mac-friendly metadata tool for managing the gigabytes of digital photos I've taken of archival materials. Adobe Lightroom's features are close, but it's an expensive piece of software and doesn't solve my problems well. &#60;/p&#62;
+&#60;p&#62;Mostly, I want a way to add arbitrary metadata to an individual image or batch of images. It might be citation-related (&#34;Every JPG in this folder or its subfolders is from the Jane Texas Papers, and this subfolder is from Box 1...&#34;), subject-related, author-related, or idiosyncratically related to my own research questions. (Think of a sociologist or anthropologist coding interview data.) In an ideal world, it would be able to support a &#34;transcription&#34; field. JPEG/EXIF metadata fields seem unwieldy, not to mention that they're easy to clobber accidentally. &#60;/p&#62;
+&#60;p&#62;I've looked into DSpace as a repository system (and even installed it on my laptop), but it's overkill for single-researcher use at the dissertation level, not to mention a huge amount of work to set up. I don't have access to an institutional DSpace for building my own collections, or else that might be a good answer (from what I know of it).&#60;/p&#62;
+&#60;p&#62;Really, what I want is a research workflow system for digital reference images. I want to be able to easily, quickly mark and categorize the items in my (very large) collections according to arbitrary categories; find the items I'm looking for using a faceted search; transcribe them in some cases, but not all; know what I haven't looked at yet, but need to; cite the item I'm looking at; etc. Zotero isn't really suited for this, nor is Bookends (my preferred desktop citation manager).&#60;/p&#62;
+&#60;p&#62;If such a tool doesn't exist for making this process easier, are there established best practices for setting up a home-hacked metadata and workflow system of my own? I've been hacking around with Ruby scripts that store this metadata in nearby text or YAML files, but those haven't worked as well as I'd like.
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

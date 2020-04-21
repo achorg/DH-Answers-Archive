@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Topic: Creating a wordlist from text</title>
+		<link>http://digitalhumanities.org/answers/topic/creating-a-wordlist-from-text</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Topic: Creating a wordlist from text</description>
+		<language>en-US</language>
+		<pubDate>Wed, 21 Feb 2018 02:25:09 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/topic/creating-a-wordlist-from-text" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>lmullen on "Creating a wordlist from text"</title>
+						<link>http://digitalhumanities.org/answers/topic/creating-a-wordlist-from-text#post-1762</link>
+			<pubDate>Mon, 22 Oct 2012 16:24:45 +0000</pubDate>
+			<dc:creator>lmullen</dc:creator>
+			<guid isPermaLink="false">1762@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @Ben Brumfield's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/creating-a-wordlist-from-text#post-1758&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;If you have the file in plain text, you can use Unix utilities.&#60;/p&#62;
+
+
+&#60;div class=&#34;bb_syntax&#34;&#62;&#60;div class=&#34;code&#34;&#62;&#60;pre class=&#34;bash&#34; style=&#34;font-family:monospace;&#34;&#62;&#60;span style=&#34;color: #c20cb9; font-weight: bold;&#34;&#62;tr&#60;/span&#62; &#60;span style=&#34;color: #660033;&#34;&#62;-sc&#60;/span&#62; &#60;span style=&#34;color: #ff0000;&#34;&#62;'[A-Z][a-z]'&#60;/span&#62; &#60;span style=&#34;color: #ff0000;&#34;&#62;'[12*]'&#60;/span&#62; &#60;span style=&#34;color: #000000; font-weight: bold;&#34;&#62;&#38;lt;&#60;/span&#62; input.txt &#60;span style=&#34;color: #000000; font-weight: bold;&#34;&#62;&#124;&#60;/span&#62; &#60;span style=&#34;color: #c20cb9; font-weight: bold;&#34;&#62;sort&#60;/span&#62; &#60;span style=&#34;color: #000000; font-weight: bold;&#34;&#62;&#124;&#60;/span&#62; &#60;span style=&#34;color: #c20cb9; font-weight: bold;&#34;&#62;uniq&#60;/span&#62; &#60;span style=&#34;color: #000000; font-weight: bold;&#34;&#62;&#38;gt;&#60;/span&#62; output.txt&#60;/pre&#62;&#60;/div&#62;&#60;/div&#62;
+
+
+
+&#60;p&#62;Which is to say, read the file input.txt, putting each word onto one line, sort the words alphabetically, and remove any duplicates, saving the file to output.txt.&#60;/p&#62;
+&#60;p&#62;P.S. I cannot for the life of me get the forum to stop stripping characters. The third set of brackets should contain &#34;backslash zero one two star&#34; in numeric characters, not 12*.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>dot.porter on "Creating a wordlist from text"</title>
+						<link>http://digitalhumanities.org/answers/topic/creating-a-wordlist-from-text#post-1760</link>
+			<pubDate>Mon, 22 Oct 2012 15:34:32 +0000</pubDate>
+			<dc:creator>dot.porter</dc:creator>
+			<guid isPermaLink="false">1760@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Thanks for all the suggestions, I'll check them out and see what works best.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>dot.porter on "Creating a wordlist from text"</title>
+						<link>http://digitalhumanities.org/answers/topic/creating-a-wordlist-from-text#post-1759</link>
+			<pubDate>Mon, 22 Oct 2012 15:33:47 +0000</pubDate>
+			<dc:creator>dot.porter</dc:creator>
+			<guid isPermaLink="false">1759@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @Stéfan Sinclair's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/creating-a-wordlist-from-text#post-1755&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;Only because I didn't think of it!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Ben Brumfield on "Creating a wordlist from text"</title>
+						<link>http://digitalhumanities.org/answers/topic/creating-a-wordlist-from-text#post-1758</link>
+			<pubDate>Mon, 22 Oct 2012 15:27:21 +0000</pubDate>
+			<dc:creator>Ben Brumfield</dc:creator>
+			<guid isPermaLink="false">1758@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Or you can generate your own ordered CSV listing in a single--though horrible--line of Ruby:&#60;/p&#62;
+
+
+&#60;div class=&#34;bb_syntax&#34;&#62;&#60;table&#62;&#60;tr&#62;&#60;td class=&#34;line_numbers&#34;&#62;&#60;pre&#62;1
+&#60;/pre&#62;&#60;/td&#62;&#60;td class=&#34;code&#34;&#62;&#60;pre class=&#34;ruby&#34; style=&#34;font-family:monospace;&#34;&#62;&#60;span style=&#34;color:#CC00FF; font-weight:bold;&#34;&#62;IO&#60;/span&#62;.&#60;span style=&#34;color:#9900CC;&#34;&#62;read&#60;/span&#62;&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#38;#40;&#60;/span&#62;&#60;span style=&#34;color:#996600;&#34;&#62;'roland.txt'&#60;/span&#62;&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#38;#41;&#60;/span&#62;.&#60;span style=&#34;color:#CC0066; font-weight:bold;&#34;&#62;split&#60;/span&#62;&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#38;#40;&#60;/span&#62;&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;/&#60;/span&#62;\W&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;+/&#60;/span&#62;&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#38;#41;&#60;/span&#62;.&#60;span style=&#34;color:#9900CC;&#34;&#62;inject&#60;/span&#62;&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#38;#40;&#60;/span&#62;&#60;span style=&#34;color:#CC00FF; font-weight:bold;&#34;&#62;Hash&#60;/span&#62;.&#60;span style=&#34;color:#9900CC;&#34;&#62;new&#60;/span&#62;&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#38;#40;&#60;/span&#62;&#60;span style=&#34;color:#006666;&#34;&#62;0&#60;/span&#62;&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#38;#41;&#60;/span&#62;&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#38;#41;&#60;/span&#62;&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#38;#123;&#60;/span&#62; &#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#124;&#60;/span&#62;h,x&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#124;&#60;/span&#62; h&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#38;#91;&#60;/span&#62;x&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#38;#93;&#60;/span&#62; &#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;+&#60;/span&#62;= &#60;span style=&#34;color:#006666;&#34;&#62;1&#60;/span&#62;; h &#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#38;#125;&#60;/span&#62;.&#60;span style=&#34;color:#9900CC;&#34;&#62;sort_by&#60;/span&#62;&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#38;#123;&#60;/span&#62;&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#124;&#60;/span&#62;k,v&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#124;&#60;/span&#62; &#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;-&#60;/span&#62;v&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#38;#125;&#60;/span&#62;.&#60;span style=&#34;color:#9900CC;&#34;&#62;each&#60;/span&#62;&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#38;#123;&#60;/span&#62; &#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#124;&#60;/span&#62;a&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#124;&#60;/span&#62; &#60;span style=&#34;color:#CC0066; font-weight:bold;&#34;&#62;print&#60;/span&#62; &#60;span style=&#34;color:#996600;&#34;&#62;&#38;quot;&#60;span style=&#34;color:#000099;&#34;&#62;\&#38;quot;&#60;/span&#62;#{a[0]}&#60;span style=&#34;color:#000099;&#34;&#62;\&#38;quot;&#60;/span&#62;,#{a[1]}&#60;span style=&#34;color:#000099;&#34;&#62;\n&#60;/span&#62;&#38;quot;&#60;/span&#62; &#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#38;#125;&#60;/span&#62;&#60;/pre&#62;&#60;/td&#62;&#60;/tr&#62;&#60;/table&#62;&#60;/div&#62;
+
+
+
+&#60;p&#62;That will print a list of all the words in &#60;code&#62;roland.txt&#60;/code&#62;, John O'Hagen's translation of the Song of Roland:&#60;/p&#62;
+
+
+&#60;div class=&#34;bb_syntax&#34;&#62;&#60;div class=&#34;code&#34;&#62;&#60;pre class=&#34;csv&#34; style=&#34;font-family:monospace;&#34;&#62;&#38;quot;the&#38;quot;,1191
+&#38;quot;and&#38;quot;,675
+&#38;quot;his&#38;quot;,588
+&#38;quot;of&#38;quot;,545
+&#38;quot;to&#38;quot;,473
+&#38;quot;he&#38;quot;,409
+&#38;quot;in&#38;quot;,353
+&#38;quot;And&#38;quot;,318
+&#38;quot;I&#38;quot;,253
+&#38;quot;The&#38;quot;,236
+&#38;quot;a&#38;quot;,209
+&#38;quot;him&#38;quot;,208
+&#38;quot;on&#38;quot;,206
+&#38;quot;s&#38;quot;,205
+&#38;quot;Roland&#38;quot;,199&#60;/pre&#62;&#60;/div&#62;&#60;/div&#62;
+
+
+</description>
+		</item>
+		<item>
+			 
+				<title>Laura Weakly on "Creating a wordlist from text"</title>
+						<link>http://digitalhumanities.org/answers/topic/creating-a-wordlist-from-text#post-1756</link>
+			<pubDate>Mon, 22 Oct 2012 14:38:37 +0000</pubDate>
+			<dc:creator>Laura Weakly</dc:creator>
+			<guid isPermaLink="false">1756@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;You could also try &#60;a href=&#34;http://tokenx.unl.edu&#34; rel=&#34;nofollow&#34;&#62;http://tokenx.unl.edu&#60;/a&#62;
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Stéfan Sinclair on "Creating a wordlist from text"</title>
+						<link>http://digitalhumanities.org/answers/topic/creating-a-wordlist-from-text#post-1755</link>
+			<pubDate>Mon, 22 Oct 2012 14:31:20 +0000</pubDate>
+			<dc:creator>Stéfan Sinclair</dc:creator>
+			<guid isPermaLink="false">1755@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Dot, is there a reason why one of the Taporware List Words tools wouldn't work for you? &#60;a href=&#34;http://taporware.ualberta.ca/~taporware/textTools/listword.shtml&#34; rel=&#34;nofollow&#34;&#62;http://taporware.ualberta.ca/~taporware/textTools/listword.shtml&#60;/a&#62;
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>acrymble on "Creating a wordlist from text"</title>
+						<link>http://digitalhumanities.org/answers/topic/creating-a-wordlist-from-text#post-1754</link>
+			<pubDate>Mon, 22 Oct 2012 14:31:01 +0000</pubDate>
+			<dc:creator>acrymble</dc:creator>
+			<guid isPermaLink="false">1754@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;You could either use Voyant (&#60;a href=&#34;http://voyant-tools.org/)&#34; rel=&#34;nofollow&#34;&#62;http://voyant-tools.org/)&#60;/a&#62;, a web-based tool. Or if you want to learn how to do that you could try the Programming Historian 2's tutorial on &#34;Computing Frequencies&#34; (&#60;a href=&#34;http://programminghistorian.org/lessons)&#34; rel=&#34;nofollow&#34;&#62;http://programminghistorian.org/lessons)&#60;/a&#62;.&#60;/p&#62;
+&#60;p&#62;All the best,&#60;/p&#62;
+&#60;p&#62;Adam
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>dot.porter on "Creating a wordlist from text"</title>
+						<link>http://digitalhumanities.org/answers/topic/creating-a-wordlist-from-text#post-1753</link>
+			<pubDate>Mon, 22 Oct 2012 14:26:48 +0000</pubDate>
+			<dc:creator>dot.porter</dc:creator>
+			<guid isPermaLink="false">1753@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I would like to create a list of words that are in a single long document. Having a word count included would be helpful, too.&#60;/p&#62;
+&#60;p&#62;The purpose is to create a list of keywords that I can use to describe the items described in this document (it's a list of manuscript descriptions), with the eventual purpose of mapping those words to my own (very short) list of descriptors. But before I can map, I really need to know what words are used throughout the document.&#60;/p&#62;
+&#60;p&#62;Is there a tool I might use to do this, or some XSLT or Perl script?
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

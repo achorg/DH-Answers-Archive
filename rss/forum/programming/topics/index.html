@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Forum: Programming - Recent Topics</title>
+		<link>http://digitalhumanities.org/answers/forum/programming</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Forum: Programming - Recent Topics</description>
+		<language>en-US</language>
+		<pubDate>Sat, 06 Aug 2016 08:40:46 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/forum/programming/topics" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>aliciapeaker@gmail.com on "How to extract tagged data and text from TEI file?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-to-extract-tagged-data-and-text-from-tei-file#post-2286</link>
+			<pubDate>Thu, 26 Feb 2015 12:56:54 +0000</pubDate>
+			<dc:creator>aliciapeaker@gmail.com</dc:creator>
+			<guid isPermaLink="false">2286@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I’ve been using CATMA (&#60;a href=&#34;http://www.catma.de/&#34; rel=&#34;nofollow&#34;&#62;http://www.catma.de/&#60;/a&#62;) to markup a text with some analytical tags I’ve created. I then exported the file in TEI, and I’m now trying to extract the data I’ve marked up in order to measure tag frequencies, but am finding it quite difficult. &#60;/p&#62;
+&#60;p&#62;Rather than tagging text with the labels I’ve created, CATMA has established a somewhat complicated (though likely necessary) system of identifiers. So, for example, I’ve tagged the word “clouds” in my text with the tag “weather,” which is a child of the tagset “non-living.” &#60;/p&#62;
+&#60;p&#62;CATMA represents the tag in the text like this:&#60;br /&#62;
+&#38;lt;text&#38;gt;&#60;br /&#62;
+     &#38;lt;body&#38;gt;&#60;br /&#62;
+          &#38;lt;ab type=“catma”&#38;gt;&#60;br /&#62;
+Small feckless &#38;lt;seg ana=&#34;#CATMA_0036983F-4D37-48C2-8BC7-5846A8364D26&#34;&#38;gt;clouds&#38;lt;/seg&#38;gt; were hurried across the vast untroubled sky...&#60;br /&#62;
+          &#38;lt;/ab&#38;gt;&#60;br /&#62;
+     &#38;lt;/body&#38;gt;&#60;br /&#62;
+&#38;lt;/text&#38;gt;&#60;/p&#62;
+&#60;p&#62;The identifier then points to this feature statement after the body of the text:&#60;/p&#62;
+&#60;p&#62;&#38;lt;text&#38;gt;&#60;br /&#62;
+     &#38;lt;body&#38;gt;&#60;br /&#62;
+     &#38;lt;/body&#38;gt;&#60;br /&#62;
+          &#38;lt;fs xml:id=&#34;CATMA_0036983F-4D37-48C2-8BC7-5846A8364D26&#34; type=&#34;CATMA_3CDE1FE4-CA5D-4460-9BFF-739537D753DE&#34;&#38;gt;&#60;br /&#62;
+            &#38;lt;f name=&#34;catma_displaycolor&#34;&#38;gt;&#60;br /&#62;
+                &#38;lt;string&#38;gt;-16710765&#38;lt;/string&#38;gt;&#60;br /&#62;
+            &#38;lt;/f&#38;gt;&#60;br /&#62;
+            &#38;lt;f name=&#34;catma_markupauthor&#34;&#38;gt;&#60;br /&#62;
+                &#38;lt;string&#38;gt;name@email&#38;lt;/string&#38;gt;&#60;br /&#62;
+            &#38;lt;/f&#38;gt;&#60;br /&#62;
+        &#38;lt;/fs&#38;gt;&#60;br /&#62;
+&#38;lt;/text&#38;gt;&#60;/p&#62;
+&#60;p&#62;The id for the type of the fs then points back up to the feature statement declaration in the header:&#60;/p&#62;
+&#60;p&#62;&#38;lt;teiHeader&#38;gt;&#60;br /&#62;
+     &#38;lt;encodingDesc&#38;gt;&#60;br /&#62;
+          &#38;lt;fsDecl xml:id=&#34;CATMA_3CDE1FE4-CA5D-4460-9BFF-739537D753DE&#34; n=&#34;2014-12-16T13:30:36.000+0000&#34; type=&#34;CATMA_3CDE1FE4-CA5D-4460-9BFF-739537D753DE&#34;&#38;gt;&#60;br /&#62;
+                    &#38;lt;fsDescr&#38;gt;Weather&#38;lt;/fsDescr&#38;gt;&#60;br /&#62;
+                    &#38;lt;fDecl xml:id=&#34;CATMA_699BAC76-8D15-408E-A30A-984849115A71&#34; name=&#34;catma_displaycolor&#34;&#38;gt;&#60;br /&#62;
+                        &#38;lt;vRange&#38;gt;&#60;br /&#62;
+                            &#38;lt;vColl&#38;gt;&#60;br /&#62;
+                                &#38;lt;string&#38;gt;-16710765&#38;lt;/string&#38;gt;&#60;br /&#62;
+                            &#38;lt;/vColl&#38;gt;&#60;br /&#62;
+                        &#38;lt;/vRange&#38;gt;&#60;br /&#62;
+                    &#38;lt;/fDecl&#38;gt;&#60;br /&#62;
+                    &#38;lt;fDecl xml:id=&#34;CATMA_8653855B-B611-48E8-AE9D-00E0160A37DB&#34; name=&#34;catma_markupauthor&#34;&#38;gt;&#60;br /&#62;
+                        &#38;lt;vRange&#38;gt;&#60;br /&#62;
+                            &#38;lt;vColl&#38;gt;&#60;br /&#62;
+                                  &#38;lt;string&#38;gt;name@email&#38;lt;/string&#38;gt;&#60;br /&#62;
+                            &#38;lt;/vColl&#38;gt;&#60;br /&#62;
+                        &#38;lt;/vRange&#38;gt;&#60;br /&#62;
+                    &#38;lt;/fDecl&#38;gt;&#60;br /&#62;
+                &#38;lt;/fsDecl&#38;gt;&#60;br /&#62;
+     &#38;lt;/encodingDesc&#38;gt;&#60;br /&#62;
+&#38;lt;/teiHeader&#38;gt; &#60;/p&#62;
+&#60;p&#62;I need to extract the text and data, perhaps in a csv file (or other output format, if it’s easier), into something that lists the tagged text (e.g. “clouds”) in one column, the first tag applied to it in the next column (e.g. &#34;weather&#34;), and the tagset or category to which that tag belongs in the next (e.g. &#34;non-living). &#60;/p&#62;
+&#60;p&#62;Or perhaps there’s a better way—really, what I’d like to be able to do is get the frequencies of each tag &#38;amp; tagset for each chapter. If there’s an easier way to mark up the text in TEI that would better allow for what I need, I’m open to re-encoding manually.&#60;/p&#62;
+&#60;p&#62;I’ve also tried playing around a bit with some XSLT and a Python script (&#60;a href=&#34;http://www.rdegges.com/quickly-extract-xml-data-with-python/&#34; rel=&#34;nofollow&#34;&#62;http://www.rdegges.com/quickly-extract-xml-data-with-python/&#60;/a&#62;) but with very little experience with either, I find myself quickly out of my depths. Open to suggestions—and thanks in advance for your help!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>amgibson on "finding a programmer for a digital edition"</title>
+						<link>http://digitalhumanities.org/answers/topic/finding-a-programmer-for-a-digital-edition#post-2270</link>
+			<pubDate>Fri, 09 Jan 2015 18:16:16 +0000</pubDate>
+			<dc:creator>amgibson</dc:creator>
+			<guid isPermaLink="false">2270@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hi all,&#60;/p&#62;
+&#60;p&#62;I am in search of some assistance from a programmer who can help to design an interface for the Digital Dickens Working Notes Project, a digital edition of Charles Dickens's working notes for his novels that aims to highlight the process of Dickens's serial novel form (more info available at &#60;a href=&#34;http://dickensnotes.com)&#34; rel=&#34;nofollow&#34;&#62;http://dickensnotes.com)&#60;/a&#62;.  My institution has no digital humanities center or support, nor do we have graduate students in computer science, so I need to search elsewhere for programming assistance. Any advice about how to go about finding a programmer who might be able to help with this project would be much appreciated.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>jlmcdonald@gmail.com on "How might DH take advantage of &#34;Heads Up Displays&#34; (i.e. Google Glass)?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-might-dh-take-advantage-of-heads-up-displays-ie-google-glass#post-1966</link>
+			<pubDate>Mon, 08 Apr 2013 15:21:50 +0000</pubDate>
+			<dc:creator>jlmcdonald@gmail.com</dc:creator>
+			<guid isPermaLink="false">1966@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Greetings all,&#60;/p&#62;
+&#60;p&#62;I've been chosen to participate in Google's beta rollout of their heads up display product Google Glass, and am curious to hear some interesting ideas as to how such technologies might be leveraged to do interesting things in the Digital Humanities (or, in fact, in the Humanities in general). I do have some ideas for what sorts of things might be useful to start building (as does my institution, where foreign language learning is a major educational focus), but I'd be remiss if I didn't pick the brains of people far more creative than me.&#60;/p&#62;
+&#60;p&#62;1) What kinds of apps might a heads up display be best suited for when it comes to education in the Humanities (especially literature, history, and culture)?&#60;/p&#62;
+&#60;p&#62;2) What kinds of research questions might such a device be able to raise?&#60;/p&#62;
+&#60;p&#62;3) The technology behind Google Glass is what they call a Mirror API -- it is based on working with open data APIs and server-side apps that sync with Google's services to send data back and forth to the hardware. For example, one app that's already developed is from the New York Times, that sends various news alerts to glass wearers subscribing to their feeds. Things like weather, anything from social media, etc. are obvious apps that will undoubtedly appear quite quickly, but I'm interested in what kinds of open APIs exist out in the DH world (for raw data, data analysis, etc.) that might be a good fit for the types of interactions that Google Glass offers? What types of data out in the DH world might be in need of building and prepping to make them available to apps like Glass might be fit for?&#60;/p&#62;
+&#60;p&#62;Also, if anyone is interested (especially those that tend more towards the programming/tools development arena of DH) in being part of some DH projects that use Google Glass, please feel free to contact me off-list.&#60;/p&#62;
+&#60;p&#62;Many, many thanks!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Miriam Posner on "What do you want to learn from the Programming Historian?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-do-you-want-to-learn-from-the-programming-historian#post-1793</link>
+			<pubDate>Tue, 20 Nov 2012 20:39:04 +0000</pubDate>
+			<dc:creator>Miriam Posner</dc:creator>
+			<guid isPermaLink="false">1793@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Over at the &#60;a href=&#34;http://programminghistorian.org/&#34;&#62;Programming Historian&#60;/a&#62;, we're seeking to add to our collection of lessons, which already covers things like grabbing text from webpages, counting word frequencies, and the basics of topic modeling. We have a lot of ideas about what other lessons we might provide, but we thought we'd ask first: What do you want to learn?&#60;/p&#62;
+&#60;p&#62;As a humanist (you don't need to be a historian), are there some specific programming tasks you'd like to perform? What are they?&#60;/p&#62;
+&#60;p&#62;(We find that the lessons work best when they're targeted at accomplishing a particular task, so the more specific the better!)
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>dot.porter on "Resources for sharpening programming skills?"</title>
+						<link>http://digitalhumanities.org/answers/topic/resources-for-sharpening-programming-skills#post-1696</link>
+			<pubDate>Tue, 19 Jun 2012 10:31:19 +0000</pubDate>
+			<dc:creator>dot.porter</dc:creator>
+			<guid isPermaLink="false">1696@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I have a long history of technical work in DH (mainly XML related). I've been working as a manager for a couple of years and although I still get to do some coding I'd like to sharpen my skills, and maybe learn something new. I'm particularly interested in tools for working with XML documents, and in website development. I have taken a couple of courses through my university's IT services (perl and python), they offer other courses too but three hours really isn't enough time to get much out of it and there's no follow-up. I've also done some of the codeacademy tutorials but again it's not really enough to do much with. Maybe I just need to do more of them? I have access to Lynda.com, which seems to be chock full of courses but that is a bit overwhelming. Ideally I would take a web development course of some sort at the U. but my life and work schedule doesn't make that a very good option right now. &#60;/p&#62;
+&#60;p&#62;Anyone with experience with Lynda.com, maybe recommendations on where to start? Or are there other options available I'm not aware of? Thanks so much DHers!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>jlmcdonald@gmail.com on "Should DH matter to coders?"</title>
+						<link>http://digitalhumanities.org/answers/topic/should-dh-matter-to-coders#post-1618</link>
+			<pubDate>Mon, 30 Apr 2012 13:55:02 +0000</pubDate>
+			<dc:creator>jlmcdonald@gmail.com</dc:creator>
+			<guid isPermaLink="false">1618@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;The debate rages on about whether or not (or to what degree) coding matters to the Digital Humanities. I'm curious to hear thoughts on the inverse relationship ... should DH matter to coders? And by coders, I mean those very starkly outside the Humanities and outside academia (I know that it's really a false dichotomy I've just set up there, but indulge my intellectual exercise a bit). Should your typical developer/app-builder/code monkey need to care about the Digital Humanities, beyond any arguments we might make about the value of the Humanities as a whole? Are things going on in DH centers, being written about at DH  blogs, etc. etc. etc. of any significance to your average attendee at Apple's WWDC or at a local jsconf?&#60;/p&#62;
+&#60;p&#62;Any conversation welcome...
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Karin Dalziel on "Best way to create COinS or other metadata from TEI using XSLT?"</title>
+						<link>http://digitalhumanities.org/answers/topic/best-way-to-create-coins-or-other-metadata-from-tei-using-xslt#post-134</link>
+			<pubDate>Thu, 23 Sep 2010 12:31:50 +0000</pubDate>
+			<dc:creator>Karin Dalziel</dc:creator>
+			<guid isPermaLink="false">134@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I feel way behind in this area. I have successfully used XSLT to insert in Dublin Core metadata into the header of an HTML page, but I would like to support multiple resources, etc. From looking around, it seems the best format to use is COinS, but the format is a bit more, er, obtuse than dublin core. &#60;/p&#62;
+&#60;p&#62;Has anyone done this? care to share some sample XSLT? Am I going about this all wrong?&#60;/p&#62;
+&#60;p&#62;(Also, I debated whether this should go in metadata or programming. Feel free to chime in on that as well)
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>inactinique on "DOMDocument and UTF-8"</title>
+						<link>http://digitalhumanities.org/answers/topic/domdocument-and-utf-8#post-1385</link>
+			<pubDate>Thu, 22 Sep 2011 02:14:21 +0000</pubDate>
+			<dc:creator>inactinique</dc:creator>
+			<guid isPermaLink="false">1385@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hi,&#60;/p&#62;
+&#60;p&#62;I'm trying to use an under development plug-in for wordpress that is developped by @&#60;a href='http://digitalhumanities.org/answers/profile/clioweb'&#62;clioweb&#60;/a&#62; and @stakats from the CHNM. The aim of this plug-in is to take the content of a zotero user's CV and to publish it on your wordpress blog. Sean Takats is using it on his blog: &#60;a href=&#34;http://quintessenceofham.org/cv/&#34; rel=&#34;nofollow&#34;&#62;http://quintessenceofham.org/cv/&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;My problem is the following: I'm French, so I've got accent in my name. See here: &#60;a href=&#34;http://www.zotero.org/inactinique/cv&#34; rel=&#34;nofollow&#34;&#62;http://www.zotero.org/inactinique/cv&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;When I'm using this plug-in, the accents in my name (and in all titles of my zotero CV page also - temporarily, I just found expressions in French with no accents for those titles) are not properly encoded on my website: &#60;a href=&#34;http://www.clavert.net/wordpress/?page_id=333&#34; rel=&#34;nofollow&#34;&#62;http://www.clavert.net/wordpress/?page_id=333&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;If you look at the HTML code of the zotero CV page, the page is declared as UTF-8 encoded (just as my website). Accents in titles, in this code, are directly typed-in (é, è, etc), but in the rest of the source code, accents are encoded in HTML (&#38;eacute; &#38;egrave; etc).&#60;/p&#62;
+&#60;p&#62;So I suppose that the problem is the way DOMDocument and loadHTML in the php code of the plug-in are handling special caracters.&#60;/p&#62;
+&#60;p&#62;The source code of the plug-in is here: &#60;a href=&#34;https://github.com/inactinique/scholarpress-vitaware&#34; rel=&#34;nofollow&#34;&#62;https://github.com/inactinique/scholarpress-vitaware&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;Does someone have an idea? Please, be quite explicit in your answers - I'm starting with php.&#60;/p&#62;
+&#60;p&#62;Best regards,&#60;br /&#62;
+Frédéric Clavert
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Stéfan Sinclair on "Recommended resources for introducing programming to kids?"</title>
+						<link>http://digitalhumanities.org/answers/topic/recommended-resources-for-introducing-programming-to-kids#post-1376</link>
+			<pubDate>Tue, 13 Sep 2011 09:49:42 +0000</pubDate>
+			<dc:creator>Stéfan Sinclair</dc:creator>
+			<guid isPermaLink="false">1376@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;This is stretching the mandate of this forum a bit, but I'm wondering if anyone has experience in introducing computer programming to kids and has resources to recommend. I'm as familiar as one might be with things like &#60;a href=&#34;http://scratch.mit.edu/&#34;&#62;Scratch&#60;/a&#62; following some quick searches, but I'm wondering if there are some first-hand accounts of what worked and what didn't at different ages. For instance, I'd be very interested in how to introduce programming concepts without using a computer (kinetic activities).
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>elotroalex on "Is there an algorithm that can match approximate blocks of text?"</title>
+						<link>http://digitalhumanities.org/answers/topic/is-there-an-algorithm-that-can-match-approximate-blocks-of-text#post-936</link>
+			<pubDate>Sun, 30 Jan 2011 15:16:14 +0000</pubDate>
+			<dc:creator>elotroalex</dc:creator>
+			<guid isPermaLink="false">936@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;This question has been floating on my mind this week during conversations about the future of &#60;a href=&#34;http://www.juxtasoftware.org/&#34;&#62;Juxta&#60;/a&#62;. The traditional &#60;a href=&#34;http://en.wikipedia.org/wiki/Diff&#34;&#62;diff&#60;/a&#62; algorithm would look at strings of text linearly. So if you have two series, A) a b c d f g h j q z, and B) a b c d e f g i j k r x y z, the diff algorithm recognizes that they share C) a b c d f g j z. In a series of versions of a given text, where an author and his collaborators have moved/transposed several blocks of text from one version to the next, the diff algorithm fails to recognize these moves, even though internal to those blocks the diff still applies. So the question is: Given a series X) a b c [d f g h j] q ... n, and a series Y) a [d f i h j] b c q ... n, how can we get the computer to recognize that Z) [d f h j] corresponds to each other and has moved? If I could solve this puzzle, we could teach Juxta to recognize moves automatically, or at least, suggest possible matches to make the scholar's work easier... I think. &#60;/p&#62;
+&#60;p&#62;One of the problems is that I don't know what kind of problem this is in terms of computer science or math: Is it a &#60;a href=&#34;http://en.wikipedia.org/wiki/Matching&#34;&#62;Matching&#60;/a&#62; problem? A &#60;a href=&#34;http://en.wikipedia.org/wiki/String_matching&#34;&#62;String searching algorithm&#60;/a&#62; problem? I'm randomly walking in the Math and Computer Science department next week, but I figure I'd run it by the DH community just in case.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Karin Dalziel on "Why does XSLT require weird formatting when I include javascript files?"</title>
+						<link>http://digitalhumanities.org/answers/topic/why-does-xsly-require-weird-formatting-when-i-include-javascript-files#post-662</link>
+			<pubDate>Wed, 10 Nov 2010 16:53:12 +0000</pubDate>
+			<dc:creator>Karin Dalziel</dc:creator>
+			<guid isPermaLink="false">662@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I have an XSLT file that writes the HTML for a website. I include the javascript like so: &#60;/p&#62;
+
+
+&#60;div class=&#34;bb_syntax&#34;&#62;&#60;table&#62;&#60;tr&#62;&#60;td class=&#34;line_numbers&#34;&#62;&#60;pre&#62;1
+&#60;/pre&#62;&#60;/td&#62;&#60;td class=&#34;code&#34;&#62;&#60;pre class=&#34;xslt&#34; style=&#34;font-family:monospace;&#34;&#62;&#38;lt;script src=&#38;quot;http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js&#38;quot; /&#38;gt;&#60;/pre&#62;&#60;/td&#62;&#60;/tr&#62;&#60;/table&#62;&#60;/div&#62;
+
+
+
+&#60;p&#62;But if I do that, it breaks the rest of the page. Instead, I have to include the javascript files like so: &#60;/p&#62;
+
+
+&#60;div class=&#34;bb_syntax&#34;&#62;&#60;table&#62;&#60;tr&#62;&#60;td class=&#34;line_numbers&#34;&#62;&#60;pre&#62;1
+&#60;/pre&#62;&#60;/td&#62;&#60;td class=&#34;code&#34;&#62;&#60;pre class=&#34;xslt&#34; style=&#34;font-family:monospace;&#34;&#62;&#38;lt;script src=&#38;quot;http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js&#38;quot;&#38;gt; &#38;amp;#160; &#38;lt;/script&#38;gt;&#60;/pre&#62;&#60;/td&#62;&#60;/tr&#62;&#60;/table&#62;&#60;/div&#62;
+
+
+
+&#60;p&#62;So that it does not break. Can anyone tell me why this is? It does not happen with included CSS files, just javascript. &#60;/p&#62;
+&#60;p&#62;Using cocoon to transform the files with Saxon 9.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Vika Zafrin on "What&#039;s wrong with python?"</title>
+						<link>http://digitalhumanities.org/answers/topic/whats-wrong-with-python#post-117</link>
+			<pubDate>Wed, 22 Sep 2010 09:25:09 +0000</pubDate>
+			<dc:creator>Vika Zafrin</dc:creator>
+			<guid isPermaLink="false">117@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;A collaborator I worked with a few years ago was in love with python.  According to him, python's strictly regimented syntax and its indentation requirements essentially forced good coding practices on people while providing a powerful engine for Doing Things.  To my collaborator, using it was as freeing as some people consider constrained writing to be.  Plus, I hear it's sometimes used to take advantage of the Java environment without having to learn Java.  So it's been in the back of my mind as a language I'd like to learn when an appropriate project presents itself.  (I'm terrible at learning programming by doing exercises.)&#60;/p&#62;
+&#60;p&#62;Then yesterday, on Twitter, one of my DH friends said &#34;friends don't let friends program python.&#34;  What's that about?  Is it a matter of personal preference, or are there functions that we often need in DH but that python is unable to provide?  Or is there something else I need to know about it, a lurking dark secret?&#60;/p&#62;
+&#60;p&#62;And related, I guess: what programming language have you found to be the most versatile, in your DH work?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Daniel Allington on "Jython too good to be true??"</title>
+						<link>http://digitalhumanities.org/answers/topic/jython-too-good-to-be-true#post-445</link>
+			<pubDate>Fri, 15 Oct 2010 07:36:48 +0000</pubDate>
+			<dc:creator>Daniel Allington</dc:creator>
+			<guid isPermaLink="false">445@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I am not a programmer. But I do like to do a bit of coding from time to time. Some time ago, I made an effort to get to know Java, though I have now forgotten what little I learnt. More recently, I was introduced to Python, which seems like a much friendlier language. However, I find myself strangely concerned that, in the unlikely event that anyone will want to run something I've coded, he or she will have to install Python first.&#60;/p&#62;
+&#60;p&#62;I understand that, thanks to Jython, I should be able to write a Python program and yet have it run it on the Java Virtual Machine with fairly minimal adjustments (ie. making sure that the thing avoids the set of modules that are available in Python but not in Jython).&#60;/p&#62;
+&#60;p&#62;But that all sounds a bit too good to be true. Is it??
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Topic: Software for creating an index?</title>
+		<link>http://digitalhumanities.org/answers/topic/software-for-creating-an-index</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Topic: Software for creating an index?</description>
+		<language>en-US</language>
+		<pubDate>Mon, 02 Jan 2017 11:16:11 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/topic/software-for-creating-an-index" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>Dorothea Salo on "Software for creating an index?"</title>
+						<link>http://digitalhumanities.org/answers/topic/software-for-creating-an-index#post-298</link>
+			<pubDate>Fri, 01 Oct 2010 11:35:04 +0000</pubDate>
+			<dc:creator>Dorothea Salo</dc:creator>
+			<guid isPermaLink="false">298@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I reiterate klarlied above: an index is not a concordance!&#60;/p&#62;
+&#60;p&#62;True indexing software includes &#60;a href=&#34;http://www.indexres.com/home.php&#34;&#62;Cindex&#60;/a&#62; and &#60;a href=&#34;http://www.sky-software.com/&#34;&#62;SI7&#60;/a&#62;. If you need a refresher on &#60;em&#62;why&#60;/em&#62; an index is not a concordance, and how to do an index right, I recommend Nancy C. Mulvany's &#60;a href=&#34;http://www.worldcat.org/title/indexing-books/oclc/28221838&#34;&#62;Indexing Books&#60;/a&#62;.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>wallygva on "Software for creating an index?"</title>
+						<link>http://digitalhumanities.org/answers/topic/software-for-creating-an-index#post-288</link>
+			<pubDate>Thu, 30 Sep 2010 20:51:29 +0000</pubDate>
+			<dc:creator>wallygva</dc:creator>
+			<guid isPermaLink="false">288@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;a href=&#34;http://www.billposer.org/Linguistics/Computation/LectureNotes/Concordances.html&#34; rel=&#34;nofollow&#34;&#62;http://www.billposer.org/Linguistics/Computation/LectureNotes/Concordances.html&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;This is a site that gives you some ideas for building indexes if you have a few unix shell skills.   &#60;/p&#62;
+&#60;p&#62;Here's a short script that will index a text file by line numbers.  I'm sure it could be enhanced but it's probably useful in even this rudimentary form:&#60;/p&#62;
+
+
+&#60;div class=&#34;bb_syntax&#34;&#62;&#60;table&#62;&#60;tr&#62;&#60;td class=&#34;line_numbers&#34;&#62;&#60;pre&#62;1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+&#60;/pre&#62;&#60;/td&#62;&#60;td class=&#34;code&#34;&#62;&#60;pre class=&#34;shell&#34; style=&#34;font-family:monospace;&#34;&#62;&#38;nbsp;
+#!/bin/sh
+cat $1 &#124;
+tr -dc '[A-Za-z][:blank:]12' &#124;
+awk '
+ {for (i = 1; i &#38;lt;= NF; i++) words[$i] = words[$i]  sprintf(&#38;quot;, %d&#38;quot;,NR);}
+ END{for (i in words){
+lines = words[i];
+ sub(/^,/,&#38;quot;&#38;quot;,lines);
+ printf(&#38;quot;%s\t%s\n&#38;quot;,i,lines);
+ }
+  }' &#124; sort -f -k 1 &#38;gt; $1.index&#60;/pre&#62;&#60;/td&#62;&#60;/tr&#62;&#60;/table&#62;&#60;/div&#62;
+
+
+
+&#60;p&#62;if you save this as a script called &#34;makeindex.sh&#34; you'd type:&#60;br /&#62;
+makeindex.sh FileToIndex [return]&#60;/p&#62;
+&#60;p&#62;and you'd get FileToIndex.index when it finished running (typically a second or two).&#60;/p&#62;
+&#60;p&#62;For example, indexing the first few lines of the previous reply from klarlied you'd get something like this excerpt:&#60;/p&#62;
+&#60;p&#62;a        1, 2, 4&#60;br /&#62;
+able     5&#60;br /&#62;
+about    4&#60;br /&#62;
+allows   2&#60;br /&#62;
+am       1&#60;br /&#62;
+an       1, 2, 2&#60;br /&#62;
+and      1, 2, 3&#60;br /&#62;
+As       1&#60;br /&#62;
+be       2, 3, 4, 5&#60;br /&#62;
+but      4, 5&#60;/p&#62;
+&#60;p&#62;A few other links of possible interest:&#60;/p&#62;
+&#60;p&#62;&#60;a href=&#34;http://www.textanalysis.info/inforet.htm&#34; rel=&#34;nofollow&#34;&#62;http://www.textanalysis.info/inforet.htm&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;&#60;a href=&#34;http://www.asindexing.org/i4a/pages/index.cfm?pageid=3319&#34; rel=&#34;nofollow&#34;&#62;http://www.asindexing.org/i4a/pages/index.cfm?pageid=3319&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;p.s., I agree with an earlier response that suggested DevonThink as a great tool for creating concordances.   Unfortunately for you, it only exists on the Mac platform.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>klarlied on "Software for creating an index?"</title>
+						<link>http://digitalhumanities.org/answers/topic/software-for-creating-an-index#post-286</link>
+			<pubDate>Thu, 30 Sep 2010 19:05:44 +0000</pubDate>
+			<dc:creator>klarlied</dc:creator>
+			<guid isPermaLink="false">286@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;As I am sure you know, and index in not a concordance.  My experience is that the latter does not even help much getting to an index.  MS Word has a tool that allows you to mark words to be included in an index, and then creates an index, knowing the page numbers.  Even so, you have to read through the manuscript, and decide what words need to be included (specifically in context - you may have a section on dogs that should be included, but not every time you use the word).  Word does not really know about sections if you discussion of dogs runs from p. 14-18, but the word 'dog' does not happen to occur on p. 16, word will not be able to help.&#60;br /&#62;
+At this point you have a finished ms. but if you decided that you needed to delete a paragraph, it could screw everything up.  I had to write a macro to reduce by one all references past a specified page, for this very reason. I could have just re-run the indexer, but then my 'section' tweaking would all be wasted.&#60;br /&#62;
+It is a huge pain. That's life.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>parezcoydigo on "Software for creating an index?"</title>
+						<link>http://digitalhumanities.org/answers/topic/software-for-creating-an-index#post-282</link>
+			<pubDate>Thu, 30 Sep 2010 14:30:51 +0000</pubDate>
+			<dc:creator>parezcoydigo</dc:creator>
+			<guid isPermaLink="false">282@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I recently indexed my book, but still largely by hand. I used DEVONthink to make a concordance as a first round of category identification, and then post index to search for terms I had left out. But, I still did the grunt work while reading through the proofs. I wrote about it &#60;a&#62;here.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>neuman on "Software for creating an index?"</title>
+						<link>http://digitalhumanities.org/answers/topic/software-for-creating-an-index#post-280</link>
+			<pubDate>Thu, 30 Sep 2010 13:05:20 +0000</pubDate>
+			<dc:creator>neuman</dc:creator>
+			<guid isPermaLink="false">280@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;The MS is at the publisher, and now we must create an index.  What concordancing or text-analysis SW for a PC simplifies the tax?
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

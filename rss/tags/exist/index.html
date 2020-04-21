@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Tag: eXist - Recent Posts</title>
+		<link>http://digitalhumanities.org/answers/tags/exist</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Tag: eXist - Recent Posts</description>
+		<language>en-US</language>
+		<pubDate>Sat, 20 Jul 2013 14:14:37 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/tags/exist" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>Richard Lehane on "Command-line tool to generate report on large number of XML files"</title>
+						<link>http://digitalhumanities.org/answers/topic/command-line-tool-to-generate-report-on-large-number-of-xml-files#post-828</link>
+			<pubDate>Tue, 14 Dec 2010 02:12:01 +0000</pubDate>
+			<dc:creator>Richard Lehane</dc:creator>
+			<guid isPermaLink="false">828@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @Stéfan Sinclair's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/command-line-tool-to-generate-report-on-large-number-of-xml-files#post-545&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;br /&#62;
+Rather than a custom script, it might be simpler to just use &#60;a href=&#34;http://xmlsoft.org/xmllint.html&#34;&#62;xmllint&#60;/a&#62; (the command line tool bundled with libxml2) for this. It can handle multiple files and if you use the &#34;--valid&#34; switch it will check against included DTDs. You could combine this with libxml's &#60;a href=&#34;http://xmlsoft.org/catalog.html&#34;&#62;catalog support&#60;/a&#62; to cache local copies of the relevant DTDs.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Conal Tuohy on "Alternatives to Cocoon?"</title>
+						<link>http://digitalhumanities.org/answers/topic/alternatives-to-cocoon#post-723</link>
+			<pubDate>Sat, 20 Nov 2010 13:15:43 +0000</pubDate>
+			<dc:creator>Conal Tuohy</dc:creator>
+			<guid isPermaLink="false">723@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Further to &#60;em&#62;@Joe Wicentowski's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/alternatives-to-cocoon#post-537&#34;&#62;post&#60;/a&#62;&#60;/em&#62; mentioning &#60;a href=&#34;http://www.w3.org/TR/xproc/&#34;&#62;XProc&#60;/a&#62;, you could use a batch-mode XProc processor such as &#60;a href=&#34;http://xmlcalabash.com/&#34;&#62;XML Calabash&#60;/a&#62; to pre-build the HTML website. If you're familiar with Cocoon and writing pipelines, you'll find XProc is similar and easy to pick up.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Stéfan Sinclair on "Command-line tool to generate report on large number of XML files"</title>
+						<link>http://digitalhumanities.org/answers/topic/command-line-tool-to-generate-report-on-large-number-of-xml-files#post-545</link>
+			<pubDate>Wed, 20 Oct 2010 16:20:08 +0000</pubDate>
+			<dc:creator>Stéfan Sinclair</dc:creator>
+			<guid isPermaLink="false">545@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I started writing some code that could provide a fairly quick and dirty solution. There are at least two issues: 1) I don't think character encoding is being examined properly so errors aren't being raised as I'd like; 2) I don't see a way to validate with a DTD if one is declared, but skip along merrily if it's not.&#60;/p&#62;
+
+
+&#60;div class=&#34;bb_syntax&#34;&#62;&#60;div class=&#34;code&#34;&#62;&#60;pre class=&#34;ruby&#34; style=&#34;font-family:monospace;&#34;&#62;&#60;span style=&#34;color:#CC0066; font-weight:bold;&#34;&#62;require&#60;/span&#62; &#60;span style=&#34;color:#996600;&#34;&#62;'rubygems'&#60;/span&#62;
+&#60;span style=&#34;color:#CC0066; font-weight:bold;&#34;&#62;require&#60;/span&#62; &#60;span style=&#34;color:#996600;&#34;&#62;'libxml'&#60;/span&#62;
+&#38;nbsp;
+&#60;span style=&#34;color:#9966CC; font-weight:bold;&#34;&#62;include&#60;/span&#62; LibXML
+&#38;nbsp;
+&#60;span style=&#34;color:#008000; font-style:italic;&#34;&#62;# process a directory recursively&#60;/span&#62;
+&#60;span style=&#34;color:#9966CC; font-weight:bold;&#34;&#62;def&#60;/span&#62; process_directory&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#38;#40;&#60;/span&#62;directory&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#38;#41;&#60;/span&#62;
+  &#60;span style=&#34;color:#CC00FF; font-weight:bold;&#34;&#62;Dir&#60;/span&#62;.&#60;span style=&#34;color:#9900CC;&#34;&#62;new&#60;/span&#62;&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#38;#40;&#60;/span&#62;directory&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#38;#41;&#60;/span&#62;.&#60;span style=&#34;color:#9900CC;&#34;&#62;each&#60;/span&#62; &#60;span style=&#34;color:#9966CC; font-weight:bold;&#34;&#62;do&#60;/span&#62; &#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#124;&#60;/span&#62;file&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#124;&#60;/span&#62;
+    full_file = &#60;span style=&#34;color:#CC00FF; font-weight:bold;&#34;&#62;File&#60;/span&#62;.&#60;span style=&#34;color:#9900CC;&#34;&#62;expand_path&#60;/span&#62;&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#38;#40;&#60;/span&#62;file, directory&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#38;#41;&#60;/span&#62;
+    &#60;span style=&#34;color:#9966CC; font-weight:bold;&#34;&#62;if&#60;/span&#62; file&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#38;#91;&#60;/span&#62;&#60;span style=&#34;color:#006666;&#34;&#62;0&#60;/span&#62;,&#60;span style=&#34;color:#006666;&#34;&#62;1&#60;/span&#62;&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#38;#93;&#60;/span&#62; == &#60;span style=&#34;color:#996600;&#34;&#62;'.'&#60;/span&#62; &#60;span style=&#34;color:#008000; font-style:italic;&#34;&#62;# skip dot files&#60;/span&#62;
+      &#60;span style=&#34;color:#9966CC; font-weight:bold;&#34;&#62;next&#60;/span&#62;
+    &#60;span style=&#34;color:#9966CC; font-weight:bold;&#34;&#62;elsif&#60;/span&#62; &#60;span style=&#34;color:#CC00FF; font-weight:bold;&#34;&#62;File&#60;/span&#62;.&#60;span style=&#34;color:#9900CC;&#34;&#62;directory&#60;/span&#62;? full_file
+      process_directory full_file
+    &#60;span style=&#34;color:#9966CC; font-weight:bold;&#34;&#62;elsif&#60;/span&#62; &#60;span style=&#34;color:#CC00FF; font-weight:bold;&#34;&#62;File&#60;/span&#62;.&#60;span style=&#34;color:#9900CC;&#34;&#62;extname&#60;/span&#62;&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#38;#40;&#60;/span&#62;file&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#38;#41;&#60;/span&#62; == &#60;span style=&#34;color:#996600;&#34;&#62;'.xml'&#60;/span&#62;
+      process_file full_file
+    &#60;span style=&#34;color:#9966CC; font-weight:bold;&#34;&#62;end&#60;/span&#62;
+  &#60;span style=&#34;color:#9966CC; font-weight:bold;&#34;&#62;end&#60;/span&#62;
+&#60;span style=&#34;color:#9966CC; font-weight:bold;&#34;&#62;end&#60;/span&#62;
+&#38;nbsp;
+&#60;span style=&#34;color:#008000; font-style:italic;&#34;&#62;# process an XML file&#60;/span&#62;
+&#60;span style=&#34;color:#9966CC; font-weight:bold;&#34;&#62;def&#60;/span&#62; process_file&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#38;#40;&#60;/span&#62;file&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#38;#41;&#60;/span&#62;
+  &#60;span style=&#34;color:#9966CC; font-weight:bold;&#34;&#62;begin&#60;/span&#62;
+&#38;nbsp;
+    &#60;span style=&#34;color:#008000; font-style:italic;&#34;&#62;# this fails when there's no DTD – how to toggle this without manual read of file?&#60;/span&#62;
+    &#60;span style=&#34;color:#008000; font-style:italic;&#34;&#62;#parser = XML::Parser.file(file, :options =&#38;gt; XML::Parser::Options::DTDVALIDD)&#60;/span&#62;
+&#38;nbsp;
+    parser = &#60;span style=&#34;color:#6666ff; font-weight:bold;&#34;&#62;XML::Parser&#60;/span&#62;.&#60;span style=&#34;color:#9900CC;&#34;&#62;file&#60;/span&#62;&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#38;#40;&#60;/span&#62;file&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#38;#41;&#60;/span&#62;
+    parser.&#60;span style=&#34;color:#9900CC;&#34;&#62;parse&#60;/span&#62;
+  &#60;span style=&#34;color:#9966CC; font-weight:bold;&#34;&#62;rescue&#60;/span&#62; &#60;span style=&#34;color:#6666ff; font-weight:bold;&#34;&#62;LibXML::XML::Error&#60;/span&#62; &#60;span style=&#34;color:#008000; font-style:italic;&#34;&#62;# already reported&#60;/span&#62;
+  &#60;span style=&#34;color:#9966CC; font-weight:bold;&#34;&#62;rescue&#60;/span&#62; &#60;span style=&#34;color:#CC00FF; font-weight:bold;&#34;&#62;Exception&#60;/span&#62;
+    &#60;span style=&#34;color:#CC0066; font-weight:bold;&#34;&#62;puts&#60;/span&#62; $!
+  &#60;span style=&#34;color:#9966CC; font-weight:bold;&#34;&#62;end&#60;/span&#62;
+&#60;span style=&#34;color:#9966CC; font-weight:bold;&#34;&#62;end&#60;/span&#62;
+&#38;nbsp;
+process_directory ARGV&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#38;#91;&#60;/span&#62;&#60;span style=&#34;color:#006666;&#34;&#62;0&#60;/span&#62;&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#38;#93;&#60;/span&#62;.&#60;span style=&#34;color:#0000FF; font-weight:bold;&#34;&#62;nil&#60;/span&#62;? ? &#60;span style=&#34;color:#CC00FF; font-weight:bold;&#34;&#62;Dir&#60;/span&#62;.&#60;span style=&#34;color:#9900CC;&#34;&#62;getwd&#60;/span&#62; : ARGV&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#38;#91;&#60;/span&#62;&#60;span style=&#34;color:#006666;&#34;&#62;0&#60;/span&#62;&#60;span style=&#34;color:#006600; font-weight:bold;&#34;&#62;&#38;#93;&#60;/span&#62;&#60;/pre&#62;&#60;/div&#62;&#60;/div&#62;
+
+
+
+&#60;p&#62;Usage (assuming you've saved the above contents as parseDirectory.rb):&#60;/p&#62;
+&#60;pre&#62;ruby parseDirectory.rb
+ruby parseDirectory /someotherdirectory/&#60;/pre&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Stéfan Sinclair on "Command-line tool to generate report on large number of XML files"</title>
+						<link>http://digitalhumanities.org/answers/topic/command-line-tool-to-generate-report-on-large-number-of-xml-files#post-544</link>
+			<pubDate>Wed, 20 Oct 2010 16:16:14 +0000</pubDate>
+			<dc:creator>Stéfan Sinclair</dc:creator>
+			<guid isPermaLink="false">544@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @Dorothea Salo's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/command-line-tool-to-generate-report-on-large-number-of-xml-files#post-533&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;Thanks for the suggestions.&#60;/p&#62;
+&#60;p&#62;&#60;em&#62;Replying to @Joe Wicentowski's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/command-line-tool-to-generate-report-on-large-number-of-xml-files#post-535&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;Yes, the batch validate command in Oxygen works great.&#60;/p&#62;
+&#60;p&#62;&#60;em&#62;Replying to @Wayne Graham's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/command-line-tool-to-generate-report-on-large-number-of-xml-files#post-543&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;These are files we're inheriting from elsewhere and trying to process.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Wayne Graham on "Command-line tool to generate report on large number of XML files"</title>
+						<link>http://digitalhumanities.org/answers/topic/command-line-tool-to-generate-report-on-large-number-of-xml-files#post-543</link>
+			<pubDate>Wed, 20 Oct 2010 14:20:59 +0000</pubDate>
+			<dc:creator>Wayne Graham</dc:creator>
+			<guid isPermaLink="false">543@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Are these new files that are getting brought in, or an existing collection? If these are new files, and you're using some type of source code control, you can use a pre-commit hook to validate the document before it gets in to the repository. If it's the latter, it may be worth while taking some time to write up a Java (or jruby) app that could generate this type of report. Lord knows there are enough folks with heaps of XML that is of dubious origin/validity...
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Joe Wicentowski on "Alternatives to Cocoon?"</title>
+						<link>http://digitalhumanities.org/answers/topic/alternatives-to-cocoon#post-537</link>
+			<pubDate>Wed, 20 Oct 2010 03:41:15 +0000</pubDate>
+			<dc:creator>Joe Wicentowski</dc:creator>
+			<guid isPermaLink="false">537@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;A bit late here, but let me echo James in suggesting &#60;a href=&#34;http://exist-db.org&#34;&#62;eXist&#60;/a&#62; - it supports XSLT, XQuery, XProc, etc. (the major ways of querying and transforming documents), has powerful full text search of your XML, flexible URL rewriting and comes with the lightweight Jetty webserver (no Cocoon necessary).  The site I work on, &#60;a href=&#34;http://history.state.gov&#34;&#62;history.state.gov&#60;/a&#62;, is pure eXist + XQuery + TEI.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Joe Wicentowski on "Command-line tool to generate report on large number of XML files"</title>
+						<link>http://digitalhumanities.org/answers/topic/command-line-tool-to-generate-report-on-large-number-of-xml-files#post-535</link>
+			<pubDate>Wed, 20 Oct 2010 03:17:02 +0000</pubDate>
+			<dc:creator>Joe Wicentowski</dc:creator>
+			<guid isPermaLink="false">535@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;It's not really a command line tool, but it works really well: &#60;a href=&#34;http://www.oxygenxml.com&#34;&#62;oXygen XML Editor&#60;/a&#62; has a number of tools for &#60;a href=&#34;http://www.oxygenxml.com/doc/ug-oxygen/topics/validating-XML-documents-against-schema.html&#34;&#62;Validating XML Documents Against a Schema&#60;/a&#62;.  I frequently use these functions to validate my project files before committing them to subversion or uploading them to my production server (&#60;a href=&#34;http://exist-db.org&#34;&#62;eXist&#60;/a&#62;).
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Dorothea Salo on "Command-line tool to generate report on large number of XML files"</title>
+						<link>http://digitalhumanities.org/answers/topic/command-line-tool-to-generate-report-on-large-number-of-xml-files#post-533</link>
+			<pubDate>Wed, 20 Oct 2010 02:45:58 +0000</pubDate>
+			<dc:creator>Dorothea Salo</dc:creator>
+			<guid isPermaLink="false">533@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Eep. No, I wish I had. Mostly what I see is people writing shell scripts or ant tasks or even little XSLT scripties (dependent on Saxon, usually) to do the job.&#60;/p&#62;
+&#60;p&#62;If you're really gunning to solve the character-encoding problem first, though, &#60;a href=&#34;http://chardet.feedparser.org/&#34;&#62;chardet&#60;/a&#62; (Python) might help, and there's a &#60;a href=&#34;http://fredeaker.blogspot.com/2007/01/character-encoding-detection.html&#34;&#62;bit of a laundry list&#60;/a&#62; of encoding-detection libraries too (looks a bit old, may be obsolete). I happened upon a &#60;a href=&#34;http://stackoverflow.com/questions/774075/character-encoding-detection-algorithm&#34;&#62;slightly more recent Stack Overflow thread&#60;/a&#62; on the subject while I was trying to dig up chardet.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Stéfan Sinclair on "Command-line tool to generate report on large number of XML files"</title>
+						<link>http://digitalhumanities.org/answers/topic/command-line-tool-to-generate-report-on-large-number-of-xml-files#post-528</link>
+			<pubDate>Tue, 19 Oct 2010 20:49:53 +0000</pubDate>
+			<dc:creator>Stéfan Sinclair</dc:creator>
+			<guid isPermaLink="false">528@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;We have a large number of TEI-encoded XML files, some of which aren't valid (usually because of character encoding problems). We'd like to generate a report that lists each file and the error(s) encountered, with line and character index, etc. I can imagine writing a quick and dirty script that essentially does what we need, but I'm wondering (lazily) if anyone has seen anything that would do the trick.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Wayne Graham on "Alternatives to Cocoon?"</title>
+						<link>http://digitalhumanities.org/answers/topic/alternatives-to-cocoon#post-393</link>
+			<pubDate>Fri, 08 Oct 2010 19:01:19 +0000</pubDate>
+			<dc:creator>Wayne Graham</dc:creator>
+			<guid isPermaLink="false">393@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;The big problem with most of the functional language implementations for XSL is at some point they all rely on the underlying C libraries (libxml, libxslt). You'll see this limitation for XSLT 2.0 transforms, you're limited to using Saxon and it's supported libraries (Java and .Net). Really you're really left with two options if you want to use a functional language in your app, you're kind of limited to either jRuby (or something funky like LIFT or Clojure) or pre-processing the partial views. &#60;/p&#62;
+&#60;p&#62;That said, there is a partial C library for the XSLT 2 spec called libX (&#60;a href=&#34;http://www.explain.com.au/libx/)&#34; rel=&#34;nofollow&#34;&#62;http://www.explain.com.au/libx/)&#60;/a&#62;. If this project takes off, you could very easily write a wrapper in PECL, Ruby, or Swig to expose this functionality to the different languages. But it's not there yet. &#60;/p&#62;
+&#60;p&#62;What I would encourage you to also look at is some automated workflows. There are some heavy-weight options (e.g. BPEL), but also some pretty light options (see &#60;a href=&#34;http://github.com/jmettraux/ruote)&#34; rel=&#34;nofollow&#34;&#62;http://github.com/jmettraux/ruote)&#60;/a&#62; that go a long way in helping you establish a sane, sustainable, and ultimately transferable method of ingesting and disseminating content, independent of what front-end technology is chosen.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>knickum.unl@gmail.com on "Alternatives to Cocoon?"</title>
+						<link>http://digitalhumanities.org/answers/topic/alternatives-to-cocoon#post-392</link>
+			<pubDate>Fri, 08 Oct 2010 17:57:18 +0000</pubDate>
+			<dc:creator>knickum.unl@gmail.com</dc:creator>
+			<guid isPermaLink="false">392@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Been meaning to respond to this also, co-worker of Karin's. Has anyone looked into any methods using python? I'm interested in changing some of the tools we use (for example, instead of using PHP --ugh -- I'd like it if we used Python/Ruby by default), so I'm trying to figure out some issues related to how we currently do things that may come up if we do that.&#60;/p&#62;
+&#60;p&#62;I'm curious (entirely ignoring the previous paragraph), it would be useful for some things we've done to be able to run xslt 2.0 functions in php. I've seen and heard JavaBridge is an option (though my experience so far has been the same as Wayne's), does anyone know of any other options? I can think of a few ways that might work, but nothing as elegant as JavaBridge at least purports to be (not that it even comes close!).
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Karin Dalziel on "Alternatives to Cocoon?"</title>
+						<link>http://digitalhumanities.org/answers/topic/alternatives-to-cocoon#post-256</link>
+			<pubDate>Thu, 30 Sep 2010 13:48:50 +0000</pubDate>
+			<dc:creator>Karin Dalziel</dc:creator>
+			<guid isPermaLink="false">256@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Some of our old, XSLT 1.0 sites have been transformed using a simple PHP transformation (I believe that is how The Journals of Lewis and Clark Expedition - &#60;a href=&#34;http://lewisandclarkjournals.unl.edu/&#34; rel=&#34;nofollow&#34;&#62;http://lewisandclarkjournals.unl.edu/&#60;/a&#62; - is currently being handled) but our newer sites use XSLT 2.0 features. &#60;/p&#62;
+&#60;p&#62;I may just make an effort to restrict myself to XSLT 1.0 for our simple projects in the future. &#60;/p&#62;
+&#60;p&#62;Thanks everyone for your wonderful responses! I have a lot to look into.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>jamesc on "Alternatives to Cocoon?"</title>
+						<link>http://digitalhumanities.org/answers/topic/alternatives-to-cocoon#post-254</link>
+			<pubDate>Thu, 30 Sep 2010 10:36:51 +0000</pubDate>
+			<dc:creator>jamesc</dc:creator>
+			<guid isPermaLink="false">254@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;It depends on a developer's needs really.  I have used Cocoon extensively, eXist, various CMSes, etc. If what you really need is just quite simple dynamic transformation from XML to HTML and not all the bells and whistles of a CMS there are much simpler routes one can take.  I have a need for a basic virtual URL remapper with dynamic transformations.  None of this needs the complexity of any of the above methods.&#60;/p&#62;
+&#60;p&#62;For example:&#60;br /&#62;
+&#60;a href=&#34;http://blogs.oucs.ox.ac.uk/jamesc/2010/08/19/simple-dynamic-transformation-of-xml-with-htaccess-php-and-xslt/&#34; rel=&#34;nofollow&#34;&#62;http://blogs.oucs.ox.ac.uk/jamesc/2010/08/19/simple-dynamic-transformation-of-xml-with-htaccess-php-and-xslt/&#60;/a&#62;&#60;br /&#62;
+shows one method of doing basic (sadly limited to XSLT1) dynamic transformations using just .htaccess and a really short php file that just says &#34;transform this XML with this XSLT&#34;. The control of which XML/XSLT combination a particular URL gets is done entirely in the .htaccess file.  &#60;/p&#62;
+&#60;p&#62;What this can't do... well it could be not very prettily... is a long series of pipelined transformations. &#60;/p&#62;
+&#60;p&#62;However, one benefit of this kind of approach is that basic php and .htaccess are available on almost all shared hosting platforms where you might not have the ability or access to install other solutions.&#60;/p&#62;
+&#60;p&#62;Just my two pence,&#60;/p&#62;
+&#60;p&#62;-James Cummings
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>James Smith on "Alternatives to Cocoon?"</title>
+						<link>http://digitalhumanities.org/answers/topic/alternatives-to-cocoon#post-250</link>
+			<pubDate>Thu, 30 Sep 2010 03:45:14 +0000</pubDate>
+			<dc:creator>James Smith</dc:creator>
+			<guid isPermaLink="false">250@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;If you're feeling adventurous and want to integrate the TEI documents into a &#60;a href=&#34;http://www.radiantcms.org/&#34;&#62;Radiant CMS&#60;/a&#62;, then you might want to look at &#60;a href=&#34;http://github.com/jgsmith/radiant-tei-tools&#34;&#62;http://github.com/jgsmith/radiant-tei-tools&#60;/a&#62; as an example of how to create a filter or Radiant tag that will transform the TEI document into HTML.  This approach lets you treat the TEI documents as pages in the CMS.&#60;/p&#62;
+&#60;p&#62;If there's any interest in the Radiant extension, I'll try to update it with what I have working in production right now -- I've been focused on a lot of other stuff lately.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Wayne Graham on "Alternatives to Cocoon?"</title>
+						<link>http://digitalhumanities.org/answers/topic/alternatives-to-cocoon#post-152</link>
+			<pubDate>Fri, 24 Sep 2010 13:44:20 +0000</pubDate>
+			<dc:creator>Wayne Graham</dc:creator>
+			<guid isPermaLink="false">152@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I can't believe I forgot this, but there's also a plugin for Omeka (see &#60;a href=&#34;http://omeka.org/codex/Plugins/TeiDisplay)&#34; rel=&#34;nofollow&#34;&#62;http://omeka.org/codex/Plugins/TeiDisplay)&#60;/a&#62; which can substitute for some of these other systems with TEI documents. Definitely another project to check out (and give us feedback). Particularly useful with the Omeka SolrSearch plugin (&#60;a href=&#34;http://omeka.org/codex/Plugins/SolrSearch)&#34; rel=&#34;nofollow&#34;&#62;http://omeka.org/codex/Plugins/SolrSearch)&#60;/a&#62;.
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

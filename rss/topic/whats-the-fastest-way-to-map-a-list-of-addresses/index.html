@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Topic: What&#039;s the fastest way to map a list of addresses?</title>
+		<link>http://digitalhumanities.org/answers/topic/whats-the-fastest-way-to-map-a-list-of-addresses</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Topic: What&#039;s the fastest way to map a list of addresses?</description>
+		<language>en-US</language>
+		<pubDate>Sat, 08 Dec 2018 16:23:33 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/topic/whats-the-fastest-way-to-map-a-list-of-addresses" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>dianamaps on "What&#039;s the fastest way to map a list of addresses?"</title>
+						<link>http://digitalhumanities.org/answers/topic/whats-the-fastest-way-to-map-a-list-of-addresses#post-1143</link>
+			<pubDate>Wed, 27 Apr 2011 04:33:53 +0000</pubDate>
+			<dc:creator>dianamaps</dc:creator>
+			<guid isPermaLink="false">1143@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;All of these work well for this:&#60;/p&#62;
+&#60;p&#62;GeoCommons, &#60;a href=&#34;http://www.geocommons.com&#34; rel=&#34;nofollow&#34;&#62;http://www.geocommons.com&#60;/a&#62;  (geocoding points)&#60;br /&#62;
+GPS Visualizer, &#60;a href=&#34;http://gpsvisualizer.com&#34; rel=&#34;nofollow&#34;&#62;http://gpsvisualizer.com&#60;/a&#62; (geocoding points)&#60;br /&#62;
+Batch Geocoding,  &#60;a href=&#34;http://www.batchgeocode.com&#34; rel=&#34;nofollow&#34;&#62;http://www.batchgeocode.com&#60;/a&#62;  (geocoding points and joining polygons)&#60;br /&#62;
+Zee Maps, &#60;a href=&#34;http://www.zeemaps.com&#34; rel=&#34;nofollow&#34;&#62;http://www.zeemaps.com&#60;/a&#62; (geocoding points)
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Joe Wicentowski on "What&#039;s the fastest way to map a list of addresses?"</title>
+						<link>http://digitalhumanities.org/answers/topic/whats-the-fastest-way-to-map-a-list-of-addresses#post-1009</link>
+			<pubDate>Tue, 22 Feb 2011 16:46:30 +0000</pubDate>
+			<dc:creator>Joe Wicentowski</dc:creator>
+			<guid isPermaLink="false">1009@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;The basic approach I'd use is one of &#34;web scraping&#34; -- extracting the data you need from the HTML page, and transforming the data into a format that you can feed to your mapping application.  &#60;/p&#62;
+&#60;p&#62;My web scraper of choice is eXist (&#60;a href=&#34;http://www.exist-db.org)&#34; rel=&#34;nofollow&#34;&#62;http://www.exist-db.org)&#60;/a&#62;, since it lets you crawl through pages using XQuery and XPath - super useful tools for dealing with the web or any XML data you might have.  I wrote a script that outputs the addresses as a table.  I chose a table format, naturally, since the above-linked Zeemaps accepts data in the form of a copied and pasted table.  Pasting this table into Zeemaps, tada, here's your map:&#60;/p&#62;
+&#60;p&#62;&#60;a href=&#34;http://www.zeemaps.com/map?group=212304&#38;amp;x=-96.8555&#38;amp;y=34.7416&#38;amp;z=13&#34; rel=&#34;nofollow&#34;&#62;http://www.zeemaps.com/map?group=212304&#38;amp;x=-96.8555&#38;amp;y=34.7416&#38;amp;z=13&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;Here is the script, followed by an excerpt of its output:&#60;/p&#62;
+&#60;p&#62;[*EDIT: I had originally pasted the code in here, but the DH forum stripped out the indenting, making it impossible to read, so I've pasted the code at &#60;a href=&#34;http://pastebin.com/6kyDg7fR&#34; rel=&#34;nofollow&#34;&#62;http://pastebin.com/6kyDg7fR&#60;/a&#62;.  You can see it there.]&#60;/p&#62;
+&#60;p&#62;I tried to add comments to the code to explain things a bit.  It's a bit messy, because I tried my best to work around the fairly horrible and inconsistent HTML coding on the source page, but I didn't sink the time in to covering every possible case.  Notice, for example, how some addresses have links, others don't; you'll see even worse inconsistencies when you view the source HTML.  Then again, such workarounds are what's required when you approach screen scraping.  Here's the page output, copied in here as text:&#60;/p&#62;
+&#60;p&#62;Borders and Alternatives&#60;br /&#62;
+Extracted from &#60;a href=&#34;http://www.edrants.com/list-of-independent-alternatives-to-closed-borders-bookstores/&#34; rel=&#34;nofollow&#34;&#62;http://www.edrants.com/list-of-independent-alternatives-to-closed-borders-bookstores/&#60;/a&#62;&#60;br /&#62;
+Name	Address&#60;br /&#62;
+Borders Bookstore #88	1100 E. Diamond Blvd., Anchorage, AK 99515&#60;br /&#62;
+University of Alaska Bookstore	2905 Providence Drive, Anchorage, AK 99508&#60;br /&#62;
+Title Wave Books	1360 West Northern Lights, Anchorage, AK 99503&#60;br /&#62;
+Borders Bookstore #596	10100 W. McDowell Road, Avondale, AZ 85323&#60;br /&#62;
+...
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Peter Organisciak on "What&#039;s the fastest way to map a list of addresses?"</title>
+						<link>http://digitalhumanities.org/answers/topic/whats-the-fastest-way-to-map-a-list-of-addresses#post-1001</link>
+			<pubDate>Sun, 20 Feb 2011 19:06:47 +0000</pubDate>
+			<dc:creator>Peter Organisciak</dc:creator>
+			<guid isPermaLink="false">1001@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;You can quickly get a map using a spreadsheet from Google Docs. Paste your data into a column, select that column, and go to Insert&#38;gt;Gadget then Map. &#60;/p&#62;
+&#60;p&#62;That will give you the map, you can then also embed it into other pages but choosing Publish Gadgets in the map's setting.&#60;/p&#62;
+&#60;p&#62;Here's a sample with your data: &#60;a href=&#34;https://spreadsheets.google.com/ccc?key=0AgnmwOU2IhTjdDhpY1NNNWJuNWtVd1hFTmJwSUlCbnc&#38;amp;hl=en&#34; rel=&#34;nofollow&#34;&#62;https://spreadsheets.google.com/ccc?key=0AgnmwOU2IhTjdDhpY1NNNWJuNWtVd1hFTmJwSUlCbnc&#38;amp;hl=en&#60;/a&#62;
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>ZeeMaps on "What&#039;s the fastest way to map a list of addresses?"</title>
+						<link>http://digitalhumanities.org/answers/topic/whats-the-fastest-way-to-map-a-list-of-addresses#post-999</link>
+			<pubDate>Sun, 20 Feb 2011 16:00:51 +0000</pubDate>
+			<dc:creator>ZeeMaps</dc:creator>
+			<guid isPermaLink="false">999@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;If you can get the list in the form of a table, you can use ZeeMaps (&#60;a href=&#34;http://www.zeemaps.com&#34; rel=&#34;nofollow&#34;&#62;http://www.zeemaps.com&#60;/a&#62;) for this purpose.&#60;/p&#62;
+&#60;p&#62;For example, in this case, you'll need a table with columns Name, Address and then upload it to a map on ZeeMaps using a CSV file or just copying-and-pasting the table.&#60;/p&#62;
+&#60;p&#62;Let us know at support at zeemaps dot com if we can help.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>cnast on "What&#039;s the fastest way to map a list of addresses?"</title>
+						<link>http://digitalhumanities.org/answers/topic/whats-the-fastest-way-to-map-a-list-of-addresses#post-998</link>
+			<pubDate>Sat, 19 Feb 2011 17:42:44 +0000</pubDate>
+			<dc:creator>cnast</dc:creator>
+			<guid isPermaLink="false">998@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Via @&#60;a href='http://digitalhumanities.org/answers/profile/janaremy'&#62;janaremy&#60;/a&#62; I saw this post about closing Borders bookstores that lists alternative independent bookstores by state and includes street addresses and website links. What would be the quickest/easiest way to turn the list into a google map? Is this an appropriate use of Google Fusion Tables maybe? &#60;/p&#62;
+&#60;p&#62;&#60;a href=&#34;http://www.edrants.com/list-of-independent-alternatives-to-closed-borders-bookstores/&#34; rel=&#34;nofollow&#34;&#62;http://www.edrants.com/list-of-independent-alternatives-to-closed-borders-bookstores/&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;A snippet from the post:&#60;/p&#62;
+&#60;p&#62;Alaska&#60;/p&#62;
+&#60;p&#62;Borders Bookstore #88&#60;br /&#62;
+1100 E. Diamond Blvd., Anchorage, AK 99515&#60;br /&#62;
+Alternatives:&#60;br /&#62;
+University of Alaska Bookstore, 2905 Providence Drive, Anchorage, AK 99508 (5.7 miles)&#60;br /&#62;
+Title Wave Books, 1360 West Northern Lights, Anchorage, AK 99503 (5.8 miles)&#60;/p&#62;
+&#60;p&#62;Arizona&#60;/p&#62;
+&#60;p&#62;Borders Bookstore #596&#60;br /&#62;
+10100 W. McDowell Road, Avondale, AZ 85323&#60;br /&#62;
+Alternatives:&#60;br /&#62;
+Thrifty Joe’s, 6020 W Bell Road, #E104, Glendale, AZ 85308 (12.0 miles)&#60;br /&#62;
+Bookmans Phoenix, 8034 N. 19th Ave., Phoenix, AZ 85021 (12.1 miles)&#60;br /&#62;
+Bent Cover Books, 12428 N. 28th Drive, Phoenix, AZ 85029 (12.6 miles)&#60;/p&#62;
+&#60;p&#62;Borders Bookstore #282&#60;br /&#62;
+870 N. 54th Street, Chandler, AZ 85226&#60;br /&#62;
+Alternatives:&#60;br /&#62;
+Changing Hands Bookstore, 6428 South McClintock Drive, Tempe, AZ 85283 (6.3 miles)&#60;br /&#62;
+Ecobooks, 227 E Baseline Road, Suite #J-5, Tempe, AZ 85283 (7.2 miles)&#60;/p&#62;
+&#60;p&#62;Borders Bookstore #69&#60;br /&#62;
+1361 S. Alma School Road, Mesa, AZ 85210&#60;br /&#62;
+Alternatives:&#60;br /&#62;
+Bookmans Mesa, 1056 S. County Club Dr., Mesa, AZ 85210 (0.0 miles)&#60;br /&#62;
+Those Were the Days, 628 N. Center Street, Mesa, AZ 85201 (2.9 miles)
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

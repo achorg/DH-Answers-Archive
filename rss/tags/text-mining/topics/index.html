@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Tag: text mining - Recent Topics</title>
+		<link>http://digitalhumanities.org/answers/tags/text-mining</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Tag: text mining - Recent Topics</description>
+		<language>en-US</language>
+		<pubDate>Fri, 14 Jul 2017 12:24:41 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/tags/text-mining/topics" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>aliciapeaker@gmail.com on "How to extract tagged data and text from TEI file?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-to-extract-tagged-data-and-text-from-tei-file#post-2286</link>
+			<pubDate>Thu, 26 Feb 2015 16:56:54 +0000</pubDate>
+			<dc:creator>aliciapeaker@gmail.com</dc:creator>
+			<guid isPermaLink="false">2286@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I’ve been using CATMA (&#60;a href=&#34;http://www.catma.de/&#34; rel=&#34;nofollow&#34;&#62;http://www.catma.de/&#60;/a&#62;) to markup a text with some analytical tags I’ve created. I then exported the file in TEI, and I’m now trying to extract the data I’ve marked up in order to measure tag frequencies, but am finding it quite difficult. &#60;/p&#62;
+&#60;p&#62;Rather than tagging text with the labels I’ve created, CATMA has established a somewhat complicated (though likely necessary) system of identifiers. So, for example, I’ve tagged the word “clouds” in my text with the tag “weather,” which is a child of the tagset “non-living.” &#60;/p&#62;
+&#60;p&#62;CATMA represents the tag in the text like this:&#60;br /&#62;
+&#38;lt;text&#38;gt;&#60;br /&#62;
+     &#38;lt;body&#38;gt;&#60;br /&#62;
+          &#38;lt;ab type=“catma”&#38;gt;&#60;br /&#62;
+Small feckless &#38;lt;seg ana=&#34;#CATMA_0036983F-4D37-48C2-8BC7-5846A8364D26&#34;&#38;gt;clouds&#38;lt;/seg&#38;gt; were hurried across the vast untroubled sky...&#60;br /&#62;
+          &#38;lt;/ab&#38;gt;&#60;br /&#62;
+     &#38;lt;/body&#38;gt;&#60;br /&#62;
+&#38;lt;/text&#38;gt;&#60;/p&#62;
+&#60;p&#62;The identifier then points to this feature statement after the body of the text:&#60;/p&#62;
+&#60;p&#62;&#38;lt;text&#38;gt;&#60;br /&#62;
+     &#38;lt;body&#38;gt;&#60;br /&#62;
+     &#38;lt;/body&#38;gt;&#60;br /&#62;
+          &#38;lt;fs xml:id=&#34;CATMA_0036983F-4D37-48C2-8BC7-5846A8364D26&#34; type=&#34;CATMA_3CDE1FE4-CA5D-4460-9BFF-739537D753DE&#34;&#38;gt;&#60;br /&#62;
+            &#38;lt;f name=&#34;catma_displaycolor&#34;&#38;gt;&#60;br /&#62;
+                &#38;lt;string&#38;gt;-16710765&#38;lt;/string&#38;gt;&#60;br /&#62;
+            &#38;lt;/f&#38;gt;&#60;br /&#62;
+            &#38;lt;f name=&#34;catma_markupauthor&#34;&#38;gt;&#60;br /&#62;
+                &#38;lt;string&#38;gt;name@email&#38;lt;/string&#38;gt;&#60;br /&#62;
+            &#38;lt;/f&#38;gt;&#60;br /&#62;
+        &#38;lt;/fs&#38;gt;&#60;br /&#62;
+&#38;lt;/text&#38;gt;&#60;/p&#62;
+&#60;p&#62;The id for the type of the fs then points back up to the feature statement declaration in the header:&#60;/p&#62;
+&#60;p&#62;&#38;lt;teiHeader&#38;gt;&#60;br /&#62;
+     &#38;lt;encodingDesc&#38;gt;&#60;br /&#62;
+          &#38;lt;fsDecl xml:id=&#34;CATMA_3CDE1FE4-CA5D-4460-9BFF-739537D753DE&#34; n=&#34;2014-12-16T13:30:36.000+0000&#34; type=&#34;CATMA_3CDE1FE4-CA5D-4460-9BFF-739537D753DE&#34;&#38;gt;&#60;br /&#62;
+                    &#38;lt;fsDescr&#38;gt;Weather&#38;lt;/fsDescr&#38;gt;&#60;br /&#62;
+                    &#38;lt;fDecl xml:id=&#34;CATMA_699BAC76-8D15-408E-A30A-984849115A71&#34; name=&#34;catma_displaycolor&#34;&#38;gt;&#60;br /&#62;
+                        &#38;lt;vRange&#38;gt;&#60;br /&#62;
+                            &#38;lt;vColl&#38;gt;&#60;br /&#62;
+                                &#38;lt;string&#38;gt;-16710765&#38;lt;/string&#38;gt;&#60;br /&#62;
+                            &#38;lt;/vColl&#38;gt;&#60;br /&#62;
+                        &#38;lt;/vRange&#38;gt;&#60;br /&#62;
+                    &#38;lt;/fDecl&#38;gt;&#60;br /&#62;
+                    &#38;lt;fDecl xml:id=&#34;CATMA_8653855B-B611-48E8-AE9D-00E0160A37DB&#34; name=&#34;catma_markupauthor&#34;&#38;gt;&#60;br /&#62;
+                        &#38;lt;vRange&#38;gt;&#60;br /&#62;
+                            &#38;lt;vColl&#38;gt;&#60;br /&#62;
+                                  &#38;lt;string&#38;gt;name@email&#38;lt;/string&#38;gt;&#60;br /&#62;
+                            &#38;lt;/vColl&#38;gt;&#60;br /&#62;
+                        &#38;lt;/vRange&#38;gt;&#60;br /&#62;
+                    &#38;lt;/fDecl&#38;gt;&#60;br /&#62;
+                &#38;lt;/fsDecl&#38;gt;&#60;br /&#62;
+     &#38;lt;/encodingDesc&#38;gt;&#60;br /&#62;
+&#38;lt;/teiHeader&#38;gt; &#60;/p&#62;
+&#60;p&#62;I need to extract the text and data, perhaps in a csv file (or other output format, if it’s easier), into something that lists the tagged text (e.g. “clouds”) in one column, the first tag applied to it in the next column (e.g. &#34;weather&#34;), and the tagset or category to which that tag belongs in the next (e.g. &#34;non-living). &#60;/p&#62;
+&#60;p&#62;Or perhaps there’s a better way—really, what I’d like to be able to do is get the frequencies of each tag &#38;amp; tagset for each chapter. If there’s an easier way to mark up the text in TEI that would better allow for what I need, I’m open to re-encoding manually.&#60;/p&#62;
+&#60;p&#62;I’ve also tried playing around a bit with some XSLT and a Python script (&#60;a href=&#34;http://www.rdegges.com/quickly-extract-xml-data-with-python/&#34; rel=&#34;nofollow&#34;&#62;http://www.rdegges.com/quickly-extract-xml-data-with-python/&#60;/a&#62;) but with very little experience with either, I find myself quickly out of my depths. Open to suggestions—and thanks in advance for your help!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>rubyperlmutter@gmail.com on "Experience with Lexos or Text Mining Software?"</title>
+						<link>http://digitalhumanities.org/answers/topic/experience-with-lexos-or-text-mining-software#post-2258</link>
+			<pubDate>Tue, 18 Nov 2014 19:57:32 +0000</pubDate>
+			<dc:creator>rubyperlmutter@gmail.com</dc:creator>
+			<guid isPermaLink="false">2258@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hi!&#60;/p&#62;
+&#60;p&#62;I'm trying to use Lexos (&#60;a href=&#34;http://lexos.wheatoncollege.edu/upload)&#34; rel=&#34;nofollow&#34;&#62;http://lexos.wheatoncollege.edu/upload)&#60;/a&#62;, and the text of the files I upload keep getting scrambled. I've tried several of the accepted formats as well as creating new files with no luck. Any ideas about what the problem could be? &#60;/p&#62;
+&#60;p&#62;Or, any recommendations for free and easy to use text-mining tools?&#60;/p&#62;
+&#60;p&#62;Thank you,&#60;br /&#62;
+Ruby
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>sinai.rusinek@gmail.com on "Text mining tools that work with RTL texts?"</title>
+						<link>http://digitalhumanities.org/answers/topic/text-mining-tools-that-work-with-rtl-texts#post-1912</link>
+			<pubDate>Thu, 07 Mar 2013 14:05:15 +0000</pubDate>
+			<dc:creator>sinai.rusinek@gmail.com</dc:creator>
+			<guid isPermaLink="false">1912@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Tried AntConc with Unicode format Hebrew Texts. It works, but the results come out left-to-right. Any recommendations on how to solve this, or tools more adapted to it?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Inna Kizhner on "New research questions in the humanities"</title>
+						<link>http://digitalhumanities.org/answers/topic/new-research-questions-in-the-humanities#post-2060</link>
+			<pubDate>Mon, 05 Aug 2013 17:51:33 +0000</pubDate>
+			<dc:creator>Inna Kizhner</dc:creator>
+			<guid isPermaLink="false">2060@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I have been talking a lot these days to scholars who are new to the concept of digital humanities. They are aware of the new research questions that emerge in the field due to the vastly enlarged scale of studies and the ability to analyse big data. Can you provide examples of new research questions (inspired by digital humanities) that are not linked to the big data problem, something beyond the usual aspects of access to data and the scale of data? Your answers would be very helpful for promoting digital humanities to those who say they do not need big data for their research.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>gwijthoff on "History and theory question: lexicography / discourse analysis / text mining"</title>
+						<link>http://digitalhumanities.org/answers/topic/history-and-theory-question-lexicography-discourse-analysis-text-mining#post-1965</link>
+			<pubDate>Mon, 08 Apr 2013 15:31:47 +0000</pubDate>
+			<dc:creator>gwijthoff</dc:creator>
+			<guid isPermaLink="false">1965@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Are there any writings on the relationship between lexicography, discourse analysis, and text/data mining?  As I continue work on a keyword-specific project, I'm wondering where the theoretical, historical, and methodological overlaps are in these various ways of mapping epistemology through language.&#60;/p&#62;
+&#60;p&#62;There are tons of questions one can ask between these fields, but I'm thinking in particular about whether something like the peaks and valleys in a frequency analysis constitute the rise and fall of a Foucauldian &#34;discursive regularity.&#34;  I recently saw &#60;a href=&#34;http://www.jstor.org/stable/10.1086/661645&#34;&#62;Bernard Geoghegan's piece in Critical Inquiry&#60;/a&#62; on enthusiasm for cybernetics research among French structuralists (a history he argues is important to visit in light of today's digital revolutions in the humanities), but it raises more questions than answers, wonderful as they are.&#60;/p&#62;
+&#60;p&#62;Any leads would be much appreciated!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>jennriley on "How do you want full text provided to you for analysis?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-do-you-want-full-text-provided-to-you-for-analysis#post-1893</link>
+			<pubDate>Tue, 19 Feb 2013 01:02:25 +0000</pubDate>
+			<dc:creator>jennriley</dc:creator>
+			<guid isPermaLink="false">1893@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;We're in the early planning stages of an initiative that will make available full text for some of our special collections library's manuscript holdings. We'll definitely provide a search interface, but we'd also like to allow the full text of these resources to be downloaded for researchers to use in text mining and whatever other applications suit their fancy. As a researcher doing this kind of work, what's the most useful way for us to make this full text available to you? One big download? Something else? Are there examples out there of sites that do this particularly well that we should model our capabilities after?&#60;/p&#62;
+&#60;p&#62;Thanks for your input!&#60;br /&#62;
+Jenn
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>jeri.elizabeth@gmail.com on "resources for the theory and math behind text-mining algorithms"</title>
+						<link>http://digitalhumanities.org/answers/topic/resources-for-the-theory-and-math-behind-text-mining-algorithms#post-1836</link>
+			<pubDate>Sat, 29 Dec 2012 23:16:23 +0000</pubDate>
+			<dc:creator>jeri.elizabeth@gmail.com</dc:creator>
+			<guid isPermaLink="false">1836@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I am working on a minor field reading list in digital history and am looking for some recommendations for texts or other resources that deal with the theory and math behind the various algorithms used by digital humanists for text-mining and topic modeling. I have already identified Blei's &#34;Probablistic Topic Models: Surveying a suite of algorithms that offer a solution to managing large document archives&#34; and am looking for more of the same. &#60;/p&#62;
+&#60;p&#62;Thank you!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Tad Suiter on "I think I have a workflow, help me figure out what tools..."</title>
+						<link>http://digitalhumanities.org/answers/topic/i-think-i-have-a-workflow-help-me-figure-out-what-tools-1#post-1704</link>
+			<pubDate>Wed, 20 Jun 2012 20:27:09 +0000</pubDate>
+			<dc:creator>Tad Suiter</dc:creator>
+			<guid isPermaLink="false">1704@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;At the end of THATCamp Prime's &#34;Dork Shorts&#34; this year, my fellow GMU History student Sasha Hoffman made a plea for help figuring out how solve a problem that I have with my dissertation research as well.&#60;/p&#62;
+&#60;p&#62;Both of us are working on comics in historic newspapers-- Sasha's dealing with midcentury political cartoons, and I'm dealing with early 20th century daily comic strips. Both of us are looking for ways to gauge the relationship of the paper's editorial bias in writing with what was in the papers' editorial or news content. &#60;/p&#62;
+&#60;p&#62;Because it intersects with my own research, I've been mulling it over for a while. I think I have an idea about a workflow that might get some good data, but I'm not sure about what tools to use, or how workable the idea has. This is where I'm looking for help from y'all.&#60;/p&#62;
+&#60;p&#62;Essentially, here's what I have come up with:&#60;/p&#62;
+&#60;ol&#62;
+&#60;li&#62;After selecting the stuff you want, collect all the comics, and tag them. Tag them as much as physically and intellectually possible, identifying issues addressed, visual elements, people discussed, news items being referenced-- get as much data as possible.  You don't know that certain visual metaphors or something you're not catching might not rise and fall at different times, so create the richest tagging taxonomy you can.&#60;/li&#62;
+&#60;li&#62;Using the databases that have the relevant newspapers-- assuming they've been digitized-- and scrape out all the relevant OCR'd text, along with data about paper, date, etc.&#60;/li&#62;
+&#60;/ol&#62;
+&#60;p&#62;AND THEN, EITHER...&#60;/p&#62;
+&#60;ul&#62;
+&#60;li&#62;Running some sort of ngram-based data-mining software (MALLET?) look for patterns in the  textual elements. &#60;/li&#62;
+&#60;li&#62;Running some sort of data-mining software, look at the information about the cartoons based on the tags, along with information about cartoonist, date, paper, etc.&#60;/li&#62;
+&#60;li&#62;Using some sort of of data-mining software, compare the outputs of the last two pieces of data mining to see where patterns emerge between the two data sets&#60;/li&#62;
+&#60;/ul&#62;
+&#60;p&#62;OR...&#60;/p&#62;
+&#60;ul&#62;
+&#60;li&#62;Find a piece of data mining software that can handle the two above types of data sets as one data set, resolve the data, and see what you get.&#60;/li&#62;
+&#60;/ul&#62;
+&#60;p&#62;I'm (clearly) very new to text mining, but I'm very interesting to learn it, and if I could do so in the course of my dissertation research, it would only be a bonus.&#60;/p&#62;
+&#60;p&#62;That said, I'm really not sure how well the above would work, how realistic a workflow it is, or what tools I might want to try to use for such an approach. This is where I'm helping you all can give me some advice.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Roger Whitson on "Text Mining and Personality Analysis"</title>
+						<link>http://digitalhumanities.org/answers/topic/text-mining-and-personality-analysis#post-1493</link>
+			<pubDate>Mon, 19 Dec 2011 00:15:21 +0000</pubDate>
+			<dc:creator>Roger Whitson</dc:creator>
+			<guid isPermaLink="false">1493@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hi all, &#60;/p&#62;
+&#60;p&#62;One of our faculty wants to use text-mining to engage in some kind of personality analysis of 19th-century literary characters. Here's what they said about the project: &#60;/p&#62;
+&#60;p&#62;&#34;I am a faculty member in psychology and, along with Professor Reed in English, I am embarking on a project in which we are combining personality theory and fictional characters.  Im not sure what is possible digitally, but we hope to be able to scan fictional texts for a variety of words, phrases, descriptors and the like which will give us clues about the ways in which authors apply various conceptions of personality and theory of mind.&#34;&#60;/p&#62;
+&#60;p&#62;It seems to me this is a pretty simple text-mining project that could possibly be done with either Voyeur or WordSeer. Does anyone have any other suggestions? Thanks!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Matthew Wilkens on "In-copyright ebooks for text analysis?"</title>
+						<link>http://digitalhumanities.org/answers/topic/in-copyright-ebooks-for-text-analysis#post-1441</link>
+			<pubDate>Wed, 09 Nov 2011 05:55:59 +0000</pubDate>
+			<dc:creator>Matthew Wilkens</dc:creator>
+			<guid isPermaLink="false">1441@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Does anyone know of a source for digital editions of contemporary fiction in large quantities (10,000+ volumes, say) that are supplied in a format suitable for text-mining (XML, HTML, plain text, etc.)? Amazon is out due to DRM, as are the typical library providers. Google and Hathi might offer long-term access, but nothing at the moment. Anything on which one can lay ones hands in the very near term?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>donald on "suggested readings: text analysis of historical documents?"</title>
+						<link>http://digitalhumanities.org/answers/topic/seeking-book-on-content-analysis-of-historical-letters#post-1083</link>
+			<pubDate>Sat, 26 Mar 2011 17:43:33 +0000</pubDate>
+			<dc:creator>donald</dc:creator>
+			<guid isPermaLink="false">1083@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hello everybody,&#60;/p&#62;
+&#60;p&#62;I am seeking information on the use of Concordance and Linguistic Inquiry and Word Count software on American Civil War letters available at the Cook Center, Corsicana, Tx. I also would like to explore the Talbot Correspondence project online. Would anybody know of publications addressing content analysis of historical letters?&#60;/p&#62;
+&#60;p&#62;all the best,&#60;/p&#62;
+&#60;p&#62;donald wayne
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>ariel.farrar@gmail.com on "looking for a corpus of literary criticism to text mine"</title>
+						<link>http://digitalhumanities.org/answers/topic/looking-for-a-corpus-of-literary-criticism-to-text-mine#post-74</link>
+			<pubDate>Fri, 17 Sep 2010 19:36:10 +0000</pubDate>
+			<dc:creator>ariel.farrar@gmail.com</dc:creator>
+			<guid isPermaLink="false">74@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I'm looking for a corpus of literary criticism that would allow me to do some text mining. Anyone have any suggestions? I found OTA, but it doesn't seem big enough...&#60;/p&#62;
+&#60;p&#62;I'm not sure I put the right &#34;category&#34; for this question...
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

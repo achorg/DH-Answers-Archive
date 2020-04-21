@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Topic: I need help with transforming images files (tiff2jpg) on a server</title>
+		<link>http://digitalhumanities.org/answers/topic/i-need-help-with-transforming-images-files-tiff2jpg-on-a-server</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Topic: I need help with transforming images files (tiff2jpg) on a server</description>
+		<language>en-US</language>
+		<pubDate>Fri, 04 Oct 2013 22:14:43 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/topic/i-need-help-with-transforming-images-files-tiff2jpg-on-a-server" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>Nick Ruest on "I need help with transforming images files (tiff2jpg) on a server"</title>
+						<link>http://digitalhumanities.org/answers/topic/i-need-help-with-transforming-images-files-tiff2jpg-on-a-server#post-406</link>
+			<pubDate>Wed, 13 Oct 2010 02:01:30 +0000</pubDate>
+			<dc:creator>Nick Ruest</dc:creator>
+			<guid isPermaLink="false">406@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Can you mount the remote directory locally at all? What about getting somebody with shell access to let you run a quick bash script with mogrify and find?&#60;/p&#62;
+&#60;pre&#62;
+#!/bin/bash
+for i in find -iname *tif
+do
+/usr/bin/mogrify -format jpg $i
+done
+&#60;/pre&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Wayne Graham on "I need help with transforming images files (tiff2jpg) on a server"</title>
+						<link>http://digitalhumanities.org/answers/topic/i-need-help-with-transforming-images-files-tiff2jpg-on-a-server#post-179</link>
+			<pubDate>Tue, 28 Sep 2010 02:11:39 +0000</pubDate>
+			<dc:creator>Wayne Graham</dc:creator>
+			<guid isPermaLink="false">179@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Does the server have php or ruby installed? You can process them (assuming ImageMagick is there) with something along these lines:&#60;/p&#62;
+
+
+&#60;div class=&#34;bb_syntax&#34;&#62;&#60;div class=&#34;code&#34;&#62;&#60;pre class=&#34;php&#34; style=&#34;font-family:monospace;&#34;&#62;&#60;span style=&#34;color: #000000; font-weight: bold;&#34;&#62;&#38;lt;?php&#60;/span&#62;
+&#60;span style=&#34;color: #000088;&#34;&#62;$images&#60;/span&#62; &#60;span style=&#34;color: #339933;&#34;&#62;=&#60;/span&#62; &#60;span style=&#34;color: #000000; font-weight: bold;&#34;&#62;new&#60;/span&#62; Imagick&#60;span style=&#34;color: #009900;&#34;&#62;&#38;#40;&#60;/span&#62;&#60;span style=&#34;color: #990000;&#34;&#62;glob&#60;/span&#62;&#60;span style=&#34;color: #009900;&#34;&#62;&#38;#40;&#60;/span&#62;&#60;span style=&#34;color: #0000ff;&#34;&#62;'images/*.tif'&#60;/span&#62;&#60;span style=&#34;color: #009900;&#34;&#62;&#38;#41;&#60;/span&#62;&#60;span style=&#34;color: #009900;&#34;&#62;&#38;#41;&#60;/span&#62;&#60;span style=&#34;color: #339933;&#34;&#62;;&#60;/span&#62;
+&#38;nbsp;
+&#60;span style=&#34;color: #b1b100;&#34;&#62;for&#60;/span&#62;&#60;span style=&#34;color: #009900;&#34;&#62;&#38;#40;&#60;/span&#62;&#60;span style=&#34;color: #000088;&#34;&#62;$images&#60;/span&#62; &#60;span style=&#34;color: #b1b100;&#34;&#62;as&#60;/span&#62; &#60;span style=&#34;color: #000088;&#34;&#62;$image&#60;/span&#62;&#60;span style=&#34;color: #009900;&#34;&#62;&#38;#41;&#60;/span&#62;&#60;span style=&#34;color: #009900;&#34;&#62;&#38;#123;&#60;/span&#62;
+    &#60;span style=&#34;color: #000088;&#34;&#62;$image&#60;/span&#62;&#60;span style=&#34;color: #339933;&#34;&#62;-&#38;gt;&#60;/span&#62;&#60;span style=&#34;color: #004000;&#34;&#62;thumbnailImage&#60;/span&#62;&#60;span style=&#34;color: #009900;&#34;&#62;&#38;#40;&#60;/span&#62;&#60;span style=&#34;color: #cc66cc;&#34;&#62;1024&#60;/span&#62;&#60;span style=&#34;color: #339933;&#34;&#62;,&#60;/span&#62;&#60;span style=&#34;color: #cc66cc;&#34;&#62;0&#60;/span&#62;&#60;span style=&#34;color: #009900;&#34;&#62;&#38;#41;&#60;/span&#62;&#60;span style=&#34;color: #339933;&#34;&#62;;&#60;/span&#62;
+&#60;span style=&#34;color: #009900;&#34;&#62;&#38;#125;&#60;/span&#62;
+&#38;nbsp;
+&#60;span style=&#34;color: #000088;&#34;&#62;$images&#60;/span&#62;&#60;span style=&#34;color: #339933;&#34;&#62;-&#38;gt;&#60;/span&#62;&#60;span style=&#34;color: #004000;&#34;&#62;writeImages&#60;/span&#62;&#60;span style=&#34;color: #009900;&#34;&#62;&#38;#40;&#60;/span&#62;&#60;span style=&#34;color: #009900;&#34;&#62;&#38;#41;&#60;/span&#62;&#60;span style=&#34;color: #339933;&#34;&#62;;&#60;/span&#62;
+&#38;nbsp;
+&#60;span style=&#34;color: #000000; font-weight: bold;&#34;&#62;?&#38;gt;&#60;/span&#62;&#60;/pre&#62;&#60;/div&#62;&#60;/div&#62;
+
+
+</description>
+		</item>
+		<item>
+			 
+				<title>dot.porter on "I need help with transforming images files (tiff2jpg) on a server"</title>
+						<link>http://digitalhumanities.org/answers/topic/i-need-help-with-transforming-images-files-tiff2jpg-on-a-server#post-178</link>
+			<pubDate>Mon, 27 Sep 2010 20:26:07 +0000</pubDate>
+			<dc:creator>dot.porter</dc:creator>
+			<guid isPermaLink="false">178@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @dot.porter's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/i-need-help-with-transforming-images-files-tiff2jpg-on-a-server#post-177&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;And I don't have shell access (not allowed on the account). Dang!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>dot.porter on "I need help with transforming images files (tiff2jpg) on a server"</title>
+						<link>http://digitalhumanities.org/answers/topic/i-need-help-with-transforming-images-files-tiff2jpg-on-a-server#post-177</link>
+			<pubDate>Mon, 27 Sep 2010 20:16:58 +0000</pubDate>
+			<dc:creator>dot.porter</dc:creator>
+			<guid isPermaLink="false">177@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @dot.porter's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/i-need-help-with-transforming-images-files-tiff2jpg-on-a-server#post-176&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;I have just figured, it's a total of approx. 48GB of files. So I definitely don't want to have to download them to process them.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>dot.porter on "I need help with transforming images files (tiff2jpg) on a server"</title>
+						<link>http://digitalhumanities.org/answers/topic/i-need-help-with-transforming-images-files-tiff2jpg-on-a-server#post-176</link>
+			<pubDate>Mon, 27 Sep 2010 20:07:09 +0000</pubDate>
+			<dc:creator>dot.porter</dc:creator>
+			<guid isPermaLink="false">176@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;The kicker is that the tiff files (several hundred divided up amongst a couple dozen directories) are on an FTP and I want to transform them to JPG and then move them to an HTML server without having to download them locally. The HTML and FTP are in the same directory on the main server. I hope this makes sense. Any suggestions?
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; User Favorites: unsworth</title>
+		<link><a href='http://digitalhumanities.org/answers/profile/unsworth'>unsworth</a></link>
+		<description>Digital Humanities Questions &amp; Answers &#187; User Favorites: unsworth</description>
+		<language>en-US</language>
+		<pubDate>Sat, 20 Jul 2013 17:29:45 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/profile/" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>laura.mandell@gmail.com on "Best way to create COinS or other metadata from TEI using XSLT?"</title>
+						<link>http://digitalhumanities.org/answers/topic/best-way-to-create-coins-or-other-metadata-from-tei-using-xslt#post-1494</link>
+			<pubDate>Mon, 19 Dec 2011 19:49:16 +0000</pubDate>
+			<dc:creator>laura.mandell@gmail.com</dc:creator>
+			<guid isPermaLink="false">1494@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @Karin Dalziel's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/best-way-to-create-coins-or-other-metadata-from-tei-using-xslt#post-137&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;Here is what I put in my XSLT param file, from the TEI-provided xslts, in order to generate COINS metadata in HTML pages that have been generated from a TEI P5 master:&#60;/p&#62;
+&#60;p&#62;&#38;lt;!-- COINS Metadata --&#38;gt;&#60;br /&#62;
+	&#38;lt;xd:doc class=&#34;hook&#34;&#38;gt;&#60;br /&#62;
+		&#38;lt;xd:short&#38;gt;for adding COINS metadata&#38;lt;/xd:short&#38;gt;&#60;br /&#62;
+		&#38;lt;xd:detail&#38;gt;coins metadata for the edition generated at &#60;a href=&#34;http://generator.ocoins.info/.&#38;#038;lt;/xd:detail&#38;#038;gt&#34; rel=&#34;nofollow&#34;&#62;http://generator.ocoins.info/.&#38;#038;lt;/xd:detail&#38;#038;gt&#60;/a&#62;;&#60;br /&#62;
+	&#38;lt;/xd:doc&#38;gt;&#60;br /&#62;
+	&#38;lt;!-- Here is what it should look like when in the HTML:	&#38;lt;span&#60;br /&#62;
+		class=&#34;Z3988&#34;&#60;br /&#62;
+		title=&#34;ctx_ver=Z39.88-2004&#38;amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&#38;amp;rfr_id=info%3Asid%2Focoins.info%3Agenerator&#60;br /&#62;
+		&#38;amp;rft.genre=article&#38;amp;rft.atitle=TITLE&#38;amp;rft.title=Poetess+Archive%3A+The+Criticism+Archive&#38;amp;rft.stitle=PACA&#60;br /&#62;
+		&#38;amp;rft.date=2011-01-01&#38;amp;rft.aulast=AUTHORLAST&#38;amp;rft.aufirst=AUTHORFIRST&#38;amp;rft.au=AUTHORFIRST+AUTHORLAST&#38;amp;rft.au=Mary+Waters&#34;&#38;gt;&#60;br /&#62;
+		(Insert Default Text Here)&#60;br /&#62;
+		&#38;lt;/span&#38;gt;&#60;/p&#62;
+&#60;p&#62;	--&#38;gt;&#60;br /&#62;
+	&#38;lt;xsl:template name=&#34;COINS&#34;&#38;gt;&#60;br /&#62;
+		&#38;lt;xsl:variable name=&#34;TITLE&#34;&#38;gt;&#60;br /&#62;
+			&#38;lt;xsl:value-of select=&#34;normalize-space(ancestor-or-self::tei:TEI/tei:teiHeader/tei:fileDesc/tei:sourceDesc/tei:biblStruct/tei:analytic/tei:title)&#34;/&#38;gt;&#60;br /&#62;
+		&#38;lt;/xsl:variable&#38;gt;&#60;br /&#62;
+		&#38;lt;xsl:variable name=&#34;AUTHORLAST&#34;&#38;gt;&#60;br /&#62;
+			&#38;lt;xsl:value-of select=&#34;normalize-space(substring-before(ancestor-or-self::tei:TEI/tei:teiHeader/tei:fileDesc/tei:sourceDesc/tei:biblStruct/tei:analytic/tei:author/tei:name, ','))&#34;/&#38;gt;&#60;br /&#62;
+		&#38;lt;/xsl:variable&#38;gt;&#60;br /&#62;
+		&#38;lt;xsl:variable name=&#34;AUTHORFIRST&#34;&#38;gt;&#60;br /&#62;
+			&#38;lt;xsl:value-of select=&#34;normalize-space(substring-before(substring-after(ancestor-or-self::tei:TEI/tei:teiHeader/tei:fileDesc/tei:sourceDesc/tei:biblStruct/tei:analytic/tei:author/tei:name, ','), ','))&#34;/&#38;gt;&#60;br /&#62;
+		&#38;lt;/xsl:variable&#38;gt;&#60;br /&#62;
+		&#38;lt;xsl:text disable-output-escaping=&#34;yes&#34;&#38;gt;&#38;lt;![CDATA[&#38;lt;span&#60;br /&#62;
+		class=&#34;Z3988&#34;&#60;br /&#62;
+		title=&#34;ctx_ver=Z39.88-2004&#38;amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&#38;amp;rfr_id=info%3Asid%2Focoins.info%3Agenerator&#60;br /&#62;
+		&#38;amp;rft.genre=article&#38;amp;rft.atitle=]]&#38;gt;&#38;lt;/xsl:text&#38;gt;&#38;lt;xsl:value-of select=&#34;translate($TITLE, ' ', '+')&#34;/&#38;gt;&#60;br /&#62;
+		&#38;lt;xsl:text disable-output-escaping=&#34;yes&#34;&#38;gt;&#38;lt;![CDATA[&#38;amp;rft.title=Poetess+Archive%3A+The+Criticism+Archive&#38;amp;rft.stitle=PACA&#60;br /&#62;
+		&#38;amp;rft.date=]]&#38;gt;&#38;lt;/xsl:text&#38;gt;&#38;lt;xsl:value-of select=&#34;translate(normalize-space(ancestor-or-self::tei:TEI/tei:teiHeader/tei:fileDesc/tei:sourceDesc/tei:biblStruct/tei:monogr/tei:imprint/tei:date/@when), ' ', '+')&#34;/&#38;gt;&#60;br /&#62;
+		&#38;lt;xsl:text disable-output-escaping=&#34;yes&#34;&#38;gt;&#38;lt;![CDATA[&#38;amp;rft.aulast=]]&#38;gt;&#38;lt;/xsl:text&#38;gt;&#60;br /&#62;
+		&#38;lt;xsl:value-of select=&#34;translate($AUTHORLAST, ' ', '+')&#34;/&#38;gt;&#60;br /&#62;
+		&#38;lt;xsl:text disable-output-escaping=&#34;yes&#34;&#38;gt;&#38;lt;![CDATA[&#38;amp;rft.aufirst=]]&#38;gt;&#38;lt;/xsl:text&#38;gt;&#60;br /&#62;
+		&#38;lt;xsl:value-of select=&#34;translate($AUTHORFIRST, ' ', '+')&#34;/&#38;gt;&#60;br /&#62;
+		&#38;lt;xsl:text disable-output-escaping=&#34;yes&#34;&#38;gt;&#38;lt;![CDATA[&#38;amp;rft.au=]]&#38;gt;&#38;lt;/xsl:text&#38;gt;&#60;br /&#62;
+		&#38;lt;xsl:value-of select=&#34;concat($AUTHORFIRST, '+', $AUTHORLAST)&#34;/&#38;gt;&#60;br /&#62;
+		&#38;lt;xsl:text disable-output-escaping=&#34;yes&#34;&#38;gt;&#38;lt;![CDATA[&#38;amp;rft.au=Mary+Waters&#34;&#38;gt;    &#38;lt;/span&#38;gt;]]&#38;gt;&#38;lt;/xsl:text&#38;gt;&#60;br /&#62;
+	&#38;lt;/xsl:template&#38;gt;
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>aearhart on "Has anybody written a history of the digital humanities?"</title>
+						<link>http://digitalhumanities.org/answers/topic/has-anybody-written-a-history-of-the-digital-humanities#post-592</link>
+			<pubDate>Tue, 26 Oct 2010 14:26:30 +0000</pubDate>
+			<dc:creator>aearhart</dc:creator>
+			<guid isPermaLink="false">592@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Bethany is correct.  I'm working on a book length project on digital literary studies.  It started out as a broader DH book, but that seemed far too general.  I'm tracing the development through forms--edition, archive--and approaches--content selection and fragmented data analysis like visualization, data mining, mapping, etc.  &#60;/p&#62;
+&#60;p&#62;I do think it is important that we, as a field, begin to collect and analyze our early history.  I've had great conversations with pioneers of the field and still have a number of folks on the list to contact (unsworth!).  I'm hoping that this project will be complete within the next two years.&#60;/p&#62;
+&#60;p&#62;Glad to hear that folks are interested in the questions that the project poses.  You never know....
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Vika Zafrin on "Methods/ideas for teaching hypertext theory"</title>
+						<link>http://digitalhumanities.org/answers/topic/methodsideas-for-teaching-hypertext-theory#post-579</link>
+			<pubDate>Mon, 25 Oct 2010 17:35:55 +0000</pubDate>
+			<dc:creator>Vika Zafrin</dc:creator>
+			<guid isPermaLink="false">579@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @Alice Stratton's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/methodsideas-for-teaching-hypertext-theory#post-556&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;Adding to the reading list @&#60;a href='http://digitalhumanities.org/answers/profile/unsworth'&#62;unsworth&#60;/a&#62; started: Theodor Nelson is useful, particularly his Literary Machines (1963) and &#34;Complex Information Processing: A File Structure for the Complex, the Changing and the Indeterminate&#34; (Proceedings of the 20th National Conference of the Association for Computing Machinery. Cleveland, OH: ACM, 1965.) &#60;/p&#62;
+&#60;p&#62;For an exercise, you might ask your students to think about hypertext as a concept separate from the digital.  One of my favorite graduate school exercises, in a hypertext writing course, was to create a hypertext in the physical world, somewhere on the university campus. That yielded some fantastically creative stuff.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Hugh Cayless on "Hosting Recomendations"</title>
+						<link>http://digitalhumanities.org/answers/topic/hosting-recomendations#post-576</link>
+			<pubDate>Mon, 25 Oct 2010 00:42:41 +0000</pubDate>
+			<dc:creator>Hugh Cayless</dc:creator>
+			<guid isPermaLink="false">576@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @Wayne Graham's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/hosting-recomendations#post-166&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;I've been very pleased with Linode so far.  I think Jetty is the most lightweight servlet container going.  It puts up with a lot of abuse before caving in too.  You get more management options with Tomcat and glassfish.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Bethany Nowviskie on "Has anybody written a history of the digital humanities?"</title>
+						<link>http://digitalhumanities.org/answers/topic/has-anybody-written-a-history-of-the-digital-humanities#post-575</link>
+			<pubDate>Sun, 24 Oct 2010 23:48:05 +0000</pubDate>
+			<dc:creator>Bethany Nowviskie</dc:creator>
+			<guid isPermaLink="false">575@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;a href=&#34;http://web.me.com/aearhart/Earhart/Earhart.html&#34;&#62;Amy Earhart&#60;/a&#62; (&#60;a href=&#34;http://twitter.com/amyeetx&#34;&#62;@amyeetx&#60;/a&#62;) is working on something like this right now. Tentative title: &#60;em&#62;Traces of the Old, Uses of the New:  The Emergence of the Digital Humanities&#60;/em&#62;.  She may be taking a literary/archival angle, though.  At least, those are the kinds of projects and groups she's connected with me about.  &#60;/p&#62;
+&#60;p&#62;She's a DHanswers user! I'll draw her attention to this thread.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Marius on "Is there a list anywhere of all the graduate programs that study DH?"</title>
+						<link>http://digitalhumanities.org/answers/topic/is-there-a-list-anywhere-of-all-the-graduate-programs-that-study-dh#post-573</link>
+			<pubDate>Sun, 24 Oct 2010 09:35:51 +0000</pubDate>
+			<dc:creator>Marius</dc:creator>
+			<guid isPermaLink="false">573@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Finally, thank you all very much for your suggestions and links. I had not expected such a great number of replies!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Marius on "Is there a list anywhere of all the graduate programs that study DH?"</title>
+						<link>http://digitalhumanities.org/answers/topic/is-there-a-list-anywhere-of-all-the-graduate-programs-that-study-dh#post-572</link>
+			<pubDate>Sun, 24 Oct 2010 09:34:22 +0000</pubDate>
+			<dc:creator>Marius</dc:creator>
+			<guid isPermaLink="false">572@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @Ethan Gruber's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/is-there-a-list-anywhere-of-all-the-graduate-programs-that-study-dh#post-553&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;You are right, it is a difficult search. I may have, perhaps, misstated the object of my search. I am in fact looking for a graduate programme of any kind that deals with digital culture/art/literature from a theoretical perspective. I have an undergraduate degree and I thought it would make sense to aim for graduate programmes. It is my understanding that I can apply for either master's programmes or doctoral programmes, but I assumed that it would be easier to be admitted to a master's. &#60;/p&#62;
+&#60;p&#62;I also need funding in order to study abroad, in any form, whether it be a scholarship or tuition waiver or some scheme in which I can work or do research in order to support myself.&#60;/p&#62;
+&#60;p&#62;Perhaps I should have made  myself clearer from the beginning. The sort of research I aim to do is best described in this (soon to be published) text: &#60;a href=&#34;http://mariuslobontiu.ro/2010/09/playing-the-text-a-call-for-theory-in-digital-fiction/&#34; rel=&#34;nofollow&#34;&#62;http://mariuslobontiu.ro/2010/09/playing-the-text-a-call-for-theory-in-digital-fiction/&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;Thank you very much for your help.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Marius on "Is there a list anywhere of all the graduate programs that study DH?"</title>
+						<link>http://digitalhumanities.org/answers/topic/is-there-a-list-anywhere-of-all-the-graduate-programs-that-study-dh#post-571</link>
+			<pubDate>Sun, 24 Oct 2010 09:32:05 +0000</pubDate>
+			<dc:creator>Marius</dc:creator>
+			<guid isPermaLink="false">571@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='http://digitalhumanities.org/answers/profile/melissaterras'&#62;MelissaTerras&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/is-there-a-list-anywhere-of-all-the-graduate-programs-that-study-dh#post-540&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;It is in fact a lifelong dream of mine to study in London. I just assumed that funding options were far more limited than in the US, so I thought it would be more realistic to just apply there. &#60;/p&#62;
+&#60;p&#62;I see that the programme you suggest has quite a comprehensive list of scolarships and international student funding, so I will definitely apply (in spite of the fact that it is not 100% what I was looking for - but it is close enough). I will also start looking for other post-graduate programmes in or around London that deal with digital culture/literature/art. Thank you very much for your suggestion!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Marius on "Is there a list anywhere of all the graduate programs that study DH?"</title>
+						<link>http://digitalhumanities.org/answers/topic/is-there-a-list-anywhere-of-all-the-graduate-programs-that-study-dh#post-570</link>
+			<pubDate>Sun, 24 Oct 2010 09:30:10 +0000</pubDate>
+			<dc:creator>Marius</dc:creator>
+			<guid isPermaLink="false">570@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='http://digitalhumanities.org/answers/profile/unsworth'&#62;unsworth&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/is-there-a-list-anywhere-of-all-the-graduate-programs-that-study-dh#post-539&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;Thank you for your answer. I am in fact looking for a master's in which to study digital art and literature from a theoretical perspective, rather than library and information science. I apologize if my initial question was misleading, and, again, thank you.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Marius on "Is there a list anywhere of all the graduate programs that study DH?"</title>
+						<link>http://digitalhumanities.org/answers/topic/is-there-a-list-anywhere-of-all-the-graduate-programs-that-study-dh#post-569</link>
+			<pubDate>Sun, 24 Oct 2010 09:29:21 +0000</pubDate>
+			<dc:creator>Marius</dc:creator>
+			<guid isPermaLink="false">569@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @Elizabeth Glascock's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/is-there-a-list-anywhere-of-all-the-graduate-programs-that-study-dh#post-508&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;Thank you very much for your suggestion!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Marius on "Is there a list anywhere of all the graduate programs that study DH?"</title>
+						<link>http://digitalhumanities.org/answers/topic/is-there-a-list-anywhere-of-all-the-graduate-programs-that-study-dh#post-568</link>
+			<pubDate>Sun, 24 Oct 2010 09:28:38 +0000</pubDate>
+			<dc:creator>Marius</dc:creator>
+			<guid isPermaLink="false">568@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='http://digitalhumanities.org/answers/profile/amandavisconti'&#62;amandavisconti&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/is-there-a-list-anywhere-of-all-the-graduate-programs-that-study-dh#post-507&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;Thank you very much for your suggestions. I am indeed more interested in studying digital art and fiction. I have been trying the exact approach you mention for quite some time (googling DH and its synonyms) but I haven't found as many programmes as I had hoped. That's why I turned to this forum (and I'm very glad I did!).&#60;/p&#62;
+&#60;p&#62;So far I've been taking the centres listed here ( &#60;a href=&#34;http://digitalhumanities.org/centernet/&#34; rel=&#34;nofollow&#34;&#62;http://digitalhumanities.org/centernet/&#60;/a&#62; ) one by one, hoping to find a post-graduate programme associated with them. It's going slow and I'm not sure if this is the right list to start from. Is there any other list that you might know of, that would be helpful?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Marius on "Is there a list anywhere of all the graduate programs that study DH?"</title>
+						<link>http://digitalhumanities.org/answers/topic/is-there-a-list-anywhere-of-all-the-graduate-programs-that-study-dh#post-567</link>
+			<pubDate>Sun, 24 Oct 2010 09:26:52 +0000</pubDate>
+			<dc:creator>Marius</dc:creator>
+			<guid isPermaLink="false">567@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='http://digitalhumanities.org/answers/profile/amandavisconti'&#62;amandavisconti&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/is-there-a-list-anywhere-of-all-the-graduate-programs-that-study-dh#post-507&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;Thank you very much for your suggestions. I am indeed more interested in studying digital art and fiction. I have been trying the exact approach you mention for quite some time (googling DH and its synonyms) but I haven't found as many programmes as I had hoped. That's why I turned to this forum (and I'm very glad I did!).&#60;/p&#62;
+&#60;p&#62;So far I've been taking the centres listed here ( &#60;a href=&#34;http://digitalhumanities.org/centernet/&#34; rel=&#34;nofollow&#34;&#62;http://digitalhumanities.org/centernet/&#60;/a&#62; ) one by one, hoping to find a post-graduate programme associated with them. It's going slow and I'm not sure if this is the right list to start from. Is there any other list that you might know of, that would be helpful?&#60;/p&#62;
+&#60;p&#62;&#60;em&#62;Replying to @Elizabeth Glascock's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/is-there-a-list-anywhere-of-all-the-graduate-programs-that-study-dh#post-508&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;br /&#62;
+Thank you very much for your suggestion!&#60;/p&#62;
+&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='http://digitalhumanities.org/answers/profile/unsworth'&#62;unsworth&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/is-there-a-list-anywhere-of-all-the-graduate-programs-that-study-dh#post-539&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;br /&#62;
+Thank you for your answer. I am in fact looking for a master's in which to study digital art and literature from a theoretical perspective, rather than library and information science. I apologize if my initial question was misleading, and, again, thank you.&#60;/p&#62;
+&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='http://digitalhumanities.org/answers/profile/melissaterras'&#62;MelissaTerras&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/is-there-a-list-anywhere-of-all-the-graduate-programs-that-study-dh#post-540&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;br /&#62;
+It is in fact a lifelong dream of mine to study in London. I just assumed that funding options were far more limited than in the US, so I thought it would be more realistic to just apply there. I see that the programme you suggest has quite a comprehensive list of scolarships and international student funding, so I will definitely apply. I will also start looking for other post-graduate programmes in or around London that deal with digital culture/literature/art. Thank you very much for your suggestion!&#60;/p&#62;
+&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='http://digitalhumanities.org/answers/profile/katherineharris'&#62;katherineharris&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/is-there-a-list-anywhere-of-all-the-graduate-programs-that-study-dh#post-546&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;br /&#62;
+Thank you very much for the list!&#60;/p&#62;
+&#60;p&#62;&#60;em&#62;Replying to @Ethan Gruber's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/is-there-a-list-anywhere-of-all-the-graduate-programs-that-study-dh#post-553&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;br /&#62;
+You are right, it is a difficult search. I may have, perhaps, misunderstood the object of my search. I am in fact looking for a graduate programme of any kind that deals with digital culture/art/literature from a theoretical perspective. I have an undergraduate degree and I thought it would make sense to aim for graduate programmes. It is my understanding that I can apply for either master's programmes or doctoral programmes, but I assumed that it would be easier to be admitted to a master's. I also need funding in order to study abroad, in any form, whether it be a scholarship or tuition waiver or some scheme in which I can work or do research in order to support myself.&#60;br /&#62;
+Perhaps I should have made  myself clearer from the beginning. The sort of research I aim to do is best described in this (soon to be published) text: &#60;a href=&#34;http://mariuslobontiu.ro/2010/09/playing-the-text-a-call-for-theory-in-digital-fiction/&#34; rel=&#34;nofollow&#34;&#62;http://mariuslobontiu.ro/2010/09/playing-the-text-a-call-for-theory-in-digital-fiction/&#60;/a&#62;&#60;br /&#62;
+Thank you very much for your help.&#60;/p&#62;
+&#60;p&#62;&#60;em&#62;Replying to @Lisa Spiro's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/is-there-a-list-anywhere-of-all-the-graduate-programs-that-study-dh#post-555&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;br /&#62;
+Thank you for the link!&#60;/p&#62;
+&#60;p&#62;And, finally, thank you all very much for your answers. I had not expected such a great number of replies!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Elizabeth Glascock on "Is there a list anywhere of all the graduate programs that study DH?"</title>
+						<link>http://digitalhumanities.org/answers/topic/is-there-a-list-anywhere-of-all-the-graduate-programs-that-study-dh#post-565</link>
+			<pubDate>Sun, 24 Oct 2010 00:40:42 +0000</pubDate>
+			<dc:creator>Elizabeth Glascock</dc:creator>
+			<guid isPermaLink="false">565@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @Ethan Gruber's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/is-there-a-list-anywhere-of-all-the-graduate-programs-that-study-dh#post-553&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;From my discussions with the co-director of the program, it is my understanding that LUC's program is terminal based. The intention is to prepare students to work in careers in DH. &#60;/p&#62;
+&#60;p&#62;That being said, my interest in the program is as a gateway to my PhD in English. My interests are in textual studies, more specifically serial publications in Victorian England. A program such as this gives options either furthering education afterward or getting right into the field.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Stéfan Sinclair on "Has anybody written a history of the digital humanities?"</title>
+						<link>http://digitalhumanities.org/answers/topic/has-anybody-written-a-history-of-the-digital-humanities#post-564</link>
+			<pubDate>Sat, 23 Oct 2010 16:42:39 +0000</pubDate>
+			<dc:creator>Stéfan Sinclair</dc:creator>
+			<guid isPermaLink="false">564@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Eric, I certainly share your interest in historical perspectives on humanities computing. Beyond fairly discipline-specific retrospectives oriented toward published research (the 1991 anniversary addition of CHUM contains several of these), I don't know of much along the lines of what you describe. I sometimes daydream of doing some video interviews with some of the pioneers still with us (Raben, Burrows, Hockey, etc.), but then the realities of my current commitments rudely shake me awake :). Still, I think this is fairly urgent, and it may not even be that time consuming to at least do the interviews, even if the synthetic work is delayed until later. But it's probably best for a historian or ethnographer to lead the work, rather than someone like me with a literary background :).&#60;/p&#62;
+&#60;p&#62;Another person to talk to about this is &#60;a href=&#34;http://www.edwardvanhoutte.org/&#34;&#62;Edward Vanhoutte&#60;/a&#62; who has compiled a lot of materials on humanities computing. I know &#60;a href=&#34;http://staff.cch.kcl.ac.uk/~wmccarty/&#34;&#62;Willard McCarty&#60;/a&#62; has also digitized a ton of early stuff, and &#60;a href=&#34;http://geoffreyrockwell.com/&#34;&#62;Geoffrey Rockwell&#60;/a&#62; has considered more closely some of the early Canadian work.&#60;/p&#62;
+&#60;p&#62;I certainly hope that someone takes this up as a project!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>unsworth on "Methods/ideas for teaching hypertext theory"</title>
+						<link>http://digitalhumanities.org/answers/topic/methodsideas-for-teaching-hypertext-theory#post-563</link>
+			<pubDate>Sat, 23 Oct 2010 05:36:57 +0000</pubDate>
+			<dc:creator>unsworth</dc:creator>
+			<guid isPermaLink="false">563@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @Alice Stratton's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/methodsideas-for-teaching-hypertext-theory#post-556&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;A text that I've found useful in teaching hypertext theory (now fairly venerable, I guess, but still surprisingly useful), is Greg Ulmer's Heuretics (&#60;a href=&#34;http://amzn.to/dwQiR7)&#34; rel=&#34;nofollow&#34;&#62;http://amzn.to/dwQiR7)&#60;/a&#62;.  While we're on vintage texts, I've also always liked Espen Aarseth's Cybertext (&#60;a href=&#34;http://amzn.to/baM8E5)&#34; rel=&#34;nofollow&#34;&#62;http://amzn.to/baM8E5)&#60;/a&#62;.  Two golden oldies...
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

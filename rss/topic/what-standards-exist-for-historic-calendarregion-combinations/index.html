@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Topic: What standards exist for historic calendar/region combinations?</title>
+		<link>http://digitalhumanities.org/answers/topic/what-standards-exist-for-historic-calendarregion-combinations</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Topic: What standards exist for historic calendar/region combinations?</description>
+		<language>en-US</language>
+		<pubDate>Tue, 13 Sep 2016 02:02:07 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/topic/what-standards-exist-for-historic-calendarregion-combinations" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>jlmcdonald@gmail.com on "What standards exist for historic calendar/region combinations?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-standards-exist-for-historic-calendarregion-combinations#post-1865</link>
+			<pubDate>Wed, 23 Jan 2013 18:07:04 +0000</pubDate>
+			<dc:creator>jlmcdonald@gmail.com</dc:creator>
+			<guid isPermaLink="false">1865@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;AFAIK, no standard like this yet exists; various programming languages, for example, just recommend you do the math on your own (lots of modules/recipes for any language of choice, though). Having a standardized lookup table (and perhaps API spec) that could be utilized by 3rd-party libraries seems incredibly useful; obviously every language would have to implement it slightly differently, depending on how their date/time objects act at the lower levels (everything I work with just assumes Gregorian dates for everything, thus leaving a gap of about 10 days in 1582).&#60;/p&#62;
+&#60;p&#62;Of course, it gets more complex the more systems you want to build in; for example, the Jewish calendar, the astronomical calendar, the Mayan calendar ... but seems no more unmangageable than the overwhelmingly complex TZ system existing in the world.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Ben Brumfield on "What standards exist for historic calendar/region combinations?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-standards-exist-for-historic-calendarregion-combinations#post-1864</link>
+			<pubDate>Wed, 23 Jan 2013 17:07:59 +0000</pubDate>
+			<dc:creator>Ben Brumfield</dc:creator>
+			<guid isPermaLink="false">1864@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Many of us are familiar with the &#34;locale&#34; concept used for internationalization -- keys like &#60;code&#62;en_GB&#60;/code&#62; or &#60;code&#62;es_US&#60;/code&#62; used to express the language and country combination needed to generate user-facing messages like &#34;Only £4!&#34; or &#34;Solamente $3.99!&#34;.  &#60;/p&#62;
+&#60;p&#62;I'm looking for something similar that would express, for a given historical country/region, what calendar system was in use at a given time.  The goal is to have enough logic that a date parsing library is capable of resolving &#34;22 Jan 1682&#34; in Scotland to 1682-01-22, but also resolving &#34;22 Jan 1682&#34; in England to 1683-01-01, since Scotland changed from Old Style New Year's Days to New Style in 1600, but England only changed in 1752.&#60;/p&#62;
+&#60;p&#62;I've had no luck with ISO-8601, nor the other technical standards that specify converting everything to proleptic Gregorian without explaining when and where that change should be made.  In fact, the closest listing I've been able to find is the table at &#60;a href=&#34;http://en.wikipedia.org/wiki/Julian_Calendar#New_Year.27s_Day&#34;&#62;on this wikipedia article&#60;/a&#62;.  Are there any such &#34;calendar local&#34; standards?&#60;/p&#62;
+&#60;p&#62;Let me emphasize that I'm attempting a modest approach to representing dates here. On one hand, I'm not trying to obliterate the dates actually written on the source documents by replacing them with a standardized version -- we expect to capture dates as written in a separate field, which will always be accessible to researchers, and will likely be the actual value we present when people use the database.  On the other hand, I'm not trying to force all standardized dates into a proleptic Gregorian system that could be used for cross-calendar comparison.  Rather, we're trying to find a nice, standardized format to be used for searching and sorting records, so that a search for &#34;1682&#34; finds records written with &#34;1682&#34;, and that &#34;December 31 1682&#34; precedes &#34;January 1 1682/3&#34;.&#60;/p&#62;
+&#60;p&#62;Any other resources on dealing with European calendar changes would be welcome.&#60;/p&#62;
+&#60;p&#62;More info on the date parser I'm trying to build can be found &#60;a href=&#34;https://github.com/mojombo/chronic/issues/169&#34;&#62;on this Github issue tracking the feature&#60;/a&#62;.
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

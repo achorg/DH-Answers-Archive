@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Forum: Programming - Recent Posts</title>
+		<link>http://digitalhumanities.org/answers/forum/programming</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Forum: Programming - Recent Posts</description>
+		<language>en-US</language>
+		<pubDate>Sat, 06 Aug 2016 09:30:12 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/forum/programming" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>petris.it@googlemail.com on "How to extract tagged data and text from TEI file?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-to-extract-tagged-data-and-text-from-tei-file#post-2293</link>
+			<pubDate>Sat, 28 Feb 2015 10:12:42 +0000</pubDate>
+			<dc:creator>petris.it@googlemail.com</dc:creator>
+			<guid isPermaLink="false">2293@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;If you have tagged the chapters and if the amount of chapters is not that huge you could query the results for every chapter like this:&#60;/p&#62;
+&#60;p&#62;tag=&#34;%&#34; where tag=&#34;chapter1&#34; boundary&#60;br /&#62;
+this one assumes you have a tag for each chapter&#60;/p&#62;
+&#60;p&#62;tag=&#34;%&#34; where tag=&#34;chapter&#34; property=&#34;number&#34; value=&#34;1&#34; boundary&#60;br /&#62;
+this one assumes you have only one chapter tag and a property that holds the chapter number&#60;/p&#62;
+&#60;p&#62;But you are right, there should be a way of extracting the positions of each tag. You could, as a workaround, extract the KWIC for each tag into its own CSV file, that gives you the positions of each instance that belongs to the tag you selected. If you add a tag column manually you will then be able to merge the contents of the per tag files into one file and get tags with positions.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>aliciapeaker@gmail.com on "How to extract tagged data and text from TEI file?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-to-extract-tagged-data-and-text-from-tei-file#post-2292</link>
+			<pubDate>Fri, 27 Feb 2015 09:38:11 +0000</pubDate>
+			<dc:creator>aliciapeaker@gmail.com</dc:creator>
+			<guid isPermaLink="false">2292@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Wonderful! Thank you all for your replies! I've used CATMA to return the tag frequencies and then exported a CSV file with the compiled results. This gives me everything I need except the location in the text of each tag, which would enable to me to track frequencies by chapter (for which I have a list of CATMA locations). Is there a way I could search CATMA for tags within a set of location ranges to output a set of results for each chapter?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>petris.it@googlemail.com on "How to extract tagged data and text from TEI file?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-to-extract-tagged-data-and-text-from-tei-file#post-2291</link>
+			<pubDate>Fri, 27 Feb 2015 05:47:36 +0000</pubDate>
+			<dc:creator>petris.it@googlemail.com</dc:creator>
+			<guid isPermaLink="false">2291@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;You could simply use the CATMA Analyzer to count and extract the tagged information.&#60;br /&#62;
+Assuming you have loaded text and annotations into the Tagger:&#60;br /&#62;
+Click on &#34;Analyze Document&#34;&#60;br /&#62;
+Type: tag=&#34;%&#34; into the query box and hit &#34;Execute query&#34;&#60;br /&#62;
+Select the tab &#34;Result by markup&#34;&#60;br /&#62;
+You'll see all tags with the frequency counts there.&#60;br /&#62;
+You can also export the results to a CSV file for further processing.&#60;br /&#62;
+So there is no need for painful XML XSLT hacking so far.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Ondine on "How to extract tagged data and text from TEI file?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-to-extract-tagged-data-and-text-from-tei-file#post-2290</link>
+			<pubDate>Thu, 26 Feb 2015 16:55:32 +0000</pubDate>
+			<dc:creator>Ondine</dc:creator>
+			<guid isPermaLink="false">2290@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I can't pretend to be the most knowledgeable person about XML and especially not about querying it for data analysis purposes. But I have used the TEI for markup and delivery a good bit, generally in oXygen and generally with a fairly constrained set of the TEI P5 tags.&#60;/p&#62;
+&#60;p&#62;From that, I can tell you that I rarely encounter anything as complicated as the markup CATMA is giving you. It seems far more complex than XML for most humanities encoding purposes would need to be, esp given that part of the point of XML, and esp TEI, is that it is human readable. Of course, for some of the more complex content analysis goals that some DHers are pursuing with enormous corpa of humanities texts, this kind of markup may be necessary.&#60;/p&#62;
+&#60;p&#62;But based on what I *think* you're trying to do, the complexity here might be unnecessarily mystifying your markup of your content. If you simply need to measure the frequency of the presence of specific tags that appear in the text, based on--I assume--your own criteria for how those tags should be applied, then it may be that a straightforward TEI document in a transparent editor (oXygen would be my choice) would give you far more control.&#60;/p&#62;
+&#60;p&#62;Simply counting the number of uses of a particular tag could be done in oXygen using an XPath query , which you can refine according to attributes, hierarchy, position, etc.&#60;br /&#62;
+The XPath wouldn't generate a new product from your XML, but it would give you results list (plain text) with a count and that shows where all the instances are.&#60;/p&#62;
+&#60;p&#62;If you want a new product, you can use XSLT to generate a new XML document that retains just the elements you want and/or that adds sequential numbers to them, again based on attributes, hierarchy, position, etc., as a way to select exactly what you want. &#60;/p&#62;
+&#60;p&#62;The CATMA document looks so complicated that I would expect it to be very difficult to parse with XSLT, but parsing a more straightforward TEI P5 document for a count of specific tags shouldn't be so difficult.&#60;/p&#62;
+&#60;p&#62;All that said, I don't use either tool often enough--and haven't recently enough--to be able to offer concrete direction. For that, I recommend going on the TEI discussion list, which you can sign up for here: &#60;a href=&#34;http://www.tei-c.org/Support/#tei-l&#34; rel=&#34;nofollow&#34;&#62;http://www.tei-c.org/Support/#tei-l&#60;/a&#62;
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Ethan Gruber on "How to extract tagged data and text from TEI file?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-to-extract-tagged-data-and-text-from-tei-file#post-2287</link>
+			<pubDate>Thu, 26 Feb 2015 13:54:52 +0000</pubDate>
+			<dc:creator>Ethan Gruber</dc:creator>
+			<guid isPermaLink="false">2287@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;To clarify, is there also an fsDecl for the &#34;non-living&#34; category which contains fDecls for &#34;weather&#34; and other tags? It's doable in XSLT. I don't think you need to count the segs in the XSLT because your TEI (presumably) contains an &#38;lt;fs&#38;gt; for every annotation you've created in your body.&#60;/p&#62;
+&#60;p&#62;You'll need to iterate through every fsDecl and perform a count of every fs that occurs elsewhere in the document that as a @type that is equal to the @xml:id of the fsDecl. You'd have to tweak this somewhat to include counts of the total tagset and to initiate the counts per chapter instead of overall. Without seeing more, it's difficult to construct XPath to handle the document chapter by chapter. See this gist for a basic bit of XSLT: &#60;a href=&#34;https://gist.github.com/ewg118/6b0b99d953ae1f4d8eaf&#34; rel=&#34;nofollow&#34;&#62;https://gist.github.com/ewg118/6b0b99d953ae1f4d8eaf&#60;/a&#62;
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>aliciapeaker@gmail.com on "How to extract tagged data and text from TEI file?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-to-extract-tagged-data-and-text-from-tei-file#post-2286</link>
+			<pubDate>Thu, 26 Feb 2015 12:56:54 +0000</pubDate>
+			<dc:creator>aliciapeaker@gmail.com</dc:creator>
+			<guid isPermaLink="false">2286@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I’ve been using CATMA (&#60;a href=&#34;http://www.catma.de/&#34; rel=&#34;nofollow&#34;&#62;http://www.catma.de/&#60;/a&#62;) to markup a text with some analytical tags I’ve created. I then exported the file in TEI, and I’m now trying to extract the data I’ve marked up in order to measure tag frequencies, but am finding it quite difficult. &#60;/p&#62;
+&#60;p&#62;Rather than tagging text with the labels I’ve created, CATMA has established a somewhat complicated (though likely necessary) system of identifiers. So, for example, I’ve tagged the word “clouds” in my text with the tag “weather,” which is a child of the tagset “non-living.” &#60;/p&#62;
+&#60;p&#62;CATMA represents the tag in the text like this:&#60;br /&#62;
+&#38;lt;text&#38;gt;&#60;br /&#62;
+     &#38;lt;body&#38;gt;&#60;br /&#62;
+          &#38;lt;ab type=“catma”&#38;gt;&#60;br /&#62;
+Small feckless &#38;lt;seg ana=&#34;#CATMA_0036983F-4D37-48C2-8BC7-5846A8364D26&#34;&#38;gt;clouds&#38;lt;/seg&#38;gt; were hurried across the vast untroubled sky...&#60;br /&#62;
+          &#38;lt;/ab&#38;gt;&#60;br /&#62;
+     &#38;lt;/body&#38;gt;&#60;br /&#62;
+&#38;lt;/text&#38;gt;&#60;/p&#62;
+&#60;p&#62;The identifier then points to this feature statement after the body of the text:&#60;/p&#62;
+&#60;p&#62;&#38;lt;text&#38;gt;&#60;br /&#62;
+     &#38;lt;body&#38;gt;&#60;br /&#62;
+     &#38;lt;/body&#38;gt;&#60;br /&#62;
+          &#38;lt;fs xml:id=&#34;CATMA_0036983F-4D37-48C2-8BC7-5846A8364D26&#34; type=&#34;CATMA_3CDE1FE4-CA5D-4460-9BFF-739537D753DE&#34;&#38;gt;&#60;br /&#62;
+            &#38;lt;f name=&#34;catma_displaycolor&#34;&#38;gt;&#60;br /&#62;
+                &#38;lt;string&#38;gt;-16710765&#38;lt;/string&#38;gt;&#60;br /&#62;
+            &#38;lt;/f&#38;gt;&#60;br /&#62;
+            &#38;lt;f name=&#34;catma_markupauthor&#34;&#38;gt;&#60;br /&#62;
+                &#38;lt;string&#38;gt;name@email&#38;lt;/string&#38;gt;&#60;br /&#62;
+            &#38;lt;/f&#38;gt;&#60;br /&#62;
+        &#38;lt;/fs&#38;gt;&#60;br /&#62;
+&#38;lt;/text&#38;gt;&#60;/p&#62;
+&#60;p&#62;The id for the type of the fs then points back up to the feature statement declaration in the header:&#60;/p&#62;
+&#60;p&#62;&#38;lt;teiHeader&#38;gt;&#60;br /&#62;
+     &#38;lt;encodingDesc&#38;gt;&#60;br /&#62;
+          &#38;lt;fsDecl xml:id=&#34;CATMA_3CDE1FE4-CA5D-4460-9BFF-739537D753DE&#34; n=&#34;2014-12-16T13:30:36.000+0000&#34; type=&#34;CATMA_3CDE1FE4-CA5D-4460-9BFF-739537D753DE&#34;&#38;gt;&#60;br /&#62;
+                    &#38;lt;fsDescr&#38;gt;Weather&#38;lt;/fsDescr&#38;gt;&#60;br /&#62;
+                    &#38;lt;fDecl xml:id=&#34;CATMA_699BAC76-8D15-408E-A30A-984849115A71&#34; name=&#34;catma_displaycolor&#34;&#38;gt;&#60;br /&#62;
+                        &#38;lt;vRange&#38;gt;&#60;br /&#62;
+                            &#38;lt;vColl&#38;gt;&#60;br /&#62;
+                                &#38;lt;string&#38;gt;-16710765&#38;lt;/string&#38;gt;&#60;br /&#62;
+                            &#38;lt;/vColl&#38;gt;&#60;br /&#62;
+                        &#38;lt;/vRange&#38;gt;&#60;br /&#62;
+                    &#38;lt;/fDecl&#38;gt;&#60;br /&#62;
+                    &#38;lt;fDecl xml:id=&#34;CATMA_8653855B-B611-48E8-AE9D-00E0160A37DB&#34; name=&#34;catma_markupauthor&#34;&#38;gt;&#60;br /&#62;
+                        &#38;lt;vRange&#38;gt;&#60;br /&#62;
+                            &#38;lt;vColl&#38;gt;&#60;br /&#62;
+                                  &#38;lt;string&#38;gt;name@email&#38;lt;/string&#38;gt;&#60;br /&#62;
+                            &#38;lt;/vColl&#38;gt;&#60;br /&#62;
+                        &#38;lt;/vRange&#38;gt;&#60;br /&#62;
+                    &#38;lt;/fDecl&#38;gt;&#60;br /&#62;
+                &#38;lt;/fsDecl&#38;gt;&#60;br /&#62;
+     &#38;lt;/encodingDesc&#38;gt;&#60;br /&#62;
+&#38;lt;/teiHeader&#38;gt; &#60;/p&#62;
+&#60;p&#62;I need to extract the text and data, perhaps in a csv file (or other output format, if it’s easier), into something that lists the tagged text (e.g. “clouds”) in one column, the first tag applied to it in the next column (e.g. &#34;weather&#34;), and the tagset or category to which that tag belongs in the next (e.g. &#34;non-living). &#60;/p&#62;
+&#60;p&#62;Or perhaps there’s a better way—really, what I’d like to be able to do is get the frequencies of each tag &#38;amp; tagset for each chapter. If there’s an easier way to mark up the text in TEI that would better allow for what I need, I’m open to re-encoding manually.&#60;/p&#62;
+&#60;p&#62;I’ve also tried playing around a bit with some XSLT and a Python script (&#60;a href=&#34;http://www.rdegges.com/quickly-extract-xml-data-with-python/&#34; rel=&#34;nofollow&#34;&#62;http://www.rdegges.com/quickly-extract-xml-data-with-python/&#60;/a&#62;) but with very little experience with either, I find myself quickly out of my depths. Open to suggestions—and thanks in advance for your help!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Kevin Hawkins on "finding a programmer for a digital edition"</title>
+						<link>http://digitalhumanities.org/answers/topic/finding-a-programmer-for-a-digital-edition#post-2271</link>
+			<pubDate>Fri, 09 Jan 2015 21:29:52 +0000</pubDate>
+			<dc:creator>Kevin Hawkins</dc:creator>
+			<guid isPermaLink="false">2271@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;You might search the profiles of people who've listed themselves at &#60;a href=&#34;http://dhcommons.org/collaborators&#34; rel=&#34;nofollow&#34;&#62;http://dhcommons.org/collaborators&#60;/a&#62; .
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>amgibson on "finding a programmer for a digital edition"</title>
+						<link>http://digitalhumanities.org/answers/topic/finding-a-programmer-for-a-digital-edition#post-2270</link>
+			<pubDate>Fri, 09 Jan 2015 18:16:16 +0000</pubDate>
+			<dc:creator>amgibson</dc:creator>
+			<guid isPermaLink="false">2270@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hi all,&#60;/p&#62;
+&#60;p&#62;I am in search of some assistance from a programmer who can help to design an interface for the Digital Dickens Working Notes Project, a digital edition of Charles Dickens's working notes for his novels that aims to highlight the process of Dickens's serial novel form (more info available at &#60;a href=&#34;http://dickensnotes.com)&#34; rel=&#34;nofollow&#34;&#62;http://dickensnotes.com)&#60;/a&#62;.  My institution has no digital humanities center or support, nor do we have graduate students in computer science, so I need to search elsewhere for programming assistance. Any advice about how to go about finding a programmer who might be able to help with this project would be much appreciated.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>agrahamt@gmail.com on "How might DH take advantage of &#34;Heads Up Displays&#34; (i.e. Google Glass)?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-might-dh-take-advantage-of-heads-up-displays-ie-google-glass#post-2017</link>
+			<pubDate>Tue, 04 Jun 2013 14:01:15 +0000</pubDate>
+			<dc:creator>agrahamt@gmail.com</dc:creator>
+			<guid isPermaLink="false">2017@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Seems to me Google Glass Apps will build upon the &#34;Augmented Reality&#34; tools that people have been tinkering with on smart phones for a few years now.  This is often used to augment trips to cities or museums.  Here's an iPhone app for historical Edinburgh and a list to virtual cities projects collected by a UNC class.&#60;br /&#62;
+I'm going to a wedding in Scotland this month, will have to try it out and report!&#60;br /&#62;
+ - Andrew&#60;br /&#62;
+&#60;a href=&#34;http://www.walkingthroughtime.co.uk/&#34; rel=&#34;nofollow&#34;&#62;http://www.walkingthroughtime.co.uk/&#60;/a&#62;&#60;br /&#62;
+&#34;A JISC funded iPhone App that lets visitors to Edinburgh walk over historical maps. The maps are provided by Landmark Information Group and the National Library of Scotland. The software was developed by Edinburgh College of Art, University of Edinburgh. Historical tours were provided with the kind assistance of Edinburgh World Heritage and Margaret Stewart.&#34;&#60;/p&#62;
+&#60;p&#62;Virtual Cities projects - &#60;a href=&#34;http://virtualcities.web.unc.edu/projects/&#34; rel=&#34;nofollow&#34;&#62;http://virtualcities.web.unc.edu/projects/&#60;/a&#62;&#60;br /&#62;
+&#34;The following list is a working list of “Virtual Cities” projects. This projects and sites on this list range from extensive academic and library projects to one-off journalistic data visualization. The list is long but far from exhaustive–so please feel free to comment with additional sites!&#34;
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>jlmcdonald@gmail.com on "How might DH take advantage of &#34;Heads Up Displays&#34; (i.e. Google Glass)?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-might-dh-take-advantage-of-heads-up-displays-ie-google-glass#post-1966</link>
+			<pubDate>Mon, 08 Apr 2013 15:21:50 +0000</pubDate>
+			<dc:creator>jlmcdonald@gmail.com</dc:creator>
+			<guid isPermaLink="false">1966@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Greetings all,&#60;/p&#62;
+&#60;p&#62;I've been chosen to participate in Google's beta rollout of their heads up display product Google Glass, and am curious to hear some interesting ideas as to how such technologies might be leveraged to do interesting things in the Digital Humanities (or, in fact, in the Humanities in general). I do have some ideas for what sorts of things might be useful to start building (as does my institution, where foreign language learning is a major educational focus), but I'd be remiss if I didn't pick the brains of people far more creative than me.&#60;/p&#62;
+&#60;p&#62;1) What kinds of apps might a heads up display be best suited for when it comes to education in the Humanities (especially literature, history, and culture)?&#60;/p&#62;
+&#60;p&#62;2) What kinds of research questions might such a device be able to raise?&#60;/p&#62;
+&#60;p&#62;3) The technology behind Google Glass is what they call a Mirror API -- it is based on working with open data APIs and server-side apps that sync with Google's services to send data back and forth to the hardware. For example, one app that's already developed is from the New York Times, that sends various news alerts to glass wearers subscribing to their feeds. Things like weather, anything from social media, etc. are obvious apps that will undoubtedly appear quite quickly, but I'm interested in what kinds of open APIs exist out in the DH world (for raw data, data analysis, etc.) that might be a good fit for the types of interactions that Google Glass offers? What types of data out in the DH world might be in need of building and prepping to make them available to apps like Glass might be fit for?&#60;/p&#62;
+&#60;p&#62;Also, if anyone is interested (especially those that tend more towards the programming/tools development arena of DH) in being part of some DH projects that use Google Glass, please feel free to contact me off-list.&#60;/p&#62;
+&#60;p&#62;Many, many thanks!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>acrymble on "What do you want to learn from the Programming Historian?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-do-you-want-to-learn-from-the-programming-historian#post-1803</link>
+			<pubDate>Thu, 29 Nov 2012 06:46:38 +0000</pubDate>
+			<dc:creator>acrymble</dc:creator>
+			<guid isPermaLink="false">1803@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Thanks for these suggestions (and we welcome more!).&#60;/p&#62;
+&#60;p&#62;I'd like to invite anyone who would like to contribute lessons on these or any other topics to contact me (adam.crymble@gmail.com). We do write lessons, but we also encourage others to take the opportunity to share what they know or what they'd like to know. Nothing teaches you about a new coding principle faster than having to teach someone else.&#60;/p&#62;
+&#60;p&#62;We're happy to guide you through the learning process and be as hands-on as you need.&#60;/p&#62;
+&#60;p&#62;Adam
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>cforster on "What do you want to learn from the Programming Historian?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-do-you-want-to-learn-from-the-programming-historian#post-1801</link>
+			<pubDate>Wed, 28 Nov 2012 00:03:46 +0000</pubDate>
+			<dc:creator>cforster</dc:creator>
+			<guid isPermaLink="false">1801@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;As a big fan of the Programming Historian, I'll echo most of what's been said. I know that I have at times struggled through working with XML. Andrew's suggestion about a discussion of objects makes a lot of sense to me; largely I'd be interested in seeing as much someone's judgement about where building a class makes sense and when it's overkill. (I have some distant memory of building a class POEM which would inherit LITERARY_TEXT and then rapidly suspecting that I was nearing madness). &#60;/p&#62;
+&#60;p&#62;Topic modeling seems like the hot thing and I appreciated the first Topic Modeling tutorial. I'd love to see a second tutorial on topic modeling (right now I'm trying to look into charting changes in topics over time...)&#60;/p&#62;
+&#60;p&#62;Does anyone do visualization with Python? I have always turned to Processing when I was going to try to generate images...
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Andrew Berger on "What do you want to learn from the Programming Historian?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-do-you-want-to-learn-from-the-programming-historian#post-1799</link>
+			<pubDate>Tue, 27 Nov 2012 17:27:27 +0000</pubDate>
+			<dc:creator>Andrew Berger</dc:creator>
+			<guid isPermaLink="false">1799@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I've been very impressed with the Programming Historian; I'm now through all of the tutorials except the one on topic modeling. I agree with the suggestions above, particularly on parsing xml and using object-oriented techniques. &#60;/p&#62;
+&#60;p&#62;A couple of additional suggestions:&#60;/p&#62;
+&#60;p&#62;1. A tutorial on using web services/APIs.&#60;/p&#62;
+&#60;p&#62;2. Advice on how to handle special characters. I don't know if this would require another tutorial (on character encoding?) or if it would be better to incorporate it into the existing ones. Searching around, there seem to be various methods for dealing with this and I'd find it helpful to get a more general idea of what's going on than the (very helpful, but brief) code snippets I've found in places like Stack Overflow.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>cljim22@gmail.com on "What do you want to learn from the Programming Historian?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-do-you-want-to-learn-from-the-programming-historian#post-1795</link>
+			<pubDate>Fri, 23 Nov 2012 16:44:30 +0000</pubDate>
+			<dc:creator>cljim22@gmail.com</dc:creator>
+			<guid isPermaLink="false">1795@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I agree with Andrew that the Programming History is great. I could use some help with working with XML. I wrote a program to download all of the UK Hansard (Parliamentary Debates) and I would like to figure out how to parse them better. I can simply strip all of the tags out by adapting earlier lessons and create large text files, but it would be better if I could extract some of the metadata in the XML (particularly the dates). As XML seems like a common database format for digital humanities content, a few basic lessons on working with XML and Python would be a big help.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Andrew Goldstone on "What do you want to learn from the Programming Historian?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-do-you-want-to-learn-from-the-programming-historian#post-1794</link>
+			<pubDate>Wed, 21 Nov 2012 13:04:14 +0000</pubDate>
+			<dc:creator>Andrew Goldstone</dc:creator>
+			<guid isPermaLink="false">1794@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Programming Historian is fantastic. Definitely helpful to this non-historian humanist.&#60;/p&#62;
+&#60;p&#62;I'd love to have lessons that follow on &#60;a href=&#34;http://programminghistorian.org/lessons/computing-frequencies&#34;&#62;Computing Frequencies&#60;/a&#62;. Once you have made the word-count list, what are some of the elementary things to do next? How do you normalize the counts reasonably? What is this tf-idf I keep trying to read about on wikipedia? I am thinking that the lesson could show how to do a little math over a big list of data points, and perhaps point out a module or two to import to help with this (maybe installing and importing modules is a lesson in itself).&#60;/p&#62;
+&#60;p&#62;Another, more programming-centric idea would be to show a little bit more how python's object-oriented features work. Is there a good application for some of its abstraction features for humanists? E.g.: I have a big csv file with 11 columns and a whole lot of rows of text data about some documents. How I get that into a suitable object in python?&#60;/p&#62;
+&#60;p&#62;Possibly this could go along with: a lesson on python's database connections.&#60;/p&#62;
+&#60;p&#62;Apologies if these are too random or too specialized or otherwise silly.
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

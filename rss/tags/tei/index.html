@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Tag: TEI - Recent Posts</title>
+		<link>http://digitalhumanities.org/answers/tags/tei</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Tag: TEI - Recent Posts</description>
+		<language>en-US</language>
+		<pubDate>Wed, 20 Apr 2016 20:36:47 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/tags/tei" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>Stéfan Sinclair on "TEI in Oxygen Author (problem with tables’ labels in XSL-FO)"</title>
+						<link>http://digitalhumanities.org/answers/topic/tei-in-oxygen-author-problem-with-tables%e2%80%99-labels-in-xsl-fo-1#post-2360</link>
+			<pubDate>Thu, 26 Nov 2015 14:29:44 +0000</pubDate>
+			<dc:creator>Stéfan Sinclair</dc:creator>
+			<guid isPermaLink="false">2360@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Could you make available the relevant files, perhaps as &#60;a href=&#34;https://gist.github.com/&#34;&#62;gists&#60;/a&#62;?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Welblaud on "TEI in Oxygen Author (problem with tables’ labels in XSL-FO)"</title>
+						<link>http://digitalhumanities.org/answers/topic/tei-in-oxygen-author-problem-with-tables%e2%80%99-labels-in-xsl-fo-1#post-2359</link>
+			<pubDate>Thu, 26 Nov 2015 04:30:49 +0000</pubDate>
+			<dc:creator>Welblaud</dc:creator>
+			<guid isPermaLink="false">2359@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Dear community,&#60;/p&#62;
+&#60;p&#62;I am intensively testing exports to PDF from TEI documents and can’t figure where could be the problem. The document is always fully valid, CSS rendition (default) work properly. However, in the result there is always missing the label, which is always coded as table’s head.&#60;/p&#62;
+&#60;p&#62;&#60;code&#62;&#60;br /&#62;
+  &#38;lt;table rendition=&#34;simple:frame&#34;&#38;gt;&#60;br /&#62;
+    &#38;lt;head&#38;gt;The head!&#38;lt;/head&#38;gt;&#60;br /&#62;
+&#60;/code&#62;&#60;/p&#62;
+&#60;p&#62;I have noticed it is really important to test several types of notation when testing outputs via XSLT (e.g. footnotes’ rendition is rather an adventure!) but here I tried almost everything and nothing helps. It seems the &#60;code&#62;tei:head&#60;/code&#62; part from XSL templates is not passed into the final output. In XeLaTeX it worked well.&#60;/p&#62;
+&#60;p&#62;Is there something I am omitting in the code and what Oxygen needs for proper rendition? (like rend=&#34;header&#34; or so?)&#60;/p&#62;
+&#60;p&#62;Any help more than welcome!&#60;/p&#62;
+&#60;p&#62;Honza Hejzl
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>petris.it@googlemail.com on "How to extract tagged data and text from TEI file?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-to-extract-tagged-data-and-text-from-tei-file#post-2293</link>
+			<pubDate>Sat, 28 Feb 2015 10:12:42 +0000</pubDate>
+			<dc:creator>petris.it@googlemail.com</dc:creator>
+			<guid isPermaLink="false">2293@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;If you have tagged the chapters and if the amount of chapters is not that huge you could query the results for every chapter like this:&#60;/p&#62;
+&#60;p&#62;tag=&#34;%&#34; where tag=&#34;chapter1&#34; boundary&#60;br /&#62;
+this one assumes you have a tag for each chapter&#60;/p&#62;
+&#60;p&#62;tag=&#34;%&#34; where tag=&#34;chapter&#34; property=&#34;number&#34; value=&#34;1&#34; boundary&#60;br /&#62;
+this one assumes you have only one chapter tag and a property that holds the chapter number&#60;/p&#62;
+&#60;p&#62;But you are right, there should be a way of extracting the positions of each tag. You could, as a workaround, extract the KWIC for each tag into its own CSV file, that gives you the positions of each instance that belongs to the tag you selected. If you add a tag column manually you will then be able to merge the contents of the per tag files into one file and get tags with positions.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>aliciapeaker@gmail.com on "How to extract tagged data and text from TEI file?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-to-extract-tagged-data-and-text-from-tei-file#post-2292</link>
+			<pubDate>Fri, 27 Feb 2015 09:38:11 +0000</pubDate>
+			<dc:creator>aliciapeaker@gmail.com</dc:creator>
+			<guid isPermaLink="false">2292@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Wonderful! Thank you all for your replies! I've used CATMA to return the tag frequencies and then exported a CSV file with the compiled results. This gives me everything I need except the location in the text of each tag, which would enable to me to track frequencies by chapter (for which I have a list of CATMA locations). Is there a way I could search CATMA for tags within a set of location ranges to output a set of results for each chapter?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>petris.it@googlemail.com on "How to extract tagged data and text from TEI file?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-to-extract-tagged-data-and-text-from-tei-file#post-2291</link>
+			<pubDate>Fri, 27 Feb 2015 05:47:36 +0000</pubDate>
+			<dc:creator>petris.it@googlemail.com</dc:creator>
+			<guid isPermaLink="false">2291@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;You could simply use the CATMA Analyzer to count and extract the tagged information.&#60;br /&#62;
+Assuming you have loaded text and annotations into the Tagger:&#60;br /&#62;
+Click on &#34;Analyze Document&#34;&#60;br /&#62;
+Type: tag=&#34;%&#34; into the query box and hit &#34;Execute query&#34;&#60;br /&#62;
+Select the tab &#34;Result by markup&#34;&#60;br /&#62;
+You'll see all tags with the frequency counts there.&#60;br /&#62;
+You can also export the results to a CSV file for further processing.&#60;br /&#62;
+So there is no need for painful XML XSLT hacking so far.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Ondine on "How to extract tagged data and text from TEI file?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-to-extract-tagged-data-and-text-from-tei-file#post-2290</link>
+			<pubDate>Thu, 26 Feb 2015 16:55:32 +0000</pubDate>
+			<dc:creator>Ondine</dc:creator>
+			<guid isPermaLink="false">2290@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I can't pretend to be the most knowledgeable person about XML and especially not about querying it for data analysis purposes. But I have used the TEI for markup and delivery a good bit, generally in oXygen and generally with a fairly constrained set of the TEI P5 tags.&#60;/p&#62;
+&#60;p&#62;From that, I can tell you that I rarely encounter anything as complicated as the markup CATMA is giving you. It seems far more complex than XML for most humanities encoding purposes would need to be, esp given that part of the point of XML, and esp TEI, is that it is human readable. Of course, for some of the more complex content analysis goals that some DHers are pursuing with enormous corpa of humanities texts, this kind of markup may be necessary.&#60;/p&#62;
+&#60;p&#62;But based on what I *think* you're trying to do, the complexity here might be unnecessarily mystifying your markup of your content. If you simply need to measure the frequency of the presence of specific tags that appear in the text, based on--I assume--your own criteria for how those tags should be applied, then it may be that a straightforward TEI document in a transparent editor (oXygen would be my choice) would give you far more control.&#60;/p&#62;
+&#60;p&#62;Simply counting the number of uses of a particular tag could be done in oXygen using an XPath query , which you can refine according to attributes, hierarchy, position, etc.&#60;br /&#62;
+The XPath wouldn't generate a new product from your XML, but it would give you results list (plain text) with a count and that shows where all the instances are.&#60;/p&#62;
+&#60;p&#62;If you want a new product, you can use XSLT to generate a new XML document that retains just the elements you want and/or that adds sequential numbers to them, again based on attributes, hierarchy, position, etc., as a way to select exactly what you want. &#60;/p&#62;
+&#60;p&#62;The CATMA document looks so complicated that I would expect it to be very difficult to parse with XSLT, but parsing a more straightforward TEI P5 document for a count of specific tags shouldn't be so difficult.&#60;/p&#62;
+&#60;p&#62;All that said, I don't use either tool often enough--and haven't recently enough--to be able to offer concrete direction. For that, I recommend going on the TEI discussion list, which you can sign up for here: &#60;a href=&#34;http://www.tei-c.org/Support/#tei-l&#34; rel=&#34;nofollow&#34;&#62;http://www.tei-c.org/Support/#tei-l&#60;/a&#62;
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Ethan Gruber on "How to extract tagged data and text from TEI file?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-to-extract-tagged-data-and-text-from-tei-file#post-2287</link>
+			<pubDate>Thu, 26 Feb 2015 13:54:52 +0000</pubDate>
+			<dc:creator>Ethan Gruber</dc:creator>
+			<guid isPermaLink="false">2287@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;To clarify, is there also an fsDecl for the &#34;non-living&#34; category which contains fDecls for &#34;weather&#34; and other tags? It's doable in XSLT. I don't think you need to count the segs in the XSLT because your TEI (presumably) contains an &#38;lt;fs&#38;gt; for every annotation you've created in your body.&#60;/p&#62;
+&#60;p&#62;You'll need to iterate through every fsDecl and perform a count of every fs that occurs elsewhere in the document that as a @type that is equal to the @xml:id of the fsDecl. You'd have to tweak this somewhat to include counts of the total tagset and to initiate the counts per chapter instead of overall. Without seeing more, it's difficult to construct XPath to handle the document chapter by chapter. See this gist for a basic bit of XSLT: &#60;a href=&#34;https://gist.github.com/ewg118/6b0b99d953ae1f4d8eaf&#34; rel=&#34;nofollow&#34;&#62;https://gist.github.com/ewg118/6b0b99d953ae1f4d8eaf&#60;/a&#62;
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>aliciapeaker@gmail.com on "How to extract tagged data and text from TEI file?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-to-extract-tagged-data-and-text-from-tei-file#post-2286</link>
+			<pubDate>Thu, 26 Feb 2015 12:56:54 +0000</pubDate>
+			<dc:creator>aliciapeaker@gmail.com</dc:creator>
+			<guid isPermaLink="false">2286@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I’ve been using CATMA (&#60;a href=&#34;http://www.catma.de/&#34; rel=&#34;nofollow&#34;&#62;http://www.catma.de/&#60;/a&#62;) to markup a text with some analytical tags I’ve created. I then exported the file in TEI, and I’m now trying to extract the data I’ve marked up in order to measure tag frequencies, but am finding it quite difficult. &#60;/p&#62;
+&#60;p&#62;Rather than tagging text with the labels I’ve created, CATMA has established a somewhat complicated (though likely necessary) system of identifiers. So, for example, I’ve tagged the word “clouds” in my text with the tag “weather,” which is a child of the tagset “non-living.” &#60;/p&#62;
+&#60;p&#62;CATMA represents the tag in the text like this:&#60;br /&#62;
+&#38;lt;text&#38;gt;&#60;br /&#62;
+     &#38;lt;body&#38;gt;&#60;br /&#62;
+          &#38;lt;ab type=“catma”&#38;gt;&#60;br /&#62;
+Small feckless &#38;lt;seg ana=&#34;#CATMA_0036983F-4D37-48C2-8BC7-5846A8364D26&#34;&#38;gt;clouds&#38;lt;/seg&#38;gt; were hurried across the vast untroubled sky...&#60;br /&#62;
+          &#38;lt;/ab&#38;gt;&#60;br /&#62;
+     &#38;lt;/body&#38;gt;&#60;br /&#62;
+&#38;lt;/text&#38;gt;&#60;/p&#62;
+&#60;p&#62;The identifier then points to this feature statement after the body of the text:&#60;/p&#62;
+&#60;p&#62;&#38;lt;text&#38;gt;&#60;br /&#62;
+     &#38;lt;body&#38;gt;&#60;br /&#62;
+     &#38;lt;/body&#38;gt;&#60;br /&#62;
+          &#38;lt;fs xml:id=&#34;CATMA_0036983F-4D37-48C2-8BC7-5846A8364D26&#34; type=&#34;CATMA_3CDE1FE4-CA5D-4460-9BFF-739537D753DE&#34;&#38;gt;&#60;br /&#62;
+            &#38;lt;f name=&#34;catma_displaycolor&#34;&#38;gt;&#60;br /&#62;
+                &#38;lt;string&#38;gt;-16710765&#38;lt;/string&#38;gt;&#60;br /&#62;
+            &#38;lt;/f&#38;gt;&#60;br /&#62;
+            &#38;lt;f name=&#34;catma_markupauthor&#34;&#38;gt;&#60;br /&#62;
+                &#38;lt;string&#38;gt;name@email&#38;lt;/string&#38;gt;&#60;br /&#62;
+            &#38;lt;/f&#38;gt;&#60;br /&#62;
+        &#38;lt;/fs&#38;gt;&#60;br /&#62;
+&#38;lt;/text&#38;gt;&#60;/p&#62;
+&#60;p&#62;The id for the type of the fs then points back up to the feature statement declaration in the header:&#60;/p&#62;
+&#60;p&#62;&#38;lt;teiHeader&#38;gt;&#60;br /&#62;
+     &#38;lt;encodingDesc&#38;gt;&#60;br /&#62;
+          &#38;lt;fsDecl xml:id=&#34;CATMA_3CDE1FE4-CA5D-4460-9BFF-739537D753DE&#34; n=&#34;2014-12-16T13:30:36.000+0000&#34; type=&#34;CATMA_3CDE1FE4-CA5D-4460-9BFF-739537D753DE&#34;&#38;gt;&#60;br /&#62;
+                    &#38;lt;fsDescr&#38;gt;Weather&#38;lt;/fsDescr&#38;gt;&#60;br /&#62;
+                    &#38;lt;fDecl xml:id=&#34;CATMA_699BAC76-8D15-408E-A30A-984849115A71&#34; name=&#34;catma_displaycolor&#34;&#38;gt;&#60;br /&#62;
+                        &#38;lt;vRange&#38;gt;&#60;br /&#62;
+                            &#38;lt;vColl&#38;gt;&#60;br /&#62;
+                                &#38;lt;string&#38;gt;-16710765&#38;lt;/string&#38;gt;&#60;br /&#62;
+                            &#38;lt;/vColl&#38;gt;&#60;br /&#62;
+                        &#38;lt;/vRange&#38;gt;&#60;br /&#62;
+                    &#38;lt;/fDecl&#38;gt;&#60;br /&#62;
+                    &#38;lt;fDecl xml:id=&#34;CATMA_8653855B-B611-48E8-AE9D-00E0160A37DB&#34; name=&#34;catma_markupauthor&#34;&#38;gt;&#60;br /&#62;
+                        &#38;lt;vRange&#38;gt;&#60;br /&#62;
+                            &#38;lt;vColl&#38;gt;&#60;br /&#62;
+                                  &#38;lt;string&#38;gt;name@email&#38;lt;/string&#38;gt;&#60;br /&#62;
+                            &#38;lt;/vColl&#38;gt;&#60;br /&#62;
+                        &#38;lt;/vRange&#38;gt;&#60;br /&#62;
+                    &#38;lt;/fDecl&#38;gt;&#60;br /&#62;
+                &#38;lt;/fsDecl&#38;gt;&#60;br /&#62;
+     &#38;lt;/encodingDesc&#38;gt;&#60;br /&#62;
+&#38;lt;/teiHeader&#38;gt; &#60;/p&#62;
+&#60;p&#62;I need to extract the text and data, perhaps in a csv file (or other output format, if it’s easier), into something that lists the tagged text (e.g. “clouds”) in one column, the first tag applied to it in the next column (e.g. &#34;weather&#34;), and the tagset or category to which that tag belongs in the next (e.g. &#34;non-living). &#60;/p&#62;
+&#60;p&#62;Or perhaps there’s a better way—really, what I’d like to be able to do is get the frequencies of each tag &#38;amp; tagset for each chapter. If there’s an easier way to mark up the text in TEI that would better allow for what I need, I’m open to re-encoding manually.&#60;/p&#62;
+&#60;p&#62;I’ve also tried playing around a bit with some XSLT and a Python script (&#60;a href=&#34;http://www.rdegges.com/quickly-extract-xml-data-with-python/&#34; rel=&#34;nofollow&#34;&#62;http://www.rdegges.com/quickly-extract-xml-data-with-python/&#60;/a&#62;) but with very little experience with either, I find myself quickly out of my depths. Open to suggestions—and thanks in advance for your help!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Kevin Hawkins on "How do I best convert hundreds of TEI P5 documents to plaintext?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-do-i-best-convert-hundreds-of-tei-p5-documents-to-plaintext#post-2232</link>
+			<pubDate>Tue, 02 Sep 2014 11:05:14 +0000</pubDate>
+			<dc:creator>Kevin Hawkins</dc:creator>
+			<guid isPermaLink="false">2232@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Do keep in mind that the approach recommended here strips the markup away, leaving only the text in between the tags.  Since the TEI (and other document-based XML languages) generally leave the transcribed text inside tags (rather than as, say, the values of attributes), this approach will work quite well.  But also keep in mind that the TEI has intentionally given up on the naive assumption that if you strip away the markup, you get the exact text that appeared on the page.  For example, the TEI's&#60;br /&#62;
+&#60;pre&#62;choice&#60;/pre&#62;
+ element includes text between tags for more than one interpretation of what you see on the page, so these two strings will appear in the output of the above command sequences, one after the other, while the source document contained only one of these (though the encoder is unclear on which).&#60;/p&#62;
+&#60;p&#62;So beware that things like will introduce errors in your OCR training.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Arno Bosse on "How do I best convert hundreds of TEI P5 documents to plaintext?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-do-i-best-convert-hundreds-of-tei-p5-documents-to-plaintext#post-2231</link>
+			<pubDate>Thu, 28 Aug 2014 14:12:52 +0000</pubDate>
+			<dc:creator>Arno Bosse</dc:creator>
+			<guid isPermaLink="false">2231@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Thank you very much everyone for your help - both techniques worked equally well. I still need to swap some characters and remove line breaks from the processed texts but I can easily batch that in my text editor. Thanks again!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Stéfan Sinclair on "How do I best convert hundreds of TEI P5 documents to plaintext?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-do-i-best-convert-hundreds-of-tei-p5-documents-to-plaintext#post-2230</link>
+			<pubDate>Thu, 28 Aug 2014 12:52:47 +0000</pubDate>
+			<dc:creator>Stéfan Sinclair</dc:creator>
+			<guid isPermaLink="false">2230@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @Hugh Cayless's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/how-do-i-best-convert-hundreds-of-tei-p5-documents-to-plaintext#post-2229&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;I was going to suggest something similar to Hugh, though the text() syntax doesn't seem to work when I test, but this does:&#60;/p&#62;
+&#60;pre&#62;xmllint --xpath &#34;string(//*[local-name()='body'])&#34; FILENAME.xml&#60;/pre&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Hugh Cayless on "How do I best convert hundreds of TEI P5 documents to plaintext?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-do-i-best-convert-hundreds-of-tei-p5-documents-to-plaintext#post-2229</link>
+			<pubDate>Thu, 28 Aug 2014 11:40:08 +0000</pubDate>
+			<dc:creator>Hugh Cayless</dc:creator>
+			<guid isPermaLink="false">2229@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @Arno Bosse's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/how-do-i-best-convert-hundreds-of-tei-p5-documents-to-plaintext#post-2227&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;@&#60;a href='http://digitalhumanities.org/answers/profile/cforster'&#62;cforster&#60;/a&#62; is almost certainly right that you want an XSLT. It all depends on the level of encoding and whether you really want all of the text, laid out as it is in the document (maybe there are footnotes in the OCR for example that have been turned into inline notes in the TEI).&#60;/p&#62;
+&#60;p&#62;That said, if you really just want a dead-simple text extraction, you can do something like the following with xmllint:&#60;/p&#62;
+&#60;p&#62;&#60;code&#62;xmllint --xpath &#34;//*[local-name() ='text']//text()&#34; flle.xml&#60;/code&#62;&#60;/p&#62;
+&#60;p&#62;That can be bundled up with a find command (or other method of iterating over the files) and the output redirected to files in order to do your batch processing.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>cforster on "How do I best convert hundreds of TEI P5 documents to plaintext?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-do-i-best-convert-hundreds-of-tei-p5-documents-to-plaintext#post-2228</link>
+			<pubDate>Thu, 28 Aug 2014 11:21:13 +0000</pubDate>
+			<dc:creator>cforster</dc:creator>
+			<guid isPermaLink="false">2228@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Well, &#60;em&#62;best&#60;/em&#62; is a tricky one. But if you're comfortable using XSLT this is pretty classic XSLT sort of problem. The default XSLT rules are to essentially output the content of the nodes so a &#60;em&#62;very&#60;/em&#62; simple script could do what you're looking to do (I've done it many times before). Chances are, though, that you are going to want to trip out the teiHeader and just get the body of the text. You can write an empty rule to match the teiHeader, which will have the effect of silencing its output. A simple (though imperfect may to do this would be an XSLT stylesheet something like the following:&#60;/p&#62;
+
+
+&#60;div class=&#34;bb_syntax&#34;&#62;&#60;div class=&#34;code&#34;&#62;&#60;pre class=&#34;xslt&#34; style=&#34;font-family:monospace;&#34;&#62;&#38;lt;?xml version=&#38;quot;1.0&#38;quot; encoding=&#38;quot;utf-8&#38;quot;?&#38;gt;
+&#38;nbsp;
+&#38;lt;xsl:stylesheet xmlns:tei=&#38;quot;http://www.tei-c.org/ns/1.0&#38;quot;
+  xmlns=&#38;quot;http://www.w3.org/1999/xhtml&#38;quot;
+  xmlns:xsl=&#38;quot;http://www.w3.org/1999/XSL/Transform&#38;quot; version=&#38;quot;1.0&#38;quot;&#38;gt;
+&#38;nbsp;
+  &#38;lt;xsl:output method=&#38;quot;text&#38;quot; encoding=&#38;quot;UTF-8&#38;quot; /&#38;gt;
+&#38;nbsp;
+  &#38;lt;xsl:template match=&#38;quot;tei:TEI&#38;quot;&#38;gt;
+    &#38;lt;xsl:apply-templates /&#38;gt;
+  &#38;lt;/xsl:template&#38;gt;
+&#38;nbsp;
+  &#38;lt;xsl:template match=&#38;quot;tei:teiHeader&#38;quot;&#38;gt;&#38;lt;/xsl:template&#38;gt;
+&#38;nbsp;
+&#38;lt;/xsl:stylesheet&#38;gt;&#60;/pre&#62;&#60;/div&#62;&#60;/div&#62;
+
+
+
+&#60;p&#62;If you're on OSX, the built-in xslt processor (xsltproc) can handle this. Just save the above XSLT code into a file (call it strip.xsl) and then, at the command line: &#60;code&#62;xsltproc strip.xsl [TEI FILE NAME]&#60;/code&#62;. By default this outputs to standard input (i.e. the screen), but you can pipe it into a file &#60;code&#62;xsltproc strip.xsl [TEI FILE NAME] &#38;gt; stripped.txt&#60;/code&#62;. And at this point if you can write a shell script, it should be possible to loop over all the files in a directory.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Arno Bosse on "How do I best convert hundreds of TEI P5 documents to plaintext?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-do-i-best-convert-hundreds-of-tei-p5-documents-to-plaintext#post-2227</link>
+			<pubDate>Thu, 28 Aug 2014 10:47:32 +0000</pubDate>
+			<dc:creator>Arno Bosse</dc:creator>
+			<guid isPermaLink="false">2227@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I'd like to use the available corpora in the German Text Archive (&#60;a href=&#34;http://www.deutschestextarchiv.de/download&#34; rel=&#34;nofollow&#34;&#62;http://www.deutschestextarchiv.de/download&#60;/a&#62;) to train OCR software. For this I need these texts as plaintext. All the German Text Archive texts however are all TEI P5 tagged. How do I best convert these (hundreds..) of documents into plaintext? &#60;/p&#62;
+&#60;p&#62;I'm comfortable on the command line and with small shell scripts but I wouldn't be able to write an app to make use of a public API to such a service. Ideally I'd like to find some tei2text-ish command line tool but the ones I've found in googling around and looking on GitHub don't appear (to me, leastways) to be suitable for TEI texts.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>TimC on "What tools are available for presenting an online parallel text?"</title>
+						<link>http://digitalhumanities.org/answers/topic/what-tools-are-available-for-presenting-an-online-parallel-text#post-2210</link>
+			<pubDate>Mon, 14 Jul 2014 10:43:54 +0000</pubDate>
+			<dc:creator>TimC</dc:creator>
+			<guid isPermaLink="false">2210@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @kevin.s.hawkins's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/what-tools-are-available-for-presenting-an-online-parallel-text#post-2208&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;Many thanks, Kevin, that's a big help. Versioning Machine! That's the one I remember seeing - I'll also take a look at JuxtaWS, and see if that will also be of use.&#60;/p&#62;
+&#60;p&#62;Thanks again!
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

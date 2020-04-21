@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Topic: TEI question</title>
+		<link>http://digitalhumanities.org/answers/topic/tei-question</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Topic: TEI question</description>
+		<language>en-US</language>
+		<pubDate>Wed, 14 Sep 2016 23:06:33 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/topic/tei-question" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>Kevin Hawkins on "TEI question"</title>
+						<link>http://digitalhumanities.org/answers/topic/tei-question#post-2053</link>
+			<pubDate>Thu, 01 Aug 2013 22:33:56 +0000</pubDate>
+			<dc:creator>Kevin Hawkins</dc:creator>
+			<guid isPermaLink="false">2053@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;DigitalHumanitiesScholar, let me make sure I understand the situation.  You have a transcription of a source document in plain text and you want to add just enough markup to identify section headings, people, places, and footnotes.  Is that right?&#60;/p&#62;
+&#60;p&#62;An XML schema only allows certain elements to nest within certain others, and the TEI schemas that come with &#38;lt;oXygen/&#38;gt; XML Editor similarly allow only certain elements in certain places.  So you can't take a plain text document and add only &#38;lt;head&#38;gt;, &#38;lt;person&#38;gt;, &#38;lt;place&#38;gt;, and &#38;lt;note&#38;gt;.  Now, perhaps you are already planning to have &#38;lt;TEI&#38;gt; containing a &#38;lt;teiHeader&#38;gt; and a &#38;lt;text&#38;gt;, and the &#38;lt;text&#38;gt; will contain a &#38;lt;body&#38;gt;, and then you wanted to put your whole transcription inside &#38;lt;body&#38;gt;.  While such a document would validate according to the schemas in &#38;lt;oXygen/&#38;gt; XML Editor, as soon as you begin adding &#38;lt;head&#38;gt;s, you will need to break the document into &#38;lt;div&#38;gt; or &#38;lt;div1&#38;gt; elements, each of which starts with a &#38;lt;head&#38;gt;.&#60;/p&#62;
+&#60;p&#62;For a personal or place name mentioned in passing in the text, you should use &#38;lt;name type=&#34;person&#34;&#38;gt; or &#38;lt;persName&#38;gt; and &#38;lt;name type=&#34;place&#34;&#38;gt; or &#38;lt;placeName&#38;gt;.  The &#38;lt;person&#38;gt; and &#38;lt;place&#38;gt; elements are meant only for providing biographical and prosopographical data that occurs in certain types of documents, or which is added when creating a scholarly edition in TEI.  See chapter 13 of the TEI Guidelines.&#60;/p&#62;
+&#60;p&#62;As for encoding footnotes, see section 3.8.1, which discusses whether to insert the &#38;lt;note&#38;gt; at the point of attachment (as in the examples in this section) or whether to use &#38;lt;ptr&#38;gt; or &#38;lt;ref&#38;gt; at that location instead.  For an example that uses &#38;lt;ref&#38;gt;, see the cross-reference to section 3.6, which gives this example:&#60;/p&#62;
+&#60;pre&#62;
+annotated text &#38;lt;ref target=&#34;#a51&#34; type=&#34;noteAnchor&#34;&#38;gt;⁵¹&#38;lt;/ref&#38;gt;
+&#38;lt;!-- ... --&#38;gt;
+&#38;lt;note xml:id=&#34;a51&#34; type=&#34;footnote&#34;&#38;gt;text of annotation&#38;lt;/note&#38;gt;
+&#60;/pre&#62;</description>
+		</item>
+		<item>
+			 
+				<title>DigitalHumanitiesScholar on "TEI question"</title>
+						<link>http://digitalhumanities.org/answers/topic/tei-question#post-2051</link>
+			<pubDate>Mon, 29 Jul 2013 02:51:21 +0000</pubDate>
+			<dc:creator>DigitalHumanitiesScholar</dc:creator>
+			<guid isPermaLink="false">2051@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hi,&#60;/p&#62;
+&#60;p&#62;I have a beginners question re TEI 5 and would be grateful for any suggestions re same.&#60;/p&#62;
+&#60;p&#62;How does one begin to encode metdata? ie: I have a transcription and am doing a very light encoding thereof - just &#38;lt;head&#38;gt;&#38;lt;/head&#38;gt;, &#38;lt;person&#38;gt;&#38;lt;/person&#38;gt;, &#38;lt;place&#38;gt;&#38;lt;/place&#38;gt; (which hopefully are correct!). If I have footnotes re certain parts of the main body of text, how to encode it and where to I place it in the TEI that I am writing in Oxygen Editor (ie: How do I show what the info refers to? Do I keep the footnote system?)&#60;/p&#62;
+&#60;p&#62;Thanks.
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

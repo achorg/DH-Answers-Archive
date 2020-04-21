@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Tag: calabash - Recent Posts</title>
+		<link>http://digitalhumanities.org/answers/tags/calabash</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Tag: calabash - Recent Posts</description>
+		<language>en-US</language>
+		<pubDate>Sat, 20 Jul 2013 09:21:47 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/tags/calabash" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>Conal Tuohy on "Alternatives to Cocoon?"</title>
+						<link>http://digitalhumanities.org/answers/topic/alternatives-to-cocoon#post-723</link>
+			<pubDate>Sat, 20 Nov 2010 13:15:43 +0000</pubDate>
+			<dc:creator>Conal Tuohy</dc:creator>
+			<guid isPermaLink="false">723@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Further to &#60;em&#62;@Joe Wicentowski's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/alternatives-to-cocoon#post-537&#34;&#62;post&#60;/a&#62;&#60;/em&#62; mentioning &#60;a href=&#34;http://www.w3.org/TR/xproc/&#34;&#62;XProc&#60;/a&#62;, you could use a batch-mode XProc processor such as &#60;a href=&#34;http://xmlcalabash.com/&#34;&#62;XML Calabash&#60;/a&#62; to pre-build the HTML website. If you're familiar with Cocoon and writing pipelines, you'll find XProc is similar and easy to pick up.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Joe Wicentowski on "Alternatives to Cocoon?"</title>
+						<link>http://digitalhumanities.org/answers/topic/alternatives-to-cocoon#post-537</link>
+			<pubDate>Wed, 20 Oct 2010 03:41:15 +0000</pubDate>
+			<dc:creator>Joe Wicentowski</dc:creator>
+			<guid isPermaLink="false">537@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;A bit late here, but let me echo James in suggesting &#60;a href=&#34;http://exist-db.org&#34;&#62;eXist&#60;/a&#62; - it supports XSLT, XQuery, XProc, etc. (the major ways of querying and transforming documents), has powerful full text search of your XML, flexible URL rewriting and comes with the lightweight Jetty webserver (no Cocoon necessary).  The site I work on, &#60;a href=&#34;http://history.state.gov&#34;&#62;history.state.gov&#60;/a&#62;, is pure eXist + XQuery + TEI.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Wayne Graham on "Alternatives to Cocoon?"</title>
+						<link>http://digitalhumanities.org/answers/topic/alternatives-to-cocoon#post-393</link>
+			<pubDate>Fri, 08 Oct 2010 19:01:19 +0000</pubDate>
+			<dc:creator>Wayne Graham</dc:creator>
+			<guid isPermaLink="false">393@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;The big problem with most of the functional language implementations for XSL is at some point they all rely on the underlying C libraries (libxml, libxslt). You'll see this limitation for XSLT 2.0 transforms, you're limited to using Saxon and it's supported libraries (Java and .Net). Really you're really left with two options if you want to use a functional language in your app, you're kind of limited to either jRuby (or something funky like LIFT or Clojure) or pre-processing the partial views. &#60;/p&#62;
+&#60;p&#62;That said, there is a partial C library for the XSLT 2 spec called libX (&#60;a href=&#34;http://www.explain.com.au/libx/)&#34; rel=&#34;nofollow&#34;&#62;http://www.explain.com.au/libx/)&#60;/a&#62;. If this project takes off, you could very easily write a wrapper in PECL, Ruby, or Swig to expose this functionality to the different languages. But it's not there yet. &#60;/p&#62;
+&#60;p&#62;What I would encourage you to also look at is some automated workflows. There are some heavy-weight options (e.g. BPEL), but also some pretty light options (see &#60;a href=&#34;http://github.com/jmettraux/ruote)&#34; rel=&#34;nofollow&#34;&#62;http://github.com/jmettraux/ruote)&#60;/a&#62; that go a long way in helping you establish a sane, sustainable, and ultimately transferable method of ingesting and disseminating content, independent of what front-end technology is chosen.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>knickum.unl@gmail.com on "Alternatives to Cocoon?"</title>
+						<link>http://digitalhumanities.org/answers/topic/alternatives-to-cocoon#post-392</link>
+			<pubDate>Fri, 08 Oct 2010 17:57:18 +0000</pubDate>
+			<dc:creator>knickum.unl@gmail.com</dc:creator>
+			<guid isPermaLink="false">392@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Been meaning to respond to this also, co-worker of Karin's. Has anyone looked into any methods using python? I'm interested in changing some of the tools we use (for example, instead of using PHP --ugh -- I'd like it if we used Python/Ruby by default), so I'm trying to figure out some issues related to how we currently do things that may come up if we do that.&#60;/p&#62;
+&#60;p&#62;I'm curious (entirely ignoring the previous paragraph), it would be useful for some things we've done to be able to run xslt 2.0 functions in php. I've seen and heard JavaBridge is an option (though my experience so far has been the same as Wayne's), does anyone know of any other options? I can think of a few ways that might work, but nothing as elegant as JavaBridge at least purports to be (not that it even comes close!).
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Karin Dalziel on "Alternatives to Cocoon?"</title>
+						<link>http://digitalhumanities.org/answers/topic/alternatives-to-cocoon#post-256</link>
+			<pubDate>Thu, 30 Sep 2010 13:48:50 +0000</pubDate>
+			<dc:creator>Karin Dalziel</dc:creator>
+			<guid isPermaLink="false">256@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Some of our old, XSLT 1.0 sites have been transformed using a simple PHP transformation (I believe that is how The Journals of Lewis and Clark Expedition - &#60;a href=&#34;http://lewisandclarkjournals.unl.edu/&#34; rel=&#34;nofollow&#34;&#62;http://lewisandclarkjournals.unl.edu/&#60;/a&#62; - is currently being handled) but our newer sites use XSLT 2.0 features. &#60;/p&#62;
+&#60;p&#62;I may just make an effort to restrict myself to XSLT 1.0 for our simple projects in the future. &#60;/p&#62;
+&#60;p&#62;Thanks everyone for your wonderful responses! I have a lot to look into.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>jamesc on "Alternatives to Cocoon?"</title>
+						<link>http://digitalhumanities.org/answers/topic/alternatives-to-cocoon#post-254</link>
+			<pubDate>Thu, 30 Sep 2010 10:36:51 +0000</pubDate>
+			<dc:creator>jamesc</dc:creator>
+			<guid isPermaLink="false">254@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;It depends on a developer's needs really.  I have used Cocoon extensively, eXist, various CMSes, etc. If what you really need is just quite simple dynamic transformation from XML to HTML and not all the bells and whistles of a CMS there are much simpler routes one can take.  I have a need for a basic virtual URL remapper with dynamic transformations.  None of this needs the complexity of any of the above methods.&#60;/p&#62;
+&#60;p&#62;For example:&#60;br /&#62;
+&#60;a href=&#34;http://blogs.oucs.ox.ac.uk/jamesc/2010/08/19/simple-dynamic-transformation-of-xml-with-htaccess-php-and-xslt/&#34; rel=&#34;nofollow&#34;&#62;http://blogs.oucs.ox.ac.uk/jamesc/2010/08/19/simple-dynamic-transformation-of-xml-with-htaccess-php-and-xslt/&#60;/a&#62;&#60;br /&#62;
+shows one method of doing basic (sadly limited to XSLT1) dynamic transformations using just .htaccess and a really short php file that just says &#34;transform this XML with this XSLT&#34;. The control of which XML/XSLT combination a particular URL gets is done entirely in the .htaccess file.  &#60;/p&#62;
+&#60;p&#62;What this can't do... well it could be not very prettily... is a long series of pipelined transformations. &#60;/p&#62;
+&#60;p&#62;However, one benefit of this kind of approach is that basic php and .htaccess are available on almost all shared hosting platforms where you might not have the ability or access to install other solutions.&#60;/p&#62;
+&#60;p&#62;Just my two pence,&#60;/p&#62;
+&#60;p&#62;-James Cummings
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>James Smith on "Alternatives to Cocoon?"</title>
+						<link>http://digitalhumanities.org/answers/topic/alternatives-to-cocoon#post-250</link>
+			<pubDate>Thu, 30 Sep 2010 03:45:14 +0000</pubDate>
+			<dc:creator>James Smith</dc:creator>
+			<guid isPermaLink="false">250@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;If you're feeling adventurous and want to integrate the TEI documents into a &#60;a href=&#34;http://www.radiantcms.org/&#34;&#62;Radiant CMS&#60;/a&#62;, then you might want to look at &#60;a href=&#34;http://github.com/jgsmith/radiant-tei-tools&#34;&#62;http://github.com/jgsmith/radiant-tei-tools&#60;/a&#62; as an example of how to create a filter or Radiant tag that will transform the TEI document into HTML.  This approach lets you treat the TEI documents as pages in the CMS.&#60;/p&#62;
+&#60;p&#62;If there's any interest in the Radiant extension, I'll try to update it with what I have working in production right now -- I've been focused on a lot of other stuff lately.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Wayne Graham on "Alternatives to Cocoon?"</title>
+						<link>http://digitalhumanities.org/answers/topic/alternatives-to-cocoon#post-152</link>
+			<pubDate>Fri, 24 Sep 2010 13:44:20 +0000</pubDate>
+			<dc:creator>Wayne Graham</dc:creator>
+			<guid isPermaLink="false">152@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I can't believe I forgot this, but there's also a plugin for Omeka (see &#60;a href=&#34;http://omeka.org/codex/Plugins/TeiDisplay)&#34; rel=&#34;nofollow&#34;&#62;http://omeka.org/codex/Plugins/TeiDisplay)&#60;/a&#62; which can substitute for some of these other systems with TEI documents. Definitely another project to check out (and give us feedback). Particularly useful with the Omeka SolrSearch plugin (&#60;a href=&#34;http://omeka.org/codex/Plugins/SolrSearch)&#34; rel=&#34;nofollow&#34;&#62;http://omeka.org/codex/Plugins/SolrSearch)&#60;/a&#62;.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Wayne Graham on "Alternatives to Cocoon?"</title>
+						<link>http://digitalhumanities.org/answers/topic/alternatives-to-cocoon#post-124</link>
+			<pubDate>Wed, 22 Sep 2010 15:23:11 +0000</pubDate>
+			<dc:creator>Wayne Graham</dc:creator>
+			<guid isPermaLink="false">124@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;In the rails stuff, I've built rake tasks that I can call through the capistrano deployment (e.g. cap production deploy calls rake render:pre-render and rake render:gen_navigation). Essentially I just didn't have to even think of it, I let the system do the heavy lifting.&#60;/p&#62;
+&#60;p&#62;Javabridge was a complete disaster. This was a few years ago, and the project has progressed, but at least on the RHEL 5 boxes I was using, it was unstable enough that I completely abandoned it. In the Zend Framework, there are some bridge-ish things (e.g. the Lucene indexer), but after some discussions with the Omeka developers, this was a bit of a disaster for them as there seemed to be a hard limit of items you could have in a collection before seeing significant performance degredation. &#60;/p&#62;
+&#60;p&#62;I will say that the Faulkner-Audio-Collection could/should be patched to do the on-the-fly transforms to improve the workflow, then, at deploy time, use an appropriate caching mechanism to minimize the CPU load on big XSLT transforms.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Karin Dalziel on "Alternatives to Cocoon?"</title>
+						<link>http://digitalhumanities.org/answers/topic/alternatives-to-cocoon#post-121</link>
+			<pubDate>Wed, 22 Sep 2010 14:55:40 +0000</pubDate>
+			<dc:creator>Karin Dalziel</dc:creator>
+			<guid isPermaLink="false">121@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @Wayne Graham's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/alternatives-to-cocoon#post-120&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;Thanks! I have been pondering pre-generating the HTML. It might make the workflow annoying during the production of a site, when the XML sometimes changes and there's back and forth between the encoder and the designer. One idea would be to do development in cocoon and then deploy as a static HTML site. &#60;/p&#62;
+&#60;p&#62;Have you had any experience running saxon through PHP using javabridge? Is jruby a lot better in terms of server resources or ease of use? We have not yet used Ruby here.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Wayne Graham on "Alternatives to Cocoon?"</title>
+						<link>http://digitalhumanities.org/answers/topic/alternatives-to-cocoon#post-120</link>
+			<pubDate>Wed, 22 Sep 2010 14:40:58 +0000</pubDate>
+			<dc:creator>Wayne Graham</dc:creator>
+			<guid isPermaLink="false">120@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Speaking from some experience with Cocoon and XTF, I try to advise people to actually find alternatives to these solutions. However, there are only a small number of ways to get around this, do mainly to the fact that the only XSLT 2 processor is the Saxon library implemented in Java. &#60;/p&#62;
+&#60;p&#62;After some pains with the limitations of XTF, a talented developer actually tackled the problem to see if one could build a &#34;better&#34; system. He came up with Raven (&#60;a href=&#34;http://github.com/mwmitchell/raven&#34; rel=&#34;nofollow&#34;&#62;http://github.com/mwmitchell/raven&#60;/a&#62;) which is a pretty cool project that builds on Solr to build the site.&#60;/p&#62;
+&#60;p&#62;Another approach we've used is to pre-compile HTML views of XML (mainly TEI) using Rake tasks (see &#60;a href=&#34;http://github.com/scholarslab/Faulkner-Audio-Collection)&#34; rel=&#34;nofollow&#34;&#62;http://github.com/scholarslab/Faulkner-Audio-Collection)&#60;/a&#62;. Mainly the pre-compilation of the view was for performance, since the XML does not change much, which makes things a bit easier to cache. &#60;/p&#62;
+&#60;p&#62;Both of these are capable of utilizing the Saxon library through jruby. With a little bit of planning (and rvm &#60;a href=&#34;http://rvm.beginrescueend.com/)&#34; rel=&#34;nofollow&#34;&#62;http://rvm.beginrescueend.com/)&#60;/a&#62;, we can use XSLT 2.0 transformations, serialize them to file locations (and generate our Solr indexes), and then deploy them to production servers that are running MRI Ruby (default package manager install).&#60;/p&#62;
+&#60;p&#62;Anyway, check these examples out; they may solve some issues you will run in to with both Cocoon (current install uses maven to build) and XTF, let alone attempting to tune the JVM for the server running the application.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Karin Dalziel on "Alternatives to Cocoon?"</title>
+						<link>http://digitalhumanities.org/answers/topic/alternatives-to-cocoon#post-119</link>
+			<pubDate>Wed, 22 Sep 2010 14:04:57 +0000</pubDate>
+			<dc:creator>Karin Dalziel</dc:creator>
+			<guid isPermaLink="false">119@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @Stéfan Sinclair's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/alternatives-to-cocoon#post-107&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;We are using XTF for a couple of projects, but someone else is doing the development on those. I should try to do an XTF site of my own so I can compare. I have a perception that XTF is rather inflexible, but I need to dig into it to see if that's true. &#60;/p&#62;
+&#60;p&#62;Thanks!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Stéfan Sinclair on "Alternatives to Cocoon?"</title>
+						<link>http://digitalhumanities.org/answers/topic/alternatives-to-cocoon#post-107</link>
+			<pubDate>Wed, 22 Sep 2010 00:22:39 +0000</pubDate>
+			<dc:creator>Stéfan Sinclair</dc:creator>
+			<guid isPermaLink="false">107@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I haven't deployed a site with Cocoon in a while, but it always felt heavy (though very useful and flexible). Have you tried XTF? &#60;a href=&#34;http://sourceforge.net/apps/trac/xtf/wiki&#34; rel=&#34;nofollow&#34;&#62;http://sourceforge.net/apps/trac/xtf/wiki&#60;/a&#62;
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Karin Dalziel on "Alternatives to Cocoon?"</title>
+						<link>http://digitalhumanities.org/answers/topic/alternatives-to-cocoon#post-97</link>
+			<pubDate>Tue, 21 Sep 2010 18:53:14 +0000</pubDate>
+			<dc:creator>Karin Dalziel</dc:creator>
+			<guid isPermaLink="false">97@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I have used Cocoon to publish  TEI encoded XML files processed with XSLT (using Saxon), but I have never tried any other method of processing/publishing files. What alternatives are there? For many sites we generally use only a very small subsets of the features in cocoon - some basic redirecting and post processing.
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

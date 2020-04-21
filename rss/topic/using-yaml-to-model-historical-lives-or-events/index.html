@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Topic: Using YAML to model historical lives or events</title>
+		<link>http://digitalhumanities.org/answers/topic/using-yaml-to-model-historical-lives-or-events</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Topic: Using YAML to model historical lives or events</description>
+		<language>en-US</language>
+		<pubDate>Thu, 15 Sep 2016 00:15:19 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/topic/using-yaml-to-model-historical-lives-or-events" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>Conal Tuohy on "Using YAML to model historical lives or events"</title>
+						<link>http://digitalhumanities.org/answers/topic/using-yaml-to-model-historical-lives-or-events#post-1631</link>
+			<pubDate>Wed, 02 May 2012 21:06:09 +0000</pubDate>
+			<dc:creator>Conal Tuohy</dc:creator>
+			<guid isPermaLink="false">1631@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I don't know of people using YAML for such things, to be honest; ARAIK the usual practice is to use an XML-based markup language such as EAC or TEI.&#60;/p&#62;
+&#60;p&#62;Regarding the readability issue of XML-based markup languages, partly I think this is just what you're used to, but of course it's not an ideal rendering for notes. Nevertheless, it's very easy to make and link an XSLT or CSS stylesheet to an XML file and use that to format the document more readably. Then it's just a matter of opening the file in a browser to view it, and a text editor to edit it. &#60;/p&#62;
+&#60;p&#62;Aside from the issue of readability, the advantages of an XML-based format are too numerous to mention.&#60;/p&#62;
+&#60;p&#62;Apart from EAC which Ben mentioned already, I would recommend you take a look at TEI; specifically the &#34;Personography Module&#34;. See &#60;a href=&#34;http://www.tei-c.org/release/doc/tei-p5-doc/en/html/ND.html#NDPERS&#34; rel=&#34;nofollow&#34;&#62;http://www.tei-c.org/release/doc/tei-p5-doc/en/html/ND.html#NDPERS&#60;/a&#62; and also see in the formal declaration of the TEI concept of &#34;event&#34;: &#60;a href=&#34;http://www.tei-c.org/release/doc/tei-p5-doc/en/html/ref-event.html&#34; rel=&#34;nofollow&#34;&#62;http://www.tei-c.org/release/doc/tei-p5-doc/en/html/ref-event.html&#60;/a&#62; and the declarations for &#34;person&#34; &#60;a href=&#34;http://www.tei-c.org/release/doc/tei-p5-doc/en/html/ref-person.html&#34; rel=&#34;nofollow&#34;&#62;http://www.tei-c.org/release/doc/tei-p5-doc/en/html/ref-person.html&#60;/a&#62; and &#34;faith&#34; &#60;a href=&#34;http://www.tei-c.org/release/doc/tei-p5-doc/en/html/ref-faith.html&#34; rel=&#34;nofollow&#34;&#62;http://www.tei-c.org/release/doc/tei-p5-doc/en/html/ref-faith.html&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;It's certainly worth studying the EAC and TEI models even if you do adopt a custom YAML-based format for your data, even just so as to be able to export your data in one of those standard formats.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>lmullen on "Using YAML to model historical lives or events"</title>
+						<link>http://digitalhumanities.org/answers/topic/using-yaml-to-model-historical-lives-or-events#post-1630</link>
+			<pubDate>Wed, 02 May 2012 15:35:03 +0000</pubDate>
+			<dc:creator>lmullen</dc:creator>
+			<guid isPermaLink="false">1630@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @Ben Brumfield's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/using-yaml-to-model-historical-lives-or-events#post-1629&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;Ben, &#60;/p&#62;
+&#60;p&#62;I've been thinking about how to go about encoding the data too. Vim (EMACS too, probably) has YAML syntax highlighting and other support out of the box. It would be pretty easy for me to create a snippet for a person record and for a conversion block to keep most things standard. Vim seems to have pretty good autocomplete too, so I could probably create a controlled vocabulary list and use that with autocomplete. &#60;/p&#62;
+&#60;p&#62;&#60;em&#62;Replying to @Ethan Gruber's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/using-yaml-to-model-historical-lives-or-events#post-1628&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;Ethan,&#60;/p&#62;
+&#60;p&#62;Thanks for the suggestions of EAC-CPF. I wasn't aware of that standard. I'm intrigued, and will have to investigate it further. I'm a little reluctant to do the encoding in XML, though, since these records have to double as regular notes. Perhaps I'll munge YAML into EAC-CPF at some point.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Ben Brumfield on "Using YAML to model historical lives or events"</title>
+						<link>http://digitalhumanities.org/answers/topic/using-yaml-to-model-historical-lives-or-events#post-1629</link>
+			<pubDate>Wed, 02 May 2012 14:22:49 +0000</pubDate>
+			<dc:creator>Ben Brumfield</dc:creator>
+			<guid isPermaLink="false">1629@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I think that YAML is an elegant solution here, since this is a file you'll be hand-editing and the data structures themselves are emerging as you create the data.  YAML should be quite easy to programmatically transform into any standard format you want with some ruby data munging scripts.&#60;/p&#62;
+&#60;p&#62;The only concern I have is that you may end up with a bit too much typing and inconsistent keys.  I wonder if an editor like Emacs has a YAML mode, and if that mode would support auto-completion of keys you've already used?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Ethan Gruber on "Using YAML to model historical lives or events"</title>
+						<link>http://digitalhumanities.org/answers/topic/using-yaml-to-model-historical-lives-or-events#post-1628</link>
+			<pubDate>Wed, 02 May 2012 14:09:42 +0000</pubDate>
+			<dc:creator>Ethan Gruber</dc:creator>
+			<guid isPermaLink="false">1628@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;It should theoretically be possible to represent this model in EAC-CPF.  Churches or denominations could be represented by corporate records, but it make take a bit of thought to represent the chronology of converting from one belief to another in the EAC-CPF chronlist.&#60;/p&#62;
+&#60;p&#62;Example document: &#60;a href=&#34;http://socialarchive.iath.virginia.edu/xtf/view?docId=oppenheimer-j-robert-1904-1967-cr.xml&#34; rel=&#34;nofollow&#34;&#62;http://socialarchive.iath.virginia.edu/xtf/view?docId=oppenheimer-j-robert-1904-1967-cr.xml&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;EAC-CPF provides some definite advantages over YAML:&#60;br /&#62;
+1. It is an international standard in the LAM community for representing people, families, and corporate entities, therefore you will be able to receive support in terms of re-usable code and tools for creating and disseminating your data&#60;br /&#62;
+2. It is effectively linked data, and thus inherits all of the benefits of linked data systems
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>lmullen on "Using YAML to model historical lives or events"</title>
+						<link>http://digitalhumanities.org/answers/topic/using-yaml-to-model-historical-lives-or-events#post-1627</link>
+			<pubDate>Wed, 02 May 2012 13:32:41 +0000</pubDate>
+			<dc:creator>lmullen</dc:creator>
+			<guid isPermaLink="false">1627@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;For my dissertation, I'm keeping track of nineteenth-century converts. I'd like to keep the data about the converts in both a human- and computer readable format. The data model needs to grow organically, because I only have a reasonable guess right now what information might be interesting about converts. The amount of data on each convert will be vastly different, from the bare information that a person converted (I might not even know a name) to having volumes of the person's papers. Also, each person might convert multiple times. Some information I want to keep track of as data (e.g., converted from, converted to, converted date), and other information can be tossed into a notes field. Finally, I have to be able to read the data myself as notes for writing, and to access it programmatically from some unknown tool (probably Ruby). While these needs are specific to my purposes, I think they could be easily generalized. For example, someone might want to keep track of strikes for a labor history.&#60;/p&#62;
+&#60;p&#62;I'm thinking about using &#60;a href=&#34;http://www.yaml.org/spec/1.2/spec.html&#34;&#62;YAML&#60;/a&#62; as the format for the data. YAML's two top priorities are &#34;YAML is easily readable by humans&#34; and &#34;YAML data is portable between programming languages,&#34; which match my own. It also seems to be dead-simple to markup data. I've created a sample file for modeling the life of Orestes Brownson, which is below.&#60;/p&#62;
+&#60;p&#62;My questions are these:&#60;/p&#62;
+&#60;ol&#62;
+&#60;li&#62;Is anyone using YAML for a digital humanities project? How are you using it, and what experience have you gained?&#60;/li&#62;
+&#60;li&#62;Can anyone offer specific comments on the data modeled below?&#60;/li&#62;
+&#60;/ol&#62;
+&#60;p&#62; &#60;/p&#62;
+
+
+&#60;div class=&#34;bb_syntax&#34;&#62;&#60;table&#62;&#60;tr&#62;&#60;td class=&#34;line_numbers&#34;&#62;&#60;pre&#62;1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+&#60;/pre&#62;&#60;/td&#62;&#60;td class=&#34;code&#34;&#62;&#60;pre class=&#34;yaml&#34; style=&#34;font-family:monospace;&#34;&#62;# A model of a convert's life
+---
+name-last       : Brownson
+name-first      : Orestes Augustus
+born            : 1803-09-16
+died            : 1876-04-17
+birth-religion  : Congregationalism
+&#38;nbsp;
+conversions     :
+&#38;nbsp;
+-   origin-religion         : Congregationalism
+    destination-religion    : Presbyterianism
+    date                    : 1822
+    ritual                  : church membership
+    citation                : ANB
+    notes                   : &#38;gt;
+      Brownson's change to congregationalism was more denominational
+      switching than a change in conscience.
+&#38;nbsp;
+-   origin-religion         : Presbyterianism
+    destination-religion    : Universalism
+    date                    : 1826
+    ritual                  : ordination
+    location                : &#38;quot;Jaffrey, New Hampshire&#38;quot;
+    citation                : ANB
+    notes                   : &#38;gt;
+      &#38;quot;He would later refer to his years in this fold as 'the most
+      anti-Christian period of my life'&#38;quot; (ANB).
+&#38;nbsp;
+      Brownson was editor of _The Gospel Advocate and Impartial
+      Investigator_, a Universalist publication.
+&#38;nbsp;
+-   origin-religion         : Universalism
+    destination-religion    : Unitarianism
+    ritual                  : further research
+    location                : &#38;quot;Walpole, New Hampshire&#38;quot;
+    citation:               : ANB
+    notes                   : &#38;gt;
+      Brownson spent some time at Brook Farm, which prepared him for
+      Transcendentalism
+&#38;nbsp;
+-   origin-religion         : Unitarianism and Transcendentalism
+    destination-religion    : Catholicism
+    date                    : 1844-10-19
+    ritual                  : baptism
+    citation                : ANB
+    notes                   : &#38;gt;
+      Brownson studied after his conversion with a Sulpician priest.
+&#38;nbsp;
+source          :
+-   Carey, Orestes Brownson
+-   American National Biography
+&#38;nbsp;
+comments        : &#38;gt;
+  This is a minimal example of what a model of a convert might look
+  like. The historical data is hastily gathered, so only the model is
+  of interest here.
+&#38;nbsp;
+  N.B. I would like to replace the citations with BibTeX keys.
+...&#60;/pre&#62;&#60;/td&#62;&#60;/tr&#62;&#60;/table&#62;&#60;/div&#62;
+
+
+</description>
+		</item>
+
+	</channel>
+</rss>

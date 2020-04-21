@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Topic: How do I best convert hundreds of TEI P5 documents to plaintext?</title>
+		<link>http://digitalhumanities.org/answers/topic/how-do-i-best-convert-hundreds-of-tei-p5-documents-to-plaintext</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Topic: How do I best convert hundreds of TEI P5 documents to plaintext?</description>
+		<language>en-US</language>
+		<pubDate>Fri, 28 Oct 2016 14:29:37 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/topic/how-do-i-best-convert-hundreds-of-tei-p5-documents-to-plaintext" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>Kevin Hawkins on "How do I best convert hundreds of TEI P5 documents to plaintext?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-do-i-best-convert-hundreds-of-tei-p5-documents-to-plaintext#post-2232</link>
+			<pubDate>Tue, 02 Sep 2014 11:05:14 +0000</pubDate>
+			<dc:creator>Kevin Hawkins</dc:creator>
+			<guid isPermaLink="false">2232@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Do keep in mind that the approach recommended here strips the markup away, leaving only the text in between the tags.  Since the TEI (and other document-based XML languages) generally leave the transcribed text inside tags (rather than as, say, the values of attributes), this approach will work quite well.  But also keep in mind that the TEI has intentionally given up on the naive assumption that if you strip away the markup, you get the exact text that appeared on the page.  For example, the TEI's&#60;br /&#62;
+&#60;pre&#62;choice&#60;/pre&#62;
+ element includes text between tags for more than one interpretation of what you see on the page, so these two strings will appear in the output of the above command sequences, one after the other, while the source document contained only one of these (though the encoder is unclear on which).&#60;/p&#62;
+&#60;p&#62;So beware that things like will introduce errors in your OCR training.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Arno Bosse on "How do I best convert hundreds of TEI P5 documents to plaintext?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-do-i-best-convert-hundreds-of-tei-p5-documents-to-plaintext#post-2231</link>
+			<pubDate>Thu, 28 Aug 2014 14:12:52 +0000</pubDate>
+			<dc:creator>Arno Bosse</dc:creator>
+			<guid isPermaLink="false">2231@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Thank you very much everyone for your help - both techniques worked equally well. I still need to swap some characters and remove line breaks from the processed texts but I can easily batch that in my text editor. Thanks again!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Stéfan Sinclair on "How do I best convert hundreds of TEI P5 documents to plaintext?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-do-i-best-convert-hundreds-of-tei-p5-documents-to-plaintext#post-2230</link>
+			<pubDate>Thu, 28 Aug 2014 12:52:47 +0000</pubDate>
+			<dc:creator>Stéfan Sinclair</dc:creator>
+			<guid isPermaLink="false">2230@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @Hugh Cayless's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/how-do-i-best-convert-hundreds-of-tei-p5-documents-to-plaintext#post-2229&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;I was going to suggest something similar to Hugh, though the text() syntax doesn't seem to work when I test, but this does:&#60;/p&#62;
+&#60;pre&#62;xmllint --xpath &#34;string(//*[local-name()='body'])&#34; FILENAME.xml&#60;/pre&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Hugh Cayless on "How do I best convert hundreds of TEI P5 documents to plaintext?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-do-i-best-convert-hundreds-of-tei-p5-documents-to-plaintext#post-2229</link>
+			<pubDate>Thu, 28 Aug 2014 11:40:08 +0000</pubDate>
+			<dc:creator>Hugh Cayless</dc:creator>
+			<guid isPermaLink="false">2229@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @Arno Bosse's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/how-do-i-best-convert-hundreds-of-tei-p5-documents-to-plaintext#post-2227&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;@&#60;a href='http://digitalhumanities.org/answers/profile/cforster'&#62;cforster&#60;/a&#62; is almost certainly right that you want an XSLT. It all depends on the level of encoding and whether you really want all of the text, laid out as it is in the document (maybe there are footnotes in the OCR for example that have been turned into inline notes in the TEI).&#60;/p&#62;
+&#60;p&#62;That said, if you really just want a dead-simple text extraction, you can do something like the following with xmllint:&#60;/p&#62;
+&#60;p&#62;&#60;code&#62;xmllint --xpath &#34;//*[local-name() ='text']//text()&#34; flle.xml&#60;/code&#62;&#60;/p&#62;
+&#60;p&#62;That can be bundled up with a find command (or other method of iterating over the files) and the output redirected to files in order to do your batch processing.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>cforster on "How do I best convert hundreds of TEI P5 documents to plaintext?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-do-i-best-convert-hundreds-of-tei-p5-documents-to-plaintext#post-2228</link>
+			<pubDate>Thu, 28 Aug 2014 11:21:13 +0000</pubDate>
+			<dc:creator>cforster</dc:creator>
+			<guid isPermaLink="false">2228@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Well, &#60;em&#62;best&#60;/em&#62; is a tricky one. But if you're comfortable using XSLT this is pretty classic XSLT sort of problem. The default XSLT rules are to essentially output the content of the nodes so a &#60;em&#62;very&#60;/em&#62; simple script could do what you're looking to do (I've done it many times before). Chances are, though, that you are going to want to trip out the teiHeader and just get the body of the text. You can write an empty rule to match the teiHeader, which will have the effect of silencing its output. A simple (though imperfect may to do this would be an XSLT stylesheet something like the following:&#60;/p&#62;
+
+
+&#60;div class=&#34;bb_syntax&#34;&#62;&#60;div class=&#34;code&#34;&#62;&#60;pre class=&#34;xslt&#34; style=&#34;font-family:monospace;&#34;&#62;&#38;lt;?xml version=&#38;quot;1.0&#38;quot; encoding=&#38;quot;utf-8&#38;quot;?&#38;gt;
+&#38;nbsp;
+&#38;lt;xsl:stylesheet xmlns:tei=&#38;quot;http://www.tei-c.org/ns/1.0&#38;quot;
+  xmlns=&#38;quot;http://www.w3.org/1999/xhtml&#38;quot;
+  xmlns:xsl=&#38;quot;http://www.w3.org/1999/XSL/Transform&#38;quot; version=&#38;quot;1.0&#38;quot;&#38;gt;
+&#38;nbsp;
+  &#38;lt;xsl:output method=&#38;quot;text&#38;quot; encoding=&#38;quot;UTF-8&#38;quot; /&#38;gt;
+&#38;nbsp;
+  &#38;lt;xsl:template match=&#38;quot;tei:TEI&#38;quot;&#38;gt;
+    &#38;lt;xsl:apply-templates /&#38;gt;
+  &#38;lt;/xsl:template&#38;gt;
+&#38;nbsp;
+  &#38;lt;xsl:template match=&#38;quot;tei:teiHeader&#38;quot;&#38;gt;&#38;lt;/xsl:template&#38;gt;
+&#38;nbsp;
+&#38;lt;/xsl:stylesheet&#38;gt;&#60;/pre&#62;&#60;/div&#62;&#60;/div&#62;
+
+
+
+&#60;p&#62;If you're on OSX, the built-in xslt processor (xsltproc) can handle this. Just save the above XSLT code into a file (call it strip.xsl) and then, at the command line: &#60;code&#62;xsltproc strip.xsl [TEI FILE NAME]&#60;/code&#62;. By default this outputs to standard input (i.e. the screen), but you can pipe it into a file &#60;code&#62;xsltproc strip.xsl [TEI FILE NAME] &#38;gt; stripped.txt&#60;/code&#62;. And at this point if you can write a shell script, it should be possible to loop over all the files in a directory.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Arno Bosse on "How do I best convert hundreds of TEI P5 documents to plaintext?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-do-i-best-convert-hundreds-of-tei-p5-documents-to-plaintext#post-2227</link>
+			<pubDate>Thu, 28 Aug 2014 10:47:32 +0000</pubDate>
+			<dc:creator>Arno Bosse</dc:creator>
+			<guid isPermaLink="false">2227@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I'd like to use the available corpora in the German Text Archive (&#60;a href=&#34;http://www.deutschestextarchiv.de/download&#34; rel=&#34;nofollow&#34;&#62;http://www.deutschestextarchiv.de/download&#60;/a&#62;) to train OCR software. For this I need these texts as plaintext. All the German Text Archive texts however are all TEI P5 tagged. How do I best convert these (hundreds..) of documents into plaintext? &#60;/p&#62;
+&#60;p&#62;I'm comfortable on the command line and with small shell scripts but I wouldn't be able to write an app to make use of a public API to such a service. Ideally I'd like to find some tei2text-ish command line tool but the ones I've found in googling around and looking on GitHub don't appear (to me, leastways) to be suitable for TEI texts.
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

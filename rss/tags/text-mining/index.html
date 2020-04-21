@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Tag: text mining - Recent Posts</title>
+		<link>http://digitalhumanities.org/answers/tags/text-mining</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Tag: text mining - Recent Posts</description>
+		<language>en-US</language>
+		<pubDate>Fri, 14 Jul 2017 10:05:17 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/tags/text-mining" rel="self" type="application/rss+xml" />
+
+		<item>
+			 
+				<title>petris.it@googlemail.com on "How to extract tagged data and text from TEI file?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-to-extract-tagged-data-and-text-from-tei-file#post-2293</link>
+			<pubDate>Sat, 28 Feb 2015 14:12:42 +0000</pubDate>
+			<dc:creator>petris.it@googlemail.com</dc:creator>
+			<guid isPermaLink="false">2293@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;If you have tagged the chapters and if the amount of chapters is not that huge you could query the results for every chapter like this:&#60;/p&#62;
+&#60;p&#62;tag=&#34;%&#34; where tag=&#34;chapter1&#34; boundary&#60;br /&#62;
+this one assumes you have a tag for each chapter&#60;/p&#62;
+&#60;p&#62;tag=&#34;%&#34; where tag=&#34;chapter&#34; property=&#34;number&#34; value=&#34;1&#34; boundary&#60;br /&#62;
+this one assumes you have only one chapter tag and a property that holds the chapter number&#60;/p&#62;
+&#60;p&#62;But you are right, there should be a way of extracting the positions of each tag. You could, as a workaround, extract the KWIC for each tag into its own CSV file, that gives you the positions of each instance that belongs to the tag you selected. If you add a tag column manually you will then be able to merge the contents of the per tag files into one file and get tags with positions.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>aliciapeaker@gmail.com on "How to extract tagged data and text from TEI file?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-to-extract-tagged-data-and-text-from-tei-file#post-2292</link>
+			<pubDate>Fri, 27 Feb 2015 13:38:11 +0000</pubDate>
+			<dc:creator>aliciapeaker@gmail.com</dc:creator>
+			<guid isPermaLink="false">2292@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Wonderful! Thank you all for your replies! I've used CATMA to return the tag frequencies and then exported a CSV file with the compiled results. This gives me everything I need except the location in the text of each tag, which would enable to me to track frequencies by chapter (for which I have a list of CATMA locations). Is there a way I could search CATMA for tags within a set of location ranges to output a set of results for each chapter?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>petris.it@googlemail.com on "How to extract tagged data and text from TEI file?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-to-extract-tagged-data-and-text-from-tei-file#post-2291</link>
+			<pubDate>Fri, 27 Feb 2015 09:47:36 +0000</pubDate>
+			<dc:creator>petris.it@googlemail.com</dc:creator>
+			<guid isPermaLink="false">2291@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;You could simply use the CATMA Analyzer to count and extract the tagged information.&#60;br /&#62;
+Assuming you have loaded text and annotations into the Tagger:&#60;br /&#62;
+Click on &#34;Analyze Document&#34;&#60;br /&#62;
+Type: tag=&#34;%&#34; into the query box and hit &#34;Execute query&#34;&#60;br /&#62;
+Select the tab &#34;Result by markup&#34;&#60;br /&#62;
+You'll see all tags with the frequency counts there.&#60;br /&#62;
+You can also export the results to a CSV file for further processing.&#60;br /&#62;
+So there is no need for painful XML XSLT hacking so far.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Ondine on "How to extract tagged data and text from TEI file?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-to-extract-tagged-data-and-text-from-tei-file#post-2290</link>
+			<pubDate>Thu, 26 Feb 2015 20:55:32 +0000</pubDate>
+			<dc:creator>Ondine</dc:creator>
+			<guid isPermaLink="false">2290@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I can't pretend to be the most knowledgeable person about XML and especially not about querying it for data analysis purposes. But I have used the TEI for markup and delivery a good bit, generally in oXygen and generally with a fairly constrained set of the TEI P5 tags.&#60;/p&#62;
+&#60;p&#62;From that, I can tell you that I rarely encounter anything as complicated as the markup CATMA is giving you. It seems far more complex than XML for most humanities encoding purposes would need to be, esp given that part of the point of XML, and esp TEI, is that it is human readable. Of course, for some of the more complex content analysis goals that some DHers are pursuing with enormous corpa of humanities texts, this kind of markup may be necessary.&#60;/p&#62;
+&#60;p&#62;But based on what I *think* you're trying to do, the complexity here might be unnecessarily mystifying your markup of your content. If you simply need to measure the frequency of the presence of specific tags that appear in the text, based on--I assume--your own criteria for how those tags should be applied, then it may be that a straightforward TEI document in a transparent editor (oXygen would be my choice) would give you far more control.&#60;/p&#62;
+&#60;p&#62;Simply counting the number of uses of a particular tag could be done in oXygen using an XPath query , which you can refine according to attributes, hierarchy, position, etc.&#60;br /&#62;
+The XPath wouldn't generate a new product from your XML, but it would give you results list (plain text) with a count and that shows where all the instances are.&#60;/p&#62;
+&#60;p&#62;If you want a new product, you can use XSLT to generate a new XML document that retains just the elements you want and/or that adds sequential numbers to them, again based on attributes, hierarchy, position, etc., as a way to select exactly what you want. &#60;/p&#62;
+&#60;p&#62;The CATMA document looks so complicated that I would expect it to be very difficult to parse with XSLT, but parsing a more straightforward TEI P5 document for a count of specific tags shouldn't be so difficult.&#60;/p&#62;
+&#60;p&#62;All that said, I don't use either tool often enough--and haven't recently enough--to be able to offer concrete direction. For that, I recommend going on the TEI discussion list, which you can sign up for here: &#60;a href=&#34;http://www.tei-c.org/Support/#tei-l&#34; rel=&#34;nofollow&#34;&#62;http://www.tei-c.org/Support/#tei-l&#60;/a&#62;
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Ethan Gruber on "How to extract tagged data and text from TEI file?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-to-extract-tagged-data-and-text-from-tei-file#post-2287</link>
+			<pubDate>Thu, 26 Feb 2015 17:54:52 +0000</pubDate>
+			<dc:creator>Ethan Gruber</dc:creator>
+			<guid isPermaLink="false">2287@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;To clarify, is there also an fsDecl for the &#34;non-living&#34; category which contains fDecls for &#34;weather&#34; and other tags? It's doable in XSLT. I don't think you need to count the segs in the XSLT because your TEI (presumably) contains an &#38;lt;fs&#38;gt; for every annotation you've created in your body.&#60;/p&#62;
+&#60;p&#62;You'll need to iterate through every fsDecl and perform a count of every fs that occurs elsewhere in the document that as a @type that is equal to the @xml:id of the fsDecl. You'd have to tweak this somewhat to include counts of the total tagset and to initiate the counts per chapter instead of overall. Without seeing more, it's difficult to construct XPath to handle the document chapter by chapter. See this gist for a basic bit of XSLT: &#60;a href=&#34;https://gist.github.com/ewg118/6b0b99d953ae1f4d8eaf&#34; rel=&#34;nofollow&#34;&#62;https://gist.github.com/ewg118/6b0b99d953ae1f4d8eaf&#60;/a&#62;
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>aliciapeaker@gmail.com on "How to extract tagged data and text from TEI file?"</title>
+						<link>http://digitalhumanities.org/answers/topic/how-to-extract-tagged-data-and-text-from-tei-file#post-2286</link>
+			<pubDate>Thu, 26 Feb 2015 16:56:54 +0000</pubDate>
+			<dc:creator>aliciapeaker@gmail.com</dc:creator>
+			<guid isPermaLink="false">2286@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I’ve been using CATMA (&#60;a href=&#34;http://www.catma.de/&#34; rel=&#34;nofollow&#34;&#62;http://www.catma.de/&#60;/a&#62;) to markup a text with some analytical tags I’ve created. I then exported the file in TEI, and I’m now trying to extract the data I’ve marked up in order to measure tag frequencies, but am finding it quite difficult. &#60;/p&#62;
+&#60;p&#62;Rather than tagging text with the labels I’ve created, CATMA has established a somewhat complicated (though likely necessary) system of identifiers. So, for example, I’ve tagged the word “clouds” in my text with the tag “weather,” which is a child of the tagset “non-living.” &#60;/p&#62;
+&#60;p&#62;CATMA represents the tag in the text like this:&#60;br /&#62;
+&#38;lt;text&#38;gt;&#60;br /&#62;
+     &#38;lt;body&#38;gt;&#60;br /&#62;
+          &#38;lt;ab type=“catma”&#38;gt;&#60;br /&#62;
+Small feckless &#38;lt;seg ana=&#34;#CATMA_0036983F-4D37-48C2-8BC7-5846A8364D26&#34;&#38;gt;clouds&#38;lt;/seg&#38;gt; were hurried across the vast untroubled sky...&#60;br /&#62;
+          &#38;lt;/ab&#38;gt;&#60;br /&#62;
+     &#38;lt;/body&#38;gt;&#60;br /&#62;
+&#38;lt;/text&#38;gt;&#60;/p&#62;
+&#60;p&#62;The identifier then points to this feature statement after the body of the text:&#60;/p&#62;
+&#60;p&#62;&#38;lt;text&#38;gt;&#60;br /&#62;
+     &#38;lt;body&#38;gt;&#60;br /&#62;
+     &#38;lt;/body&#38;gt;&#60;br /&#62;
+          &#38;lt;fs xml:id=&#34;CATMA_0036983F-4D37-48C2-8BC7-5846A8364D26&#34; type=&#34;CATMA_3CDE1FE4-CA5D-4460-9BFF-739537D753DE&#34;&#38;gt;&#60;br /&#62;
+            &#38;lt;f name=&#34;catma_displaycolor&#34;&#38;gt;&#60;br /&#62;
+                &#38;lt;string&#38;gt;-16710765&#38;lt;/string&#38;gt;&#60;br /&#62;
+            &#38;lt;/f&#38;gt;&#60;br /&#62;
+            &#38;lt;f name=&#34;catma_markupauthor&#34;&#38;gt;&#60;br /&#62;
+                &#38;lt;string&#38;gt;name@email&#38;lt;/string&#38;gt;&#60;br /&#62;
+            &#38;lt;/f&#38;gt;&#60;br /&#62;
+        &#38;lt;/fs&#38;gt;&#60;br /&#62;
+&#38;lt;/text&#38;gt;&#60;/p&#62;
+&#60;p&#62;The id for the type of the fs then points back up to the feature statement declaration in the header:&#60;/p&#62;
+&#60;p&#62;&#38;lt;teiHeader&#38;gt;&#60;br /&#62;
+     &#38;lt;encodingDesc&#38;gt;&#60;br /&#62;
+          &#38;lt;fsDecl xml:id=&#34;CATMA_3CDE1FE4-CA5D-4460-9BFF-739537D753DE&#34; n=&#34;2014-12-16T13:30:36.000+0000&#34; type=&#34;CATMA_3CDE1FE4-CA5D-4460-9BFF-739537D753DE&#34;&#38;gt;&#60;br /&#62;
+                    &#38;lt;fsDescr&#38;gt;Weather&#38;lt;/fsDescr&#38;gt;&#60;br /&#62;
+                    &#38;lt;fDecl xml:id=&#34;CATMA_699BAC76-8D15-408E-A30A-984849115A71&#34; name=&#34;catma_displaycolor&#34;&#38;gt;&#60;br /&#62;
+                        &#38;lt;vRange&#38;gt;&#60;br /&#62;
+                            &#38;lt;vColl&#38;gt;&#60;br /&#62;
+                                &#38;lt;string&#38;gt;-16710765&#38;lt;/string&#38;gt;&#60;br /&#62;
+                            &#38;lt;/vColl&#38;gt;&#60;br /&#62;
+                        &#38;lt;/vRange&#38;gt;&#60;br /&#62;
+                    &#38;lt;/fDecl&#38;gt;&#60;br /&#62;
+                    &#38;lt;fDecl xml:id=&#34;CATMA_8653855B-B611-48E8-AE9D-00E0160A37DB&#34; name=&#34;catma_markupauthor&#34;&#38;gt;&#60;br /&#62;
+                        &#38;lt;vRange&#38;gt;&#60;br /&#62;
+                            &#38;lt;vColl&#38;gt;&#60;br /&#62;
+                                  &#38;lt;string&#38;gt;name@email&#38;lt;/string&#38;gt;&#60;br /&#62;
+                            &#38;lt;/vColl&#38;gt;&#60;br /&#62;
+                        &#38;lt;/vRange&#38;gt;&#60;br /&#62;
+                    &#38;lt;/fDecl&#38;gt;&#60;br /&#62;
+                &#38;lt;/fsDecl&#38;gt;&#60;br /&#62;
+     &#38;lt;/encodingDesc&#38;gt;&#60;br /&#62;
+&#38;lt;/teiHeader&#38;gt; &#60;/p&#62;
+&#60;p&#62;I need to extract the text and data, perhaps in a csv file (or other output format, if it’s easier), into something that lists the tagged text (e.g. “clouds”) in one column, the first tag applied to it in the next column (e.g. &#34;weather&#34;), and the tagset or category to which that tag belongs in the next (e.g. &#34;non-living). &#60;/p&#62;
+&#60;p&#62;Or perhaps there’s a better way—really, what I’d like to be able to do is get the frequencies of each tag &#38;amp; tagset for each chapter. If there’s an easier way to mark up the text in TEI that would better allow for what I need, I’m open to re-encoding manually.&#60;/p&#62;
+&#60;p&#62;I’ve also tried playing around a bit with some XSLT and a Python script (&#60;a href=&#34;http://www.rdegges.com/quickly-extract-xml-data-with-python/&#34; rel=&#34;nofollow&#34;&#62;http://www.rdegges.com/quickly-extract-xml-data-with-python/&#60;/a&#62;) but with very little experience with either, I find myself quickly out of my depths. Open to suggestions—and thanks in advance for your help!
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>scottkleinman on "Experience with Lexos or Text Mining Software?"</title>
+						<link>http://digitalhumanities.org/answers/topic/experience-with-lexos-or-text-mining-software#post-2260</link>
+			<pubDate>Thu, 18 Dec 2014 00:22:19 +0000</pubDate>
+			<dc:creator>scottkleinman</dc:creator>
+			<guid isPermaLink="false">2260@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I am one of the Lexos developers, and I can't seem to reproduce the error you are getting--at least not on upload. Feel free to drop me a line (scott.kleinman@csun.edu), and we'll see if we can identify the problem.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Muzel on "Experience with Lexos or Text Mining Software?"</title>
+						<link>http://digitalhumanities.org/answers/topic/experience-with-lexos-or-text-mining-software#post-2259</link>
+			<pubDate>Wed, 17 Dec 2014 19:14:04 +0000</pubDate>
+			<dc:creator>Muzel</dc:creator>
+			<guid isPermaLink="false">2259@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;What is your desired output?&#60;br /&#62;
+Have you tried Voyant Tools?
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>rubyperlmutter@gmail.com on "Experience with Lexos or Text Mining Software?"</title>
+						<link>http://digitalhumanities.org/answers/topic/experience-with-lexos-or-text-mining-software#post-2258</link>
+			<pubDate>Tue, 18 Nov 2014 19:57:32 +0000</pubDate>
+			<dc:creator>rubyperlmutter@gmail.com</dc:creator>
+			<guid isPermaLink="false">2258@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hi!&#60;/p&#62;
+&#60;p&#62;I'm trying to use Lexos (&#60;a href=&#34;http://lexos.wheatoncollege.edu/upload)&#34; rel=&#34;nofollow&#34;&#62;http://lexos.wheatoncollege.edu/upload)&#60;/a&#62;, and the text of the files I upload keep getting scrambled. I've tried several of the accepted formats as well as creating new files with no luck. Any ideas about what the problem could be? &#60;/p&#62;
+&#60;p&#62;Or, any recommendations for free and easy to use text-mining tools?&#60;/p&#62;
+&#60;p&#62;Thank you,&#60;br /&#62;
+Ruby
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>slh@ens-lyon.fr on "Text mining tools that work with RTL texts?"</title>
+						<link>http://digitalhumanities.org/answers/topic/text-mining-tools-that-work-with-rtl-texts#post-2172</link>
+			<pubDate>Sat, 03 May 2014 12:52:10 +0000</pubDate>
+			<dc:creator>slh@ens-lyon.fr</dc:creator>
+			<guid isPermaLink="false">2172@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @sinai.rusinek@gmail.com's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/text-mining-tools-that-work-with-rtl-texts#post-1912&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;Hi Sinai,&#60;/p&#62;
+&#60;p&#62;I suggest you give a try to &#60;a href=&#34;http://textometrie.ens-lyon.fr/?lang=en&#34;&#62;TXM&#60;/a&#62;.&#60;/p&#62;
+&#60;p&#62;We haven't designed the GUI with RTL writing systems in mind but UTF-8 RTL encoding appears to be globally well supported by default technology, with a notable exception concerning concordance contexts that are interchanged from left to right.&#60;/p&#62;
+&#60;p&#62;The current state of the software and possible evolutions concerning writing systems is described here (in French): &#60;a href=&#34;https://groupes.renater.fr/wiki/txm-info/public/specs_langues?s=%C3%A9criture&#34; rel=&#34;nofollow&#34;&#62;https://groupes.renater.fr/wiki/txm-info/public/specs_langues?s=%C3%A9criture&#60;/a&#62;.&#60;/p&#62;
+&#60;p&#62;If there is sufficient interest, we could make things evolve more rapidly with respect to RTL.&#60;/p&#62;
+&#60;p&#62;Mind that GUI management of RTL display is independant of the word segmentation/tokenization process of raw text which can also have a deep impact on usability of textual analysis software. Even if one can alaways use software on character strings, it is much better to use them on words or lexical items. For TXM we begin to address semitic language word tokenization with Arabic. See here the current state: &#60;a href=&#34;https://groupes.renater.fr/wiki/txm-info/public/specs_import_annotation_lexicale_auto#etat_de_l_art_pour_l_arabe&#34; rel=&#34;nofollow&#34;&#62;https://groupes.renater.fr/wiki/txm-info/public/specs_import_annotation_lexicale_auto#etat_de_l_art_pour_l_arabe&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;If there is sufficient interest, we could include Hebrew in our roadmap. For example wih the MorphTagger software: &#60;a href=&#34;http://www.cs.technion.ac.il/~barhaim/MorphTagger&#34; rel=&#34;nofollow&#34;&#62;http://www.cs.technion.ac.il/~barhaim/MorphTagger&#60;/a&#62;.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Brett Bobley on "New research questions in the humanities"</title>
+						<link>http://digitalhumanities.org/answers/topic/new-research-questions-in-the-humanities#post-2129</link>
+			<pubDate>Sun, 03 Nov 2013 02:41:15 +0000</pubDate>
+			<dc:creator>Brett Bobley</dc:creator>
+			<guid isPermaLink="false">2129@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='http://digitalhumanities.org/answers/profile/tedunderwood'&#62;tedunderwood&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/new-research-questions-in-the-humanities#post-2111&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;Ted makes a great point here. Indeed, there is a lot to be done in this domain.&#60;/p&#62;
+&#60;p&#62;Brett
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>tedunderwood on "New research questions in the humanities"</title>
+						<link>http://digitalhumanities.org/answers/topic/new-research-questions-in-the-humanities#post-2111</link>
+			<pubDate>Sat, 19 Oct 2013 12:01:51 +0000</pubDate>
+			<dc:creator>tedunderwood</dc:creator>
+			<guid isPermaLink="false">2111@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;@Inna: I have to confess that it seems to me expansion of scale is in no danger of turning humanities research into &#34;a set of standardized operations.&#34;&#60;/p&#62;
+&#60;p&#62;It might be nice if we had standards for any part of this process! But we don't. At this point there are only maybe twenty or thirty people seriously attempting macroscopic, quantitative humanities research, and many of those people are not in humanities disciplines: they're psychologists or computer scientists or linguists. So there's a huge diversity of approach. We're all posing different questions, and having to improvise our own ad-hoc solutions. And my sense is that we haven't even begun to discover what's possible in this domain. I believe that because I keep stumbling on really big obvious questions that haven't been posed yet.&#60;/p&#62;
+&#60;p&#62;I understand that a lot of people in the humanities are philosophically or temperamentally uneasy with quantitative methods, especially at a macroscopic scale. Which is fine! there are lots of persuasive reasons not to do this kind of research. But the notion that &#34;it has already been done; it's standardized now&#34; is not one of the reasons I find persuasive. I'm too vividly aware that almost nothing has been done yet in this domain.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Smallpiper on "New research questions in the humanities"</title>
+						<link>http://digitalhumanities.org/answers/topic/new-research-questions-in-the-humanities#post-2083</link>
+			<pubDate>Sat, 17 Aug 2013 12:01:04 +0000</pubDate>
+			<dc:creator>Smallpiper</dc:creator>
+			<guid isPermaLink="false">2083@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @Patrick Murray-John's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/new-research-questions-in-the-humanities#post-2064&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;The Oxford English Dictionary (OED) is a great example of an early (1988-) digital resource that has produced a wealth of research questions that only it could answer, but which are nonetheless basically humanistic questions about intellectual history, literature, society, and culture. Some examples include the significance of particular authors (e.g. Shakespeare) on A. the dictionary and B. the language (and C. the gap between A. and B.); word coinage and sense coinage; changing editorial practices (reflecting changing societal attitudes) regarding words about sex, race, and religion; and the varying significance of different literary periods to late Victorian lexicographers (and their successors). All this and much more using just the interfaces (CDROM and online) supplied by OUP over the years. My own DH project uses the back data to detect and document the OED's influence on poetry (and vice versa), as well as other kinds of literary production (&#60;a href=&#34;http://poetry-contingency.uwaterloo.ca&#34; rel=&#34;nofollow&#34;&#62;http://poetry-contingency.uwaterloo.ca&#60;/a&#62; ).
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Smallpiper on "History and theory question: lexicography / discourse analysis / text mining"</title>
+						<link>http://digitalhumanities.org/answers/topic/history-and-theory-question-lexicography-discourse-analysis-text-mining#post-2082</link>
+			<pubDate>Fri, 16 Aug 2013 23:04:02 +0000</pubDate>
+			<dc:creator>Smallpiper</dc:creator>
+			<guid isPermaLink="false">2082@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Perhaps at an angle to what you're describing, from time to time I post on lexicography and literary writing, especially poetry, here: &#60;a href=&#34;http://poetry-contingency.uwaterloo.ca/&#34; rel=&#34;nofollow&#34;&#62;http://poetry-contingency.uwaterloo.ca/&#60;/a&#62;, with an emphasis on text mining and comparison.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+			 
+				<title>Inna Kizhner on "New research questions in the humanities"</title>
+						<link>http://digitalhumanities.org/answers/topic/new-research-questions-in-the-humanities#post-2066</link>
+			<pubDate>Mon, 12 Aug 2013 13:42:16 +0000</pubDate>
+			<dc:creator>Inna Kizhner</dc:creator>
+			<guid isPermaLink="false">2066@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Thanks a lot for your replies! Yes, many people just do close reading. Thank you, Ted, for sincerely admitting that there are things that 'DH does not do'. But don't they need digital methods to build (say) networks of metaphors (some metaphors may belong to a particular set of characters) or don't they need spatial tools to map their characters and study how particular words are related to geographical settings? Thank you, Linkoln, for reminding us that these are old research questions that are easier to answer with digital tools.&#60;/p&#62;
+&#60;p&#62;Anyway, currently, big data changes might result in turning research in the humanities into a set of standardized operations, a sort of assembly line. This may explain Eliah Meek's remark that DH conference this year was dominated by text analysis. Don't you think that DH is now at the stage of market-driven consumerism rather than the stage of looking for new intellectual discoveries in the humanities similar to a spiritual and intellectual wave that printing press raised in Europe in the sixteenth century?
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>
