@@ -17,7 +17,7 @@
 			<name>q</name>
 			<link>http://digitalhumanities.org/answers/search.php</link>
 		</textInput>
-		<atom:link href="/DH-Answers-Archive/rss/tags/tei" rel="self" type="application/rss+xml" />
+		<atom:link href="/rss/tags/tei" rel="self" type="application/rss+xml" />
 
 		<item>
 			 
@@ -217,7 +217,7 @@ Small feckless &#38;lt;seg ana=&#34;#CATMA_0036983F-4D37-48C2-8BC7-5846A8364D26&
 			<dc:creator>Hugh Cayless</dc:creator>
 			<guid isPermaLink="false">2229@http://digitalhumanities.org/answers/</guid>
 			<description>&#60;p&#62;&#60;em&#62;Replying to @Arno Bosse's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/how-do-i-best-convert-hundreds-of-tei-p5-documents-to-plaintext#post-2227&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
-&#60;p&#62;@&#60;a href='/DH-Answers-Archive/profile/cforster'&#62;cforster&#60;/a&#62; is almost certainly right that you want an XSLT. It all depends on the level of encoding and whether you really want all of the text, laid out as it is in the document (maybe there are footnotes in the OCR for example that have been turned into inline notes in the TEI).&#60;/p&#62;
+&#60;p&#62;@&#60;a href='/profile/cforster'&#62;cforster&#60;/a&#62; is almost certainly right that you want an XSLT. It all depends on the level of encoding and whether you really want all of the text, laid out as it is in the document (maybe there are footnotes in the OCR for example that have been turned into inline notes in the TEI).&#60;/p&#62;
 &#60;p&#62;That said, if you really just want a dead-simple text extraction, you can do something like the following with xmllint:&#60;/p&#62;
 &#60;p&#62;&#60;code&#62;xmllint --xpath &#34;//*[local-name() ='text']//text()&#34; flle.xml&#60;/code&#62;&#60;/p&#62;
 &#60;p&#62;That can be bundled up with a find command (or other method of iterating over the files) and the output redirected to files in order to do your batch processing.
