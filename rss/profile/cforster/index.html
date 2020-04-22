@@ -6,7 +6,7 @@
 	xmlns:atom="http://www.w3.org/2005/Atom">
 	<channel>
 		<title>Digital Humanities Questions &#38; Answers &#187; User Favorites: cforster</title>
-		<link><a href='http://digitalhumanities.org/answers/profile/cforster'>cforster</a></link>
+		<link><a href='/DH-Answers-Archive/profile/cforster'>cforster</a></link>
 		<description>Digital Humanities Questions &amp; Answers &#187; User Favorites: cforster</description>
 		<language>en-US</language>
 		<pubDate>Wed, 20 Apr 2016 20:16:30 +0000</pubDate>
@@ -61,7 +61,7 @@
 			<dc:creator>Hugh Cayless</dc:creator>
 			<guid isPermaLink="false">2229@http://digitalhumanities.org/answers/</guid>
 			<description>&#60;p&#62;&#60;em&#62;Replying to @Arno Bosse's &#60;a href=&#34;http://digitalhumanities.org/answers/topic/how-do-i-best-convert-hundreds-of-tei-p5-documents-to-plaintext#post-2227&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
-&#60;p&#62;@&#60;a href='http://digitalhumanities.org/answers/profile/cforster'&#62;cforster&#60;/a&#62; is almost certainly right that you want an XSLT. It all depends on the level of encoding and whether you really want all of the text, laid out as it is in the document (maybe there are footnotes in the OCR for example that have been turned into inline notes in the TEI).&#60;/p&#62;
+&#60;p&#62;@&#60;a href='/DH-Answers-Archive/profile/cforster'&#62;cforster&#60;/a&#62; is almost certainly right that you want an XSLT. It all depends on the level of encoding and whether you really want all of the text, laid out as it is in the document (maybe there are footnotes in the OCR for example that have been turned into inline notes in the TEI).&#60;/p&#62;
 &#60;p&#62;That said, if you really just want a dead-simple text extraction, you can do something like the following with xmllint:&#60;/p&#62;
 &#60;p&#62;&#60;code&#62;xmllint --xpath &#34;//*[local-name() ='text']//text()&#34; flle.xml&#60;/code&#62;&#60;/p&#62;
 &#60;p&#62;That can be bundled up with a find command (or other method of iterating over the files) and the output redirected to files in order to do your batch processing.
@@ -148,7 +148,7 @@
 			<pubDate>Mon, 31 Dec 2012 18:35:36 +0000</pubDate>
 			<dc:creator>Ben Marwick</dc:creator>
 			<guid isPermaLink="false">1842@http://digitalhumanities.org/answers/</guid>
-			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='http://digitalhumanities.org/answers/profile/cforster'&#62;cforster&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/topic-modeling-mallet-with-jstor-data-for-research#post-1767&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='/DH-Answers-Archive/profile/cforster'&#62;cforster&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/topic-modeling-mallet-with-jstor-data-for-research#post-1767&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
 &#60;p&#62;Here are a few lines of R that I'm working with for topic modelling. These lines should:&#60;/p&#62;
 &#60;p&#62;1. read in the JSTOR CSV wordcount files to R&#60;br /&#62;
 2. convert them from a table of words and their counts to a 'bag of words'&#60;br /&#62;

@@ -131,7 +131,7 @@ if($html = '&#38;lt;?xml encoding=&#34;UTF-8&#34;&#38;gt;' . file_get_contents($
 			<pubDate>Thu, 22 Sep 2011 04:43:21 +0000</pubDate>
 			<dc:creator>Conal Tuohy</dc:creator>
 			<guid isPermaLink="false">1386@http://digitalhumanities.org/answers/</guid>
-			<description>&#60;p&#62;I&#60;em&#62;Replying to @&#60;a href='http://digitalhumanities.org/answers/profile/inactinique'&#62;inactinique&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/domdocument-and-utf-8#post-1385&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+			<description>&#60;p&#62;I&#60;em&#62;Replying to @&#60;a href='/DH-Answers-Archive/profile/inactinique'&#62;inactinique&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/domdocument-and-utf-8#post-1385&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
 &#60;p&#62;I'm not a PHP expert, either, so I can't suggest a proper fix to UTF-8-encode the Zotero data, but perhaps you could change the encoding declaration on that one page?
 &#60;/p&#62;</description>
 		</item>
@@ -143,7 +143,7 @@ if($html = '&#38;lt;?xml encoding=&#34;UTF-8&#34;&#38;gt;' . file_get_contents($
 			<dc:creator>inactinique</dc:creator>
 			<guid isPermaLink="false">1385@http://digitalhumanities.org/answers/</guid>
 			<description>&#60;p&#62;Hi,&#60;/p&#62;
-&#60;p&#62;I'm trying to use an under development plug-in for wordpress that is developped by @&#60;a href='http://digitalhumanities.org/answers/profile/clioweb'&#62;clioweb&#60;/a&#62; and @stakats from the CHNM. The aim of this plug-in is to take the content of a zotero user's CV and to publish it on your wordpress blog. Sean Takats is using it on his blog: &#60;a href=&#34;http://quintessenceofham.org/cv/&#34; rel=&#34;nofollow&#34;&#62;http://quintessenceofham.org/cv/&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;I'm trying to use an under development plug-in for wordpress that is developped by @&#60;a href='/DH-Answers-Archive/profile/clioweb'&#62;clioweb&#60;/a&#62; and @stakats from the CHNM. The aim of this plug-in is to take the content of a zotero user's CV and to publish it on your wordpress blog. Sean Takats is using it on his blog: &#60;a href=&#34;http://quintessenceofham.org/cv/&#34; rel=&#34;nofollow&#34;&#62;http://quintessenceofham.org/cv/&#60;/a&#62;&#60;/p&#62;
 &#60;p&#62;My problem is the following: I'm French, so I've got accent in my name. See here: &#60;a href=&#34;http://www.zotero.org/inactinique/cv&#34; rel=&#34;nofollow&#34;&#62;http://www.zotero.org/inactinique/cv&#60;/a&#62;&#60;/p&#62;
 &#60;p&#62;When I'm using this plug-in, the accents in my name (and in all titles of my zotero CV page also - temporarily, I just found expressions in French with no accents for those titles) are not properly encoded on my website: &#60;a href=&#34;http://www.clavert.net/wordpress/?page_id=333&#34; rel=&#34;nofollow&#34;&#62;http://www.clavert.net/wordpress/?page_id=333&#60;/a&#62;&#60;/p&#62;
 &#60;p&#62;If you look at the HTML code of the zotero CV page, the page is declared as UTF-8 encoded (just as my website). Accents in titles, in this code, are directly typed-in (é, è, etc), but in the rest of the source code, accents are encoded in HTML (&#38;eacute; &#38;egrave; etc).&#60;/p&#62;

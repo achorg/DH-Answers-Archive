@@ -26,7 +26,7 @@
 			<pubDate>Mon, 29 Apr 2013 03:09:18 +0000</pubDate>
 			<dc:creator>Scott Weingart</dc:creator>
 			<guid isPermaLink="false">1993@http://digitalhumanities.org/answers/</guid>
-			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='http://digitalhumanities.org/answers/profile/johnlaudun'&#62;johnlaudun&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/methods-to-process-a-plain-text-collection-into-a-bimodal-graph#post-1992&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;br /&#62;
+			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='/DH-Answers-Archive/profile/johnlaudun'&#62;johnlaudun&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/methods-to-process-a-plain-text-collection-into-a-bimodal-graph#post-1992&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;br /&#62;
 Ah, sorry that I neglected to mention the header row! What you're seeing in the first picture is actually what you're looking for (a document-document network based on shared words), but the word nodes were not removed. Preprocessing-&#38;gt;Delete Isolates can do that. Also, if that was the bibliographic coupling, than the other algorithm will have the word-word network based on shared documents. As for getting the graph into gephi, try saving the network out as graphml, renaming the file from .xml to .graphml, and then loading it into gephi. &#60;/p&#62;
 &#60;p&#62;In any case, because there are likely many words per document, you might do well to threshold above a certain value (filtering in gephi or preprocessing-&#38;gt;extract edges above or below value in sci2) to make the network a bit more sparse.
 &#60;/p&#62;</description>
@@ -73,7 +73,7 @@ laudun-2,like&#124;said&#124;famili&#124;weird
 			<pubDate>Fri, 26 Apr 2013 19:23:56 +0000</pubDate>
 			<dc:creator>Scott Weingart</dc:creator>
 			<guid isPermaLink="false">1989@http://digitalhumanities.org/answers/</guid>
-			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='http://digitalhumanities.org/answers/profile/johnlaudun'&#62;johnlaudun&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/methods-to-process-a-plain-text-collection-into-a-bimodal-graph#post-1988&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;br /&#62;
+			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='/DH-Answers-Archive/profile/johnlaudun'&#62;johnlaudun&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/methods-to-process-a-plain-text-collection-into-a-bimodal-graph#post-1988&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;br /&#62;
 I think maybe I didn't explain what I meant well enough the first time, sorry! If you have a csv that looks like &#60;/p&#62;
 &#60;pre&#62;
 title1, fulltext1
@@ -101,7 +101,7 @@ t3, w4
 			<pubDate>Fri, 26 Apr 2013 19:19:09 +0000</pubDate>
 			<dc:creator>johnlaudun</dc:creator>
 			<guid isPermaLink="false">1988@http://digitalhumanities.org/answers/</guid>
-			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='http://digitalhumanities.org/answers/profile/johnlaudun'&#62;johnlaudun&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/methods-to-process-a-plain-text-collection-into-a-bimodal-graph#post-1987&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='/DH-Answers-Archive/profile/johnlaudun'&#62;johnlaudun&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/methods-to-process-a-plain-text-collection-into-a-bimodal-graph#post-1987&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
 &#60;p&#62;What I'm working on is a script that goes from scraping out word frequencies to changing the csv to simply be the name-of-the-text, word, like this:&#60;/p&#62;
 &#60;pre&#62;
     text1, word1
@@ -142,7 +142,7 @@ t3, w4
 			<pubDate>Fri, 26 Apr 2013 16:42:19 +0000</pubDate>
 			<dc:creator>Scott Weingart</dc:creator>
 			<guid isPermaLink="false">1986@http://digitalhumanities.org/answers/</guid>
-			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='http://digitalhumanities.org/answers/profile/johnlaudun'&#62;johnlaudun&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/methods-to-process-a-plain-text-collection-into-a-bimodal-graph#post-1984&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;br /&#62;
+			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='/DH-Answers-Archive/profile/johnlaudun'&#62;johnlaudun&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/methods-to-process-a-plain-text-collection-into-a-bimodal-graph#post-1984&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;br /&#62;
 Also, on a side note, if you do the first normalization step and then &#34;Extract Word Co-Occurrence&#34; network, you can also get to words that co-occur frequently, as explained here: &#60;a href=&#34;http://wiki.cns.iu.edu/pages/viewpage.action?pageId=2200066#id-514StudyingFourMajorNetSciResearchersISIData-5145WordCo-OccurrenceNetwork5145WordCo-OccurrenceNetwork&#34; rel=&#34;nofollow&#34;&#62;http://wiki.cns.iu.edu/pages/viewpage.action?pageId=2200066#id-514StudyingFourMajorNetSciResearchersISIData-5145WordCo-OccurrenceNetwork5145WordCo-OccurrenceNetwork&#60;/a&#62;
 &#60;/p&#62;</description>
 		</item>
@@ -153,7 +153,7 @@ Also, on a side note, if you do the first normalization step and then &#34;Extra
 			<pubDate>Fri, 26 Apr 2013 16:40:13 +0000</pubDate>
 			<dc:creator>Scott Weingart</dc:creator>
 			<guid isPermaLink="false">1985@http://digitalhumanities.org/answers/</guid>
-			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='http://digitalhumanities.org/answers/profile/johnlaudun'&#62;johnlaudun&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/methods-to-process-a-plain-text-collection-into-a-bimodal-graph#post-1984&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;br /&#62;
+			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='/DH-Answers-Archive/profile/johnlaudun'&#62;johnlaudun&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/methods-to-process-a-plain-text-collection-into-a-bimodal-graph#post-1984&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;br /&#62;
 This can actually be done within Sci2 itself, once you have a csv with titles in one column and text in the second. Once that's loaded into Sci2, go to Preprocessing-&#38;gt;Topical-&#38;gt;Stopword Text (you can select your own stopword list from that dialog). &#60;/p&#62;
 &#60;p&#62;Then go to Data Preparation-&#38;gt;Extract Directed Network, first column title, second column text, hit okay, and voila! You can then make that into texts based on words in common or words based on texts in common using either Data Prep-&#38;gt;Extract Co-Citation Network, or Extract Bibliographic Coupling Network (depending on your need), and you've got what you're looking for.
 &#60;/p&#62;</description>

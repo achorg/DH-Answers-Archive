@@ -27,7 +27,7 @@
 			<dc:creator>Sharon K. Goetz</dc:creator>
 			<guid isPermaLink="false">1675@http://digitalhumanities.org/answers/</guid>
 			<description>&#60;p&#62;Belatedly, since I was checking to see what the current received wisdom is: character entities in P4 are also handy for glyphs for which no Unicode exists (yet?). Though I like Junicode, I'm leery of pasting in glyphs from its Private Use section. Very much in agreement with @kevin.s.hawkins here, also. &#60;/p&#62;
-&#60;p&#62;I'm glad to see @&#60;a href='http://digitalhumanities.org/answers/profile/jamesc'&#62;jamesc&#60;/a&#62;'s reminder about oXygen's code templates, at any rate, and will define a few templates for the glyphs in my manuscripts which aren't satisfied by the many Unicode hex points I've memorized....
+&#60;p&#62;I'm glad to see @&#60;a href='/DH-Answers-Archive/profile/jamesc'&#62;jamesc&#60;/a&#62;'s reminder about oXygen's code templates, at any rate, and will define a few templates for the glyphs in my manuscripts which aren't satisfied by the many Unicode hex points I've memorized....
 &#60;/p&#62;</description>
 		</item>
 		<item>
@@ -150,7 +150,7 @@
 			<pubDate>Wed, 17 Nov 2010 11:34:18 +0000</pubDate>
 			<dc:creator>jamesc</dc:creator>
 			<guid isPermaLink="false">701@http://digitalhumanities.org/answers/</guid>
-			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='http://digitalhumanities.org/answers/profile/cforster'&#62;cforster&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/tei-basic-tags#post-700&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='/DH-Answers-Archive/profile/cforster'&#62;cforster&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/tei-basic-tags#post-700&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
 &#60;p&#62;Yup, that is exactly what I meant. :-)  Chris is right, if you want to mark them up just because they are in small-caps then what you are (semantically) noting is that there is some highlighting of some sort there and that is it.  So &#38;lt;hi rend=&#34;sc&#34;&#38;gt; (or similar) is definitely your friend in that case.  &#60;a href=&#34;http://www.tei-c.org/release/doc/tei-p5-doc/en/html/ref-hi.html&#34; rel=&#34;nofollow&#34;&#62;http://www.tei-c.org/release/doc/tei-p5-doc/en/html/ref-hi.html&#60;/a&#62; &#60;/p&#62;
 &#60;p&#62;The 'comparing two texts in real time' seems interesting, and if you want help with that let us know!&#60;/p&#62;
 &#60;p&#62;-James
@@ -163,15 +163,15 @@
 			<pubDate>Wed, 17 Nov 2010 03:25:40 +0000</pubDate>
 			<dc:creator>cforster</dc:creator>
 			<guid isPermaLink="false">700@http://digitalhumanities.org/answers/</guid>
-			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='http://digitalhumanities.org/answers/profile/ianrobertson'&#62;IanRobertson&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/tei-basic-tags#post-699&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
-&#60;p&#62;Hey Ian. @&#60;a href='http://digitalhumanities.org/answers/profile/jamesc'&#62;jamesc&#60;/a&#62; is far more authoritative on these matters than I am, but I think I can elaborate on his point to clarify what you need. In short: the &#38;lt;hi&#38;gt; tag can take care of your smallcaps issue. For instance, if you have a poem with the first word in small caps it might look like this:&#60;/p&#62;
+			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='/DH-Answers-Archive/profile/ianrobertson'&#62;IanRobertson&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/tei-basic-tags#post-699&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;Hey Ian. @&#60;a href='/DH-Answers-Archive/profile/jamesc'&#62;jamesc&#60;/a&#62; is far more authoritative on these matters than I am, but I think I can elaborate on his point to clarify what you need. In short: the &#38;lt;hi&#38;gt; tag can take care of your smallcaps issue. For instance, if you have a poem with the first word in small caps it might look like this:&#60;/p&#62;
 &#60;pre&#62;
 &#38;lt;lg type=&#34;poem&#34;&#38;gt;
 &#38;lt;l&#38;gt;&#38;lt;hi rend=&#34;smallcaps&#34;&#38;gt;Some&#38;lt;/hi&#38;gt; keep the Sabbath going to Church—&#38;lt;/l&#38;gt;
 &#38;lt;l&#38;gt;I keep it, staying at Home—&#38;lt;/l&#38;gt;
 [...]
 &#60;/pre&#62;
-&#60;p&#62;The point in determining what function the small caps serve is just to mark it up in the most appropriate way. If the small caps were section titles, then it might make sense to mark up not the typography (or maybe not &#60;em&#62;only&#60;/em&#62; the typography) but to add something semantic, like a &#38;lt;div&#38;gt; or a &#38;lt;head&#38;gt; or whatever. I think that was @&#60;a href='http://digitalhumanities.org/answers/profile/jamesc'&#62;jamesc&#60;/a&#62;'s point in noting &#34;the real question to ask is why you are encoding small caps.&#34; I think in this case, indeed, it sounds like you're marking up them as small caps just because they're small caps. In which case &#38;lt;hi rend=&#34;smallcaps&#34;&#38;gt;...&#38;lt;/hi&#38;gt; seems like a good solution.&#60;/p&#62;
+&#60;p&#62;The point in determining what function the small caps serve is just to mark it up in the most appropriate way. If the small caps were section titles, then it might make sense to mark up not the typography (or maybe not &#60;em&#62;only&#60;/em&#62; the typography) but to add something semantic, like a &#38;lt;div&#38;gt; or a &#38;lt;head&#38;gt; or whatever. I think that was @&#60;a href='/DH-Answers-Archive/profile/jamesc'&#62;jamesc&#60;/a&#62;'s point in noting &#34;the real question to ask is why you are encoding small caps.&#34; I think in this case, indeed, it sounds like you're marking up them as small caps just because they're small caps. In which case &#38;lt;hi rend=&#34;smallcaps&#34;&#38;gt;...&#38;lt;/hi&#38;gt; seems like a good solution.&#60;/p&#62;
 &#60;p&#62;Hope that clarifies.
 &#60;/p&#62;</description>
 		</item>
@@ -182,7 +182,7 @@
 			<pubDate>Tue, 16 Nov 2010 19:30:40 +0000</pubDate>
 			<dc:creator>IanRobertson</dc:creator>
 			<guid isPermaLink="false">699@http://digitalhumanities.org/answers/</guid>
-			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='http://digitalhumanities.org/answers/profile/jamesc'&#62;jamesc&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/tei-basic-tags#post-677&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='/DH-Answers-Archive/profile/jamesc'&#62;jamesc&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/tei-basic-tags#post-677&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
 &#60;p&#62;Thanks for all the help.  I'm very new to TEI so I'm sorry if this doesn't make much sense, but to answer your question. I'm doing a research project in college and the person in charge of me suggested I tag smallcaps because he planned on comparing two similar texts in real time.  The texts are all slightly modified from the original, so smallcaps would matter.
 &#60;/p&#62;</description>
 		</item>
@@ -193,7 +193,7 @@
 			<pubDate>Sat, 13 Nov 2010 13:51:07 +0000</pubDate>
 			<dc:creator>Bethany Nowviskie</dc:creator>
 			<guid isPermaLink="false">683@http://digitalhumanities.org/answers/</guid>
-			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='http://digitalhumanities.org/answers/profile/jamesc'&#62;jamesc&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/tei-basic-tags#post-680&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='/DH-Answers-Archive/profile/jamesc'&#62;jamesc&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/tei-basic-tags#post-680&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
 &#60;p&#62;Hey, James -- good stuff! To keep this discussion on the TEI topic, I've instead &#60;a href=&#34;http://digitalhumanities.org/answers/topic/how-can-we-improve-the-dhanswers-site/page/2?replies=30#post-682&#34;&#62;responded to you&#60;/a&#62; over in our thread on suggestions for improving the DH Answers site!
 &#60;/p&#62;</description>
 		</item>
