@@ -17,7 +17,7 @@
 			<name>q</name>
 			<link>http://digitalhumanities.org/answers/search.php</link>
 		</textInput>
-		<atom:link href="/rss/topic/know-of-a-great-web-based-application-that-supports-editorial-workflow" rel="self" type="application/rss+xml" />
+		<atom:link href="/rss/topic/know-of-a-great-web-based-application-that-supports-editorial-workflow/index.xml" rel="self" type="application/rss+xml" />
 
 		<item>
 			 

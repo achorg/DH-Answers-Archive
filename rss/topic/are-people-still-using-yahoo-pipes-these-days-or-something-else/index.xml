@@ -17,7 +17,7 @@
 			<name>q</name>
 			<link>http://digitalhumanities.org/answers/search.php</link>
 		</textInput>
-		<atom:link href="/rss/topic/are-people-still-using-yahoo-pipes-these-days-or-something-else" rel="self" type="application/rss+xml" />
+		<atom:link href="/rss/topic/are-people-still-using-yahoo-pipes-these-days-or-something-else/index.xml" rel="self" type="application/rss+xml" />
 
 		<item>
 			 

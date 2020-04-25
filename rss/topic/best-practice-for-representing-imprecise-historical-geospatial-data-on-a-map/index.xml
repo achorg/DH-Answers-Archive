@@ -17,7 +17,7 @@
 			<name>q</name>
 			<link>http://digitalhumanities.org/answers/search.php</link>
 		</textInput>
-		<atom:link href="/rss/topic/best-practice-for-representing-imprecise-historical-geospatial-data-on-a-map" rel="self" type="application/rss+xml" />
+		<atom:link href="/rss/topic/best-practice-for-representing-imprecise-historical-geospatial-data-on-a-map/index.xml" rel="self" type="application/rss+xml" />
 
 		<item>
 			 

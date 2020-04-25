@@ -17,7 +17,7 @@
 			<name>q</name>
 			<link>http://digitalhumanities.org/answers/search.php</link>
 		</textInput>
-		<atom:link href="/rss/topic/how-to-find-traces-of-a-text-eg-article-in-a-more-recent-one-eg-chapter" rel="self" type="application/rss+xml" />
+		<atom:link href="/rss/topic/how-to-find-traces-of-a-text-eg-article-in-a-more-recent-one-eg-chapter/index.xml" rel="self" type="application/rss+xml" />
 
 		<item>
 			 

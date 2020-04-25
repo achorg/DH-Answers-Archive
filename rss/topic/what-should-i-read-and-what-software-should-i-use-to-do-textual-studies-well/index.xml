@@ -17,7 +17,7 @@
 			<name>q</name>
 			<link>http://digitalhumanities.org/answers/search.php</link>
 		</textInput>
-		<atom:link href="/rss/topic/what-should-i-read-and-what-software-should-i-use-to-do-textual-studies-well" rel="self" type="application/rss+xml" />
+		<atom:link href="/rss/topic/what-should-i-read-and-what-software-should-i-use-to-do-textual-studies-well/index.xml" rel="self" type="application/rss+xml" />
 
 		<item>
 			 

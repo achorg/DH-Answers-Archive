@@ -17,7 +17,7 @@
 			<name>q</name>
 			<link>http://digitalhumanities.org/answers/search.php</link>
 		</textInput>
-		<atom:link href="/rss/topic/what-type-of-projects-can-be-done-in-digital-humanities" rel="self" type="application/rss+xml" />
+		<atom:link href="/rss/topic/what-type-of-projects-can-be-done-in-digital-humanities/index.xml" rel="self" type="application/rss+xml" />
 
 		<item>
 			 

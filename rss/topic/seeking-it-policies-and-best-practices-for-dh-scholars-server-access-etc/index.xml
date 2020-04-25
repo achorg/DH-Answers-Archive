@@ -17,7 +17,7 @@
 			<name>q</name>
 			<link>http://digitalhumanities.org/answers/search.php</link>
 		</textInput>
-		<atom:link href="/rss/topic/seeking-it-policies-and-best-practices-for-dh-scholars-server-access-etc" rel="self" type="application/rss+xml" />
+		<atom:link href="/rss/topic/seeking-it-policies-and-best-practices-for-dh-scholars-server-access-etc/index.xml" rel="self" type="application/rss+xml" />
 
 		<item>
 			 

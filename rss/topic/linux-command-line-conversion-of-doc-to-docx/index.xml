@@ -17,7 +17,7 @@
 			<name>q</name>
 			<link>http://digitalhumanities.org/answers/search.php</link>
 		</textInput>
-		<atom:link href="/rss/topic/linux-command-line-conversion-of-doc-to-docx" rel="self" type="application/rss+xml" />
+		<atom:link href="/rss/topic/linux-command-line-conversion-of-doc-to-docx/index.xml" rel="self" type="application/rss+xml" />
 
 		<item>
 			 

@@ -17,7 +17,7 @@
 			<name>q</name>
 			<link>http://digitalhumanities.org/answers/search.php</link>
 		</textInput>
-		<atom:link href="/rss/topic/so-what-is-this-qa-forum-and-what-can-i-do-here" rel="self" type="application/rss+xml" />
+		<atom:link href="/rss/topic/so-what-is-this-qa-forum-and-what-can-i-do-here/index.xml" rel="self" type="application/rss+xml" />
 
 		<item>
 			 
