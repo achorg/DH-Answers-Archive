@@ -4,21 +4,21 @@ Theme URI: http://digitalhumanities.org/answers
 Description: Theme for ADHO DH Q&A site.
 Version: 0.1
 Author: Joe Gilbert
-Author URI: 
+Author URI:
 */
 
 /* Globals and Frame
 =================================== */
 
-@font-face {  
-  font-family: "League Gothic";  
-  src: url('fonts/leaguegothic-webfont.eot'); /* IE */  
-  src: local("League Gothic"), url('fonts/LeagueGothic.ttf') format("truetype"); /* non-IE */  
+@font-face {
+  font-family: "League Gothic";
+  src: url('fonts/leaguegothic-webfont.eot'); /* IE */
+  src: local("League Gothic"), url('fonts/LeagueGothic.ttf') format("truetype"); /* non-IE */
 }
 
 html, body {
 	height: 100%;
-	min-height: 100%;	
+	min-height: 100%;
 }
 
 html body {
@@ -71,7 +71,7 @@ input[type="submit"] {
 	border-radius: 4px;
 	-webkit-background-clip: padding-box;
 	font-size: 11px;
-	
+
 }
 
 input[type="submit"]:hover {
@@ -108,8 +108,8 @@ img.avatar { border: 1px solid #ddd; }
 
 #header p { margin-bottom: 0; font-weight: bolder;}
 #header h1 {
-	margin-bottom: 7px; 
-	font-weight: normal; 
+	margin-bottom: 7px;
+	font-weight: normal;
 	font-family:"League Gothic","Lucida Grande",Tahoma,"Helvetica Neue",Arial,Helvetica,sans-serif;
 	font-size: 5em;
 	word-spacing: 0.1em;
@@ -188,11 +188,11 @@ div.search input {
 =================================== */
 
 #header #ach-logo {
-	text-indent: -9999px; 
-	display: block; 
-	height: 37px; 
-	position: relative; 
-	width: 750px; 
+	text-indent: -9999px;
+	display: block;
+	height: 37px;
+	position: relative;
+	width: 750px;
 	right: 220px;
 	margin-bottom: 10px;
 }
@@ -206,7 +206,7 @@ div.search input {
 	display: block;
 	float: left;
 	text-align: center;
-	background: #eee;	
+	background: #eee;
 	padding: 2px 4px 2px 26px;
 	vertical-align: middle;
 	border: 1px solid #999;
@@ -487,7 +487,7 @@ input#tag {
 	-moz-border-radius: 4px;
 	-webkit-border-radius: 4px;
 	border-radius: 4px;
-	-webkit-background-clip: padding-box;	
+	-webkit-background-clip: padding-box;
 }
 
 input#tagformsub {
@@ -556,7 +556,7 @@ input#tagformsub:active {
 	-webkit-border-radius: 6px;
 	border-radius: 6px;
 	-webkit-background-clip: padding-box;
-}	
+}
 
 #thread li.alt .threadpost { background-color: #eee; }
 
@@ -809,7 +809,7 @@ a.rss-link {
 	-moz-text-shadow:    1px 1px 3px #400;
 	-o-text-shadow:      1px 1px 3px #400;
 	-ms-text-shadow:     1px 1px 3px #400;
-	text-shadow:         1px 1px 3px #400;	
+	text-shadow:         1px 1px 3px #400;
 }
 
 #latest .table-head, #forumlist .table-head, #favorites .table-head {
@@ -905,7 +905,7 @@ div.social-it ul.socials li.socialit-twitter a {
 
 #userinfo dt { font-weight: bold; }
 
-#userinfo dd { margin: 0 0 5px; } 
+#userinfo dd { margin: 0 0 5px; }
 
 #useractivity { margin: 15px 0 5px; }
 
@@ -964,7 +964,7 @@ div.social-it ul.socials li.socialit-twitter a {
 }
 
 #search-for { margin: 15px 0 5px; }
- 
+
 ul#search-suggestions { margin-left: 25px; }
 
 .search-results { margin: 0 0 10px; }
@@ -990,7 +990,7 @@ ul#search-suggestions { margin-left: 25px; }
 	-ms-border-radius:     0 0 4px 4px;
 	border-radius:         0 0 4px 4px;
 	border-bottom: 1px solid #888;
-	border-right: 1px solid #aaa;	
+	border-right: 1px solid #aaa;
 	border-left: 1px solid #aaa;
 	-webkit-background-clip: padding-box;
 }
@@ -1112,7 +1112,7 @@ p.required-message:before {
 }
 
 #openid_identity {
-	padding-left: 20px; 
+	padding-left: 20px;
 	background: url("/answers/my-plugins/openid-plus/openid.png") no-repeat scroll left center rgb(255, 255, 255);
 }
 
@@ -1150,7 +1150,7 @@ p.required-message:before {
 	-webkit-border-radius: 3px;
 	border-radius: 3px;
 	-webkit-background-clip: padding-box;
-	
+
 }
 
 #pass-strength-result.bad {
@@ -1181,7 +1181,7 @@ p.required-message:before {
 
 #register-page fieldset {
 	float: left;
-	width: 465px;	
+	width: 465px;
 }
 
 #register-page fieldset table tr th {
@@ -1297,8 +1297,8 @@ p.required-message:before {
 	body .container {font-size: 125%; width: 99% !important;}
 	#sidebar, .topic-icon-image, td.num, .table-head {display: none;}
 	#util-login {float: none !important; text-align: center;}
-	#header {padding-left: 0 !important; width: 100% !important; margin-right: 0;} 
-	#header #ach-logo {display: none;} 
+	#header {padding-left: 0 !important; width: 100% !important; margin-right: 0;}
+	#header #ach-logo {display: none;}
 	#header h1 {font-size: 150% !important; font-variant: small-caps; padding: 10px 0; text-align: center; font-weight: bold;}
 	.header-button {-webkit-box-shadow: none; -moz-box-shadow: none; -o-box-shadow: none; -ms-box-shadow: none;	box-shadow: none; font-size: 110%;}
 	div.search {width: auto !important;}
@@ -1311,4 +1311,39 @@ p.required-message:before {
 	.login-container.span-12 {width: auto;}
 	#footer, #footer p {width: 99%; font-size: 90%;}
 	.threadpost {margin-left: 0 !important};
+}
+
+
+
+
+/* 2020 added for archive version */
+
+/* disable php links */
+a[href$=".php"], .search-form, #lang-switch {
+  pointer-events: none;
+  cursor: default;
+  opacity: 0.6;
+}
+
+/* add corner ribbon indicating this is an archive */
+body::before {
+	content: "ARCHIVE";
+	background-color: #900;
+	color:	rgb(255, 255, 255);
+	/*text-shadow: 1px 1px 3px #400;*/
+	position: absolute;
+	right: 0;
+	top: 0;
+	font-size: 200%;
+	line-height: 200%;
+	z-index: 5;
+	padding: 0 3em; /* 2 */
+	  text-align: center; /* 3 */
+  transform:
+    translateY(-100%)
+    rotate(90deg)
+    translateX(70.71067811865476%)
+    rotate(-45deg); /* 4 */
+  transform-origin: bottom right; /* 4 */
+
 }
