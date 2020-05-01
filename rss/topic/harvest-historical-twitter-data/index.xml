@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Topic: Harvest Historical Twitter Data</title>
+		<link>http://digitalhumanities.org/answers/topic/harvest-historical-twitter-data</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Topic: Harvest Historical Twitter Data</description>
+		<language>en-US</language>
+		<pubDate>Sun, 24 Mar 2019 17:08:59 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/topic/harvest-historical-twitter-data" rel="self" type="application/rss+xml" />
+
+		<item>
+
+				<title>stustu12 on "Harvest Historical Twitter Data"</title>
+						<link>http://digitalhumanities.org/answers/topic/harvest-historical-twitter-data#post-2414</link>
+			<pubDate>Sat, 24 Jun 2017 23:16:17 +0000</pubDate>
+			<dc:creator>stustu12</dc:creator>
+			<guid isPermaLink="false">2414@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='http://digitalhumanities.org/answers/profile/justinlittman'&#62;justinlittman&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/harvest-historical-twitter-data#post-2412&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;Thanks Justin. DiscoverText (&#60;a href=&#34;https://discovertext.com&#34; rel=&#34;nofollow&#34;&#62;https://discovertext.com&#60;/a&#62;) is an option for day-forward Twitter via the Search API or using the Gnip PowerTrack. For historical Twitter, people need to use Sifter (&#60;a href=&#34;https://sifter.texifter.com&#34; rel=&#34;nofollow&#34;&#62;https://sifter.texifter.com&#60;/a&#62;) to generate up to three free estimates per day. If there is an estimate you like, there is a price to access the data using DiscoverText.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+
+				<title>justinlittman on "Harvest Historical Twitter Data"</title>
+						<link>http://digitalhumanities.org/answers/topic/harvest-historical-twitter-data#post-2412</link>
+			<pubDate>Mon, 05 Jun 2017 13:19:26 +0000</pubDate>
+			<dc:creator>justinlittman</dc:creator>
+			<guid isPermaLink="false">2412@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='http://digitalhumanities.org/answers/profile/kdonovan11'&#62;kdonovan11&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/harvest-historical-twitter-data#post-2410&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;The Twitter API supports retrieving the last 3,200 tweets from a user's timeline. A commandline tool like Twarc (&#60;a href=&#34;https://github.com/docnow/twarc&#34; rel=&#34;nofollow&#34;&#62;https://github.com/docnow/twarc&#60;/a&#62;) can be used to get the user's timeline from the API. If you're looking for web interface, Social Feed Manager (&#60;a href=&#34;https://gwu-libraries.github.io/sfm-ui/)&#34; rel=&#34;nofollow&#34;&#62;https://gwu-libraries.github.io/sfm-ui/)&#60;/a&#62;, which I work on, is another option.&#60;/p&#62;
+&#60;p&#62;Options for getting historical tweets for a hashtag are much more limited. The Search API only indexes the last 7-9 days. The search on Twitter's website indexes further back in time, but the nature of what is indexed (and not indexed) is unknown.&#60;/p&#62;
+&#60;p&#62;Data service providers such as DiscoverText (&#60;a href=&#34;https://discovertext.com/&#34; rel=&#34;nofollow&#34;&#62;https://discovertext.com/&#60;/a&#62;) allow for greater access to historical data, but obviously at a cost.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+
+				<title>kdonovan11 on "Harvest Historical Twitter Data"</title>
+						<link>http://digitalhumanities.org/answers/topic/harvest-historical-twitter-data#post-2411</link>
+			<pubDate>Fri, 02 Jun 2017 08:00:33 +0000</pubDate>
+			<dc:creator>kdonovan11</dc:creator>
+			<guid isPermaLink="false">2411@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='http://digitalhumanities.org/answers/profile/kdonovan11'&#62;kdonovan11&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/harvest-historical-twitter-data#post-2410&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;I see that it is possible to use Twitter's Advanced Search to search for a particular account's tweets during a given time period; however, that requires scrolling through it all on their site. What would be best is the ability to export them (links, images, and all).
+&#60;/p&#62;</description>
+		</item>
+		<item>
+
+				<title>kdonovan11 on "Harvest Historical Twitter Data"</title>
+						<link>http://digitalhumanities.org/answers/topic/harvest-historical-twitter-data#post-2410</link>
+			<pubDate>Thu, 01 Jun 2017 19:25:33 +0000</pubDate>
+			<dc:creator>kdonovan11</dc:creator>
+			<guid isPermaLink="false">2410@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I would like to capture tweets from last year which centered on a particular social movement in Kenya. Many of them were sent or retweeted by @ConsumersKenya, so simply getting an archive of their tweets within a certain timeframe would be quite helpful. Being able to get those who used relevant hashtags during that period would also be fruitful.&#60;/p&#62;
+&#60;p&#62;There seem to be plenty of services to archive ongoing tweets, but is there a good way to get historical tweets for certain dates?
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

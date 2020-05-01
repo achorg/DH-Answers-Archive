@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Topic: Examples of online teaching modules or lesson plans?</title>
+		<link>http://digitalhumanities.org/answers/topic/examples-of-online-teaching-modules-or-lesson-plans</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Topic: Examples of online teaching modules or lesson plans?</description>
+		<language>en-US</language>
+		<pubDate>Sun, 24 Mar 2019 17:08:55 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/topic/examples-of-online-teaching-modules-or-lesson-plans" rel="self" type="application/rss+xml" />
+
+		<item>
+
+				<title>Kaarina on "Examples of online teaching modules or lesson plans?"</title>
+						<link>http://digitalhumanities.org/answers/topic/examples-of-online-teaching-modules-or-lesson-plans#post-2386</link>
+			<pubDate>Sun, 06 Mar 2016 12:45:30 +0000</pubDate>
+			<dc:creator>Kaarina</dc:creator>
+			<guid isPermaLink="false">2386@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='http://digitalhumanities.org/answers/profile/katherineharris'&#62;katherineharris&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/examples-of-online-teaching-modules-or-lesson-plans#post-2385&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;Thank you! This looks great.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+
+				<title>katherineharris on "Examples of online teaching modules or lesson plans?"</title>
+						<link>http://digitalhumanities.org/answers/topic/examples-of-online-teaching-modules-or-lesson-plans#post-2385</link>
+			<pubDate>Thu, 03 Mar 2016 20:02:23 +0000</pubDate>
+			<dc:creator>katherineharris</dc:creator>
+			<guid isPermaLink="false">2385@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;YES!&#60;/p&#62;
+&#60;p&#62;Check out the in-progress collection: Digital Pedagogy in the Humanities.&#60;/p&#62;
+&#60;p&#62;A few keywords that might have assignments and syllabi that fit your needs:&#60;/p&#62;
+&#60;p&#62;Archive: &#60;a href=&#34;https://github.com/curateteaching/digitalpedagogy/blob/master/keywords/archive.md&#34; rel=&#34;nofollow&#34;&#62;https://github.com/curateteaching/digitalpedagogy/blob/master/keywords/archive.md&#60;/a&#62;&#60;br /&#62;
+Interface: &#60;a href=&#34;https://github.com/curateteaching/digitalpedagogy/blob/master/keywords/interface.md&#34; rel=&#34;nofollow&#34;&#62;https://github.com/curateteaching/digitalpedagogy/blob/master/keywords/interface.md&#60;/a&#62;&#60;br /&#62;
+Poetry: &#60;a href=&#34;https://github.com/curateteaching/digitalpedagogy/blob/master/keywords/poetry.md&#34; rel=&#34;nofollow&#34;&#62;https://github.com/curateteaching/digitalpedagogy/blob/master/keywords/poetry.md&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;And many, many others. Each keyword has a list of 10 pedagogical artifacts. Feel free to use those materials right now. A finalized published version of the entire collection will be stabilized by January 2017. For now, we continue adding keywords and going through open peer review.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+
+				<title>Kaarina on "Examples of online teaching modules or lesson plans?"</title>
+						<link>http://digitalhumanities.org/answers/topic/examples-of-online-teaching-modules-or-lesson-plans#post-2384</link>
+			<pubDate>Thu, 03 Mar 2016 19:57:09 +0000</pubDate>
+			<dc:creator>Kaarina</dc:creator>
+			<guid isPermaLink="false">2384@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Hello!&#60;/p&#62;
+&#60;p&#62;I am helping to develop teaching modules around a collection of digitized texts and artefacts, so that non-expert instructors and teachers can integrate these texts into their courses. &#60;/p&#62;
+&#60;p&#62;Can anyone think of examples of strong teaching modules/guides/plans that are freely available online?&#60;/p&#62;
+&#60;p&#62;Thanks!
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

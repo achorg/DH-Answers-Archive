@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Topic: Does anyone have resources or examples on how to write about website design?</title>
+		<link>http://digitalhumanities.org/answers/topic/does-anyone-have-resources-or-examples-on-how-to-write-about-website-design</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Topic: Does anyone have resources or examples on how to write about website design?</description>
+		<language>en-US</language>
+		<pubDate>Sun, 24 Mar 2019 17:08:17 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/topic/does-anyone-have-resources-or-examples-on-how-to-write-about-website-design" rel="self" type="application/rss+xml" />
+
+		<item>
+
+				<title>Amanda Visconti on "Does anyone have resources or examples on how to write about website design?"</title>
+						<link>http://digitalhumanities.org/answers/topic/does-anyone-have-resources-or-examples-on-how-to-write-about-website-design#post-2427</link>
+			<pubDate>Sun, 21 Jan 2018 14:50:55 +0000</pubDate>
+			<dc:creator>Amanda Visconti</dc:creator>
+			<guid isPermaLink="false">2427@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='http://digitalhumanities.org/answers/profile/mlholloway251'&#62;mlholloway251&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/does-anyone-have-resources-or-examples-on-how-to-write-about-website-design#post-2425&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;If you're not already involved there, it could also be useful to join &#60;a href=&#34;https://www.hastac.org/&#34;&#62;HASTAC&#60;/a&#62; and blog about your process/questions that come up—there's a pretty good community of commenters there.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+
+				<title>Amanda Visconti on "Does anyone have resources or examples on how to write about website design?"</title>
+						<link>http://digitalhumanities.org/answers/topic/does-anyone-have-resources-or-examples-on-how-to-write-about-website-design#post-2426</link>
+			<pubDate>Sun, 21 Jan 2018 14:45:31 +0000</pubDate>
+			<dc:creator>Amanda Visconti</dc:creator>
+			<guid isPermaLink="false">2426@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;Some of the pieces of my &#60;a href=&#34;http://dr.amandavisconti.com/&#34;&#62;(completed) digital dissertation&#60;/a&#62; using web design/development for literature scholarship might be useful? Some specific links below, but also check out &#60;a href=&#34;https://docs.google.com/document/d/1qJwx0nYam3aJazetVfmij6q92Owv-gu_pfl-Xci6BLM/edit?usp=sharing&#34;&#62;this great GoogleDoc&#60;/a&#62; some folks at CUNY curated with info on a variety of digital dissertation formats.&#60;/p&#62;
+&#60;p&#62;I have &#60;a href=&#34;http://literaturegeek.com/tag/dissertation/&#34;&#62;some blog posts&#60;/a&#62; both about the design of a digital edition website for my dissertation, and about the design of the websites presenting the dissertation (e.g. &#60;a href=&#34;http://literaturegeek.com/2014/04/02/digitaldissformat&#34;&#62;post on choosing and arguing for digital dissertation design&#60;/a&#62;, and &#60;a href=&#34;http://literaturegeek.com/2014/03/31/html5scholarlyarticle&#34;&#62;some design choices&#60;/a&#62;, and &#60;a href=&#34;http://literaturegeek.com/2014/09/16/user-testing-a-digital-edition-getting-the-feedback-you-need&#34;&#62;user testing dissertation websites&#60;/a&#62;). &#60;/p&#62;
+&#60;p&#62;A skim of the table of contents for &#60;a href=&#34;http://dr.amandavisconti.com/AmandaVisconti_DigitalDissertationWhitepaper_OfficialSubmission.pdf&#34;&#62;the whitepaper debriefing my digital dissertation&#60;/a&#62; might also be useful?&#60;/p&#62;
+&#60;p&#62;I also found it useful to &#60;a href=&#34;https://github.com/amandavisconti/infinite-ulysses-dissertation/blob/master/About%20the%20Dissertation/MANIFEST.md&#34;&#62;make a list of all the scholarly effort that went into the digital dissertation&#60;/a&#62;, annotated to explain the website-related work that might not be obvious to scholarly evaluators.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+
+				<title>mlholloway251 on "Does anyone have resources or examples on how to write about website design?"</title>
+						<link>http://digitalhumanities.org/answers/topic/does-anyone-have-resources-or-examples-on-how-to-write-about-website-design#post-2425</link>
+			<pubDate>Fri, 19 Jan 2018 22:39:31 +0000</pubDate>
+			<dc:creator>mlholloway251</dc:creator>
+			<guid isPermaLink="false">2425@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I am creating a website via wordpress for my dissertation and I need help on how to write about design choices, layout, what I chose to include, etc. If you have any resources that might help me please let me know. Thanks!
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>

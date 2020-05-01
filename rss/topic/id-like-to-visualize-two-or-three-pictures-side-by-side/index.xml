@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="bbPress/1.0.2" -->
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Digital Humanities Questions &#38; Answers &#187; Topic: I&#039;d like to visualize two or three pictures side by side</title>
+		<link>http://digitalhumanities.org/answers/topic/id-like-to-visualize-two-or-three-pictures-side-by-side</link>
+		<description>Digital Humanities Questions &amp; Answers &#187; Topic: I&#039;d like to visualize two or three pictures side by side</description>
+		<language>en-US</language>
+		<pubDate>Sun, 24 Mar 2019 17:08:16 +0000</pubDate>
+		<generator>http://bbpress.org/?v=1.0.2</generator>
+		<textInput>
+			<title><![CDATA[Search]]></title>
+			<description><![CDATA[Search all topics from these forums.]]></description>
+			<name>q</name>
+			<link>http://digitalhumanities.org/answers/search.php</link>
+		</textInput>
+		<atom:link href="http://digitalhumanities.org/answers/rss/topic/id-like-to-visualize-two-or-three-pictures-side-by-side" rel="self" type="application/rss+xml" />
+
+		<item>
+
+				<title>aliciapeaker@gmail.com on "I&#039;d like to visualize two or three pictures side by side"</title>
+						<link>http://digitalhumanities.org/answers/topic/id-like-to-visualize-two-or-three-pictures-side-by-side#post-2396</link>
+			<pubDate>Mon, 13 Jun 2016 22:20:23 +0000</pubDate>
+			<dc:creator>aliciapeaker@gmail.com</dc:creator>
+			<guid isPermaLink="false">2396@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;One of the most common ways of doing this is using CSS's &#34;display: inline-block.&#34; Here's a good start with some sample code: &#60;a href=&#34;http://www.w3schools.com/css/css_inline-block.asp&#34; rel=&#34;nofollow&#34;&#62;http://www.w3schools.com/css/css_inline-block.asp&#60;/a&#62;
+&#60;/p&#62;</description>
+		</item>
+		<item>
+
+				<title>Gogol71 on "I&#039;d like to visualize two or three pictures side by side"</title>
+						<link>http://digitalhumanities.org/answers/topic/id-like-to-visualize-two-or-three-pictures-side-by-side#post-2394</link>
+			<pubDate>Wed, 01 Jun 2016 19:03:02 +0000</pubDate>
+			<dc:creator>Gogol71</dc:creator>
+			<guid isPermaLink="false">2394@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;&#60;em&#62;Replying to @&#60;a href='http://digitalhumanities.org/answers/profile/gogol71'&#62;Gogol71&#60;/a&#62;'s &#60;a href=&#34;http://digitalhumanities.org/answers/topic/id-like-to-visualize-two-or-three-pictures-side-by-side#post-2393&#34;&#62;post&#60;/a&#62;:&#60;/em&#62;&#60;/p&#62;
+&#60;p&#62;This is the answer I got from Scalar:&#60;/p&#62;
+&#60;p&#62;We've thought about including this kind of functionality as a built-in feature in Scalar before, allowing authors to insert multiple media objects side-by-side. Perhaps down the road we will. For now, this sort of thing must be done manually, using html in the html editor. In other words, when you're in the page editor, click &#34;Source&#34; so that you're editing the actual html, then insert your media manually, spacing them side-by-side accordingly.&#60;/p&#62;
+&#60;p&#62;I'd be very grateful if someone gave me the html code to do this.
+&#60;/p&#62;</description>
+		</item>
+		<item>
+
+				<title>Gogol71 on "I&#039;d like to visualize two or three pictures side by side"</title>
+						<link>http://digitalhumanities.org/answers/topic/id-like-to-visualize-two-or-three-pictures-side-by-side#post-2393</link>
+			<pubDate>Wed, 01 Jun 2016 08:00:40 +0000</pubDate>
+			<dc:creator>Gogol71</dc:creator>
+			<guid isPermaLink="false">2393@http://digitalhumanities.org/answers/</guid>
+			<description>&#60;p&#62;I'm working with scalar (&#60;a href=&#34;http://scalar.usc.edu&#34; rel=&#34;nofollow&#34;&#62;http://scalar.usc.edu&#60;/a&#62;) and would like to compare pictures and transcriptions in columns. I guess three and even four columns of pictures or transcriptions should be possible. Many thanks for your help.&#60;br /&#62;
+Guillaume
+&#60;/p&#62;</description>
+		</item>
+
+	</channel>
+</rss>
