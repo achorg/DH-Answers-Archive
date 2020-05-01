@@ -212,7 +212,7 @@ div.search input {
 	border: 1px solid #999;
 	margin-right: 5px;
 	font-size: 15px;
-	background: url("http://digitalhumanities.org/answers/my-plugins/best-answer/best-answer.png") no-repeat scroll 5px 50% #EEEEEE;
+	background: url("/my-plugins/best-answer/best-answer.png") no-repeat scroll 5px 50% #EEEEEE;
 	-moz-border-radius: 4px;
 	-webkit-border-radius: 4px;
 	border-radius: 4px;
@@ -782,7 +782,7 @@ a.rss-link {
 }
 
 #follow-us {
-	background:url("http://twitter-badges.s3.amazonaws.com/t_mini-a.png") no-repeat scroll 5px 50% transparent;
+	background:url("https://twitter-badges.s3.amazonaws.com/t_mini-a.png") no-repeat scroll 5px 50% transparent;
 	height:auto !important;
 	padding-left:26px;
 	padding-top: 1px;
@@ -862,7 +862,7 @@ div.social-it ul.socials li a {
 
 div.social-it ul.socials li.socialit-twitter a {
 	padding-left: 26px;
-	background: url("http://twitter-badges.s3.amazonaws.com/t_mini-a.png") no-repeat scroll 5px 50% transparent;
+	background: url("https://twitter-badges.s3.amazonaws.com/t_mini-a.png") no-repeat scroll 5px 50% transparent;
 	height: auto !important;
 }
 
