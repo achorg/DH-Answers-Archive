@@ -38,6 +38,9 @@ def get_post_info(div, topic_url, feed):
     # generate permalink from li id since in at least one
     # case the permalink isn't found
 
+    if 'replies' in topic_url:
+        topic_url = topic_url.split('?replies')[0]
+
     info['url'] = '%s#%s' % (topic_url, div['id'])
 
     # first div id includes order information as position-#
