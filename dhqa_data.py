@@ -5,7 +5,7 @@ Script to parse data DH Q&A archive and create a dataset of posts.
 
 Install python dependencies:
 
-    pip install beautifulsoup4 feedparser
+    pip install beautifulsoup4 feedparser requests
 
 Clone DH Q&A archive repository:
 
@@ -37,13 +37,7 @@ def get_post_info(div, topic_url, feed):
 
     # generate permalink from li id since in at least one
     # case the permalink isn't found
-    # Check for weird apostrophe in url
-    # check = '\xe2\x80\x99'
 
-    # if check in topic_url:
-    #     topic_url = topic_url.decode('ascii','ignore')
-    #     print('got it ', topic_url)
-    # print(topic_url, div['id'])
     info['url'] = '%s#%s' % (topic_url, div['id'])
 
     # first div id includes order information as position-#
