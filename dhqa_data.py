@@ -37,10 +37,6 @@ def get_post_info(div, topic_url, feed):
 
     # generate permalink from li id since in at least one
     # case the permalink isn't found
-
-    if 'replies' in topic_url:
-        topic_url = topic_url.split('?replies')[0]
-
     info['url'] = '%s#%s' % (topic_url, div['id'])
 
     # first div id includes order information as position-#
@@ -66,7 +62,7 @@ def get_post_info(div, topic_url, feed):
     info['html_content'] = threadpost.div.prettify()
 
     # extract text from post on html page
-    info['content'] = threadpost.find('div', class_='post').get_text()
+    info['content'] = threadpost.div.get_text()
 
     # check if this is a reply to a specific post
     if threadpost.p and threadpost.p.get_text().startswith('Replying to'):
