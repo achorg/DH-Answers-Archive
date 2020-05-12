@@ -1,11 +1,11 @@
 #!/usr/bin/env python
-
+# encoding: utf-8
 '''
 Script to parse data DH Q&A archive and create a dataset of posts.
 
 Install python dependencies:
 
-    pip install beautifulsoup4 feedparser
+    pip install beautifulsoup4 feedparser requests
 
 Clone DH Q&A archive repository:
 
@@ -58,8 +58,11 @@ def get_post_info(div, topic_url, feed):
     [comment.extract() for comment in threadpost.findAll(
         text=lambda text:isinstance(text, Comment))]
 
-    # get post content
-    info['content'] = threadpost.div.prettify()
+    # get post html content
+    info['html_content'] = threadpost.div.prettify()
+
+    # extract text from post on html page
+    info['content'] = threadpost.div.get_text()
 
     # check if this is a reply to a specific post
     if threadpost.p and threadpost.p.get_text().startswith('Replying to'):
@@ -116,6 +119,7 @@ post_fieldnames = [
     'tags',
     'author',
     'author_url',
+    'html_content',
     'content',
     'date',
     'relative_date',
@@ -126,7 +130,6 @@ post_fieldnames = [
 ]
 
 for path in glob.glob('topic/*/index.html'):
-    # print(path)
 
     # topic meta should include url for topic,
     # but is not completely reliable!
