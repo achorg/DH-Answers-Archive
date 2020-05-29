@@ -178,13 +178,17 @@ for path in glob.glob('topic/*/index.html'):
         next_link = soup.find('a', class_='next')
         if next_link:
             page_two = '%s/index.html' % next_link['href'].lstrip('/')
+            # post permalink and RSS links are relative to the page
+            page_url = 'http://digitalhumanities.org/answers%s' % \
+                next_link['href']
+
+            # page two capture date could be different
+            capture_date = wayback_machine_timestamp(page_url)
+            topic_data['snapshot_date'] = capture_date or ''
             with open(page_two) as page_two_doc:
                 soup2 = BeautifulSoup(page_two_doc, 'html.parser')
                 posts = soup2.findAll('li', id=re.compile(r'^post-\d+'))
                 for post in posts:
-                    # post permalink and RSS links are relative to the page
-                    page_url = 'http://digitalhumanities.org/answers%s' % \
-                        next_link['href']
                     post_data = get_post_info(post, topic_url, feed,
                                               page_url=page_url)
                     post_data.update(topic_data)
