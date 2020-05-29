@@ -5,6 +5,8 @@ content.
 
 ## CSV fields
 
+File: [dhqa_data.csv](dhqa_data.csv)
+
 * url
 * topic_url
 * question
