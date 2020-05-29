@@ -26,19 +26,20 @@ Fields:
 
 ## Wayback Machine capture data
 
-To help determine dates for posts that are not present in the RSS feeds
-available in the site archive, we downloaded data for topic and rss
-URLs from the Internet Archive [Wayback CDX Server API](https://github.com/internetarchive/wayback/tree/master/wayback-cdx-server).
+In the hope that it might help determine dates for posts that are not present
+in the RSS feeds available in the site archive, we downloaded data for topic and
+rss URLs from the Internet Archive
+[Wayback CDX Server API](https://github.com/internetarchive/wayback/tree/master/wayback-cdx-server).
 
 Fields:
 
-* urlkey
-* timestamp
-* original (original url)
-* mimetype
-* statuscode
-* digest
-* length
+* *urlkey* Wayback Machine URL identifier
+* *timestamp* timestamp of capture
+* *original* original url
+* *mimetype* content type
+* *statuscode* HTTP status code
+* *digest* digest of the content
+* *length* size of the content
 
 Files:
 
