@@ -59,8 +59,8 @@ Overall the forum was most active prior to 2014, with the most questions and rep
 
 ![post rates](images/post_share_replies.png)
 
-These two graphs attempt to answer this question. The first visualizes that the majority of posts were authored by individuals who published over 5 posts to DH Q&A. The second graph illustrates the length of time between a question being posted and the replies to the question. 
+These two graphs attempt to answer this question. The first visualizes that the majority of posts were authored by individuals who published over 5 posts to DH Q&A. The second graph illustrates the length of time between a question being posted and the replies to the question.
 
 Combined these graphs seem to indicate that DH Q&A was a place for debating topics in the early 2010s, and though the forum continued to be online until 2018, these discussions moved elsewhere much earlier (most likely Twitter or DH Slack).
 
-This is just some initial forays though, and we hope you'll explore this dataset, as well as share your findings.  To follow our data analysis and see the code for generating these graphs, please visit our [Google Colab Notebook](https://colab.research.google.com/drive/1CSdLUMz3fOzUWXxMWUiQaQoOmDddi5oJ#scrollTo=mkSRhPWlP1Eb&line=1&uniqifier=1).
+These graphs are only the tip of the iceberg though, and there's lots of full text data here to analyze for those that are interested! To follow our data analysis and see the code for generating these graphs, please visit our [Google Colab Notebook](https://colab.research.google.com/drive/1CSdLUMz3fOzUWXxMWUiQaQoOmDddi5oJ#scrollTo=mkSRhPWlP1Eb&line=1&uniqifier=1). If you do happen to use this dataset, please let us know!
