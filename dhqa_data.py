@@ -64,8 +64,10 @@ def get_post_info(div, topic_url, feed, page_url=None):
     [comment.extract() for comment in threadpost.findAll(
         text=lambda text:isinstance(text, Comment))]
 
-    # get post content
-    info['content'] = threadpost.div.prettify()
+    # get post html content
+    info['html_content'] = threadpost.div.prettify()
+    # extract text from post on html page
+    info['content'] = threadpost.div.get_text()
 
     # check if this is a reply to a specific post
     if threadpost.p and threadpost.p.get_text().startswith('Replying to'):
