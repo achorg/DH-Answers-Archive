@@ -9,20 +9,20 @@ File: [dhqa_data.csv](dhqa_data.csv)
 
 Fields:
 
-* *url* post permalink
-* *topic_url* permalink for the topic this post belongs to
-* *question* topic question
-* *tags* list of tags for the topic
-* *author* post author name
-* *author_url* post author url
-* *html_content* post content with as HTML
-* *content* post content in plain text
-* *date* date/time the post was published ISO 8601 format (if available)
-* *relative_date* relative date text displayed in the HTML, e.g. "3 years ago"
-* *snapshot_date* timestamp for the most recent capture of this page in the wayback
-* *order* order of the post within the topic
-* *is_best_answer* true if the post was marked as a best answer
-* *reply_to* permalink for a post if this was a reply to a specific post
+* **url** post permalink
+* **topic_url** permalink for the topic this post belongs to
+* **question** topic question
+* **tags** list of tags for the topic
+* **author** post author name
+* **author_url** post author url
+* **html_content** post content with as HTML
+* **content** post content in plain text
+* **date** date/time the post was published ISO 8601 format (if available)
+* **relative_date** relative date text displayed in the HTML, e.g. "3 years ago"
+* **snapshot_date** timestamp for the most recent capture of this page in the wayback
+* **order** order of the post within the topic
+* **is_best_answer** true if the post was marked as a best answer
+* **reply_to** permalink for a post if this was a reply to a specific post
 
 ### About the dates
 
@@ -42,13 +42,13 @@ rss URLs from the Internet Archive
 
 Fields:
 
-* *urlkey* Wayback Machine URL identifier
-* *timestamp* timestamp of capture
-* *original* original url
-* *mimetype* content type
-* *statuscode* HTTP status code
-* *digest* digest of the content
-* *length* size of the content
+* **urlkey** Wayback Machine URL identifier
+* **timestamp** timestamp of capture
+* **original** original url
+* **mimetype** content type
+* **statuscode** HTTP status code
+* **digest** digest of the content
+* **length** size of the content
 
 Files:
 
