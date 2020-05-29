@@ -24,6 +24,15 @@ Fields:
 * *is_best_answer* true if the post was marked as a best answer
 * *reply_to* permalink for a post if this was a reply to a specific post
 
+### About the dates
+
+The HTML content for posts in the site archive only includes relative dates
+(e.g. "Posted 3 years ago"). Fortunately, the RSS feeds do contain full dates
+for the publication date of posts. Unfortunately, the RSS feed data is
+incomplete — a few RSS feeds were never captured by the Wayback Machine,
+while others have some but not all posts for a topic (usually for a
+popular topic with many answers).
+
 ## Wayback Machine capture data
 
 In the hope that it might help determine dates for posts that are not present
