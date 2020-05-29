@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# encoding: utf-8
+
 '''
 Script to parse data DH Q&A archive and create a dataset of posts.
 
@@ -29,15 +29,21 @@ import requests
 baseurl = 'http://digitalhumanities.org/answers'
 
 
-def get_post_info(div, topic_url, feed):
+def get_post_info(div, topic_url, feed, page_url=None):
     # take a post container and return dict of post info
-    # takes  bs4 div, basec url for this topic, and rss feedparser obj
+    # takes bs4 div, base url for this topic, feedparser object,
+    # and optional page url where it differs from topic url
+    # (i.e. posts on page 2 of a topic)
 
     info = {}
 
+    # page url is different from topic url for posts on page 2
+    if page_url is None:
+        page_url = topic_url
+
     # generate permalink from li id since in at least one
     # case the permalink isn't found
-    info['url'] = '%s#%s' % (topic_url, div['id'])
+    info['url'] = '%s#%s' % (page_url, div['id'])
 
     # first div id includes order information as position-#
     info['order'] = div.div['id'].split('-')[1]
@@ -60,7 +66,6 @@ def get_post_info(div, topic_url, feed):
 
     # get post html content
     info['html_content'] = threadpost.div.prettify()
-
     # extract text from post on html page
     info['content'] = threadpost.div.get_text()
 
@@ -153,7 +158,6 @@ for path in glob.glob('topic/*/index.html'):
         # html doesn't have a proper date but RSS should
         # get rss filename from rss link
         rss = soup.find('a', class_="rss-link")['href'].lstrip('/')
-        # print(rss)
         if os.path.exists(rss):
             # with open(rss) as rssdoc:
             feed = feedparser.parse(rss)
@@ -176,12 +180,19 @@ for path in glob.glob('topic/*/index.html'):
         next_link = soup.find('a', class_='next')
         if next_link:
             page_two = '%s/index.html' % next_link['href'].lstrip('/')
+            # post permalink and RSS links are relative to the page
+            page_url = 'http://digitalhumanities.org/answers%s' % \
+                next_link['href']
+
+            # page two capture date could be different
+            capture_date = wayback_machine_timestamp(page_url)
+            topic_data['snapshot_date'] = capture_date or ''
             with open(page_two) as page_two_doc:
                 soup2 = BeautifulSoup(page_two_doc, 'html.parser')
                 posts = soup2.findAll('li', id=re.compile(r'^post-\d+'))
                 for post in posts:
-                    # unlikely these will be in RSS feed...
-                    post_data = get_post_info(post, topic_url, feed)
+                    post_data = get_post_info(post, topic_url, feed,
+                                              page_url=page_url)
                     post_data.update(topic_data)
                     dhqa_posts.append(post_data)
 
